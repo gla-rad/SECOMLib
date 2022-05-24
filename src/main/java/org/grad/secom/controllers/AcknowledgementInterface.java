@@ -16,9 +16,7 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.AccessNotificationRequest;
-import org.grad.secom.models.AccessNotificationResponse;
-import org.grad.secom.models.Acknowledgement;
+import org.grad.secom.models.AcknowledgementRequest;
 import org.grad.secom.models.AcknowledgementResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,9 +40,9 @@ public interface AcknowledgementInterface {
      * (read) by the end user (operational acknowledgement). The acknowledgement
      * contains a reference to object delivered.
      *
-     * @param acknowledgement  the acknowledgement object
+     * @param acknowledgementRequest  the acknowledgement object
      * @return the acknowledgement response object
      */
-    ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody Acknowledgement acknowledgement);
+    ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody AcknowledgementRequest acknowledgementRequest);
 
 }

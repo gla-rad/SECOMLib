@@ -16,6 +16,9 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.StatusResponse;
+import org.springframework.http.ResponseEntity;
+
 /**
  * The SECOM Status Interface Definition.
  * </p>
@@ -26,5 +29,13 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface StatusInterface {
+
+    /**
+     * GET /v1/status : The purpose of the interface is to provide a dynamic
+     * method to ask for the technical status of the specific service instance.
+     *
+     * @return the status response object
+     */
+    ResponseEntity<StatusResponse> subscription();
 
 }

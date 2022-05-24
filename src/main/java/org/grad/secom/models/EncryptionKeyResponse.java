@@ -19,51 +19,32 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Upload Class
+ * The SECOM Encryption Key Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class Upload {
+public class EncryptionKeyResponse {
 
     // Class Variables
     @NotNull
-    private Envelope envelope;
-    @NotNull
-    private String envelopeSignature;
+    private String responseText;
 
     /**
-     * Gets envelope.
+     * Gets response text.
      *
-     * @return the envelope
+     * @return the response text
      */
-    public Envelope getEnvelope() {
-        return envelope;
+    public String getResponseText() {
+        return responseText;
     }
 
     /**
-     * Sets envelope.
+     * Sets response text.
      *
-     * @param envelope the envelope
+     * @param responseText the response text
      */
-    public void setEnvelope(Envelope envelope) {
-        this.envelope = envelope;
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 
-    /**
-     * Gets envelope signature.
-     *
-     * @return the envelope signature
-     */
-    public String getEnvelopeSignature() {
-        return envelopeSignature;
-    }
-
-    /**
-     * Sets envelope signature.
-     *
-     * @param envelopeSignature the envelope signature
-     */
-    public void setEnvelopeSignature(String envelopeSignature) {
-        this.envelopeSignature = envelopeSignature;
-    }
 }

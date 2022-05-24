@@ -16,54 +16,56 @@
 
 package org.grad.secom.models;
 
+import org.grad.secom.models.enums.SubscriptionEventEnum;
+
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Upload Link Class
+ * The SECOM Subscription Notification Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class UploadLink {
+public class SubscriptionNotificationRequest {
 
     // Class Variables
     @NotNull
-    private EnvelopeLink envelope;
+    private String subscriptionIdentifier;
     @NotNull
-    private String envelopeSignature;
+    private SubscriptionEventEnum eventEnum;
 
     /**
-     * Gets envelope.
+     * Gets subscription identifier.
      *
-     * @return the envelope
+     * @return the subscription identifier
      */
-    public EnvelopeLink getEnvelope() {
-        return envelope;
+    public String getSubscriptionIdentifier() {
+        return subscriptionIdentifier;
     }
 
     /**
-     * Sets envelope.
+     * Sets subscription identifier.
      *
-     * @param envelope the envelope
+     * @param subscriptionIdentifier the subscription identifier
      */
-    public void setEnvelope(EnvelopeLink envelope) {
-        this.envelope = envelope;
+    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
+        this.subscriptionIdentifier = subscriptionIdentifier;
     }
 
     /**
-     * Gets envelope signature.
+     * Gets event enum.
      *
-     * @return the envelope signature
+     * @return the event enum
      */
-    public String getEnvelopeSignature() {
-        return envelopeSignature;
+    public SubscriptionEventEnum getEventEnum() {
+        return eventEnum;
     }
 
     /**
-     * Sets envelope signature.
+     * Sets event enum.
      *
-     * @param envelopeSignature the envelope signature
+     * @param eventEnum the event enum
      */
-    public void setEnvelopeSignature(String envelopeSignature) {
-        this.envelopeSignature = envelopeSignature;
+    public void setEventEnum(SubscriptionEventEnum eventEnum) {
+        this.eventEnum = eventEnum;
     }
 }

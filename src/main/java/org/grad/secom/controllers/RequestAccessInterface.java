@@ -16,16 +16,10 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.RequestAccess;
-import org.grad.secom.models.S100ProductSpecification;
-import org.grad.secom.models.enums.DataTypeEnum;
-import org.grad.secom.models.enums.ReasonEnum;
+import org.grad.secom.models.RequestAccessRequest;
 import org.grad.secom.models.RequestAccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 /**
  * The SECOM Request Access Interface Definition.
@@ -42,9 +36,9 @@ public interface RequestAccessInterface {
      * POST /v1/access/request : Access to the service instance information can
      * be requested through the Request Access interface.
      *
-     * @param requestAccess the request access object
+     * @param requestAccessRequest the request access object
      * @return the request access response object
      */
-    ResponseEntity<RequestAccessResponse> requestAccess(@RequestBody RequestAccess requestAccess);
+    ResponseEntity<RequestAccessResponse> requestAccess(@RequestBody RequestAccessRequest requestAccessRequest);
 
 }

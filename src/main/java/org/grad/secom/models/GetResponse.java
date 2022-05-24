@@ -32,7 +32,7 @@ public class GetResponse {
     // Class Variables
     private DataResponse data;
     @NotNull
-    private PaginationObject pagination;
+    private Pagination pagination;
 
     /**
      * Instantiates a new Get message response object.
@@ -73,7 +73,7 @@ public class GetResponse {
      *
      * @return the pagination
      */
-    public PaginationObject getPagination() {
+    public Pagination getPagination() {
         return pagination;
     }
 
@@ -82,7 +82,7 @@ public class GetResponse {
      *
      * @param pagination the pagination
      */
-    public void setPagination(PaginationObject pagination) {
+    public void setPagination(Pagination pagination) {
         this.pagination = pagination;
     }
 

@@ -16,55 +16,54 @@
 
 package org.grad.secom.models;
 
-
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
- * The SECOM Get Summary Response Class.
+ * The SECOM Acknowledgement Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetSummaryResponse {
+public class AcknowledgementRequest {
 
     // Class Variables
-    List<Summary> summary;
     @NotNull
-    Pagination pagination;
+    private AcknowledgementData data;
+    @NotNull
+    private DigitalSignatureValue digitalSignature;
 
     /**
-     * Gets summary.
+     * Gets data.
      *
-     * @return the summary
+     * @return the data
      */
-    public List<Summary> getSummary() {
-        return summary;
+    public AcknowledgementData getData() {
+        return data;
     }
 
     /**
-     * Sets summary.
+     * Sets data.
      *
-     * @param summary the summary
+     * @param data the data
      */
-    public void setSummary(List<Summary> summary) {
-        this.summary = summary;
+    public void setData(AcknowledgementData data) {
+        this.data = data;
     }
 
     /**
-     * Gets pagination.
+     * Gets digital signature.
      *
-     * @return the pagination
+     * @return the digital signature
      */
-    public Pagination getPagination() {
-        return pagination;
+    public DigitalSignatureValue getDigitalSignature() {
+        return digitalSignature;
     }
 
     /**
-     * Sets pagination.
+     * Sets digital signature.
      *
-     * @param pagination the pagination
+     * @param digitalSignature the digital signature
      */
-    public void setPagination(Pagination pagination) {
-        this.pagination = pagination;
+    public void setDigitalSignature(DigitalSignatureValue digitalSignature) {
+        this.digitalSignature = digitalSignature;
     }
 }

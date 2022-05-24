@@ -16,6 +16,8 @@
 
 package org.grad.secom.models;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * The SECOM Interfaces Object.
  *
@@ -24,23 +26,48 @@ package org.grad.secom.models;
 public class SecomInterfaces {
 
     // Class Variables
-    private boolean upload;
-    private boolean uploadLink;
-    private boolean acknowledgment;
-    private boolean get;
-    private boolean getSummary;
-    private boolean getByLink;
-    private boolean subscription;
-    private boolean subscriptionNotification;
-    private boolean access;
-    private boolean encryptionKey;
+    @NotNull
+    private Boolean upload;
+    @NotNull
+    private Boolean uploadLink;
+    @NotNull
+    private Boolean acknowledgment;
+    @NotNull
+    private Boolean get;
+    @NotNull
+    private Boolean getSummary;
+    @NotNull
+    private Boolean getByLink;
+    @NotNull
+    private Boolean subscription;
+    @NotNull
+    private Boolean subscriptionNotification;
+    @NotNull
+    private Boolean access;
+    @NotNull
+    private Boolean encryptionKey;
 
     /**
-     * Is upload boolean.
-     *
-     * @return the boolean
+     * Instantiates a new Secom interfaces.
      */
-    public boolean isUpload() {
+    public SecomInterfaces() {
+        this.upload = Boolean.FALSE;
+        this.uploadLink = Boolean.FALSE;
+        this.get = Boolean.FALSE;
+        this.getSummary = Boolean.FALSE;
+        this.getByLink = Boolean.FALSE;
+        this.subscription = Boolean.FALSE;
+        this.subscriptionNotification = Boolean.FALSE;
+        this.access = Boolean.FALSE;
+        this.encryptionKey = Boolean.FALSE;
+    }
+
+    /**
+     * Gets upload.
+     *
+     * @return the upload
+     */
+    public Boolean getUpload() {
         return upload;
     }
 
@@ -49,16 +76,16 @@ public class SecomInterfaces {
      *
      * @param upload the upload
      */
-    public void setUpload(boolean upload) {
+    public void setUpload(Boolean upload) {
         this.upload = upload;
     }
 
     /**
-     * Is upload link boolean.
+     * Gets upload link.
      *
-     * @return the boolean
+     * @return the upload link
      */
-    public boolean isUploadLink() {
+    public Boolean getUploadLink() {
         return uploadLink;
     }
 
@@ -67,16 +94,16 @@ public class SecomInterfaces {
      *
      * @param uploadLink the upload link
      */
-    public void setUploadLink(boolean uploadLink) {
+    public void setUploadLink(Boolean uploadLink) {
         this.uploadLink = uploadLink;
     }
 
     /**
-     * Is acknowledgment boolean.
+     * Gets acknowledgment.
      *
-     * @return the boolean
+     * @return the acknowledgment
      */
-    public boolean isAcknowledgment() {
+    public Boolean getAcknowledgment() {
         return acknowledgment;
     }
 
@@ -85,16 +112,16 @@ public class SecomInterfaces {
      *
      * @param acknowledgment the acknowledgment
      */
-    public void setAcknowledgment(boolean acknowledgment) {
+    public void setAcknowledgment(Boolean acknowledgment) {
         this.acknowledgment = acknowledgment;
     }
 
     /**
-     * Is get boolean.
+     * Gets get.
      *
-     * @return the boolean
+     * @return the get
      */
-    public boolean isGet() {
+    public Boolean getGet() {
         return get;
     }
 
@@ -103,16 +130,16 @@ public class SecomInterfaces {
      *
      * @param get the get
      */
-    public void setGet(boolean get) {
+    public void setGet(Boolean get) {
         this.get = get;
     }
 
     /**
-     * Is get summary boolean.
+     * Gets get summary.
      *
-     * @return the boolean
+     * @return the get summary
      */
-    public boolean isGetSummary() {
+    public Boolean getGetSummary() {
         return getSummary;
     }
 
@@ -121,16 +148,16 @@ public class SecomInterfaces {
      *
      * @param getSummary the get summary
      */
-    public void setGetSummary(boolean getSummary) {
+    public void setGetSummary(Boolean getSummary) {
         this.getSummary = getSummary;
     }
 
     /**
-     * Is get by link boolean.
+     * Gets get by link.
      *
-     * @return the boolean
+     * @return the get by link
      */
-    public boolean isGetByLink() {
+    public Boolean getGetByLink() {
         return getByLink;
     }
 
@@ -139,16 +166,16 @@ public class SecomInterfaces {
      *
      * @param getByLink the get by link
      */
-    public void setGetByLink(boolean getByLink) {
+    public void setGetByLink(Boolean getByLink) {
         this.getByLink = getByLink;
     }
 
     /**
-     * Is subscription boolean.
+     * Gets subscription.
      *
-     * @return the boolean
+     * @return the subscription
      */
-    public boolean isSubscription() {
+    public Boolean getSubscription() {
         return subscription;
     }
 
@@ -157,16 +184,16 @@ public class SecomInterfaces {
      *
      * @param subscription the subscription
      */
-    public void setSubscription(boolean subscription) {
+    public void setSubscription(Boolean subscription) {
         this.subscription = subscription;
     }
 
     /**
-     * Is subscription notification boolean.
+     * Gets subscription notification.
      *
-     * @return the boolean
+     * @return the subscription notification
      */
-    public boolean isSubscriptionNotification() {
+    public Boolean getSubscriptionNotification() {
         return subscriptionNotification;
     }
 
@@ -175,16 +202,16 @@ public class SecomInterfaces {
      *
      * @param subscriptionNotification the subscription notification
      */
-    public void setSubscriptionNotification(boolean subscriptionNotification) {
+    public void setSubscriptionNotification(Boolean subscriptionNotification) {
         this.subscriptionNotification = subscriptionNotification;
     }
 
     /**
-     * Is access boolean.
+     * Gets access.
      *
-     * @return the boolean
+     * @return the access
      */
-    public boolean isAccess() {
+    public Boolean getAccess() {
         return access;
     }
 
@@ -193,16 +220,16 @@ public class SecomInterfaces {
      *
      * @param access the access
      */
-    public void setAccess(boolean access) {
+    public void setAccess(Boolean access) {
         this.access = access;
     }
 
     /**
-     * Is encryption key boolean.
+     * Gets encryption key.
      *
-     * @return the boolean
+     * @return the encryption key
      */
-    public boolean isEncryptionKey() {
+    public Boolean getEncryptionKey() {
         return encryptionKey;
     }
 
@@ -211,7 +238,7 @@ public class SecomInterfaces {
      *
      * @param encryptionKey the encryption key
      */
-    public void setEncryptionKey(boolean encryptionKey) {
+    public void setEncryptionKey(Boolean encryptionKey) {
         this.encryptionKey = encryptionKey;
     }
 }

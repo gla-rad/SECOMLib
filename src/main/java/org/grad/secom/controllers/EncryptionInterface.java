@@ -16,6 +16,11 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.EncryptionKeyResponse;
+import org.grad.secom.models.EncryptionKeyRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * The SECOM Encryption Interface Definition.
  * </p>
@@ -26,5 +31,13 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface EncryptionInterface {
+
+    /**
+     * POST /v1/encryptionkey : The purpose of the interface is to exchange a temporary
+     * secret key.
+     *
+     * @return the encryption key response object
+     */
+    ResponseEntity<EncryptionKeyResponse> uploadEncryptionKey(@RequestBody EncryptionKeyRequest encryptionKeyRequest);
 
 }

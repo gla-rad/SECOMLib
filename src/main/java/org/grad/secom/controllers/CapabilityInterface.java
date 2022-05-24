@@ -31,8 +31,9 @@ import org.springframework.http.ResponseEntity;
 public interface CapabilityInterface {
 
     /**
-     * GET /secom/v1/capability : Returns the service instance capabilities as
-     * specified by the SECOM standard.
+     * GET v1/capability : The purpose of the interface is to provide a dynamic
+     * method to ask a service instance at runtime what interfaces are
+     * accessible, and what payload formats and version are valid.
      *
      * @return the capability response object
      */

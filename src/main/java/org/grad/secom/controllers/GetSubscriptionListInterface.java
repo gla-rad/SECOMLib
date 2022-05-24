@@ -16,6 +16,14 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.SubscriptionList;
+import org.grad.secom.models.SubscriptionRequest;
+import org.grad.secom.models.SubscriptionResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
+
 /**
  * The SECOM Get Subscription Interface Definition.
  * </p>
@@ -26,5 +34,13 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface GetSubscriptionListInterface {
+
+    /**
+     * GET /v1/subscription : A list of active subscriptions is retrieved
+     * through this interface.
+     *
+     * @return the subscription response object
+     */
+    ResponseEntity<List<SubscriptionList>> getSubscriptionList();
 
 }

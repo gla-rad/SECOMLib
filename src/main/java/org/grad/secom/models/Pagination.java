@@ -19,11 +19,11 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Pagination Object.
+ * The SECOM Pagination Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class PaginationObject {
+public class Pagination {
 
     // Class Variables
     private Integer totalItems;
@@ -33,7 +33,7 @@ public class PaginationObject {
     /**
      * Instantiates a new Pagination object.
      */
-    public PaginationObject() {
+    public Pagination() {
 
     }
 
@@ -43,7 +43,7 @@ public class PaginationObject {
      * @param totalItems      the total items
      * @param maxItemsPerPage the max items per page
      */
-    public PaginationObject(Integer totalItems, Integer maxItemsPerPage) {
+    public Pagination(Integer totalItems, Integer maxItemsPerPage) {
         this.totalItems = totalItems;
         this.maxItemsPerPage = maxItemsPerPage;
     }

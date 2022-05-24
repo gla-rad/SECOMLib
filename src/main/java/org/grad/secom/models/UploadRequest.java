@@ -16,55 +16,54 @@
 
 package org.grad.secom.models;
 
-
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
- * The SECOM Get Summary Response Class.
+ * The SECOM Upload Request Class
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetSummaryResponse {
+public class UploadRequest {
 
     // Class Variables
-    List<Summary> summary;
     @NotNull
-    Pagination pagination;
+    private Envelope envelope;
+    @NotNull
+    private String envelopeSignature;
 
     /**
-     * Gets summary.
+     * Gets envelope.
      *
-     * @return the summary
+     * @return the envelope
      */
-    public List<Summary> getSummary() {
-        return summary;
+    public Envelope getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets summary.
+     * Sets envelope.
      *
-     * @param summary the summary
+     * @param envelope the envelope
      */
-    public void setSummary(List<Summary> summary) {
-        this.summary = summary;
+    public void setEnvelope(Envelope envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets pagination.
+     * Gets envelope signature.
      *
-     * @return the pagination
+     * @return the envelope signature
      */
-    public Pagination getPagination() {
-        return pagination;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets pagination.
+     * Sets envelope signature.
      *
-     * @param pagination the pagination
+     * @param envelopeSignature the envelope signature
      */
-    public void setPagination(Pagination pagination) {
-        this.pagination = pagination;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

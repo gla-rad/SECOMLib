@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class RequestAccess {
+public class RequestAccessRequest {
 
     // Class Variables
     @NotNull

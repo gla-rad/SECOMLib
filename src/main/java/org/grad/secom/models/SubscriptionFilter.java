@@ -20,11 +20,11 @@ import org.grad.secom.models.enums.AreaNameEnum;
 import org.grad.secom.models.enums.DataTypeEnum;
 
 /**
- * The SECOM Subscription Request Class.
+ * The SECOM Subscription Filter Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionRequest {
+public class SubscriptionFilter {
 
     // Class Variables
     private DataTypeEnum dataType;

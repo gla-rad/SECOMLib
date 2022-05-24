@@ -16,9 +16,7 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.AccessNotificationRequest;
-import org.grad.secom.models.AccessNotificationResponse;
-import org.grad.secom.models.Upload;
+import org.grad.secom.models.UploadRequest;
 import org.grad.secom.models.UploadResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,9 +37,9 @@ public interface UploadInterface {
      * data to a consumer. The operation expects one single data object and
      * its metadata.
      *
-     * @param upload  the upload object
+     * @param uploadRequest  the upload object
      * @return the upload response object
      */
-    ResponseEntity<UploadResponse> upload(@RequestBody Upload upload);
+    ResponseEntity<UploadResponse> upload(@RequestBody UploadRequest uploadRequest);
 
 }

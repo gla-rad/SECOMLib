@@ -16,7 +16,7 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.UploadLink;
+import org.grad.secom.models.UploadLinkRequest;
 import org.grad.secom.models.UploadLinkResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,9 +37,9 @@ public interface UploadLinkInterface {
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
      *
-     * @param uploadLink  the upload link object
+     * @param uploadLinkRequest  the upload link object
      * @return the upload link response object
      */
-    ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLink uploadLink);
+    ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLinkRequest uploadLinkRequest);
 
 }
