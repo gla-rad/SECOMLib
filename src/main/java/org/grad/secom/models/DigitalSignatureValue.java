@@ -24,63 +24,44 @@ package org.grad.secom.models;
 public class DigitalSignatureValue {
 
     // Class Variables
-    private String signedPublicKeyID;
-    private String signedPublicKeyRootKey;
-    private String signedPublicKey;
+    private String publicRootCertificateThumbprint;
+    private byte[] publicCertificate;
     private String digitalSignature;
 
     /**
-     * Gets signed public key id.
+     * Gets public root certificate thumbprint.
      *
-     * @return the signed public key id
+     * @return the public root certificate thumbprint
      */
-    public String getSignedPublicKeyID() {
-        return signedPublicKeyID;
+    public String getPublicRootCertificateThumbprint() {
+        return publicRootCertificateThumbprint;
     }
 
     /**
-     * Sets signed public key id.
+     * Sets public root certificate thumbprint.
      *
-     * @param signedPublicKeyID the signed public key id
+     * @param publicRootCertificateThumbprint the public root certificate thumbprint
      */
-    public void setSignedPublicKeyID(String signedPublicKeyID) {
-        this.signedPublicKeyID = signedPublicKeyID;
+    public void setPublicRootCertificateThumbprint(String publicRootCertificateThumbprint) {
+        this.publicRootCertificateThumbprint = publicRootCertificateThumbprint;
     }
 
     /**
-     * Gets signed public key root key.
+     * Get public certificate byte [ ].
      *
-     * @return the signed public key root key
+     * @return the byte [ ]
      */
-    public String getSignedPublicKeyRootKey() {
-        return signedPublicKeyRootKey;
+    public byte[] getPublicCertificate() {
+        return publicCertificate;
     }
 
     /**
-     * Sets signed public key root key.
+     * Sets public certificate.
      *
-     * @param signedPublicKeyRootKey the signed public key root key
+     * @param publicCertificate the public certificate
      */
-    public void setSignedPublicKeyRootKey(String signedPublicKeyRootKey) {
-        this.signedPublicKeyRootKey = signedPublicKeyRootKey;
-    }
-
-    /**
-     * Gets signed public key.
-     *
-     * @return the signed public key
-     */
-    public String getSignedPublicKey() {
-        return signedPublicKey;
-    }
-
-    /**
-     * Sets signed public key.
-     *
-     * @param signedPublicKey the signed public key
-     */
-    public void setSignedPublicKey(String signedPublicKey) {
-        this.signedPublicKey = signedPublicKey;
+    public void setPublicCertificate(byte[] publicCertificate) {
+        this.publicCertificate = publicCertificate;
     }
 
     /**

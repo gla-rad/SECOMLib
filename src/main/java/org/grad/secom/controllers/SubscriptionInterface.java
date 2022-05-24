@@ -16,7 +16,7 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.Subscription;
+import org.grad.secom.models.SubscriptionRequest;
 import org.grad.secom.models.SubscriptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,9 +37,9 @@ public interface SubscriptionInterface {
      * specific information according to parameters, or the information
      * accessible upon decision by the information provider.
      *
-     * @param subscription the subscription object
+     * @param subscriptionRequest the subscription object
      * @return the subscription response object
      */
-    ResponseEntity<SubscriptionResponse> subscription(@RequestBody Subscription subscription);
+    ResponseEntity<SubscriptionResponse> subscription(@RequestBody SubscriptionRequest subscriptionRequest);
 
 }

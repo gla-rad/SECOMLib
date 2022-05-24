@@ -16,6 +16,13 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.AccessNotificationRequest;
+import org.grad.secom.models.AccessNotificationResponse;
+import org.grad.secom.models.Acknowledgement;
+import org.grad.secom.models.AcknowledgementResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * The SECOM Acknowledgement Interface Definition.
  * </p>
@@ -26,5 +33,18 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface AcknowledgementInterface {
+
+    /**
+     * POST /v1/acknowledgement : During upload of information, an
+     * acknowledgement can be requested which is expected to be received when
+     * the uploaded message has been delivered to the end system (technical
+     * acknowledgement), and an acknowledgement when the message has been opened
+     * (read) by the end user (operational acknowledgement). The acknowledgement
+     * contains a reference to object delivered.
+     *
+     * @param acknowledgement  the acknowledgement object
+     * @return the acknowledgement response object
+     */
+    ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody Acknowledgement acknowledgement);
 
 }

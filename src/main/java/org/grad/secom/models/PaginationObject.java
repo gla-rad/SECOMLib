@@ -16,6 +16,8 @@
 
 package org.grad.secom.models;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * The SECOM Pagination Object.
  *
@@ -24,8 +26,9 @@ package org.grad.secom.models;
 public class PaginationObject {
 
     // Class Variables
-    private int totalItems;
-    private int maxItemsPerPage;
+    private Integer totalItems;
+    @NotNull
+    private Integer maxItemsPerPage;
 
     /**
      * Instantiates a new Pagination object.
@@ -40,7 +43,7 @@ public class PaginationObject {
      * @param totalItems      the total items
      * @param maxItemsPerPage the max items per page
      */
-    public PaginationObject(int totalItems, int maxItemsPerPage) {
+    public PaginationObject(Integer totalItems, Integer maxItemsPerPage) {
         this.totalItems = totalItems;
         this.maxItemsPerPage = maxItemsPerPage;
     }
@@ -50,7 +53,7 @@ public class PaginationObject {
      *
      * @return the total items
      */
-    public int getTotalItems() {
+    public Integer getTotalItems() {
         return totalItems;
     }
 
@@ -59,7 +62,7 @@ public class PaginationObject {
      *
      * @param totalItems the total items
      */
-    public void setTotalItems(int totalItems) {
+    public void setTotalItems(Integer totalItems) {
         this.totalItems = totalItems;
     }
 
@@ -68,7 +71,7 @@ public class PaginationObject {
      *
      * @return the max items per page
      */
-    public int getMaxItemsPerPage() {
+    public Integer getMaxItemsPerPage() {
         return maxItemsPerPage;
     }
 
@@ -77,7 +80,7 @@ public class PaginationObject {
      *
      * @param maxItemsPerPage the max items per page
      */
-    public void setMaxItemsPerPage(int maxItemsPerPage) {
+    public void setMaxItemsPerPage(Integer maxItemsPerPage) {
         this.maxItemsPerPage = maxItemsPerPage;
     }
 }

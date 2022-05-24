@@ -17,25 +17,27 @@
 package org.grad.secom.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Base64;
 
 /**
- * The SECOM Get Message Response Class.
+ * The SECOM Get Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetMessageResponse {
+public class GetResponse {
 
     // Class Variables
-    private String payload;
-    private ExchangeMetadata exchangeMetadata;
+    private DataResponse data;
+    @NotNull
     private PaginationObject pagination;
 
     /**
      * Instantiates a new Get message response object.
      */
-    public GetMessageResponse() {
+    public GetResponse() {
 
     }
 
@@ -44,44 +46,26 @@ public class GetMessageResponse {
      *
      * @param payload the payload
      */
-    public GetMessageResponse(String payload) {
+    public GetResponse(String payload) {
         this.encodePayload(payload);
     }
 
     /**
-     * Gets payload.
+     * Gets data.
      *
-     * @return the payload
+     * @return the data
      */
-    public String getPayload() {
-        return payload;
+    public DataResponse getData() {
+        return data;
     }
 
     /**
-     * Sets payload.
+     * Sets data.
      *
-     * @param payload the payload
+     * @param data the data
      */
-    public void setPayload(String payload) {
-        this.payload = payload;
-    }
-
-    /**
-     * Gets exchange metadata.
-     *
-     * @return the exchange metadata
-     */
-    public ExchangeMetadata getExchangeMetadata() {
-        return exchangeMetadata;
-    }
-
-    /**
-     * Sets exchange metadata.
-     *
-     * @param exchangeMetadata the exchange metadata
-     */
-    public void setExchangeMetadata(ExchangeMetadata exchangeMetadata) {
-        this.exchangeMetadata = exchangeMetadata;
+    public void setData(DataResponse data) {
+        this.data = data;
     }
 
     /**
@@ -110,15 +94,24 @@ public class GetMessageResponse {
      */
     @JsonIgnore
     public void encodePayload(String payloadObject) {
-        this.payload = Base64.getEncoder().encodeToString(payloadObject.getBytes());
+        if(this.data == null) {
+            this.data = new DataResponse();
+        }
+        this.data.setPayload(Base64.getEncoder().encodeToString(payloadObject.getBytes()));
     }
 
     /**
      * A helper function that automatically decodes the Base 64 payload into the
      * required string.
+     *
+     * @return the string
+     * @throws IOException the io exception
      */
     @JsonIgnore
     public String decodePayload() throws IOException {
-        return new String(Base64.getDecoder().decode(this.payload));
+        if(this.data == null) {
+            return null;
+        }
+        return new String(Base64.getDecoder().decode(this.data.getPayload()));
     }
 }

@@ -16,7 +16,7 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.AccessNotification;
+import org.grad.secom.models.AccessNotificationRequest;
 import org.grad.secom.models.AccessNotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,9 +37,9 @@ public interface AccessNotificationInterface {
      * service instance shall be sent asynchronous through this client
      * interface.
      *
-     * @param accessNotification  the access notification object
+     * @param accessNotificationRequest  the access notification object
      * @return the access notification response object
      */
-    ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotification accessNotification);
+    ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotificationRequest accessNotificationRequest);
 
 }

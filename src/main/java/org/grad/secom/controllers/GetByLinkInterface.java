@@ -16,6 +16,11 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.GetResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
 /**
  * The SECOM Get By Link Interface Definition.
  * </p>
@@ -26,5 +31,17 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface GetByLinkInterface {
+
+    /**
+     * GET /v1/object/link : The Get By Link interface is used for pulling
+     * information from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
+     *
+     * @param transactionIdentifier the transaction identifier
+     * @return the object in an "application/zip" encoding
+     */
+    ResponseEntity<StreamingResponseBody> getByLink(@RequestParam(value = "transactionIdentifier") String transactionIdentifier);
 
 }

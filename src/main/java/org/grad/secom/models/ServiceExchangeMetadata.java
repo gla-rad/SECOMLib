@@ -18,19 +18,27 @@ package org.grad.secom.models;
 
 import org.grad.secom.models.enums.ClassificationEnum;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * The SECOM Exchange Metadata Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class ExchangeMetadata {
+public class ServiceExchangeMetadata {
 
     // Class Variables
+    @NotNull
     private boolean dataProtection;
+    @NotNull
     private String protectionScheme;
+    @NotNull
     private String digitalSignatureReference;
+    @NotNull
     private DigitalSignatureValue digitalSignatureValue;
+    @NotNull
     private ClassificationEnum classification;
+    @NotNull
     private boolean compressionFlag;
 
     /**

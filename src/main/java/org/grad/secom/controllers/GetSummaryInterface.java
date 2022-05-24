@@ -16,12 +16,15 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.AreaNameEnumList;
 import org.grad.secom.models.enums.DataTypeEnum;
 import org.grad.secom.models.GetSummaryResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.constraints.Pattern;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
@@ -37,8 +40,10 @@ public interface GetSummaryInterface {
 
 
     /**
-     * GET /v1/object/summary : Returns the service instance summary as
-     * specified by the SECOM standard.
+     * GET /v1/object/summary :  A list of information shall be returned from
+     * this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
      *
      * @param dataType the object data type
      * @param productSpecification the object product specification
@@ -50,13 +55,13 @@ public interface GetSummaryInterface {
      * @param pageable the pageable information
      * @return the summary response object
      */
-    ResponseEntity<GetSummaryResponse> getSummary(@RequestParam("dataType") Optional<DataTypeEnum> dataType,
-                                                  @RequestParam("productSpecification") Optional<String> productSpecification,
-                                                  @RequestParam("geometry") Optional<String> geometry,
-                                                  @RequestParam("areaName") Optional<String> areaName,
-                                                  @RequestParam("unlocode") Optional<String> unlocode,
-                                                  @RequestParam("fromTime") Optional<String> fromTime,
-                                                  @RequestParam("toTime") Optional<String> toTime,
+    ResponseEntity<GetSummaryResponse> getSummary(@RequestParam(value = "dataType", required = false) DataTypeEnum dataType,
+                                                  @RequestParam(value = "productSpecification", required = false) String productSpecification,
+                                                  @RequestParam(value = "geometry", required = false) String geometry,
+                                                  @RequestParam(value = "areaName", required = false) AreaNameEnumList areaName,
+                                                  @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
+                                                  @RequestParam(value = "fromTime", required = false) LocalDateTime fromTime,
+                                                  @RequestParam(value = "toTime", required = false) LocalDateTime toTime,
                                                   Pageable pageable);
 
 }

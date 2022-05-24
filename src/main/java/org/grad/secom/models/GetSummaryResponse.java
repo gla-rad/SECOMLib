@@ -17,6 +17,7 @@
 package org.grad.secom.models;
 
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -27,25 +28,26 @@ import java.util.List;
 public class GetSummaryResponse {
 
     // Class Variables
-    List<InformationSummary> informationSummary;
+    List<Summary> summary;
+    @NotNull
     PaginationObject pagination;
 
     /**
-     * Gets information summary.
+     * Gets summary.
      *
-     * @return the information summary
+     * @return the summary
      */
-    public List<InformationSummary> getInformationSummary() {
-        return informationSummary;
+    public List<Summary> getSummary() {
+        return summary;
     }
 
     /**
-     * Sets information summary.
+     * Sets summary.
      *
-     * @param informationSummary the information summary
+     * @param summary the summary
      */
-    public void setInformationSummary(List<InformationSummary> informationSummary) {
-        this.informationSummary = informationSummary;
+    public void setSummary(List<Summary> summary) {
+        this.summary = summary;
     }
 
     /**

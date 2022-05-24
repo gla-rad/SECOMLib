@@ -18,25 +18,31 @@ package org.grad.secom.models;
 
 import org.grad.secom.models.enums.DecisionReasonEnum;
 
+import javax.validation.constraints.NotNull;
+
 /**
- * The SECOM Access Notification Class.
+ * The SECOM Access Notification Request Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessNotification {
+public class AccessNotificationRequest {
 
     // Class Variables
-    private boolean decision;
+    @NotNull
+    private Boolean decision;
+    @NotNull
     private String decisionReason;
+    @NotNull
     private DecisionReasonEnum decisionReasonEnum;
+    @NotNull
     private String transactionIdentifier;
 
     /**
-     * Is decision boolean.
+     * Gets decision.
      *
-     * @return the boolean
+     * @return the decision
      */
-    public boolean isDecision() {
+    public Boolean getDecision() {
         return decision;
     }
 
@@ -45,7 +51,7 @@ public class AccessNotification {
      *
      * @param decision the decision
      */
-    public void setDecision(boolean decision) {
+    public void setDecision(Boolean decision) {
         this.decision = decision;
     }
 

@@ -94,7 +94,7 @@ public enum AreaNameEnum {
      * Find the enum entry that corresponds to the provided value.
      *
      * @param value the enum value
-     * @return The respective S125 AtoN Type enum entry
+     * @return The respective enum entry
      */
     public static AreaNameEnum fromValue(int value) {
         return Arrays.stream(AreaNameEnum.values())

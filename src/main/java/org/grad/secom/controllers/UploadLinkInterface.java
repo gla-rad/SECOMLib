@@ -16,6 +16,11 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.UploadLink;
+import org.grad.secom.models.UploadLinkResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * The SECOM Upload Link Interface Definition.
  * </p>
@@ -27,5 +32,14 @@ package org.grad.secom.controllers;
  */
 public interface UploadLinkInterface {
 
+    /**
+     * POST /v1/object/link : The REST operation POST /object/link. The
+     * interface shall be used for uploading (pushing) a link to data to a
+     * consumer.
+     *
+     * @param uploadLink  the upload link object
+     * @return the upload link response object
+     */
+    ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLink uploadLink);
 
 }

@@ -21,20 +21,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 /**
- * The SECOM Classification Enum.
+ * The SECOM Acknowledgement Request Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum ClassificationEnum {
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6),
-    SEVEN(7),
-    EIGHT(8),
-    NINE(9);
+public enum AckRequestEnum {
+    NO_ACK_REQUESTED(0),
+    DELIVERED_ACK_REQUESTED(1),
+    OPENED_ACK_REQUESTED(2),
+    DELIVERED_AND_OPENED_ACK_REQUESTED(3);
 
     // Enum Variables
     private final int value;
@@ -44,7 +39,7 @@ public enum ClassificationEnum {
      *
      * @param newValue the enum value
      */
-    ClassificationEnum(final int newValue) {
+    AckRequestEnum(final int newValue) {
         value = newValue;
     }
 
@@ -62,8 +57,8 @@ public enum ClassificationEnum {
      * @param value the enum value
      * @return The respective enum entry
      */
-    public static ClassificationEnum fromValue(int value) {
-        return Arrays.stream(ClassificationEnum.values())
+    public static AckRequestEnum fromValue(int value) {
+        return Arrays.stream(AckRequestEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

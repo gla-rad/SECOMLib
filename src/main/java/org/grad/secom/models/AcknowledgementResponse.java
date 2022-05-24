@@ -16,53 +16,55 @@
 
 package org.grad.secom.models;
 
+import org.grad.secom.models.enums.ResponseCodeEnum;
+
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Response Class.
+ * The SECOM Acknowledgement Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponse {
+public class AcknowledgementResponse {
 
     // Class Variables
-    private String subscriptionIdentifier;
+    private ResponseCodeEnum responseCode;
     @NotNull
-    private String responseText;
+    private String message;
 
     /**
-     * Gets subscription identifier.
+     * Gets response code.
      *
-     * @return the subscription identifier
+     * @return the response code
      */
-    public String getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    public ResponseCodeEnum getResponseCode() {
+        return responseCode;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets response code.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param responseCode the response code
      */
-    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setResponseCode(ResponseCodeEnum responseCode) {
+        this.responseCode = responseCode;
     }
 
     /**
-     * Gets response text.
+     * Gets message.
      *
-     * @return the response text
+     * @return the message
      */
-    public String getResponseText() {
-        return responseText;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets response text.
+     * Sets message.
      *
-     * @param responseText the response text
+     * @param message the message
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

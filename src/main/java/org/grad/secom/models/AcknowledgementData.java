@@ -16,19 +16,25 @@
 
 package org.grad.secom.models;
 
+import org.grad.secom.models.enums.AckEnum;
+
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 /**
- * The SECOM Request Access Response Class.
+ * The SECOM Acknowledgement Data Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class RequestAccessResponse {
+public class AcknowledgementData {
 
     // Class Variables
+    @NotNull
     private String transactionIdentifier;
     @NotNull
-    private String responseText;
+    private LocalDateTime createdAt;
+    @NotNull
+    private AckEnum type;
 
     /**
      * Gets transaction identifier.
@@ -49,20 +55,39 @@ public class RequestAccessResponse {
     }
 
     /**
-     * Gets response text.
+     * Gets created at.
      *
-     * @return the response text
+     * @return the created at
      */
-    public String getResponseText() {
-        return responseText;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
     /**
-     * Sets response text.
+     * Sets created at.
      *
-     * @param responseText the response text
+     * @param createdAt the created at
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
+
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
+    public AckEnum getType() {
+        return type;
+    }
+
+    /**
+     * Sets type.
+     *
+     * @param type the type
+     */
+    public void setType(AckEnum type) {
+        this.type = type;
+    }
+
 }

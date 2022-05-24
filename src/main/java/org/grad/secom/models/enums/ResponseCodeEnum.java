@@ -21,20 +21,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 /**
- * The SECOM Classification Enum.
+ * The SECOM Response Code Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum ClassificationEnum {
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6),
-    SEVEN(7),
-    EIGHT(8),
-    NINE(9);
+public enum ResponseCodeEnum {
+    NO_ERROR(0),
+    XML_SCHEMA_VALIDATION_ERROR(1),
+    MISSING_REQUIRED_DATA_FOR_SERVICE(2),
+    UNKNOWN_DATA_TYPE_OR_VERSION(3),
+    FAILED_SIGNATURE_VERIFICATION(4),
+    FAILED_DECRYPTION(5),
+    UNEXPECTED_SERVER_ERROR(6);
 
     // Enum Variables
     private final int value;
@@ -44,7 +42,7 @@ public enum ClassificationEnum {
      *
      * @param newValue the enum value
      */
-    ClassificationEnum(final int newValue) {
+    ResponseCodeEnum(final int newValue) {
         value = newValue;
     }
 
@@ -62,8 +60,8 @@ public enum ClassificationEnum {
      * @param value the enum value
      * @return The respective enum entry
      */
-    public static ClassificationEnum fromValue(int value) {
-        return Arrays.stream(ClassificationEnum.values())
+    public static ResponseCodeEnum fromValue(int value) {
+        return Arrays.stream(ResponseCodeEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

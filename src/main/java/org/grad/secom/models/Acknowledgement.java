@@ -19,50 +19,51 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Response Class.
+ * The SECOM Acknowledgement Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponse {
+public class Acknowledgement {
 
     // Class Variables
-    private String subscriptionIdentifier;
     @NotNull
-    private String responseText;
+    private AcknowledgementData data;
+    @NotNull
+    private DigitalSignatureValue digitalSignature;
 
     /**
-     * Gets subscription identifier.
+     * Gets data.
      *
-     * @return the subscription identifier
+     * @return the data
      */
-    public String getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    public AcknowledgementData getData() {
+        return data;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets data.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param data the data
      */
-    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setData(AcknowledgementData data) {
+        this.data = data;
     }
 
     /**
-     * Gets response text.
+     * Gets digital signature.
      *
-     * @return the response text
+     * @return the digital signature
      */
-    public String getResponseText() {
-        return responseText;
+    public DigitalSignatureValue getDigitalSignature() {
+        return digitalSignature;
     }
 
     /**
-     * Sets response text.
+     * Sets digital signature.
      *
-     * @param responseText the response text
+     * @param digitalSignature the digital signature
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setDigitalSignature(DigitalSignatureValue digitalSignature) {
+        this.digitalSignature = digitalSignature;
     }
 }

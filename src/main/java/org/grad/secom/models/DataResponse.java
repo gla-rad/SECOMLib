@@ -19,50 +19,51 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Response Class.
+ * The SECOM Data Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponse {
+public class DataResponse {
 
     // Class Variables
-    private String subscriptionIdentifier;
     @NotNull
-    private String responseText;
+    private String payload;
+    @NotNull
+    private ServiceExchangeMetadata serviceExchangeMetadata;
 
     /**
-     * Gets subscription identifier.
+     * Gets payload.
      *
-     * @return the subscription identifier
+     * @return the payload
      */
-    public String getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    public String getPayload() {
+        return payload;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets payload.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param payload the payload
      */
-    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setPayload(String payload) {
+        this.payload = payload;
     }
 
     /**
-     * Gets response text.
+     * Gets service exchange metadata.
      *
-     * @return the response text
+     * @return the service exchange metadata
      */
-    public String getResponseText() {
-        return responseText;
+    public ServiceExchangeMetadata getServiceExchangeMetadata() {
+        return serviceExchangeMetadata;
     }
 
     /**
-     * Sets response text.
+     * Sets service exchange metadata.
      *
-     * @param responseText the response text
+     * @param serviceExchangeMetadata the service exchange metadata
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setServiceExchangeMetadata(ServiceExchangeMetadata serviceExchangeMetadata) {
+        this.serviceExchangeMetadata = serviceExchangeMetadata;
     }
 }

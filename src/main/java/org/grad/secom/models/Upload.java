@@ -19,50 +19,51 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Response Class.
+ * The SECOM Upload Class
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponse {
+public class Upload {
 
     // Class Variables
-    private String subscriptionIdentifier;
     @NotNull
-    private String responseText;
+    private Envelope envelope;
+    @NotNull
+    private String envelopeSignature;
 
     /**
-     * Gets subscription identifier.
+     * Gets envelope.
      *
-     * @return the subscription identifier
+     * @return the envelope
      */
-    public String getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    public Envelope getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets envelope.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param envelope the envelope
      */
-    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setEnvelope(Envelope envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets response text.
+     * Gets envelope signature.
      *
-     * @return the response text
+     * @return the envelope signature
      */
-    public String getResponseText() {
-        return responseText;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets response text.
+     * Sets envelope signature.
      *
-     * @param responseText the response text
+     * @param envelopeSignature the envelope signature
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

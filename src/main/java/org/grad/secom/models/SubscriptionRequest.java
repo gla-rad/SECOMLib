@@ -21,16 +21,14 @@ import org.grad.secom.models.enums.DataTypeEnum;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Class.
+ * The SECOM Subscription Request Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class Subscription {
+public class SubscriptionRequest {
 
     // Class Variables
-    @NotNull
     private DataTypeEnum dataType;
-    @NotNull
     private S100ProductSpecification productSpecification;
     private String geometry;
     private AreaNameEnum areaName;

@@ -16,34 +16,36 @@
 
 package org.grad.secom.models;
 
+import org.grad.secom.models.enums.ResponseCodeEnum;
+
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Access Notification Response Class.
+ * The SECOM Upload Link Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessNotificationResponse {
+public class UploadLinkResponse {
 
     // Class Variables
     @NotNull
-    private String responseText;
+    private String message;
 
     /**
-     * Gets response text.
+     * Gets message.
      *
-     * @return the response text
+     * @return the message
      */
-    public String getResponseText() {
-        return responseText;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets response text.
+     * Sets message.
      *
-     * @param responseText the response text
+     * @param message the message
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

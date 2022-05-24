@@ -16,6 +16,7 @@
 
 package org.grad.secom.models;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -26,10 +27,14 @@ import java.time.LocalDateTime;
 public class S100ProductSpecification {
 
     // Class Variables
+    @NotNull
     private String name;
+    @NotNull
     private String version;
+    @NotNull
     private LocalDateTime date;
-    private int number;
+    @NotNull
+    private Integer number;
 
     /**
      * Gets name.
@@ -90,7 +95,7 @@ public class S100ProductSpecification {
      *
      * @return the number
      */
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
@@ -99,7 +104,7 @@ public class S100ProductSpecification {
      *
      * @param number the number
      */
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 }

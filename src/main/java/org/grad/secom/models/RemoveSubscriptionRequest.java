@@ -19,16 +19,15 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Subscription Response Class.
+ * The SECOM Remove Subscription Request Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponse {
+public class RemoveSubscriptionRequest {
 
     // Class Variables
-    private String subscriptionIdentifier;
     @NotNull
-    private String responseText;
+    private String subscriptionIdentifier;
 
     /**
      * Gets subscription identifier.
@@ -46,23 +45,5 @@ public class SubscriptionResponse {
      */
     public void setSubscriptionIdentifier(String subscriptionIdentifier) {
         this.subscriptionIdentifier = subscriptionIdentifier;
-    }
-
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
     }
 }

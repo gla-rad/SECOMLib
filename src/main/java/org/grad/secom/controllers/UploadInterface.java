@@ -16,6 +16,13 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.AccessNotificationRequest;
+import org.grad.secom.models.AccessNotificationResponse;
+import org.grad.secom.models.Upload;
+import org.grad.secom.models.UploadResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * The SECOM Upload Interface Definition.
  * </p>
@@ -26,5 +33,15 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface UploadInterface {
+
+    /**
+     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * data to a consumer. The operation expects one single data object and
+     * its metadata.
+     *
+     * @param upload  the upload object
+     * @return the upload response object
+     */
+    ResponseEntity<UploadResponse> upload(@RequestBody Upload upload);
 
 }
