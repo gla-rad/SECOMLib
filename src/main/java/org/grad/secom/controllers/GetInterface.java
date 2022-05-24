@@ -20,8 +20,8 @@ import org.grad.secom.models.enums.DataTypeEnum;
 import org.grad.secom.models.GetMessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Pageable;
 
-import java.awt.print.Pageable;
 import java.util.Optional;
 
 /**
