@@ -16,14 +16,10 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.S100ProductSpecification;
+import org.grad.secom.models.Subscription;
 import org.grad.secom.models.SubscriptionResponse;
-import org.grad.secom.models.enums.AreaNameEnum;
-import org.grad.secom.models.enums.DataTypeEnum;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * The SECOM Subscription Interface Definition.
@@ -41,17 +37,9 @@ public interface SubscriptionInterface {
      * specific information according to parameters, or the information
      * accessible upon decision by the information provider.
      *
-     * @param dataType the datatype requested
-     * @param productSpecification the S-100-based product type requested
-     * @param geometry geometry criteria as WKT LineString or Polygon
-     * @param areaName name of defined area
-     * @param unlocode according to UN/LOCODE codelist
+     * @param subscription the subscription object
      * @return the subscription response object
      */
-    ResponseEntity<SubscriptionResponse> subscription(@RequestParam("dataType") Optional<DataTypeEnum> dataType,
-                                                      @RequestParam("productSpecification") Optional<S100ProductSpecification> productSpecification,
-                                                      @RequestParam("geometry") Optional<String> geometry,
-                                                      @RequestParam("areaName") Optional<AreaNameEnum> areaName,
-                                                      @RequestParam("unlocode") Optional<String> unlocode);
+    ResponseEntity<SubscriptionResponse> subscription(@RequestBody Subscription subscription);
 
 }

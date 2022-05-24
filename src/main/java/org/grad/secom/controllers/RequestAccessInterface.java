@@ -44,7 +44,7 @@ public interface RequestAccessInterface {
      * @param reasonEnum the machine-readable reason for requesting access
      * @param dataType the data type requested
      * @param productSpecification the S-100-based product type requested
-     * @return the object information
+     * @return the request access response object
      */
     ResponseEntity<RequestAccessResponse> requestAccess(@RequestParam("reason") Optional<String> reason,
                                                         @RequestParam("reasonEnum") Optional<ReasonEnum> reasonEnum,

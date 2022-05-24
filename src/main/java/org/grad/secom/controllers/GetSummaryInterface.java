@@ -48,7 +48,7 @@ public interface GetSummaryInterface {
      * @param fromTime the object from time
      * @param toTime the object to time
      * @param pageable the pageable information
-     * @return the SECOM summary information
+     * @return the summary response object
      */
     ResponseEntity<GetSummaryResponse> getSummary(@RequestParam("dataType") Optional<DataTypeEnum> dataType,
                                                   @RequestParam("productSpecification") Optional<String> productSpecification,

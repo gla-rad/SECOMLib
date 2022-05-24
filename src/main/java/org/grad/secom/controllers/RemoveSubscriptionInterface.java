@@ -16,6 +16,11 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.RemoveSubscription;
+import org.grad.secom.models.SubscriptionResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
+
 /**
  * The SECOM Remove Subscription Interface Definition.
  * </p>
@@ -26,5 +31,16 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface RemoveSubscriptionInterface {
+
+    /**
+     * DELETE /v1/subscription : Subscription(s) can be removed either
+     * internally by information owner, or externally by the consumer. This
+     * interface shall be used by the consumer to request removal of
+     * subscription.
+     *
+     * @param removeSubscription the remove subscription object
+     * @return the remove subscription response object
+     */
+    ResponseEntity<SubscriptionResponse> removeSubscription(@RequestBody RemoveSubscription removeSubscription);
 
 }

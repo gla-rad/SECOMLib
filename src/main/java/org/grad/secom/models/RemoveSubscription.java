@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
-
-import org.grad.secom.models.CapabilityResponse;
-import org.springframework.http.ResponseEntity;
+package org.grad.secom.models;
 
 /**
- * The SECOM Capability Interface Definition.
- * </p>
- * This interface definition can be used by the SECOM-compliant services in
- * order to direct the implementation of the relevant endpoint according to
- * the specified SECOM standard version.
+ * The SECOM Remove Subscription Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface {
+public class RemoveSubscription {
+
+    // Class Variables
+    private String subscriptionIdentifier;
 
     /**
-     * GET /secom/v1/capability : Returns the service instance capabilities as
-     * specified by the SECOM standard.
+     * Gets subscription identifier.
      *
-     * @return the capability response object
+     * @return the subscription identifier
      */
-    ResponseEntity<CapabilityResponse> getCapabilities();
+    public String getSubscriptionIdentifier() {
+        return subscriptionIdentifier;
+    }
 
+    /**
+     * Sets subscription identifier.
+     *
+     * @param subscriptionIdentifier the subscription identifier
+     */
+    public void setSubscriptionIdentifier(String subscriptionIdentifier) {
+        this.subscriptionIdentifier = subscriptionIdentifier;
+    }
 }
