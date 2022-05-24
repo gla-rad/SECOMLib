@@ -17,11 +17,11 @@
 package org.grad.secom.models;
 
 /**
- * The SECOM Information Summary Object Class.
+ * The SECOM Information Summary Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class InformationSummaryObject {
+public class InformationSummary {
 
     // Class Variables
     private String messageIdentifier;

@@ -16,9 +16,8 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.CapabilityResponseObject;
-import org.grad.secom.models.DataTypeEnum;
-import org.grad.secom.models.GetSummaryResponseObject;
+import org.grad.secom.models.enums.DataTypeEnum;
+import org.grad.secom.models.GetSummaryResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -51,13 +50,13 @@ public interface GetSummaryInterface {
      * @param pageable the pageable information
      * @return the SECOM summary information
      */
-    ResponseEntity<GetSummaryResponseObject> getSummary(@RequestParam("dataType") Optional<DataTypeEnum> dataType,
-                                                        @RequestParam("productSpecification") Optional<String> productSpecification,
-                                                        @RequestParam("geometry") Optional<String> geometry,
-                                                        @RequestParam("areaName") Optional<String> areaName,
-                                                        @RequestParam("unlocode") Optional<String> unlocode,
-                                                        @RequestParam("fromTime") Optional<String> fromTime,
-                                                        @RequestParam("toTime") Optional<String> toTime,
-                                                        Pageable pageable);
+    ResponseEntity<GetSummaryResponse> getSummary(@RequestParam("dataType") Optional<DataTypeEnum> dataType,
+                                                  @RequestParam("productSpecification") Optional<String> productSpecification,
+                                                  @RequestParam("geometry") Optional<String> geometry,
+                                                  @RequestParam("areaName") Optional<String> areaName,
+                                                  @RequestParam("unlocode") Optional<String> unlocode,
+                                                  @RequestParam("fromTime") Optional<String> fromTime,
+                                                  @RequestParam("toTime") Optional<String> toTime,
+                                                  Pageable pageable);
 
 }

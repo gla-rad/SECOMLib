@@ -21,11 +21,11 @@ import java.io.IOException;
 import java.util.Base64;
 
 /**
- * The SECOM Get Message Response Object Class.
+ * The SECOM Get Message Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetMessageResponseObject {
+public class GetMessageResponse {
 
     // Class Variables
     private String payload;
@@ -35,7 +35,7 @@ public class GetMessageResponseObject {
     /**
      * Instantiates a new Get message response object.
      */
-    public GetMessageResponseObject() {
+    public GetMessageResponse() {
 
     }
 
@@ -44,7 +44,7 @@ public class GetMessageResponseObject {
      *
      * @param payload the payload
      */
-    public GetMessageResponseObject(String payload) {
+    public GetMessageResponse(String payload) {
         this.encodePayload(payload);
     }
 

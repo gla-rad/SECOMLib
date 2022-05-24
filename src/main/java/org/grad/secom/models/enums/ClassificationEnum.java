@@ -14,28 +14,43 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.models.enums;
 
-import org.grad.secom.models.CapabilityResponse;
-import org.springframework.http.ResponseEntity;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- * The SECOM Capability Interface Definition.
- * </p>
- * This interface definition can be used by the SECOM-compliant services in
- * order to direct the implementation of the relevant endpoint according to
- * the specified SECOM standard version.
+ * The SECOM Classification Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface {
+public enum ClassificationEnum {
+    ONE(1),
+    TWO(2),
+    THREE(3),
+    FOUR(4),
+    FIVE(5),
+    SIX(6),
+    SEVEN(7),
+    EIGHT(8),
+    NINE(9);
+
+    // Enum Variables
+    private final int value;
 
     /**
-     * GET /secom/v1/capability : Returns the service instance capabilities as
-     * specified by the SECOM standard.
+     * Enum Constructor
      *
-     * @return the service instance capabilities
+     * @param newValue the enum value
      */
-    ResponseEntity<CapabilityResponse> getCapabilities();
+    ClassificationEnum(final int newValue) {
+        value = newValue;
+    }
 
+    /**
+     * Gets value.
+     *
+     * @return the value
+     */
+    @JsonValue
+    public int getValue() { return value; }
 }

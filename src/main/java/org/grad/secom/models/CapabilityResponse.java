@@ -19,9 +19,11 @@ package org.grad.secom.models;
 import java.net.URL;
 
 /**
- * The type Capability response object.
+ * The SECOM Capability Response Class.
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class CapabilityResponseObject {
+public class CapabilityResponse {
 
     // Class Variables
     String payloadName;

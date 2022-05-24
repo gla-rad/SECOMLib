@@ -14,23 +14,61 @@
  * limitations under the License.
  */
 
-package org.grad.secom.models;
+package org.grad.secom.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
 
 /**
- * The SECOM Data Type Enum.
+ * The SECOM Reason Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum DataTypeEnum {
-    S100_DataSet(1),
-    S100_ExchangeSet(2),
-    Reserved_1_RTZ(3),
-    Reserved_2_TXT(4),
-    Reserved_3_PCMF(5);
+public enum AreaNameEnum {
+    METAREA_I(0),
+    METAREA_II(1),
+    METAREA_III(2),
+    METAREA_IV(3),
+    METAREA_V(4),
+    METAREA_VI(5),
+    METAREA_VII(6),
+    METAREA_VIII_N(7),
+    METAREA_VIII_S(8),
+    METAREA_IX(9),
+    METAREA_X(10),
+    METAREA_XI(11),
+    METAREA_XII(12),
+    METAREA_XIII(13),
+    METAREA_XIV(14),
+    METAREA_XV(15),
+    METAREA_XVI(16),
+    METAREA_XVII(17),
+    METAREA_XVIII(18),
+    METAREA_XIX(19),
+    METAREA_XX(20),
+    METAREA_XXI(21),
+    NAVAREA_I(22),
+    NAVAREA_II(23),
+    NAVAREA_III(24),
+    NAVAREA_IV(25),
+    NAVAREA_V(26),
+    NAVAREA_VI(27),
+    NAVAREA_VII(28),
+    NAVAREA_VIII(29),
+    NAVAREA_IX(30),
+    NAVAREA_X(31),
+    NAVAREA_XI(32),
+    NAVAREA_XII(33),
+    NAVAREA_XIII(34),
+    NAVAREA_XIV(35),
+    NAVAREA_XV(36),
+    NAVAREA_XVI(37),
+    NAVAREA_XVII(38),
+    NAVAREA_XVIII(39),
+    NAVAREA_XIX(40),
+    NAVAREA_XX(41),
+    NAVAREA_XXI(42);
 
     // Enum Variables
     private final int value;
@@ -40,7 +78,7 @@ public enum DataTypeEnum {
      *
      * @param newValue the enum value
      */
-    DataTypeEnum(final int newValue) {
+    AreaNameEnum(final int newValue) {
         value = newValue;
     }
 
@@ -58,8 +96,8 @@ public enum DataTypeEnum {
      * @param value the enum value
      * @return The respective S125 AtoN Type enum entry
      */
-    public static DataTypeEnum fromValue(int value) {
-        return Arrays.stream(DataTypeEnum.values())
+    public static AreaNameEnum fromValue(int value) {
+        return Arrays.stream(AreaNameEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

@@ -17,7 +17,7 @@
 package org.grad.secom.models;
 
 /**
- * The SECOM Pagination Object
+ * The SECOM Pagination Object.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

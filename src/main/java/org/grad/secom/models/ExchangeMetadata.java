@@ -16,8 +16,10 @@
 
 package org.grad.secom.models;
 
+import org.grad.secom.models.enums.ClassificationEnum;
+
 /**
- * The SECOM Exchange Metadata Object Class.
+ * The SECOM Exchange Metadata Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -27,7 +29,7 @@ public class ExchangeMetadata {
     private boolean dataProtection;
     private String protectionScheme;
     private String digitalSignatureReference;
-    private DigitalSignatureValueObject digitalSignatureValue;
+    private DigitalSignatureValue digitalSignatureValue;
     private ClassificationEnum classification;
     private boolean compressionFlag;
 
@@ -90,7 +92,7 @@ public class ExchangeMetadata {
      *
      * @return the digital signature value
      */
-    public DigitalSignatureValueObject getDigitalSignatureValue() {
+    public DigitalSignatureValue getDigitalSignatureValue() {
         return digitalSignatureValue;
     }
 
@@ -99,7 +101,7 @@ public class ExchangeMetadata {
      *
      * @param digitalSignatureValue the digital signature value
      */
-    public void setDigitalSignatureValue(DigitalSignatureValueObject digitalSignatureValue) {
+    public void setDigitalSignatureValue(DigitalSignatureValue digitalSignatureValue) {
         this.digitalSignatureValue = digitalSignatureValue;
     }
 

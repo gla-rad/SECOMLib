@@ -20,32 +20,32 @@ package org.grad.secom.models;
 import java.util.List;
 
 /**
- * The SECOM Get Summary Response Object
+ * The SECOM Get Summary Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetSummaryResponseObject {
+public class GetSummaryResponse {
 
     // Class Variables
-    List<InformationSummaryObject> informationSummaryObject;
+    List<InformationSummary> informationSummary;
     PaginationObject pagination;
 
     /**
-     * Gets information summary object.
+     * Gets information summary.
      *
-     * @return the information summary object
+     * @return the information summary
      */
-    public List<InformationSummaryObject> getInformationSummaryObject() {
-        return informationSummaryObject;
+    public List<InformationSummary> getInformationSummary() {
+        return informationSummary;
     }
 
     /**
-     * Sets information summary object.
+     * Sets information summary.
      *
-     * @param informationSummaryObject the information summary object
+     * @param informationSummary the information summary
      */
-    public void setInformationSummaryObject(List<InformationSummaryObject> informationSummaryObject) {
-        this.informationSummaryObject = informationSummaryObject;
+    public void setInformationSummary(List<InformationSummary> informationSummary) {
+        this.informationSummary = informationSummary;
     }
 
     /**

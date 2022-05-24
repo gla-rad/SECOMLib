@@ -17,11 +17,11 @@
 package org.grad.secom.models;
 
 /**
- * The SECOM Digital Signature Value Object
+ * The SECOM Digital Signature Value Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DigitalSignatureValueObject {
+public class DigitalSignatureValue {
 
     // Class Variables
     private String signedPublicKeyID;

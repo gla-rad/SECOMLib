@@ -16,8 +16,8 @@
 
 package org.grad.secom.controllers;
 
-import org.grad.secom.models.DataTypeEnum;
-import org.grad.secom.models.GetMessageResponseObject;
+import org.grad.secom.models.enums.DataTypeEnum;
+import org.grad.secom.models.GetMessageResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -50,14 +50,14 @@ public interface GetInterface {
      * @param pageable the pageable information
      * @return the object information
      */
-    ResponseEntity<GetMessageResponseObject> getObject(@RequestParam("dataReference") Optional<String> dataReference,
-                                                       @RequestParam("dataType") Optional<DataTypeEnum> dataType,
-                                                       @RequestParam("productSpecification") Optional<String> productSpecification,
-                                                       @RequestParam("geometry") Optional<String> geometry,
-                                                       @RequestParam("areaName") Optional<String> areaName,
-                                                       @RequestParam("unlocode") Optional<String> unlocode,
-                                                       @RequestParam("fromTime") Optional<String> fromTime,
-                                                       @RequestParam("toTime") Optional<String> toTime,
-                                                       Pageable pageable);
+    ResponseEntity<GetMessageResponse> getObject(@RequestParam("dataReference") Optional<String> dataReference,
+                                                 @RequestParam("dataType") Optional<DataTypeEnum> dataType,
+                                                 @RequestParam("productSpecification") Optional<String> productSpecification,
+                                                 @RequestParam("geometry") Optional<String> geometry,
+                                                 @RequestParam("areaName") Optional<String> areaName,
+                                                 @RequestParam("unlocode") Optional<String> unlocode,
+                                                 @RequestParam("fromTime") Optional<String> fromTime,
+                                                 @RequestParam("toTime") Optional<String> toTime,
+                                                 Pageable pageable);
 
 }

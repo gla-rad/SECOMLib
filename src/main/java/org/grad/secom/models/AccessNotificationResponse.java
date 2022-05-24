@@ -14,28 +14,33 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
-
-import org.grad.secom.models.CapabilityResponse;
-import org.springframework.http.ResponseEntity;
+package org.grad.secom.models;
 
 /**
- * The SECOM Capability Interface Definition.
- * </p>
- * This interface definition can be used by the SECOM-compliant services in
- * order to direct the implementation of the relevant endpoint according to
- * the specified SECOM standard version.
+ * The SECOM Access Notification Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface {
+public class AccessNotificationResponse {
+
+    // Class Variables
+    private String responseText;
 
     /**
-     * GET /secom/v1/capability : Returns the service instance capabilities as
-     * specified by the SECOM standard.
+     * Gets response text.
      *
-     * @return the service instance capabilities
+     * @return the response text
      */
-    ResponseEntity<CapabilityResponse> getCapabilities();
+    public String getResponseText() {
+        return responseText;
+    }
 
+    /**
+     * Sets response text.
+     *
+     * @param responseText the response text
+     */
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
+    }
 }

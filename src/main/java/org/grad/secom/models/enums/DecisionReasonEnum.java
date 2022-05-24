@@ -14,25 +14,20 @@
  * limitations under the License.
  */
 
-package org.grad.secom.models;
+package org.grad.secom.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.Arrays;
+
 /**
- * The SECOM Classification Enum.
+ * The SECOM Decision Reason Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum ClassificationEnum {
-    ONE(1),
-    TWO(2),
-    THREE(3),
-    FOUR(4),
-    FIVE(5),
-    SIX(6),
-    SEVEN(7),
-    EIGHT(8),
-    NINE(9);
+public enum DecisionReasonEnum {
+    ACCESS_REJECTED(0),
+    ACCESS_REJECTED_REQUEST_BY_OTHER_MECHANISM(1);
 
     // Enum Variables
     private final int value;
@@ -42,7 +37,7 @@ public enum ClassificationEnum {
      *
      * @param newValue the enum value
      */
-    ClassificationEnum(final int newValue) {
+    DecisionReasonEnum(final int newValue) {
         value = newValue;
     }
 
@@ -53,4 +48,17 @@ public enum ClassificationEnum {
      */
     @JsonValue
     public int getValue() { return value; }
+
+    /**
+     * Find the enum entry that corresponds to the provided value.
+     *
+     * @param value the enum value
+     * @return The respective S125 AtoN Type enum entry
+     */
+    public static ReasonEnum fromValue(int value) {
+        return Arrays.stream(ReasonEnum.values())
+                .filter(t -> t.getValue() == value)
+                .findFirst()
+                .orElse(null);
+    }
 }

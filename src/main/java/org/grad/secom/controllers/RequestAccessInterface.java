@@ -16,6 +16,15 @@
 
 package org.grad.secom.controllers;
 
+import org.grad.secom.models.S100ProductSpecification;
+import org.grad.secom.models.enums.DataTypeEnum;
+import org.grad.secom.models.enums.ReasonEnum;
+import org.grad.secom.models.RequestAccessResponse;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Optional;
+
 /**
  * The SECOM Request Access Interface Definition.
  * </p>
@@ -26,5 +35,20 @@ package org.grad.secom.controllers;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface RequestAccessInterface {
+
+    /**
+     * POST /v1/access/request : Access to the service instance information can
+     * be requested through the Request Access interface.
+     *
+     * @param reason the human-readable reason for requesting access
+     * @param reasonEnum the machine-readable reason for requesting access
+     * @param dataType the data type requested
+     * @param productSpecification the S-100-based product type requested
+     * @return the object information
+     */
+    ResponseEntity<RequestAccessResponse> requestAccess(@RequestParam("reason") Optional<String> reason,
+                                                        @RequestParam("reasonEnum") Optional<ReasonEnum> reasonEnum,
+                                                        @RequestParam("dataType") Optional<DataTypeEnum> dataType,
+                                                        @RequestParam("productSpecification") Optional<S100ProductSpecification> productSpecification);
 
 }
