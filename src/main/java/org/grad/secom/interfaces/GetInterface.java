@@ -16,15 +16,17 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.models.AreaNameEnumList;
-import org.grad.secom.models.enums.DataTypeEnum;
 import org.grad.secom.models.GetResponse;
+import org.grad.secom.models.enums.AreaNameEnum;
+import org.grad.secom.models.enums.DataTypeEnum;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * The SECOM Get Interface Definition.
@@ -57,10 +59,10 @@ public interface GetInterface {
                                     @RequestParam(value = "dataType", required = false) DataTypeEnum dataType,
                                     @RequestParam(value = "productSpecification", required = false) String productSpecification,
                                     @RequestParam(value = "geometry", required = false) String geometry,
-                                    @RequestParam(value = "areaName", required = false) AreaNameEnumList areaName,
+                                    @RequestParam(value = "areaName", required = false) @Pattern(regexp = "(\\d+(,\\d+)*)?") List<AreaNameEnum> areaName,
                                     @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
-                                    @RequestParam(value = "fromTime", required = false) LocalDateTime fromTime,
-                                    @RequestParam(value = "toTime", required = false) LocalDateTime toTime,
+                                    @RequestParam(value = "fromTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromTime,
+                                    @RequestParam(value = "toTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toTime,
                                     Pageable pageable);
 
 }
