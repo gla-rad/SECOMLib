@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
 import org.grad.secom.models.AreaNameEnumList;
 import org.grad.secom.models.enums.DataTypeEnum;
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * The SECOM Get Summary Interface Definition.

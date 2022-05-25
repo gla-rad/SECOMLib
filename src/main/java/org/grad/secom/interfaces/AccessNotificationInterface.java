@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.RequestAccessRequest;
-import org.grad.secom.models.RequestAccessResponse;
+import org.grad.secom.models.AccessNotificationRequest;
+import org.grad.secom.models.AccessNotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Request Access Interface Definition.
+ * The SECOM Access Notification Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,15 +30,16 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface RequestAccessInterface {
+public interface AccessNotificationInterface {
 
     /**
-     * POST /v1/access/request : Access to the service instance information can
-     * be requested through the Request Access interface.
+     * POST /v1/access/notification : Result from Access Request performed on a
+     * service instance shall be sent asynchronous through this client
+     * interface.
      *
-     * @param requestAccessRequest the request access object
-     * @return the request access response object
+     * @param accessNotificationRequest  the access notification object
+     * @return the access notification response object
      */
-    ResponseEntity<RequestAccessResponse> requestAccess(@RequestBody RequestAccessRequest requestAccessRequest);
+    ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotificationRequest accessNotificationRequest);
 
 }

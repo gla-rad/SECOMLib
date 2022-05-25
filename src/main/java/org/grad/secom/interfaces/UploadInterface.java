@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.RemoveSubscriptionRequest;
-import org.grad.secom.models.SubscriptionResponse;
+import org.grad.secom.models.UploadRequest;
+import org.grad.secom.models.UploadResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Remove Subscription Interface Definition.
+ * The SECOM Upload Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,17 +30,16 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface RemoveSubscriptionInterface {
+public interface UploadInterface {
 
     /**
-     * DELETE /v1/subscription : Subscription(s) can be removed either
-     * internally by information owner, or externally by the consumer. This
-     * interface shall be used by the consumer to request removal of
-     * subscription.
+     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * data to a consumer. The operation expects one single data object and
+     * its metadata.
      *
-     * @param removeSubscriptionRequest the remove subscription object
-     * @return the remove subscription response object
+     * @param uploadRequest  the upload object
+     * @return the upload response object
      */
-    ResponseEntity<SubscriptionResponse> removeSubscription(@RequestBody RemoveSubscriptionRequest removeSubscriptionRequest);
+    ResponseEntity<UploadResponse> upload(@RequestBody UploadRequest uploadRequest);
 
 }

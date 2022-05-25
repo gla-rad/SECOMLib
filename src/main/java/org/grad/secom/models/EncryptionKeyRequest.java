@@ -18,6 +18,8 @@ package org.grad.secom.models;
 
 import org.grad.secom.models.enums.EncryptionKeyTypeEnum;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * The SECOM Encryption Key Request Class.
  *
@@ -26,9 +28,13 @@ import org.grad.secom.models.enums.EncryptionKeyTypeEnum;
 public class EncryptionKeyRequest {
 
     // Class Variables
+    @NotNull
     private String encryptionKey;
+    @NotNull
     private String transactionIdentifier;
+    @NotNull
     private DigitalSignatureValue digitalSignatureValue;
+    @NotNull
     private EncryptionKeyTypeEnum encryptionKeyTypeEnum;
 
     /**

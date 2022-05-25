@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.AccessNotificationRequest;
-import org.grad.secom.models.AccessNotificationResponse;
+import org.grad.secom.models.RemoveSubscriptionRequest;
+import org.grad.secom.models.SubscriptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Access Notification Interface Definition.
+ * The SECOM Remove Subscription Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,16 +30,17 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AccessNotificationInterface {
+public interface RemoveSubscriptionInterface {
 
     /**
-     * POST /v1/access/notification : Result from Access Request performed on a
-     * service instance shall be sent asynchronous through this client
-     * interface.
+     * DELETE /v1/subscription : Subscription(s) can be removed either
+     * internally by information owner, or externally by the consumer. This
+     * interface shall be used by the consumer to request removal of
+     * subscription.
      *
-     * @param accessNotificationRequest  the access notification object
-     * @return the access notification response object
+     * @param removeSubscriptionRequest the remove subscription object
+     * @return the remove subscription response object
      */
-    ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotificationRequest accessNotificationRequest);
+    ResponseEntity<SubscriptionResponse> removeSubscription(@RequestBody RemoveSubscriptionRequest removeSubscriptionRequest);
 
 }

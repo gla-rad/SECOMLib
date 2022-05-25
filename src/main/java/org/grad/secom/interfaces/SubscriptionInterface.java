@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.EncryptionKeyResponse;
-import org.grad.secom.models.EncryptionKeyRequest;
+import org.grad.secom.models.SubscriptionRequest;
+import org.grad.secom.models.SubscriptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Encryption Interface Definition.
+ * The SECOM Subscription Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,14 +30,16 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface EncryptionInterface {
+public interface SubscriptionInterface {
 
     /**
-     * POST /v1/encryptionkey : The purpose of the interface is to exchange a temporary
-     * secret key.
+     * POST /v1/subscription : Request subscription on information, either
+     * specific information according to parameters, or the information
+     * accessible upon decision by the information provider.
      *
-     * @return the encryption key response object
+     * @param subscriptionRequest the subscription object
+     * @return the subscription response object
      */
-    ResponseEntity<EncryptionKeyResponse> uploadEncryptionKey(@RequestBody EncryptionKeyRequest encryptionKeyRequest);
+    ResponseEntity<SubscriptionResponse> subscription(@RequestBody SubscriptionRequest subscriptionRequest);
 
 }

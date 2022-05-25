@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.CapabilityResponse;
+import org.grad.secom.models.StatusResponse;
 import org.springframework.http.ResponseEntity;
 
 /**
- * The SECOM Capability Interface Definition.
+ * The SECOM Status Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -28,15 +28,14 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface {
+public interface StatusInterface {
 
     /**
-     * GET v1/capability : The purpose of the interface is to provide a dynamic
-     * method to ask a service instance at runtime what interfaces are
-     * accessible, and what payload formats and version are valid.
+     * GET /v1/status : The purpose of the interface is to provide a dynamic
+     * method to ask for the technical status of the specific service instance.
      *
-     * @return the capability response object
+     * @return the status response object
      */
-    ResponseEntity<CapabilityResponse> getCapabilities();
+    ResponseEntity<StatusResponse> subscription();
 
 }

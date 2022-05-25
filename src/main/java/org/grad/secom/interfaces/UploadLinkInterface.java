@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.AcknowledgementRequest;
-import org.grad.secom.models.AcknowledgementResponse;
+import org.grad.secom.models.UploadLinkRequest;
+import org.grad.secom.models.UploadLinkResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Acknowledgement Interface Definition.
+ * The SECOM Upload Link Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,19 +30,16 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AcknowledgementInterface {
+public interface UploadLinkInterface {
 
     /**
-     * POST /v1/acknowledgement : During upload of information, an
-     * acknowledgement can be requested which is expected to be received when
-     * the uploaded message has been delivered to the end system (technical
-     * acknowledgement), and an acknowledgement when the message has been opened
-     * (read) by the end user (operational acknowledgement). The acknowledgement
-     * contains a reference to object delivered.
+     * POST /v1/object/link : The REST operation POST /object/link. The
+     * interface shall be used for uploading (pushing) a link to data to a
+     * consumer.
      *
-     * @param acknowledgementRequest  the acknowledgement object
-     * @return the acknowledgement response object
+     * @param uploadLinkRequest  the upload link object
+     * @return the upload link response object
      */
-    ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody AcknowledgementRequest acknowledgementRequest);
+    ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLinkRequest uploadLinkRequest);
 
 }

@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
 import org.grad.secom.models.AreaNameEnumList;
-import org.grad.secom.models.enums.AreaNameEnum;
 import org.grad.secom.models.enums.DataTypeEnum;
 import org.grad.secom.models.GetResponse;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,6 @@ import org.springframework.data.domain.Pageable;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * The SECOM Get Interface Definition.

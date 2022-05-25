@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.SubscriptionNotificationRequest;
-import org.grad.secom.models.SubscriptionNotificationResponse;
-import org.grad.secom.models.SubscriptionRequest;
-import org.grad.secom.models.SubscriptionResponse;
+import org.grad.secom.models.AcknowledgementRequest;
+import org.grad.secom.models.AcknowledgementResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Subscription Notification Interface Definition.
+ * The SECOM Acknowledgement Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -32,15 +30,19 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SubscriptionNotificationInterface {
+public interface AcknowledgementInterface {
 
     /**
-     * POST /v1/subscription/notification : The interface receives notifications
-     * when a subscription is created or removed by the information provider.
+     * POST /v1/acknowledgement : During upload of information, an
+     * acknowledgement can be requested which is expected to be received when
+     * the uploaded message has been delivered to the end system (technical
+     * acknowledgement), and an acknowledgement when the message has been opened
+     * (read) by the end user (operational acknowledgement). The acknowledgement
+     * contains a reference to object delivered.
      *
-     * @param subscriptionNotificationRequest the subscription notification request object
-     * @return the subscription notification response object
+     * @param acknowledgementRequest  the acknowledgement object
+     * @return the acknowledgement response object
      */
-    ResponseEntity<SubscriptionNotificationResponse> subscription(@RequestBody SubscriptionNotificationRequest subscriptionNotificationRequest);
+    ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody AcknowledgementRequest acknowledgementRequest);
 
 }

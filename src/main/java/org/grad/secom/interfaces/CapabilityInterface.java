@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.UploadLinkRequest;
-import org.grad.secom.models.UploadLinkResponse;
+import org.grad.secom.models.CapabilityResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Upload Link Interface Definition.
+ * The SECOM Capability Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,16 +28,15 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface UploadLinkInterface {
+public interface CapabilityInterface {
 
     /**
-     * POST /v1/object/link : The REST operation POST /object/link. The
-     * interface shall be used for uploading (pushing) a link to data to a
-     * consumer.
+     * GET v1/capability : The purpose of the interface is to provide a dynamic
+     * method to ask a service instance at runtime what interfaces are
+     * accessible, and what payload formats and version are valid.
      *
-     * @param uploadLinkRequest  the upload link object
-     * @return the upload link response object
+     * @return the capability response object
      */
-    ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLinkRequest uploadLinkRequest);
+    ResponseEntity<CapabilityResponse> getCapabilities();
 
 }

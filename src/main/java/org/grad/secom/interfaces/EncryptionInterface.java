@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.GetResponse;
+import org.grad.secom.models.EncryptionKeyResponse;
+import org.grad.secom.models.EncryptionKeyRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Get By Link Interface Definition.
+ * The SECOM Encryption Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,18 +30,14 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetByLinkInterface {
+public interface EncryptionInterface {
 
     /**
-     * GET /v1/object/link : The Get By Link interface is used for pulling
-     * information from a data storage handled by the information owner. The
-     * link to the data storage can be exchanged with Upload Link interface.
-     * The owner of the information (provider) is responsible for relevant
-     * authentication and authorization procedure before returning information.
+     * POST /v1/encryptionkey : The purpose of the interface is to exchange a
+     * temporary secret key.
      *
-     * @param transactionIdentifier the transaction identifier
-     * @return the object in an "application/zip" encoding
+     * @return the encryption key response object
      */
-    ResponseEntity<StreamingResponseBody> getByLink(@RequestParam(value = "transactionIdentifier") String transactionIdentifier);
+    ResponseEntity<EncryptionKeyResponse> uploadEncryptionKey(@RequestBody EncryptionKeyRequest encryptionKeyRequest);
 
 }

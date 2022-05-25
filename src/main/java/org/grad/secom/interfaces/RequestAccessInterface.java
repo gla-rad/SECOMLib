@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.UploadRequest;
-import org.grad.secom.models.UploadResponse;
+import org.grad.secom.models.RequestAccessRequest;
+import org.grad.secom.models.RequestAccessResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
- * The SECOM Upload Interface Definition.
+ * The SECOM Request Access Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -30,16 +30,15 @@ import org.springframework.web.bind.annotation.RequestBody;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface UploadInterface {
+public interface RequestAccessInterface {
 
     /**
-     * POST /v1/object : The interface shall be used for uploading (pushing)
-     * data to a consumer. The operation expects one single data object and
-     * its metadata.
+     * POST /v1/access/request : Access to the service instance information can
+     * be requested through the Request Access interface.
      *
-     * @param uploadRequest  the upload object
-     * @return the upload response object
+     * @param requestAccessRequest the request access object
+     * @return the request access response object
      */
-    ResponseEntity<UploadResponse> upload(@RequestBody UploadRequest uploadRequest);
+    ResponseEntity<RequestAccessResponse> requestAccess(@RequestBody RequestAccessRequest requestAccessRequest);
 
 }

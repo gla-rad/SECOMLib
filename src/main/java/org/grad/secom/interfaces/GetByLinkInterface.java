@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.StatusResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 /**
- * The SECOM Status Interface Definition.
+ * The SECOM Get By Link Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -28,14 +29,18 @@ import org.springframework.http.ResponseEntity;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface StatusInterface {
+public interface GetByLinkInterface {
 
     /**
-     * GET /v1/status : The purpose of the interface is to provide a dynamic
-     * method to ask for the technical status of the specific service instance.
+     * GET /v1/object/link : The Get By Link interface is used for pulling
+     * information from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
      *
-     * @return the status response object
+     * @param transactionIdentifier the transaction identifier
+     * @return the object in an "application/zip" encoding
      */
-    ResponseEntity<StatusResponse> subscription();
+    ResponseEntity<StreamingResponseBody> getByLink(@RequestParam(value = "transactionIdentifier") String transactionIdentifier);
 
 }

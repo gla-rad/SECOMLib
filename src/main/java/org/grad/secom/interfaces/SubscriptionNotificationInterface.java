@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-package org.grad.secom.controllers;
+package org.grad.secom.interfaces;
 
-import org.grad.secom.models.SubscriptionList;
-import org.grad.secom.models.SubscriptionRequest;
-import org.grad.secom.models.SubscriptionResponse;
+import org.grad.secom.models.SubscriptionNotificationRequest;
+import org.grad.secom.models.SubscriptionNotificationResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.List;
-
 /**
- * The SECOM Get Subscription Interface Definition.
+ * The SECOM Subscription Notification Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -33,14 +30,15 @@ import java.util.List;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetSubscriptionListInterface {
+public interface SubscriptionNotificationInterface {
 
     /**
-     * GET /v1/subscription : A list of active subscriptions is retrieved
-     * through this interface.
+     * POST /v1/subscription/notification : The interface receives notifications
+     * when a subscription is created or removed by the information provider.
      *
-     * @return the subscription response object
+     * @param subscriptionNotificationRequest the subscription notification request object
+     * @return the subscription notification response object
      */
-    ResponseEntity<List<SubscriptionList>> getSubscriptionList();
+    ResponseEntity<SubscriptionNotificationResponse> subscription(@RequestBody SubscriptionNotificationRequest subscriptionNotificationRequest);
 
 }
