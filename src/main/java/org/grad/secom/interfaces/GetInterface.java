@@ -56,7 +56,7 @@ public interface GetInterface {
     ResponseEntity<GetResponse> get(@RequestParam(value = "dataReference", required = false) String dataReference,
                                     @RequestParam(value = "dataType", required = false) DataTypeEnum dataType,
                                     @RequestParam(value = "productSpecification", required = false) String productSpecification,
-                                    @RequestParam(value = "geometry") String geometry,
+                                    @RequestParam(value = "geometry", required = false) String geometry,
                                     @RequestParam(value = "areaName", required = false) AreaNameEnumList areaName,
                                     @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
                                     @RequestParam(value = "fromTime", required = false) LocalDateTime fromTime,
