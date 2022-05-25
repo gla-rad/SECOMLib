@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.SubscriptionNotificationRequest;
 import org.grad.secom.models.SubscriptionNotificationResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,12 +34,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface SubscriptionNotificationInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/v1/subscription/notification";
+
+    /**
      * POST /v1/subscription/notification : The interface receives notifications
      * when a subscription is created or removed by the information provider.
      *
      * @param subscriptionNotificationRequest the subscription notification request object
      * @return the subscription notification response object
      */
+    @PostMapping(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
     ResponseEntity<SubscriptionNotificationResponse> subscription(@RequestBody SubscriptionNotificationRequest subscriptionNotificationRequest);
 
 }

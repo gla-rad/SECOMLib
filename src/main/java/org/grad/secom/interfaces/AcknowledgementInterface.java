@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.AcknowledgementRequest;
 import org.grad.secom.models.AcknowledgementResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AcknowledgementInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String ACKNOWLEDGMENT_INTERFACE_PATH = "/v1/acknowledgement";
+
+    /**
      * POST /v1/acknowledgement : During upload of information, an
      * acknowledgement can be requested which is expected to be received when
      * the uploaded message has been delivered to the end system (technical
@@ -43,6 +49,7 @@ public interface AcknowledgementInterface {
      * @param acknowledgementRequest  the acknowledgement object
      * @return the acknowledgement response object
      */
+    @PostMapping(ACKNOWLEDGMENT_INTERFACE_PATH)
     ResponseEntity<AcknowledgementResponse> accessNotification(@RequestBody AcknowledgementRequest acknowledgementRequest);
 
 }

@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.AccessNotificationRequest;
 import org.grad.secom.models.AccessNotificationResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface AccessNotificationInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String ACCESS_NOTIFICATION_INTERFACE_PATH = "/v1/access/notification";
+
+    /**
      * POST /v1/access/notification : Result from Access Request performed on a
      * service instance shall be sent asynchronous through this client
      * interface.
@@ -40,6 +46,7 @@ public interface AccessNotificationInterface {
      * @param accessNotificationRequest  the access notification object
      * @return the access notification response object
      */
+    @PostMapping(ACCESS_NOTIFICATION_INTERFACE_PATH)
     ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotificationRequest accessNotificationRequest);
 
 }

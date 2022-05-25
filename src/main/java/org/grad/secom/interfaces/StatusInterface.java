@@ -18,6 +18,7 @@ package org.grad.secom.interfaces;
 
 import org.grad.secom.models.StatusResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * The SECOM Status Interface Definition.
@@ -31,11 +32,17 @@ import org.springframework.http.ResponseEntity;
 public interface StatusInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String STATUS_INTERFACE_PATH = "/v1/status";
+
+    /**
      * GET /v1/status : The purpose of the interface is to provide a dynamic
      * method to ask for the technical status of the specific service instance.
      *
      * @return the status response object
      */
+    @GetMapping(STATUS_INTERFACE_PATH)
     ResponseEntity<StatusResponse> subscription();
 
 }

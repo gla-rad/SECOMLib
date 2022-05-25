@@ -18,6 +18,7 @@ package org.grad.secom.interfaces;
 
 import org.grad.secom.models.SubscriptionList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -33,11 +34,17 @@ import java.util.List;
 public interface GetSubscriptionListInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String GET_SUBSCRIPTION_LIST_INTERFACE_PATH = "/v1/subscription";
+
+    /**
      * GET /v1/subscription : A list of active subscriptions is retrieved
      * through this interface.
      *
      * @return the subscription response object
      */
+    @GetMapping(GET_SUBSCRIPTION_LIST_INTERFACE_PATH)
     ResponseEntity<List<SubscriptionList>> getSubscriptionList();
 
 }

@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.UploadRequest;
 import org.grad.secom.models.UploadResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UploadInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String UPLOAD_INTERFACE_PATH = "/v1/object";
+
+    /**
      * POST /v1/object : The interface shall be used for uploading (pushing)
      * data to a consumer. The operation expects one single data object and
      * its metadata.
@@ -40,6 +46,7 @@ public interface UploadInterface {
      * @param uploadRequest  the upload object
      * @return the upload response object
      */
+    @PostMapping(UPLOAD_INTERFACE_PATH)
     ResponseEntity<UploadResponse> upload(@RequestBody UploadRequest uploadRequest);
 
 }

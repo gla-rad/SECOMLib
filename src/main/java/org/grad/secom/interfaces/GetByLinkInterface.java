@@ -17,6 +17,7 @@
 package org.grad.secom.interfaces;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -32,6 +33,11 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 public interface GetByLinkInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
+
+    /**
      * GET /v1/object/link : The Get By Link interface is used for pulling
      * information from a data storage handled by the information owner. The
      * link to the data storage can be exchanged with Upload Link interface.
@@ -41,6 +47,7 @@ public interface GetByLinkInterface {
      * @param transactionIdentifier the transaction identifier
      * @return the object in an "application/zip" encoding
      */
+    @GetMapping(GET_BY_LINK_INTERFACE_PATH)
     ResponseEntity<StreamingResponseBody> getByLink(@RequestParam(value = "transactionIdentifier") String transactionIdentifier);
 
 }

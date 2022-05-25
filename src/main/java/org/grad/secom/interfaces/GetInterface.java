@@ -22,6 +22,7 @@ import org.grad.secom.models.enums.DataTypeEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.Pattern;
@@ -40,6 +41,11 @@ import java.util.List;
 public interface GetInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String GET_INTERFACE_PATH = "/v1/object";
+
+    /**
      * GET /v1/object : The Get interface is used for pulling information from a
      * service provider. The owner of the information (provider) is responsible
      * for the authorization procedure before returning information.
@@ -55,6 +61,7 @@ public interface GetInterface {
      * @param pageable the pageable information
      * @return the object information
      */
+    @GetMapping(GET_INTERFACE_PATH)
     ResponseEntity<GetResponse> get(@RequestParam(value = "dataReference", required = false) String dataReference,
                                     @RequestParam(value = "dataType", required = false) DataTypeEnum dataType,
                                     @RequestParam(value = "productSpecification", required = false) String productSpecification,

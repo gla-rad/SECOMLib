@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.EncryptionKeyResponse;
 import org.grad.secom.models.EncryptionKeyRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,11 +34,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface EncryptionInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+
+    /**
      * POST /v1/encryptionkey : The purpose of the interface is to exchange a
      * temporary secret key.
      *
      * @return the encryption key response object
      */
+    @PostMapping(CAPABILITY_INTERFACE_PATH)
     ResponseEntity<EncryptionKeyResponse> uploadEncryptionKey(@RequestBody EncryptionKeyRequest encryptionKeyRequest);
 
 }

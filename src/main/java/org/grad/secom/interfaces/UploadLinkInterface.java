@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.UploadLinkRequest;
 import org.grad.secom.models.UploadLinkResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface UploadLinkInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String UPLOAD_LINK_INTERFACE_PATH = "/v1/object/link";
+
+    /**
      * POST /v1/object/link : The REST operation POST /object/link. The
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
@@ -40,6 +46,7 @@ public interface UploadLinkInterface {
      * @param uploadLinkRequest  the upload link object
      * @return the upload link response object
      */
+    @PostMapping(UPLOAD_LINK_INTERFACE_PATH)
     ResponseEntity<UploadLinkResponse> upload(@RequestBody UploadLinkRequest uploadLinkRequest);
 
 }

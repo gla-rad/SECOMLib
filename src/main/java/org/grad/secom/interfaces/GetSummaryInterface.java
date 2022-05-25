@@ -22,6 +22,7 @@ import org.grad.secom.models.enums.DataTypeEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
@@ -38,6 +39,10 @@ import java.util.List;
  */
 public interface GetSummaryInterface {
 
+    /**
+     * The Interface Endpoint Path.
+     */
+    public static final String GET_SUMMARY_INTERFACE_PATH = "/v1/object/summary";
 
     /**
      * GET /v1/object/summary :  A list of information shall be returned from
@@ -55,6 +60,7 @@ public interface GetSummaryInterface {
      * @param pageable the pageable information
      * @return the summary response object
      */
+    @GetMapping(GET_SUMMARY_INTERFACE_PATH)
     ResponseEntity<GetSummaryResponse> getSummary(DataTypeEnum dataType,
                                                   String productSpecification,
                                                   String geometry,

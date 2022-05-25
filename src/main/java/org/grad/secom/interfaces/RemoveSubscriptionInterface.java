@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.RemoveSubscriptionRequest;
 import org.grad.secom.models.SubscriptionResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,6 +34,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface RemoveSubscriptionInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
+
+    /**
      * DELETE /v1/subscription : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
@@ -41,6 +47,7 @@ public interface RemoveSubscriptionInterface {
      * @param removeSubscriptionRequest the remove subscription object
      * @return the remove subscription response object
      */
+    @DeleteMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
     ResponseEntity<SubscriptionResponse> removeSubscription(@RequestBody RemoveSubscriptionRequest removeSubscriptionRequest);
 
 }

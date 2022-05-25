@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.models.RequestAccessRequest;
 import org.grad.secom.models.RequestAccessResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 /**
@@ -33,12 +34,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface RequestAccessInterface {
 
     /**
+     * The Interface Endpoint Path.
+     */
+    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/access/request";
+
+    /**
      * POST /v1/access/request : Access to the service instance information can
      * be requested through the Request Access interface.
      *
      * @param requestAccessRequest the request access object
      * @return the request access response object
      */
+    @PostMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
     ResponseEntity<RequestAccessResponse> requestAccess(@RequestBody RequestAccessRequest requestAccessRequest);
 
 }
