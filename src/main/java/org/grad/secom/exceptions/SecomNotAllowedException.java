@@ -14,33 +14,24 @@
  * limitations under the License.
  */
 
-package org.grad.secom.models;
+package org.grad.secom.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The SECOM Upload Link Response Class.
+ * The SECOM Not Allowed Exception Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class UploadLinkResponse {
-
-    // Class Variables
-    private String responseText;
+@ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+public class SecomNotAllowedException extends SecomGenericException {
 
     /**
-     * Gets response text.
-     *
-     * @return the response text
+     * Class Constructor.
      */
-    public String getResponseText() {
-        return responseText;
+    public SecomNotAllowedException(String message) {
+        super(message);
     }
 
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 }

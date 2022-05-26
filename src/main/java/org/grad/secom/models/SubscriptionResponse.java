@@ -27,7 +27,6 @@ public class SubscriptionResponse {
 
     // Class Variables
     private String subscriptionIdentifier;
-    @NotNull
     private String responseText;
 
     /**

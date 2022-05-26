@@ -32,6 +32,7 @@ public class StatusResponse {
     @NotNull
     private String version;
     private LocalDateTime lastPrivateInteractionTime;
+    private String responseText;
 
     /**
      * Gets status.
@@ -85,5 +86,23 @@ public class StatusResponse {
      */
     public void setLastPrivateInteractionTime(LocalDateTime lastPrivateInteractionTime) {
         this.lastPrivateInteractionTime = lastPrivateInteractionTime;
+    }
+
+    /**
+     * Gets response text.
+     *
+     * @return the response text
+     */
+    public String getResponseText() {
+        return responseText;
+    }
+
+    /**
+     * Sets response text.
+     *
+     * @param responseText the response text
+     */
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }

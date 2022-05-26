@@ -16,14 +16,25 @@
 
 package org.grad.secom.interfaces;
 
+import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotFoundException;
+import org.grad.secom.exceptions.SecomNotImplementedException;
+import org.grad.secom.models.GetResponse;
 import org.grad.secom.models.GetSummaryResponse;
 import org.grad.secom.models.enums.AreaNameEnum;
 import org.grad.secom.models.enums.DataTypeEnum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -69,5 +80,48 @@ public interface GetSummaryInterface {
                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromTime,
                                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toTime,
                                                   Pageable pageable);
+
+    /**
+     * The exception handler implementation for the interface.
+     *
+     * @param ex the exception that was raised
+     * @param request the request that cause the exception
+     * @param response the response for the request
+     * @return the handler response according to the SECOM standard
+     */
+    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class, MethodArgumentTypeMismatchException.class})
+    default ResponseEntity<Object> handleGetSummaryInterfaceExceptions(Exception ex,
+                                                                       HttpServletRequest request,
+                                                                       HttpServletResponse response) {
+        // Create the upload response
+        HttpStatus httpStatus;
+        GetResponse getResponse = new GetResponse();
+
+        // Handle according to the exception type
+        if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            getResponse.setResponseText("Not authorized to requested information");
+        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
+            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
+            getResponse.setResponseText("Method not allowed");
+        } else if(ex instanceof SecomNotImplementedException) {
+            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            getResponse.setResponseText("Not implemented");
+        }  else if (ex instanceof SecomNotFoundException) {
+            httpStatus = HttpStatus.NOT_FOUND;
+            getResponse.setResponseText(String.format("Information not found"));
+        } else if (ex instanceof MethodArgumentTypeMismatchException) {
+            MethodArgumentTypeMismatchException typeMismatchException = (MethodArgumentTypeMismatchException) ex;
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            getResponse.setResponseText(String.format("Parameter %s=%s incorrect format", typeMismatchException.getName(), typeMismatchException.getValue()));
+        } else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            getResponse.setResponseText(ex.getMessage());
+        }
+
+        // Otherwise, send a generic internal server error
+        return ResponseEntity.status(httpStatus)
+                .body(getResponse);
+    }
 
 }

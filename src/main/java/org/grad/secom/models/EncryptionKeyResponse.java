@@ -26,7 +26,6 @@ import javax.validation.constraints.NotNull;
 public class EncryptionKeyResponse {
 
     // Class Variables
-    @NotNull
     private String responseText;
 
     /**

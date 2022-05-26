@@ -16,14 +16,24 @@
 
 package org.grad.secom.interfaces;
 
+import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotImplementedException;
 import org.grad.secom.models.SubscriptionList;
+import org.grad.secom.models.SubscriptionListResponse;
+import org.grad.secom.models.SubscriptionResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * The SECOM Get Subscription Interface Definition.
+ * The SECOM Get Subscription List Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -45,6 +55,42 @@ public interface GetSubscriptionListInterface {
      * @return the subscription response object
      */
     @GetMapping(GET_SUBSCRIPTION_LIST_INTERFACE_PATH)
-    ResponseEntity<List<SubscriptionList>> getSubscriptionList();
+    ResponseEntity<List<SubscriptionListResponse>> getSubscriptionList();
+
+    /**
+     * The exception handler implementation for the interface.
+     *
+     * @param ex the exception that was raised
+     * @param request the request that cause the exception
+     * @param response the response for the request
+     * @return the handler response according to the SECOM standard
+     */
+    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class})
+    default ResponseEntity<Object> handleSubscriptionListInterfaceExceptions(Exception ex,
+                                                                             HttpServletRequest request,
+                                                                             HttpServletResponse response) {
+        // Create the upload response
+        HttpStatus httpStatus;
+        SubscriptionListResponse subscriptionListResponse = new SubscriptionListResponse();
+
+        // Handle according to the exception type
+        if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            subscriptionListResponse.setResponseText("Not authorized to requested information");
+        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
+            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
+            subscriptionListResponse.setResponseText("Method not allowed");
+        } else if(ex instanceof SecomNotImplementedException) {
+            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            subscriptionListResponse.setResponseText("Not implemented");
+        }  else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            subscriptionListResponse.setResponseText(ex.getMessage());
+        }
+
+        // Otherwise, send a generic internal server error
+        return ResponseEntity.status(httpStatus)
+                .body(subscriptionListResponse);
+    }
 
 }

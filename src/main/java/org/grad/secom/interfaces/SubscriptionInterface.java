@@ -16,11 +16,21 @@
 
 package org.grad.secom.interfaces;
 
+import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotImplementedException;
+import org.grad.secom.models.AccessNotificationResponse;
 import org.grad.secom.models.SubscriptionRequest;
 import org.grad.secom.models.SubscriptionResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * The SECOM Subscription Interface Definition.
@@ -48,5 +58,41 @@ public interface SubscriptionInterface {
      */
     @PostMapping(SUBSCRIPTION_INTERFACE_PATH)
     ResponseEntity<SubscriptionResponse> subscription(@RequestBody SubscriptionRequest subscriptionRequest);
+
+    /**
+     * The exception handler implementation for the interface.
+     *
+     * @param ex the exception that was raised
+     * @param request the request that cause the exception
+     * @param response the response for the request
+     * @return the handler response according to the SECOM standard
+     */
+    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class})
+    default ResponseEntity<Object> handleSubscriptionInterfaceExceptions(Exception ex,
+                                                                         HttpServletRequest request,
+                                                                         HttpServletResponse response) {
+        // Create the upload response
+        HttpStatus httpStatus;
+        SubscriptionResponse subscriptionResponse = new SubscriptionResponse();
+
+        // Handle according to the exception type
+        if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            subscriptionResponse.setResponseText("Not authorized to requested information");
+        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
+            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
+            subscriptionResponse.setResponseText("Method not allowed");
+        } else if(ex instanceof SecomNotImplementedException) {
+            httpStatus = HttpStatus.NOT_IMPLEMENTED;
+            subscriptionResponse.setResponseText("Not implemented");
+        }  else {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            subscriptionResponse.setResponseText(ex.getMessage());
+        }
+
+        // Otherwise, send a generic internal server error
+        return ResponseEntity.status(httpStatus)
+                .body(subscriptionResponse);
+    }
 
 }

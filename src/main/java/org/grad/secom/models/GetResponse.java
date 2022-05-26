@@ -33,6 +33,7 @@ public class GetResponse {
     private DataResponse data;
     @NotNull
     private Pagination pagination;
+    private String responseText;
 
     /**
      * Instantiates a new Get message response object.
@@ -84,6 +85,24 @@ public class GetResponse {
      */
     public void setPagination(Pagination pagination) {
         this.pagination = pagination;
+    }
+
+    /**
+     * Gets response text.
+     *
+     * @return the response text
+     */
+    public String getResponseText() {
+        return responseText;
+    }
+
+    /**
+     * Sets response text.
+     *
+     * @param responseText the response text
+     */
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 
     /**

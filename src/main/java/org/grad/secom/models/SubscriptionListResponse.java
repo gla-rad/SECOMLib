@@ -16,35 +16,35 @@
 
 package org.grad.secom.models;
 
-import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * The SECOM Request Access Response Class.
+ * The SECOM Subscription List Response Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class RequestAccessResponse {
+public class SubscriptionListResponse {
 
     // Class Variables
-    private String transactionIdentifier;
+    private List<SubscriptionList> subscriptionList;
     private String responseText;
 
     /**
-     * Gets transaction identifier.
+     * Gets subscription list.
      *
-     * @return the transaction identifier
+     * @return the subscription list
      */
-    public String getTransactionIdentifier() {
-        return transactionIdentifier;
+    public List<SubscriptionList> getSubscriptionList() {
+        return subscriptionList;
     }
 
     /**
-     * Sets transaction identifier.
+     * Sets subscription list.
      *
-     * @param transactionIdentifier the transaction identifier
+     * @param subscriptionList the subscription list
      */
-    public void setTransactionIdentifier(String transactionIdentifier) {
-        this.transactionIdentifier = transactionIdentifier;
+    public void setSubscriptionList(List<SubscriptionList> subscriptionList) {
+        this.subscriptionList = subscriptionList;
     }
 
     /**
@@ -64,4 +64,5 @@ public class RequestAccessResponse {
     public void setResponseText(String responseText) {
         this.responseText = responseText;
     }
+
 }

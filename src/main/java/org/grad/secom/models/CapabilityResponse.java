@@ -26,10 +26,11 @@ import java.net.URL;
 public class CapabilityResponse {
 
     // Class Variables
-    String payloadName;
-    String payloadVersion;
-    URL payloadSchemaUrl;
-    SecomInterfaces implementedInterfaces;
+    private String payloadName;
+    private String payloadVersion;
+    private URL payloadSchemaUrl;
+    private SecomInterfaces implementedInterfaces;
+    private String responseText;
 
     /**
      * Gets payload name.
@@ -101,5 +102,23 @@ public class CapabilityResponse {
      */
     public void setImplementedInterfaces(SecomInterfaces implementedInterfaces) {
         this.implementedInterfaces = implementedInterfaces;
+    }
+
+    /**
+     * Gets response text.
+     *
+     * @return the response text
+     */
+    public String getResponseText() {
+        return responseText;
+    }
+
+    /**
+     * Sets response text.
+     *
+     * @param responseText the response text
+     */
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }

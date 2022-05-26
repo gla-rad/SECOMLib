@@ -28,9 +28,10 @@ import java.util.List;
 public class GetSummaryResponse {
 
     // Class Variables
-    List<Summary> summary;
+    private List<Summary> summary;
     @NotNull
-    Pagination pagination;
+    private Pagination pagination;
+    private String responseText;
 
     /**
      * Gets summary.
@@ -66,5 +67,23 @@ public class GetSummaryResponse {
      */
     public void setPagination(Pagination pagination) {
         this.pagination = pagination;
+    }
+
+    /**
+     * Gets response text.
+     *
+     * @return the response text
+     */
+    public String getResponseText() {
+        return responseText;
+    }
+
+    /**
+     * Sets response text.
+     *
+     * @param responseText the response text
+     */
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }

@@ -18,8 +18,6 @@ package org.grad.secom.models;
 
 import org.grad.secom.models.enums.ResponseCodeEnum;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * The SECOM Acknowledgement Response Class.
  *
@@ -29,8 +27,7 @@ public class AcknowledgementResponse {
 
     // Class Variables
     private ResponseCodeEnum responseCode;
-    @NotNull
-    private String message;
+    private String responseText;
 
     /**
      * Gets response code.
@@ -51,20 +48,20 @@ public class AcknowledgementResponse {
     }
 
     /**
-     * Gets message.
+     * Gets response text.
      *
-     * @return the message
+     * @return the response text
      */
-    public String getMessage() {
-        return message;
+    public String getResponseText() {
+        return responseText;
     }
 
     /**
-     * Sets message.
+     * Sets response text.
      *
-     * @param message the message
+     * @param responseText the response text
      */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }

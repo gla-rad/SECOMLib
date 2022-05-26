@@ -14,33 +14,45 @@
  * limitations under the License.
  */
 
-package org.grad.secom.models;
+package org.grad.secom.exceptions;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * The SECOM Upload Link Response Class.
+ * The SECOM Not Found Exception Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class UploadLinkResponse {
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class SecomNotFoundException extends SecomGenericException {
 
     // Class Variables
-    private String responseText;
+    private String identifier;
 
     /**
-     * Gets response text.
-     *
-     * @return the response text
+     * Class Constructor.
      */
-    public String getResponseText() {
-        return responseText;
+    public SecomNotFoundException(String identifier) {
+        super(String.format("%s not found", identifier));
+        this.identifier = identifier;
     }
 
     /**
-     * Sets response text.
+     * Gets identifier.
      *
-     * @param responseText the response text
+     * @return the identifier
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    /**
+     * Sets identifier.
+     *
+     * @param identifier the identifier
+     */
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

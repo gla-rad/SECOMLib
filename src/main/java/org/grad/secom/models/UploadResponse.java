@@ -30,8 +30,7 @@ public class UploadResponse {
     // Class Variables
     @NotNull
     private ResponseCodeEnum responseCode;
-    @NotNull
-    private String message;
+    private String responseText;
 
     /**
      * Gets response code.
@@ -52,20 +51,20 @@ public class UploadResponse {
     }
 
     /**
-     * Gets message.
+     * Gets response text.
      *
-     * @return the message
+     * @return the response text
      */
-    public String getMessage() {
-        return message;
+    public String getResponseText() {
+        return responseText;
     }
 
     /**
-     * Sets message.
+     * Sets response text.
      *
-     * @param message the message
+     * @param responseText the response text
      */
-    public void setMessage(String message) {
-        this.message = message;
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }
