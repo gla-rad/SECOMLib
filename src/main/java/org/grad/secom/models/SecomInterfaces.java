@@ -53,6 +53,7 @@ public class SecomInterfaces {
     public SecomInterfaces() {
         this.upload = Boolean.FALSE;
         this.uploadLink = Boolean.FALSE;
+        this.acknowledgment = Boolean.FALSE;
         this.get = Boolean.FALSE;
         this.getSummary = Boolean.FALSE;
         this.getByLink = Boolean.FALSE;
