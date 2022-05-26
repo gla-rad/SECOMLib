@@ -17,7 +17,7 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.models.RemoveSubscriptionRequest;
-import org.grad.secom.models.SubscriptionResponse;
+import org.grad.secom.models.RemoveSubscriptionResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +48,6 @@ public interface RemoveSubscriptionInterface {
      * @return the remove subscription response object
      */
     @DeleteMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<SubscriptionResponse> removeSubscription(@RequestBody RemoveSubscriptionRequest removeSubscriptionRequest);
+    ResponseEntity<RemoveSubscriptionResponse> removeSubscription(@RequestBody RemoveSubscriptionRequest removeSubscriptionRequest);
 
 }
