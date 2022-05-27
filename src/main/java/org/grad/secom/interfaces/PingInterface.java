@@ -17,9 +17,7 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.CapabilityResponseObject;
+import org.grad.secom.models.PingResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -32,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Capability Interface Definition.
+ * The SECOM Ping Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -40,22 +38,21 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface extends GenericInterface {
+public interface PingInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+    public static final String STATUS_INTERFACE_PATH = "/v1/ping";
 
     /**
-     * GET /v1/capability : The purpose of the interface is to provide a dynamic
-     * method to ask a service instance at runtime what interfaces are
-     * accessible, and what payload formats and version are valid.
+     * GET /v1/ping : The purpose of the interface is to provide a dynamic
+     * method to ask for the technical status of the specific service instance.
      *
-     * @return the capability response object
+     * @return the status response object
      */
-    @GetMapping(CAPABILITY_INTERFACE_PATH)
-    ResponseEntity<CapabilityResponseObject> capability();
+    @GetMapping(STATUS_INTERFACE_PATH)
+    ResponseEntity<PingResponseObject> ing();
 
     /**
      * The exception handler implementation for the interface.
@@ -71,19 +68,19 @@ public interface CapabilityInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleCapabilityInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
-        // Create the capability response
+    default ResponseEntity<Object> handlePingInterfaceExceptions(Exception ex,
+                                                                 HttpServletRequest request,
+                                                                 HttpServletResponse response) {
+        // Create the ping response
         HttpStatus httpStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        PingResponseObject pingResponseObject = new PingResponseObject();
 
         // Handle according to the exception type
         httpStatus = this.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(capabilityResponseObject);
+                .body(pingResponseObject);
     }
 
 }

@@ -19,53 +19,34 @@ package org.grad.secom.models;
 import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Digital Signature Value Class.
+ * The SECOM Acknowledgement Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DigitalSignatureValue {
+public class AcknowledgementObject {
 
     // Class Variables
-    private String publicRootCertificateThumbprint;
     @NotNull
-    private String publicCertificate;
+    private EnvelopeAckObj envelope;
     @NotNull
     private String digitalSignature;
 
     /**
-     * Gets public root certificate thumbprint.
+     * Gets envelope.
      *
-     * @return the public root certificate thumbprint
+     * @return the envelope
      */
-    public String getPublicRootCertificateThumbprint() {
-        return publicRootCertificateThumbprint;
+    public EnvelopeAckObj getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets public root certificate thumbprint.
+     * Sets envelope.
      *
-     * @param publicRootCertificateThumbprint the public root certificate thumbprint
+     * @param envelope the envelope
      */
-    public void setPublicRootCertificateThumbprint(String publicRootCertificateThumbprint) {
-        this.publicRootCertificateThumbprint = publicRootCertificateThumbprint;
-    }
-
-    /**
-     * Gets public certificate.
-     *
-     * @return the public certificate
-     */
-    public String getPublicCertificate() {
-        return publicCertificate;
-    }
-
-    /**
-     * Sets public certificate.
-     *
-     * @param publicCertificate the public certificate
-     */
-    public void setPublicCertificate(String publicCertificate) {
-        this.publicCertificate = publicCertificate;
+    public void setEnvelope(EnvelopeAckObj envelope) {
+        this.envelope = envelope;
     }
 
     /**

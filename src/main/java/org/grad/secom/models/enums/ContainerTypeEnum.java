@@ -21,13 +21,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 /**
- * The SECOM Subscription Event Enum.
+ * The SECOM Container Type Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SubscriptionEventEnum {
-    SUBSCRIPTION_CREATED(1),
-    SUBSCRIPTION_REMOVED(2);
+public enum ContainerTypeEnum {
+    S100_DataSet(0),
+    S100_ExchangeSet(1),
+    NONE(2);
 
     // Enum Variables
     private final int value;
@@ -37,7 +38,7 @@ public enum SubscriptionEventEnum {
      *
      * @param newValue the enum value
      */
-    SubscriptionEventEnum(final int newValue) {
+    ContainerTypeEnum(final int newValue) {
         value = newValue;
     }
 
@@ -55,8 +56,8 @@ public enum SubscriptionEventEnum {
      * @param value the enum value
      * @return The respective enum entry
      */
-    public static SubscriptionEventEnum fromValue(int value) {
-        return Arrays.stream(SubscriptionEventEnum.values())
+    public static ContainerTypeEnum fromValue(int value) {
+        return Arrays.stream(ContainerTypeEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

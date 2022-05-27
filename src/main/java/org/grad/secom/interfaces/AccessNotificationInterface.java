@@ -17,20 +17,20 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.AccessNotificationRequest;
-import org.grad.secom.models.AccessNotificationResponse;
-import org.grad.secom.models.RequestAccessResponse;
+import org.grad.secom.exceptions.SecomNotFoundException;
+import org.grad.secom.models.AccessNotificationObject;
+import org.grad.secom.models.AccessNotificationResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 
 /**
  * The SECOM Access Notification Interface Definition.
@@ -41,7 +41,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AccessNotificationInterface {
+public interface AccessNotificationInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -53,11 +53,11 @@ public interface AccessNotificationInterface {
      * service instance shall be sent asynchronous through this client
      * interface.
      *
-     * @param accessNotificationRequest  the access notification object
+     * @param accessNotificationObject  the access notification object
      * @return the access notification response object
      */
     @PostMapping(ACCESS_NOTIFICATION_INTERFACE_PATH)
-    ResponseEntity<AccessNotificationResponse> accessNotification(@RequestBody AccessNotificationRequest accessNotificationRequest);
+    ResponseEntity<AccessNotificationResponseObject> accessNotification(@RequestBody AccessNotificationObject accessNotificationObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -67,32 +67,31 @@ public interface AccessNotificationInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({
+            SecomGenericException.class,
+            ValidationException.class,
+            HttpRequestMethodNotSupportedException.class,
+            MethodArgumentTypeMismatchException.class
+    })
     default ResponseEntity<Object> handleAccessNotificationInterfaceExceptions(Exception ex,
                                                                                HttpServletRequest request,
                                                                                HttpServletResponse response) {
-        // Create the upload response
+        // Create the access notification response
         HttpStatus httpStatus;
-        AccessNotificationResponse accessNotificationResponse = new AccessNotificationResponse();
+        AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            accessNotificationResponse.setResponseText("Not authorized to requested information");
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
-            accessNotificationResponse.setResponseText("Method not allowed");
-        } else if(ex instanceof SecomNotImplementedException) {
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
-            accessNotificationResponse.setResponseText("Not implemented");
-        }  else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            accessNotificationResponse.setResponseText(ex.getMessage());
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            accessNotificationResponseObject.setResponseText("Bad Request");
+        } else {
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            accessNotificationResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
-        // Otherwise, send a generic internal server error
+        // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(accessNotificationResponse);
+                .body(accessNotificationResponseObject);
     }
 
 }

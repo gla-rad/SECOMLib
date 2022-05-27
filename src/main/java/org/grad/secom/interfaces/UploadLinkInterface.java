@@ -17,8 +17,10 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.*;
-import org.grad.secom.models.UploadLinkRequest;
-import org.grad.secom.models.UploadLinkResponse;
+import org.grad.secom.models.UploadLinkObject;
+import org.grad.secom.models.UploadLinkResponseObject;
+import org.grad.secom.models.UploadResponseObject;
+import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -26,9 +28,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentConversionNotSupportedException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 import java.net.MalformedURLException;
 
 /**
@@ -40,7 +44,7 @@ import java.net.MalformedURLException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface UploadLinkInterface {
+public interface UploadLinkInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -52,11 +56,11 @@ public interface UploadLinkInterface {
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
      *
-     * @param uploadLinkRequest  the upload link object
+     * @param uploadLinkObject  the upload link object
      * @return the upload link response object
      */
     @PostMapping(UPLOAD_LINK_INTERFACE_PATH)
-    ResponseEntity<UploadLinkResponse> uploadLink(@RequestBody UploadLinkRequest uploadLinkRequest);
+    ResponseEntity<UploadLinkResponseObject> uploadLink(@RequestBody UploadLinkObject uploadLinkObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -66,39 +70,46 @@ public interface UploadLinkInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class, MalformedURLException.class})
-    default ResponseEntity<UploadLinkResponse> handleUploadLinkInterfaceExceptions(Exception ex,
-                                                                                   HttpServletRequest request,
-                                                                                   HttpServletResponse response) {
+    @ExceptionHandler({
+            SecomGenericException.class,
+            ValidationException.class,
+            HttpRequestMethodNotSupportedException.class,
+            MethodArgumentTypeMismatchException.class
+    })
+    default ResponseEntity<UploadLinkResponseObject> handleUploadLinkInterfaceExceptions(Exception ex,
+                                                                                         HttpServletRequest request,
+                                                                                         HttpServletResponse response) {
 
-        // Create the upload response
+        // Create the upload link response
         HttpStatus httpStatus;
-        UploadLinkResponse uploadLinkResponse = new UploadLinkResponse();
+        UploadLinkResponseObject uploadResponseObject = new UploadLinkResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            uploadLinkResponse.setResponseText("Not authorized to upload link");
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
-            uploadLinkResponse.setResponseText("Method not allowed");
-        } else if(ex instanceof SecomNotImplementedException) {
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
-            uploadLinkResponse.setResponseText("Not implemented");
-        } else if(ex instanceof MalformedURLException) {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            uploadLinkResponse.setResponseText("Link is not a valid URL");
-        } else if(ex instanceof MethodArgumentConversionNotSupportedException) {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            uploadLinkResponse.setResponseText("Unknown data type or version");
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
+            uploadResponseObject.setResponseText("Missing required data for the service");
+        } else if(ex instanceof SecomSignatureVerificationException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
+            uploadResponseObject.setResponseText("Failed signature verification");
+        } else if(ex instanceof SecomInvalidCertificateException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
+            uploadResponseObject.setResponseText("Invalid Certificate");
+        } else if(ex instanceof SecomSchemaValidationException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
+            uploadResponseObject.setResponseText("Schema validation error");
         } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            uploadLinkResponse.setResponseText(ex.getMessage());
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            uploadResponseObject.setSECOM_ResponseCode(null);
+            uploadResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
-        // Return the response
+        // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(uploadLinkResponse);
+                .body(uploadResponseObject);
     }
 
 }

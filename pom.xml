@@ -6,7 +6,7 @@
 
     <groupId>org.grad.secom</groupId>
     <artifactId>SECOMLib</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.2</version>
 
     <properties>
         <maven.min.version>3.0.0</maven.min.version>

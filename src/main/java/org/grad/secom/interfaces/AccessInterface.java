@@ -18,13 +18,16 @@ package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.CapabilityResponseObject;
+import org.grad.secom.models.AccessRequestObject;
+import org.grad.secom.models.AccessResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +35,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Capability Interface Definition.
+ * The SECOM Access Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -40,22 +43,22 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface extends GenericInterface {
+public interface AccessInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/access";
 
     /**
-     * GET /v1/capability : The purpose of the interface is to provide a dynamic
-     * method to ask a service instance at runtime what interfaces are
-     * accessible, and what payload formats and version are valid.
+     * POST /v1/access : Access to the service instance information can be
+     * requested through the Request Access interface.
      *
-     * @return the capability response object
+     * @param accessRequestObject the request access object
+     * @return the request access response object
      */
-    @GetMapping(CAPABILITY_INTERFACE_PATH)
-    ResponseEntity<CapabilityResponseObject> capability();
+    @PostMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
+    ResponseEntity<AccessResponseObject> requestAccess(@RequestBody AccessRequestObject accessRequestObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -71,19 +74,28 @@ public interface CapabilityInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleCapabilityInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
-        // Create the capability response
+    default ResponseEntity<Object> handleAccessInterfaceExceptions(Exception ex,
+                                                                   HttpServletRequest request,
+                                                                   HttpServletResponse response) {
+        // Create the access response
         HttpStatus httpStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        AccessResponseObject accessResponseObject = new AccessResponseObject();
 
         // Handle according to the exception type
-        httpStatus = this.handleCommonExceptionResponseCode(ex);
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            accessResponseObject.setResponseText("Bad Request");
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            accessResponseObject.setResponseText("Not authorized to requested information");
+        } else {
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            accessResponseObject.setResponseText(httpStatus.getReasonPhrase());
+        }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(capabilityResponseObject);
+                .body(accessResponseObject);
     }
 
 }

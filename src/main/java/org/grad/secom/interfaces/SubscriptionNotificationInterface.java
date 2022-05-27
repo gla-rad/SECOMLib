@@ -17,19 +17,19 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.SubscriptionNotificationRequest;
-import org.grad.secom.models.SubscriptionNotificationResponse;
+import org.grad.secom.models.SubscriptionNotificationObject;
+import org.grad.secom.models.SubscriptionNotificationResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 
 /**
  * The SECOM Subscription Notification Interface Definition.
@@ -40,7 +40,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SubscriptionNotificationInterface {
+public interface SubscriptionNotificationInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -51,11 +51,11 @@ public interface SubscriptionNotificationInterface {
      * POST /v1/subscription/notification : The interface receives notifications
      * when a subscription is created or removed by the information provider.
      *
-     * @param subscriptionNotificationRequest the subscription notification request object
+     * @param subscriptionNotificationObject the subscription notification request object
      * @return the subscription notification response object
      */
     @PostMapping(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
-    ResponseEntity<SubscriptionNotificationResponse> subscriptionNotification(@RequestBody SubscriptionNotificationRequest subscriptionNotificationRequest);
+    ResponseEntity<SubscriptionNotificationResponseObject> subscriptionNotification(@RequestBody SubscriptionNotificationObject subscriptionNotificationObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -65,32 +65,31 @@ public interface SubscriptionNotificationInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({
+            SecomGenericException.class,
+            ValidationException.class,
+            HttpRequestMethodNotSupportedException.class,
+            MethodArgumentTypeMismatchException.class
+    })
     default ResponseEntity<Object> handleSubscriptionNotificationInterfaceExceptions(Exception ex,
                                                                                      HttpServletRequest request,
                                                                                      HttpServletResponse response) {
-        // Create the upload response
+        // Create the subscription notification response
         HttpStatus httpStatus;
-        SubscriptionNotificationResponse subscriptionNotificationResponse = new SubscriptionNotificationResponse();
+        SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            subscriptionNotificationResponse.setResponseText("Not authorized to requested information");
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
-            subscriptionNotificationResponse.setResponseText("Method not allowed");
-        } else if(ex instanceof SecomNotImplementedException) {
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
-            subscriptionNotificationResponse.setResponseText("Not implemented");
-        }  else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            subscriptionNotificationResponse.setResponseText(ex.getMessage());
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            subscriptionNotificationResponseObject.setResponseText("Bad Request");
+        } else {
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            subscriptionNotificationResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
-        // Otherwise, send a generic internal server error
+        // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(subscriptionNotificationResponse);
+                .body(subscriptionNotificationResponseObject);
     }
 
 }

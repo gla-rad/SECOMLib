@@ -21,13 +21,16 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 /**
- * The SECOM Subscription Event Enum.
+ * The SECOM Nack Type Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SubscriptionEventEnum {
-    SUBSCRIPTION_CREATED(1),
-    SUBSCRIPTION_REMOVED(2);
+public enum NackTypeEnum {
+    XML_SCHEMA_VALIDATION_ERROR(0),
+    UNKNOWN_DATA_TYPE_OR_VERSION(1),
+    FAILED_DATA_SIGNATURE_VERIFICATION(2),
+    FAILED_DECRYPTION(3),
+    FAILED_DECOMPRESSION(4);
 
     // Enum Variables
     private final int value;
@@ -37,7 +40,7 @@ public enum SubscriptionEventEnum {
      *
      * @param newValue the enum value
      */
-    SubscriptionEventEnum(final int newValue) {
+    NackTypeEnum(final int newValue) {
         value = newValue;
     }
 
@@ -55,8 +58,8 @@ public enum SubscriptionEventEnum {
      * @param value the enum value
      * @return The respective enum entry
      */
-    public static SubscriptionEventEnum fromValue(int value) {
-        return Arrays.stream(SubscriptionEventEnum.values())
+    public static NackTypeEnum fromValue(int value) {
+        return Arrays.stream(NackTypeEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

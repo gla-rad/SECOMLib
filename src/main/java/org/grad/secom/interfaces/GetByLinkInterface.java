@@ -16,11 +16,8 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotFoundException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.GetResponse;
+import org.grad.secom.exceptions.*;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -32,6 +29,9 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
+import java.util.Base64;
+import java.util.UUID;
 
 /**
  * The SECOM Get By Link Interface Definition.
@@ -42,7 +42,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetByLinkInterface {
+public interface GetByLinkInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -57,10 +57,10 @@ public interface GetByLinkInterface {
      * authentication and authorization procedure before returning information.
      *
      * @param transactionIdentifier the transaction identifier
-     * @return the object in an "application/zip" encoding
+     * @return the object in an "application/octet-stream" encoding
      */
     @GetMapping(GET_BY_LINK_INTERFACE_PATH)
-    ResponseEntity<StreamingResponseBody> getByLink(@RequestParam(value = "transactionIdentifier") String transactionIdentifier);
+    ResponseEntity<String> getByLink(@RequestParam(value = "transactionIdentifier") UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
@@ -70,33 +70,38 @@ public interface GetByLinkInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({
+            SecomGenericException.class,
+            ValidationException.class,
+            HttpRequestMethodNotSupportedException.class,
+            MethodArgumentTypeMismatchException.class
+    })
     default ResponseEntity<Object> handleGetByLinkInterfaceExceptions(Exception ex,
                                                                       HttpServletRequest request,
                                                                       HttpServletResponse response) {
-        // Create the upload response
+        // Create the get by link response
         HttpStatus httpStatus = null;
         String responseText = null;
 
         // Handle according to the exception type
-        if(ex instanceof SecomNotAuthorisedException) {
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            responseText = "Bad Request";
+        } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
             responseText = "Not authorized to requested information";
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
-            responseText = "Method not allowed";
-        } else if(ex instanceof SecomNotImplementedException) {
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
-            responseText = "Not implemented";
-        }  else if (ex instanceof SecomNotFoundException) {
+        } else if(ex instanceof SecomInvalidCertificateException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            responseText = "Invalid Certificate";
+        }  else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            responseText = "Information not found";
+            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
         } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            responseText = ex.getMessage();
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            responseText = httpStatus.getReasonPhrase();
         }
 
-        // Otherwise, send a generic internal server error
+        // And send the error response back
         return ResponseEntity.status(httpStatus)
                 .body(responseText);
     }

@@ -21,13 +21,15 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 /**
- * The SECOM Subscription Event Enum.
+ * The SECOM Response Code Enum.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SubscriptionEventEnum {
-    SUBSCRIPTION_CREATED(1),
-    SUBSCRIPTION_REMOVED(2);
+public enum SECOM_ResponseCodeEnum {
+    MISSING_REQUIRED_DATA_FOR_SERVICE(0),
+    FAILED_SIGNATURE_VERIFICATION(1),
+    INVALID_CERTIFICATE(2),
+    SCHEMA_VALIDATION_ERROR(3);
 
     // Enum Variables
     private final int value;
@@ -37,7 +39,7 @@ public enum SubscriptionEventEnum {
      *
      * @param newValue the enum value
      */
-    SubscriptionEventEnum(final int newValue) {
+    SECOM_ResponseCodeEnum(final int newValue) {
         value = newValue;
     }
 
@@ -55,8 +57,8 @@ public enum SubscriptionEventEnum {
      * @param value the enum value
      * @return The respective enum entry
      */
-    public static SubscriptionEventEnum fromValue(int value) {
-        return Arrays.stream(SubscriptionEventEnum.values())
+    public static SECOM_ResponseCodeEnum fromValue(int value) {
+        return Arrays.stream(SECOM_ResponseCodeEnum.values())
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);

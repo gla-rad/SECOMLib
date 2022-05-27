@@ -16,11 +16,14 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.exceptions.*;
-import org.grad.secom.models.GetResponse;
-import org.grad.secom.models.enums.AreaNameEnum;
-import org.grad.secom.models.enums.DataTypeEnum;
+import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotFoundException;
+import org.grad.secom.models.GetResponseObject;
+import org.grad.secom.models.enums.ContainerTypeEnum;
+import org.grad.secom.models.enums.SECOM_DataProductType;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,9 +35,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ValidationException;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * The SECOM Get Interface Definition.
@@ -45,7 +49,7 @@ import java.util.List;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetInterface {
+public interface GetInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -58,26 +62,26 @@ public interface GetInterface {
      * for the authorization procedure before returning information.
      *
      * @param dataReference the object data reference
-     * @param dataType the object data type
-     * @param productSpecification the object product specification
+     * @param containerType the object data container type
+     * @param dataProductType the object data product type
+     * @param productVersion the object data product version
      * @param geometry the object geometry
-     * @param areaName the object area name
      * @param unlocode the object UNLOCODE
-     * @param fromTime the object from time
-     * @param toTime the object to time
+     * @param validFrom the object valid from time
+     * @param validTo the object valid to time
      * @param pageable the pageable information
      * @return the object information
      */
     @GetMapping(GET_INTERFACE_PATH)
-    ResponseEntity<GetResponse> get(@RequestParam(value = "dataReference", required = false) String dataReference,
-                                    @RequestParam(value = "dataType", required = false) DataTypeEnum dataType,
-                                    @RequestParam(value = "productSpecification", required = false) String productSpecification,
-                                    @RequestParam(value = "geometry", required = false) String geometry,
-                                    @RequestParam(value = "areaName", required = false) @Pattern(regexp = "(\\d+(,\\d+)*)?") List<AreaNameEnum> areaName,
-                                    @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
-                                    @RequestParam(value = "fromTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromTime,
-                                    @RequestParam(value = "toTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toTime,
-                                    Pageable pageable);
+    ResponseEntity<GetResponseObject> get(@RequestParam(value = "dataReference", required = false) UUID dataReference,
+                                          @RequestParam(value = "containerType", required = false) ContainerTypeEnum containerType,
+                                          @RequestParam(value = "dataProductType", required = false) SECOM_DataProductType dataProductType,
+                                          @RequestParam(value = "productVersion", required = false) String productVersion,
+                                          @RequestParam(value = "geometry", required = false) String geometry,
+                                          @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
+                                          @RequestParam(value = "validFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validFrom,
+                                          @RequestParam(value = "validTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validTo,
+                                          @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable);
 
     /**
      * The exception handler implementation for the interface.
@@ -87,39 +91,37 @@ public interface GetInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({SecomGenericException.class, HttpRequestMethodNotSupportedException.class, MethodArgumentTypeMismatchException.class})
+    @ExceptionHandler({
+            SecomGenericException.class,
+            ValidationException.class,
+            HttpRequestMethodNotSupportedException.class,
+            MethodArgumentTypeMismatchException.class
+    })
     default ResponseEntity<Object> handleGetInterfaceExceptions(Exception ex,
                                                                 HttpServletRequest request,
                                                                 HttpServletResponse response) {
-        // Create the upload response
+        // Create the get response
         HttpStatus httpStatus;
-        GetResponse getResponse = new GetResponse();
+        GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomNotAuthorisedException) {
+        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            getResponseObject.setResponseText("Bad Request");
+        } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getResponse.setResponseText("Not authorized to requested information");
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            httpStatus = HttpStatus.METHOD_NOT_ALLOWED;
-            getResponse.setResponseText("Method not allowed");
-        } else if(ex instanceof SecomNotImplementedException) {
-            httpStatus = HttpStatus.NOT_IMPLEMENTED;
-            getResponse.setResponseText("Not implemented");
-        }  else if (ex instanceof SecomNotFoundException) {
+            getResponseObject.setResponseText("Not authorized to requested information");
+        } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            getResponse.setResponseText(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
-        } else if (ex instanceof MethodArgumentTypeMismatchException) {
-            MethodArgumentTypeMismatchException typeMismatchException = (MethodArgumentTypeMismatchException) ex;
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            getResponse.setResponseText(String.format("Parameter %s=%s incorrect format", typeMismatchException.getName(), typeMismatchException.getValue()));
+            getResponseObject.setResponseText("Information not found");
         } else {
-            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            getResponse.setResponseText(ex.getMessage());
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            getResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
-        // Otherwise, send a generic internal server error
+        // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(getResponse);
+                .body(getResponseObject);
     }
 
 }
