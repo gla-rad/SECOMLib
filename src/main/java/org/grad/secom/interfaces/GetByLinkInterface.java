@@ -84,7 +84,7 @@ public interface GetByLinkInterface extends GenericInterface {
         String responseText = null;
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseText = "Bad Request";
         } else if(ex instanceof SecomNotAuthorisedException) {

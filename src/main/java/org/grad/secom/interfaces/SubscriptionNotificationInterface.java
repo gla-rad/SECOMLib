@@ -17,6 +17,7 @@
 package org.grad.secom.interfaces;
 
 import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.SubscriptionNotificationObject;
 import org.grad.secom.models.SubscriptionNotificationResponseObject;
 import org.springframework.http.HttpStatus;
@@ -80,7 +81,7 @@ public interface SubscriptionNotificationInterface extends GenericInterface {
         SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             subscriptionNotificationResponseObject.setResponseText("Bad Request");
         } else {

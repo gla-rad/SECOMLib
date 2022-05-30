@@ -16,10 +16,7 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotFoundException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
+import org.grad.secom.exceptions.*;
 import org.grad.secom.models.RemoveSubscriptionObject;
 import org.grad.secom.models.RemoveSubscriptionResponseObject;
 import org.springframework.http.HttpStatus;
@@ -85,7 +82,7 @@ public interface RemoveSubscriptionInterface extends GenericInterface {
         RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             removeSubscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

@@ -89,7 +89,7 @@ public interface AcknowledgementInterface extends GenericInterface {
             httpStatus = HttpStatus.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
             acknowledgementResponseObject.setResponseText("Bad Request");
-        } else if (ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setResponseText("Missing required data for the service");

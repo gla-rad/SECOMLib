@@ -16,10 +16,7 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomInvalidCertificateException;
-import org.grad.secom.exceptions.SecomSchemaValidationException;
-import org.grad.secom.exceptions.SecomSignatureVerificationException;
+import org.grad.secom.exceptions.*;
 import org.grad.secom.models.UploadObject;
 import org.grad.secom.models.UploadResponseObject;
 import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
@@ -86,7 +83,7 @@ public interface UploadInterface extends GenericInterface {
         UploadResponseObject uploadResponseObject = new UploadResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             uploadResponseObject.setResponseText("Missing required data for the service");

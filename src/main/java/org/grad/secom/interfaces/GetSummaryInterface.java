@@ -19,6 +19,7 @@ package org.grad.secom.interfaces;
 import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
+import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.GetSummaryResponseObject;
 import org.grad.secom.models.enums.ContainerTypeEnum;
 import org.grad.secom.models.enums.SECOM_DataProductType;
@@ -104,7 +105,7 @@ public interface GetSummaryInterface extends GenericInterface {
         GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             getSummaryResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

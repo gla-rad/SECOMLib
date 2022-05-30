@@ -16,10 +16,7 @@
 
 package org.grad.secom.interfaces;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotFoundException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
+import org.grad.secom.exceptions.*;
 import org.grad.secom.models.AccessRequestObject;
 import org.grad.secom.models.AccessResponseObject;
 import org.springframework.http.HttpStatus;
@@ -83,7 +80,7 @@ public interface AccessInterface extends GenericInterface {
         AccessResponseObject accessResponseObject = new AccessResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             accessResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
