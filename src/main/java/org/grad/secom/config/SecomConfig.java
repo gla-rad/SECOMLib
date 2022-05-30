@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package org.grad.secom.exceptions;
+package org.grad.secom.config;
+
+import org.grad.secom.components.ContainerTypeEnumConverter;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
- * The SECOM Generic Exception Class.
+ * The SECOM Springboot Configuration Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomGenericException extends RuntimeException {
+@Configuration
+public class SecomConfig {
 
     /**
-     * Class Constructor.
+     * The container type enum converted bean.
+     *
+     * @return the container type enum converted bean
      */
-    public SecomGenericException(String message) {
-        super(message);
+    @Bean
+    public ContainerTypeEnumConverter containerTypeEnumConverter() {
+        return new ContainerTypeEnumConverter();
     }
 
 }

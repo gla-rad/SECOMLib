@@ -16,6 +16,9 @@
 
 package org.grad.secom.models.enums;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * The SECOM Response Code Enum.
  *
@@ -31,8 +34,8 @@ public enum SECOM_DataProductType {
     S122("S-122 Marine Protected Areas (MPAs)"),
     S123("S-123 Marine Radio Services"),
     S124("S-124 Navigational Warnings"),
-    S125(" S-125 Marine Navigational Services"),
-    S126(" S-126 Marine Physical Environment"),
+    S125("S-125 Marine Navigational Services"),
+    S126("S-126 Marine Physical Environment"),
     S127("S-127 Marine Traffic Management"),
     S128("S-128 Catalogue of Nautical Products"),
     S129("S-129 Under Keel Clearance Management (UKCM)"),
@@ -69,6 +72,19 @@ public enum SECOM_DataProductType {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Find the enum entry that corresponds to the provided description.
+     *
+     * @param description the enum description
+     * @return The respective enum entry
+     */
+    public static SECOM_DataProductType fromDescription(String description) {
+        return Arrays.stream(SECOM_DataProductType.values())
+                .filter(t -> Objects.equals(t.getDescription(), description))
+                .findFirst()
+                .orElse(null);
     }
 
 }

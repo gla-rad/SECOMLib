@@ -46,7 +46,7 @@ public class SummaryObject {
     private String info_status;
     private String info_description;
     private LocalDateTime info_lastModifiedDate;
-    private String into_productVersion;
+    private String info_productVersion;
     private Long info_size;
 
     /**
@@ -230,21 +230,21 @@ public class SummaryObject {
     }
 
     /**
-     * Gets into product version.
+     * Gets info product version.
      *
-     * @return the into product version
+     * @return the info product version
      */
-    public String getInto_productVersion() {
-        return into_productVersion;
+    public String getInfo_productVersion() {
+        return info_productVersion;
     }
 
     /**
-     * Sets into product version.
+     * Sets info product version.
      *
-     * @param into_productVersion the into product version
+     * @param info_productVersion the info product version
      */
-    public void setInto_productVersion(String into_productVersion) {
-        this.into_productVersion = into_productVersion;
+    public void setInfo_productVersion(String info_productVersion) {
+        this.info_productVersion = info_productVersion;
     }
 
     /**

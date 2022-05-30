@@ -78,7 +78,7 @@ public interface GetInterface extends GenericInterface {
                                           @RequestParam(value = "dataProductType", required = false) SECOM_DataProductType dataProductType,
                                           @RequestParam(value = "productVersion", required = false) String productVersion,
                                           @RequestParam(value = "geometry", required = false) String geometry,
-                                          @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[a-z]{5}") String unlocode,
+                                          @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[A-Z]{5}") String unlocode,
                                           @RequestParam(value = "validFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validFrom,
                                           @RequestParam(value = "validTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validTo,
                                           @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable);

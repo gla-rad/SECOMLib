@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package org.grad.secom.exceptions;
+package org.grad.secom.components;
+
+import org.grad.secom.models.enums.ContainerTypeEnum;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.stereotype.Component;
 
 /**
- * The SECOM Generic Exception Class.
+ * The SECOM Container Type Enum Converter.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomGenericException extends RuntimeException {
+@Component
+public class ContainerTypeEnumConverter implements Converter<String, ContainerTypeEnum> {
 
-    /**
-     * Class Constructor.
-     */
-    public SecomGenericException(String message) {
-        super(message);
+    @Override
+    public ContainerTypeEnum convert(String value) {
+        return ContainerTypeEnum.fromValue(Integer.parseInt(value));
     }
 
 }

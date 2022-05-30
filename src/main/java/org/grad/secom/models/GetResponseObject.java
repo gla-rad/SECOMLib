@@ -90,28 +90,29 @@ public class GetResponseObject {
     }
 
     /**
-     * A helper function that automatically encodes the provided object into
+     * A helper function that automatically encodes the provided data into
      * a Base64 string.
      *
-     * @param payloadObject the object to be encoded and assigned to the payload
+     * @param payloadObject the object to be encoded and assigned to the data
      */
     @JsonIgnore
-    public void encodePayload(String payloadObject) {
+    public void encodeData(String payloadObject, SECOM_ExchangeMetadata exchangeMetadata) {
         if(this.dataResponseObject == null) {
             this.dataResponseObject = new DataResponseObject();
         }
         this.dataResponseObject.setData(Base64.getEncoder().encodeToString(payloadObject.getBytes()));
+        this.dataResponseObject.setExchangeMetadata(exchangeMetadata);
     }
 
     /**
-     * A helper function that automatically decodes the Base 64 payload into the
+     * A helper function that automatically decodes the Base 64 data into the
      * required string.
      *
-     * @return the string
+     * @return the decoded data string
      * @throws IOException the io exception
      */
     @JsonIgnore
-    public String decodePayload() throws IOException {
+    public String decodeData() throws IOException {
         if(this.dataResponseObject == null) {
             return null;
         }
