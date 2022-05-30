@@ -30,6 +30,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -58,7 +59,7 @@ public interface EncryptionKeyNotifyInterface extends GenericInterface {
      * @return the encryption key response object
      */
     @PostMapping(ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH)
-    ResponseEntity<EncryptionKeyResponseObject> encryptionKeyNotify(@RequestBody EncryptionKeyNotificationObject encryptionKeyNotificationObject);
+    ResponseEntity<EncryptionKeyResponseObject> encryptionKeyNotify(@Valid  @RequestBody EncryptionKeyNotificationObject encryptionKeyNotificationObject);
 
     /**
      * The exception handler implementation for the interface.

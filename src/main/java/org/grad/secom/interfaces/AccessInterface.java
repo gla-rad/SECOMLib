@@ -32,6 +32,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -58,7 +59,7 @@ public interface AccessInterface extends GenericInterface {
      * @return the request access response object
      */
     @PostMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<AccessResponseObject> requestAccess(@RequestBody AccessRequestObject accessRequestObject);
+    ResponseEntity<AccessResponseObject> requestAccess(@Valid @RequestBody AccessRequestObject accessRequestObject);
 
     /**
      * The exception handler implementation for the interface.

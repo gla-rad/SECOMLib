@@ -30,6 +30,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -60,7 +61,7 @@ public interface AcknowledgementInterface extends GenericInterface {
      * @return the acknowledgement response object
      */
     @PostMapping(ACKNOWLEDGMENT_INTERFACE_PATH)
-    ResponseEntity<AcknowledgementResponseObject> acknowledgment(@RequestBody AcknowledgementObject acknowledgementObject);
+    ResponseEntity<AcknowledgementResponseObject> acknowledgment(@Valid @RequestBody AcknowledgementObject acknowledgementObject);
 
     /**
      * The exception handler implementation for the interface.

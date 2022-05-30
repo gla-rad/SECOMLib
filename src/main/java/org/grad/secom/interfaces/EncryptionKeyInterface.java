@@ -29,6 +29,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -55,7 +56,7 @@ public interface EncryptionKeyInterface extends GenericInterface {
      * @return the encryption key response object
      */
     @PostMapping(ENCRYPTION_KEY_INTERFACE_PATH)
-    ResponseEntity<EncryptionKeyResponseObject> encryptionKey(@RequestBody EncryptionKeyObject encryptionKeyObject);
+    ResponseEntity<EncryptionKeyResponseObject> encryptionKey(@Valid @RequestBody EncryptionKeyObject encryptionKeyObject);
 
     /**
      * The exception handler implementation for the interface.

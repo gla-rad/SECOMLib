@@ -32,6 +32,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -59,7 +60,7 @@ public interface SubscriptionInterface extends GenericInterface {
      * @return the subscription response object
      */
     @PostMapping(SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<SubscriptionResponseObject> subscription(@RequestBody SubscriptionRequestObject subscriptionRequestObject);
+    ResponseEntity<SubscriptionResponseObject> subscription(@Valid  @RequestBody SubscriptionRequestObject subscriptionRequestObject);
 
     /**
      * The exception handler implementation for the interface.

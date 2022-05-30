@@ -32,6 +32,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import java.net.MalformedURLException;
 
@@ -60,7 +61,7 @@ public interface UploadLinkInterface extends GenericInterface {
      * @return the upload link response object
      */
     @PostMapping(UPLOAD_LINK_INTERFACE_PATH)
-    ResponseEntity<UploadLinkResponseObject> uploadLink(@RequestBody UploadLinkObject uploadLinkObject);
+    ResponseEntity<UploadLinkResponseObject> uploadLink(@Valid @RequestBody UploadLinkObject uploadLinkObject);
 
     /**
      * The exception handler implementation for the interface.

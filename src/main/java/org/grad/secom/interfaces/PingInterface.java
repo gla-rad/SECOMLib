@@ -52,7 +52,7 @@ public interface PingInterface extends GenericInterface {
      * @return the status response object
      */
     @GetMapping(STATUS_INTERFACE_PATH)
-    ResponseEntity<PingResponseObject> ing();
+    ResponseEntity<PingResponseObject> ping();
 
     /**
      * The exception handler implementation for the interface.

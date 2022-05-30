@@ -30,6 +30,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -57,7 +58,7 @@ public interface AccessNotificationInterface extends GenericInterface {
      * @return the access notification response object
      */
     @PostMapping(ACCESS_NOTIFICATION_INTERFACE_PATH)
-    ResponseEntity<AccessNotificationResponseObject> accessNotification(@RequestBody AccessNotificationObject accessNotificationObject);
+    ResponseEntity<AccessNotificationResponseObject> accessNotification(@Valid @RequestBody AccessNotificationObject accessNotificationObject);
 
     /**
      * The exception handler implementation for the interface.

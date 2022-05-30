@@ -32,6 +32,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -60,7 +61,7 @@ public interface RemoveSubscriptionInterface extends GenericInterface {
      * @return the remove subscription response object
      */
     @DeleteMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestBody RemoveSubscriptionObject removeSubscriptionObject);
+    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@Valid  @RequestBody RemoveSubscriptionObject removeSubscriptionObject);
 
     /**
      * The exception handler implementation for the interface.

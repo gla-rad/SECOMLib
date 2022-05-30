@@ -33,6 +33,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
@@ -60,7 +61,7 @@ public interface UploadInterface extends GenericInterface {
      * @return the upload response object
      */
     @PostMapping(UPLOAD_INTERFACE_PATH)
-    ResponseEntity<UploadResponseObject> upload(@RequestBody UploadObject uploadObject);
+    ResponseEntity<UploadResponseObject> upload(@Valid  @RequestBody UploadObject uploadObject);
 
     /**
      * The exception handler implementation for the interface.
