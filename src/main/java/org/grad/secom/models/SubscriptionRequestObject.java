@@ -19,6 +19,7 @@ package org.grad.secom.models;
 import org.grad.secom.models.enums.ContainerTypeEnum;
 import org.grad.secom.models.enums.SECOM_DataProductType;
 
+import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class SubscriptionRequestObject {
     private UUID dataReference;
     private String productVersion;
     private String geometry;
+    @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
     private LocalDateTime subscriptionPeriodStart;
     private LocalDateTime subscriptionPeriodEnd;
