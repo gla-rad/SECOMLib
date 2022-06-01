@@ -6,7 +6,7 @@
 
     <groupId>org.grad.secom</groupId>
     <artifactId>SECOMLib</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.4</version>
 
     <properties>
         <maven.min.version>3.0.0</maven.min.version>
@@ -20,11 +20,11 @@
     <repositories>
         <repository>
             <id>grad</id>
-            <url>https://gla-rrnav1.dyndns.org:8081/repository/grad/</url>
+            <url>https://rnavlab.gla-rad.org:8081/repository/grad/</url>
         </repository>
         <repository>
             <id>grad-snapshots</id>
-            <url>https://gla-rrnav1.dyndns.org:8081/repository/grad-snapshots/</url>
+            <url>https://rnavlab.gla-rad.org:8081/repository/grad-snapshots/</url>
         </repository>
     </repositories>
 
