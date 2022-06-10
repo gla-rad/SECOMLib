@@ -16,6 +16,7 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.SubscriptionNotificationObject;
 import org.grad.secom.models.SubscriptionNotificationResponseObject;
@@ -77,7 +78,7 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
         SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionNotificationResponseObject.setResponseText("Bad Request");
         } else {

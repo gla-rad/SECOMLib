@@ -16,6 +16,7 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.EncryptionKeyResponseObject;
@@ -81,7 +82,7 @@ public interface DiscoveryServiceSecomInterface extends GenericSecomInterface {
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {

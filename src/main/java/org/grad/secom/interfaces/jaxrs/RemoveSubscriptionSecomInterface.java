@@ -16,6 +16,7 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
@@ -79,7 +80,7 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
         RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             removeSubscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

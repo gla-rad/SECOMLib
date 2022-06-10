@@ -16,6 +16,7 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.exceptions.*;
 import org.grad.secom.models.AcknowledgementObject;
 import org.grad.secom.models.AcknowledgementResponseObject;
@@ -85,7 +86,7 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
             acknowledgementResponseObject.setResponseText("Bad Request");
-        } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
+        } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setResponseText("Missing required data for the service");

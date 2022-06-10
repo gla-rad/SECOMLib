@@ -16,6 +16,7 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
@@ -99,7 +100,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
         GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             getResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
