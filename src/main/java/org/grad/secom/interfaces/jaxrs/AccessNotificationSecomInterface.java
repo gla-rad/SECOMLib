@@ -20,7 +20,6 @@ import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.AccessNotificationObject;
 import org.grad.secom.models.AccessNotificationResponseObject;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +78,7 @@ public interface AccessNotificationSecomInterface extends GenericSecomInterface 
         AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof NumberFormatException || ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             accessNotificationResponseObject.setResponseText("Bad Request");
         } else {

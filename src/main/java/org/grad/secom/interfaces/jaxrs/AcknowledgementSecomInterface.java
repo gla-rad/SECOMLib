@@ -20,7 +20,6 @@ import org.grad.secom.exceptions.*;
 import org.grad.secom.models.AcknowledgementObject;
 import org.grad.secom.models.AcknowledgementResponseObject;
 import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +85,7 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
             acknowledgementResponseObject.setResponseText("Bad Request");
-        } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setResponseText("Missing required data for the service");

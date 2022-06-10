@@ -20,7 +20,6 @@ import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.SubscriptionRequestObject;
 import org.grad.secom.models.SubscriptionResponseObject;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +77,7 @@ public interface SubscriptionSecomInterface extends GenericSecomInterface {
         SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

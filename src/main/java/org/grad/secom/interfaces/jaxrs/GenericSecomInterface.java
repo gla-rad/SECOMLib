@@ -18,8 +18,8 @@ package org.grad.secom.interfaces.jaxrs;
 
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+import javax.ws.rs.NotAllowedException;
 import javax.ws.rs.core.Response;
 
 /**
@@ -41,7 +41,7 @@ public interface GenericSecomInterface {
     static Response.Status handleCommonExceptionResponseCode(Exception ex) {
         if(ex instanceof SecomNotAuthorisedException) {
             return Response.Status.FORBIDDEN;
-        } else if(ex instanceof HttpRequestMethodNotSupportedException) {
+        } else if(ex instanceof NotAllowedException) {
             return Response.Status.METHOD_NOT_ALLOWED;
         } else if(ex instanceof SecomNotImplementedException) {
             return Response.Status.NOT_IMPLEMENTED;

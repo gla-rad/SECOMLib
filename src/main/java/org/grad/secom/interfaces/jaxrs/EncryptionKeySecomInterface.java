@@ -19,7 +19,6 @@ package org.grad.secom.interfaces.jaxrs;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.EncryptionKeyObject;
 import org.grad.secom.models.EncryptionKeyResponseObject;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -77,7 +76,7 @@ public interface EncryptionKeySecomInterface extends GenericSecomInterface {
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");
         } else {

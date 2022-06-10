@@ -16,15 +16,11 @@
 
 package org.grad.secom.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 /**
  * The SECOM Signature Verification Exception Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 public class SecomSignatureVerificationException extends SecomGenericException {
 
     /**

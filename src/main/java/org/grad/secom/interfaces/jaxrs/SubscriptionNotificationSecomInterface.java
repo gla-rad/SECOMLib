@@ -19,7 +19,6 @@ package org.grad.secom.interfaces.jaxrs;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.SubscriptionNotificationObject;
 import org.grad.secom.models.SubscriptionNotificationResponseObject;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,7 +77,7 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
         SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionNotificationResponseObject.setResponseText("Bad Request");
         } else {

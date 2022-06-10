@@ -16,15 +16,11 @@
 
 package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.AccessRequestObject;
 import org.grad.secom.models.AccessResponseObject;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,12 +70,6 @@ public interface AccessSecomInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
     static Response handleAccessInterfaceExceptions(Exception ex,
                                                     HttpServletRequest request,
                                                     HttpServletResponse response) {
@@ -88,7 +78,7 @@ public interface AccessSecomInterface extends GenericSecomInterface {
         AccessResponseObject accessResponseObject = new AccessResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException || ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             accessResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

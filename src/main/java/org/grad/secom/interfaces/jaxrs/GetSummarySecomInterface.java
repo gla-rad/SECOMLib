@@ -22,8 +22,6 @@ import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.GetSummaryResponseObject;
 import org.grad.secom.models.enums.ContainerTypeEnum;
 import org.grad.secom.models.enums.SECOM_DataProductType;
-import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,8 +76,8 @@ public interface GetSummarySecomInterface extends GenericSecomInterface {
                                         @QueryParam("productVersion") String productVersion,
                                         @QueryParam("geometry") String geometry,
                                         @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                        @QueryParam("validFrom") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validFrom,
-                                        @QueryParam("validTo") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validTo,
+                                        @QueryParam("validFrom") LocalDateTime validFrom,
+                                        @QueryParam("validTo") LocalDateTime validTo,
                                         @QueryParam("page") @Min(0) Integer page,
                                         @QueryParam("pageSize") @Min(0) Integer pageSize);
 
@@ -99,7 +97,7 @@ public interface GetSummarySecomInterface extends GenericSecomInterface {
         GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             getSummaryResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

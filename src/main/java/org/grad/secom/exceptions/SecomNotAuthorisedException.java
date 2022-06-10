@@ -16,15 +16,11 @@
 
 package org.grad.secom.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
-
 /**
  * The SECOM Not Authorised Exception Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@ResponseStatus(HttpStatus.FORBIDDEN)
 public class SecomNotAuthorisedException extends SecomGenericException {
 
     /**

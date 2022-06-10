@@ -20,7 +20,6 @@ import org.grad.secom.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +78,7 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
         String responseText = null;
 
         // Handle according to the exception type
-        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             responseText = "Bad Request";
         } else if(ex instanceof SecomNotAuthorisedException) {

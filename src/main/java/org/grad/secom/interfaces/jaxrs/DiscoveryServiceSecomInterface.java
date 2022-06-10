@@ -21,7 +21,6 @@ import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.EncryptionKeyResponseObject;
 import org.grad.secom.models.SearchFilterObject;
 import org.grad.secom.models.SearchObjectResult;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,7 +81,7 @@ public interface DiscoveryServiceSecomInterface extends GenericSecomInterface {
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {

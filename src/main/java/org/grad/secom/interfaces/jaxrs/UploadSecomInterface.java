@@ -23,7 +23,6 @@ import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.UploadObject;
 import org.grad.secom.models.UploadResponseObject;
 import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,7 +82,7 @@ public interface UploadSecomInterface extends GenericSecomInterface {
         UploadResponseObject uploadResponseObject = new UploadResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             uploadResponseObject.setResponseText("Missing required data for the service");
