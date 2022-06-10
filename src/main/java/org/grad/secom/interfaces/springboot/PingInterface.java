@@ -14,27 +14,23 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
 import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.models.EncryptionKeyNotificationObject;
-import org.grad.secom.models.EncryptionKeyResponseObject;
+import org.grad.secom.models.PingResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Encryption Key Notify Interface Definition.
+ * The SECOM Ping Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -42,24 +38,21 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface EncryptionKeyNotifyInterface extends GenericInterface {
+public interface PingInterface extends GenericInterface {
 
     /**
-     * The Interface Notify Endpoint Path.
+     * The Interface Endpoint Path.
      */
-    public static final String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/v1/encryptionkey/notify";
+    public static final String STATUS_INTERFACE_PATH = "/v1/ping";
 
     /**
-     * POST /v1/encryptionkey/notify : The purpose of the interface is to
-     * exchange a temporary secret key. This operation enables a consumer to
-     * request an encrypted secret key from a producer by providing a reference
-     * to the encrypted data and a public certificate for symmetric key
-     * derivation used to protect the temporary encryption key during transfer.
+     * GET /v1/ping : The purpose of the interface is to provide a dynamic
+     * method to ask for the technical status of the specific service instance.
      *
-     * @return the encryption key response object
+     * @return the status response object
      */
-    @PostMapping(ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH)
-    ResponseEntity<EncryptionKeyResponseObject> encryptionKeyNotify(@Valid  @RequestBody EncryptionKeyNotificationObject encryptionKeyNotificationObject);
+    @GetMapping(STATUS_INTERFACE_PATH)
+    ResponseEntity<PingResponseObject> ping();
 
     /**
      * The exception handler implementation for the interface.
@@ -75,26 +68,19 @@ public interface EncryptionKeyNotifyInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleEncryptionInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
-
-        // Create the encryption key response
+    default ResponseEntity<Object> handlePingInterfaceExceptions(Exception ex,
+                                                                 HttpServletRequest request,
+                                                                 HttpServletResponse response) {
+        // Create the ping response
         HttpStatus httpStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        PingResponseObject pingResponseObject = new PingResponseObject();
 
         // Handle according to the exception type
-       if (ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            encryptionKeyResponseObject.setResponseText("Not authorized");
-        } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setResponseText(httpStatus.getReasonPhrase());
-        }
+        httpStatus = this.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(encryptionKeyResponseObject);
+                .body(pingResponseObject);
     }
 
 }

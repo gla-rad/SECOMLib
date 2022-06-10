@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.*;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.grad.secom.exceptions.SecomInvalidCertificateException;
+import org.grad.secom.exceptions.SecomNotAuthorisedException;
+import org.grad.secom.exceptions.SecomNotFoundException;
+import org.grad.secom.exceptions.SecomValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
-import java.util.Base64;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
 import java.util.UUID;
 
 /**
@@ -42,12 +41,12 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetByLinkInterface extends GenericInterface {
+public interface GetByLinkSecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
+    String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
 
     /**
      * GET /v1/object/link : The Get By Link interface is used for pulling
@@ -59,8 +58,10 @@ public interface GetByLinkInterface extends GenericInterface {
      * @param transactionIdentifier the transaction identifier
      * @return the object in an "application/octet-stream" encoding
      */
-    @GetMapping(GET_BY_LINK_INTERFACE_PATH)
-    ResponseEntity<String> getByLink(@RequestParam(value = "transactionIdentifier") UUID transactionIdentifier);
+    @Path(GET_BY_LINK_INTERFACE_PATH)
+    @GET
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    String getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
@@ -70,40 +71,35 @@ public interface GetByLinkInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<Object> handleGetByLinkInterfaceExceptions(Exception ex,
-                                                                      HttpServletRequest request,
-                                                                      HttpServletResponse response) {
+    static Response handleGetByLinkInterfaceExceptions(Exception ex,
+                                                       HttpServletRequest request,
+                                                       HttpServletResponse response) {
         // Create the get by link response
-        HttpStatus httpStatus = null;
+        Response.Status responseStatus = null;
         String responseText = null;
 
         // Handle according to the exception type
         if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             responseText = "Bad Request";
         } else if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN;
             responseText = "Not authorized to requested information";
         } else if(ex instanceof SecomInvalidCertificateException) {
-            httpStatus = HttpStatus.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN;
             responseText = "Invalid Certificate";
         }  else if(ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.NOT_FOUND;
+            responseStatus = Response.Status.NOT_FOUND;
             responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
         } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
-            responseText = httpStatus.getReasonPhrase();
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseText = responseStatus.getReasonPhrase();
         }
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(responseText);
+        return Response.status(responseStatus)
+                .entity(responseText)
+                .build();
     }
 
 }

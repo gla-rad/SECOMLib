@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
-import org.grad.secom.exceptions.*;
-import org.grad.secom.models.AccessRequestObject;
-import org.grad.secom.models.AccessResponseObject;
+import org.grad.secom.exceptions.SecomGenericException;
+import org.grad.secom.exceptions.SecomValidationException;
+import org.grad.secom.models.EncryptionKeyObject;
+import org.grad.secom.models.EncryptionKeyResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -33,7 +34,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Access Interface Definition.
+ * The SECOM Encryption Key Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -41,22 +42,22 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AccessInterface extends GenericInterface {
+public interface EncryptionKeyInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/access";
+    public static final String ENCRYPTION_KEY_INTERFACE_PATH = "/v1/encryptionkey";
 
     /**
-     * POST /v1/access : Access to the service instance information can be
-     * requested through the Request Access interface.
+     * POST /v1/encryptionkey : The purpose of the interface is to exchange a
+     * temporary secret key. This operation is used to upload (push) an
+     * encrypted secret key to a consumer.
      *
-     * @param accessRequestObject the request access object
-     * @return the request access response object
+     * @return the encryption key response object
      */
-    @PostMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<AccessResponseObject> requestAccess(@Valid @RequestBody AccessRequestObject accessRequestObject);
+    @PostMapping(ENCRYPTION_KEY_INTERFACE_PATH)
+    ResponseEntity<EncryptionKeyResponseObject> encryptionKey(@RequestBody @Valid EncryptionKeyObject encryptionKeyObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -72,28 +73,26 @@ public interface AccessInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleAccessInterfaceExceptions(Exception ex,
-                                                                   HttpServletRequest request,
-                                                                   HttpServletResponse response) {
-        // Create the access response
+    default ResponseEntity<Object> handleEncryptionInterfaceExceptions(Exception ex,
+                                                                       HttpServletRequest request,
+                                                                       HttpServletResponse response) {
+
+        // Create the encryption key response
         HttpStatus httpStatus;
-        AccessResponseObject accessResponseObject = new AccessResponseObject();
+        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            accessResponseObject.setResponseText("Bad Request");
-        } else if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            accessResponseObject.setResponseText("Not authorized to requested information");
+            encryptionKeyResponseObject.setResponseText("Bad Request");
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            accessResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            encryptionKeyResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(accessResponseObject);
+                .body(encryptionKeyResponseObject);
     }
 
 }

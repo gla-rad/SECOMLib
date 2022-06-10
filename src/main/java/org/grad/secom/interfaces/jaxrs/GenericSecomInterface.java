@@ -14,22 +14,23 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 
+import javax.ws.rs.core.Response;
+
 /**
- * The SECOM Generic Interface.
+ * The Generic SECOM Interface.
  * <p/>
- * This interfact contains the common functionality shared between all the
+ * This interface contains the common functionality shared between all the
  * SECOM interfaces.
  *
  * @author Nikolaos Vastardis (email: NihttpStatuskolaos.Vastardis@gla-rad.org)
  */
-public interface GenericInterface {
+public interface GenericSecomInterface {
 
     /**
      * Handle all exceptions in a common way.
@@ -37,15 +38,15 @@ public interface GenericInterface {
      * @param ex the exception that took place
      * @return the HTTP status code
      */
-    default HttpStatus handleCommonExceptionResponseCode(Exception ex) {
+    static Response.Status handleCommonExceptionResponseCode(Exception ex) {
         if(ex instanceof SecomNotAuthorisedException) {
-            return HttpStatus.FORBIDDEN;
+            return Response.Status.FORBIDDEN;
         } else if(ex instanceof HttpRequestMethodNotSupportedException) {
-            return HttpStatus.METHOD_NOT_ALLOWED;
+            return Response.Status.METHOD_NOT_ALLOWED;
         } else if(ex instanceof SecomNotImplementedException) {
-            return HttpStatus.NOT_IMPLEMENTED;
+            return Response.Status.NOT_IMPLEMENTED;
         } else {
-            return HttpStatus.INTERNAL_SERVER_ERROR;
+            return Response.Status.INTERNAL_SERVER_ERROR;
         }
     }
 

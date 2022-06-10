@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
 import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
-import org.grad.secom.models.GetSummaryResponseObject;
+import org.grad.secom.models.GetResponseObject;
 import org.grad.secom.models.enums.ContainerTypeEnum;
 import org.grad.secom.models.enums.SECOM_DataProductType;
 import org.springframework.data.domain.Pageable;
@@ -36,13 +36,13 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
- * The SECOM Get Summary Interface Definition.
+ * The SECOM Get Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -50,19 +50,19 @@ import java.time.LocalDateTime;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetSummaryInterface extends GenericInterface {
+public interface GetInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String GET_SUMMARY_INTERFACE_PATH = "/v1/object/summary";
+    public static final String GET_INTERFACE_PATH = "/v1/object";
 
     /**
-     * GET /v1/object/summary :  A list of information shall be returned from
-     * this interface. The summary contains identity, status and short
-     * description of each information object. The actual information object
-     * shall be retrieved using the Get interface.
+     * GET /v1/object : The Get interface is used for pulling information from a
+     * service provider. The owner of the information (provider) is responsible
+     * for the authorization procedure before returning information.
      *
+     * @param dataReference the object data reference
      * @param containerType the object data container type
      * @param dataProductType the object data product type
      * @param productVersion the object data product version
@@ -71,17 +71,18 @@ public interface GetSummaryInterface extends GenericInterface {
      * @param validFrom the object valid from time
      * @param validTo the object valid to time
      * @param pageable the pageable information
-     * @return the summary response object
+     * @return the object information
      */
-    @GetMapping(GET_SUMMARY_INTERFACE_PATH)
-    ResponseEntity<GetSummaryResponseObject> getSummary(@RequestParam(value = "containerType", required = false) ContainerTypeEnum containerType,
-                                                        @RequestParam(value = "dataProductType", required = false) SECOM_DataProductType dataProductType,
-                                                        @RequestParam(value = "productVersion", required = false) String productVersion,
-                                                        @RequestParam(value = "geometry", required = false) String geometry,
-                                                        @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                                        @RequestParam(value = "validFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validFrom,
-                                                        @RequestParam(value = "validTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validTo,
-                                                        @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable);
+    @GetMapping(GET_INTERFACE_PATH)
+    ResponseEntity<GetResponseObject> get(@RequestParam(value = "dataReference", required = false) UUID dataReference,
+                                          @RequestParam(value = "containerType", required = false) ContainerTypeEnum containerType,
+                                          @RequestParam(value = "dataProductType", required = false) SECOM_DataProductType dataProductType,
+                                          @RequestParam(value = "productVersion", required = false) String productVersion,
+                                          @RequestParam(value = "geometry", required = false) String geometry,
+                                          @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "[A-Z]{5}") String unlocode,
+                                          @RequestParam(value = "validFrom", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validFrom,
+                                          @RequestParam(value = "validTo", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime validTo,
+                                          @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable);
 
     /**
      * The exception handler implementation for the interface.
@@ -97,31 +98,31 @@ public interface GetSummaryInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleGetSummaryInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
-        // Create the get summary response
+    default ResponseEntity<Object> handleGetInterfaceExceptions(Exception ex,
+                                                                HttpServletRequest request,
+                                                                HttpServletResponse response) {
+        // Create the get response
         HttpStatus httpStatus;
-        GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
+        GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            getSummaryResponseObject.setResponseText("Bad Request");
+            getResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getSummaryResponseObject.setResponseText("Not authorized to requested information");
+            getResponseObject.setResponseText("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            getSummaryResponseObject.setResponseText("Information not found");
+            getResponseObject.setResponseText("Information not found");
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            getSummaryResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            getResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(getSummaryResponseObject);
+                .body(getResponseObject);
     }
 
 }

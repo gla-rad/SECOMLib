@@ -14,26 +14,24 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
 import org.grad.secom.exceptions.*;
-import org.grad.secom.models.RemoveSubscriptionObject;
-import org.grad.secom.models.RemoveSubscriptionResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 import javax.validation.ValidationException;
+import java.util.UUID;
 
 /**
- * The SECOM Remove Subscription Interface Definition.
+ * The SECOM Get By Link Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -41,24 +39,25 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface RemoveSubscriptionInterface extends GenericInterface {
+public interface GetByLinkInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
+    public static final String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
 
     /**
-     * DELETE /v1/subscription : Subscription(s) can be removed either
-     * internally by information owner, or externally by the consumer. This
-     * interface shall be used by the consumer to request removal of
-     * subscription.
+     * GET /v1/object/link : The Get By Link interface is used for pulling
+     * information from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
      *
-     * @param removeSubscriptionObject the remove subscription object
-     * @return the remove subscription response object
+     * @param transactionIdentifier the transaction identifier
+     * @return the object in an "application/octet-stream" encoding
      */
-    @DeleteMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@Valid  @RequestBody RemoveSubscriptionObject removeSubscriptionObject);
+    @GetMapping(GET_BY_LINK_INTERFACE_PATH)
+    ResponseEntity<String> getByLink(@RequestParam(value = "transactionIdentifier") UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
@@ -74,31 +73,34 @@ public interface RemoveSubscriptionInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleRemoveSubscriptionInterfaceExceptions(Exception ex,
-                                                                               HttpServletRequest request,
-                                                                               HttpServletResponse response) {
-        // Create the remove subscription response
-        HttpStatus httpStatus;
-        RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
+    default ResponseEntity<Object> handleGetByLinkInterfaceExceptions(Exception ex,
+                                                                      HttpServletRequest request,
+                                                                      HttpServletResponse response) {
+        // Create the get by link response
+        HttpStatus httpStatus = null;
+        String responseText = null;
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            removeSubscriptionResponseObject.setResponseText("Bad Request");
+            responseText = "Bad Request";
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            removeSubscriptionResponseObject.setResponseText("Not authorized to remove subscription");
-        } else if(ex instanceof SecomNotFoundException) {
+            responseText = "Not authorized to requested information";
+        } else if(ex instanceof SecomInvalidCertificateException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            removeSubscriptionResponseObject.setResponseText("Subscriber identifier not found");
+            responseText = "Invalid Certificate";
+        }  else if(ex instanceof SecomNotFoundException) {
+            httpStatus = HttpStatus.NOT_FOUND;
+            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            removeSubscriptionResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            responseText = httpStatus.getReasonPhrase();
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(removeSubscriptionResponseObject);
+                .body(responseText);
     }
 
 }

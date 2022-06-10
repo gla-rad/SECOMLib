@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
 import org.grad.secom.exceptions.*;
 import org.grad.secom.models.AcknowledgementObject;
 import org.grad.secom.models.AcknowledgementResponseObject;
 import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * The SECOM Acknowledgement Interface Definition.
@@ -42,12 +42,12 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AcknowledgementInterface extends GenericInterface {
+public interface AcknowledgementSecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String ACKNOWLEDGMENT_INTERFACE_PATH = "/v1/acknowledgement";
+    String ACKNOWLEDGMENT_INTERFACE_PATH = "/v1/acknowledgement";
 
     /**
      * POST /v1/acknowledgement : During upload of information, an
@@ -60,8 +60,11 @@ public interface AcknowledgementInterface extends GenericInterface {
      * @param acknowledgementObject  the acknowledgement object
      * @return the acknowledgement response object
      */
-    @PostMapping(ACKNOWLEDGMENT_INTERFACE_PATH)
-    ResponseEntity<AcknowledgementResponseObject> acknowledgment(@Valid @RequestBody AcknowledgementObject acknowledgementObject);
+    @Path(ACKNOWLEDGMENT_INTERFACE_PATH)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    AcknowledgementResponseObject acknowledgment(@Valid AcknowledgementObject acknowledgementObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -71,52 +74,47 @@ public interface AcknowledgementInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<AcknowledgementResponseObject> handleAcknowledgementInterfaceExceptions(Exception ex,
-                                                                                                   HttpServletRequest request,
-                                                                                                   HttpServletResponse response) {
+    static Response handleAcknowledgementInterfaceExceptions(Exception ex,
+                                                             HttpServletRequest request,
+                                                             HttpServletResponse response) {
         // Create the acknowledgment response
-        HttpStatus httpStatus;
+        Response.Status responseStatus;
         AcknowledgementResponseObject acknowledgementResponseObject = new AcknowledgementResponseObject();
 
         // Handle according to the exception type
         if (ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
             acknowledgementResponseObject.setResponseText("Bad Request");
         } else if (ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setResponseText("Missing required data for the service");
         } else if (ex instanceof SecomSignatureVerificationException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
             acknowledgementResponseObject.setResponseText("Failed signature verification");
         } else if (ex instanceof SecomInvalidCertificateException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             acknowledgementResponseObject.setResponseText("Invalid Certificate");
         } else if (ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN;
             acknowledgementResponseObject.setResponseText("Not authorized to upload ACK");
         } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
 
             // Divert from the common practice a little
-            httpStatus = httpStatus == HttpStatus.INTERNAL_SERVER_ERROR ? HttpStatus.BAD_REQUEST : httpStatus;
-            acknowledgementResponseObject.setResponseText(httpStatus == HttpStatus.FORBIDDEN ?
-                    "Not authorized to upload ACK" : httpStatus.getReasonPhrase());
+            responseStatus = responseStatus == Response.Status.INTERNAL_SERVER_ERROR ? Response.Status.BAD_REQUEST : responseStatus;
+            acknowledgementResponseObject.setResponseText(responseStatus == Response.Status.FORBIDDEN ?
+                    "Not authorized to upload ACK" : responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(acknowledgementResponseObject);
+        return Response.status(responseStatus)
+                .entity(acknowledgementResponseObject)
+                .build();
     }
 
 }

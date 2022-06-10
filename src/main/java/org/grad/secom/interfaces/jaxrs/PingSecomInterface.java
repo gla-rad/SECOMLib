@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.models.PingResponseObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ValidationException;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /**
  * The SECOM Ping Interface Definition.
@@ -38,12 +34,12 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface PingInterface extends GenericInterface {
+public interface PingSecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String STATUS_INTERFACE_PATH = "/v1/ping";
+    String PING_INTERFACE_PATH = "/v1/ping";
 
     /**
      * GET /v1/ping : The purpose of the interface is to provide a dynamic
@@ -51,8 +47,10 @@ public interface PingInterface extends GenericInterface {
      *
      * @return the status response object
      */
-    @GetMapping(STATUS_INTERFACE_PATH)
-    ResponseEntity<PingResponseObject> ping();
+    @Path(PING_INTERFACE_PATH)
+    @GET
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    PingResponseObject ping();
 
     /**
      * The exception handler implementation for the interface.
@@ -62,25 +60,20 @@ public interface PingInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<Object> handlePingInterfaceExceptions(Exception ex,
-                                                                 HttpServletRequest request,
-                                                                 HttpServletResponse response) {
+    static Response handlePingInterfaceExceptions(Exception ex,
+                                                  HttpServletRequest request,
+                                                  HttpServletResponse response) {
         // Create the ping response
-        HttpStatus httpStatus;
+        Response.Status responseStatus;
         PingResponseObject pingResponseObject = new PingResponseObject();
 
         // Handle according to the exception type
-        httpStatus = this.handleCommonExceptionResponseCode(ex);
+        responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(pingResponseObject);
+        return Response.status(responseStatus)
+                .entity(pingResponseObject)
+                .build();
     }
 
 }

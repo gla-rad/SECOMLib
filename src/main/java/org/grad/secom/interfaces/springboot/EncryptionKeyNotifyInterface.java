@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
 import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.exceptions.SecomNotImplementedException;
-import org.grad.secom.models.CapabilityResponseObject;
+import org.grad.secom.models.EncryptionKeyNotificationObject;
+import org.grad.secom.models.EncryptionKeyResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Capability Interface Definition.
+ * The SECOM Encryption Key Notify Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -40,22 +42,24 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilityInterface extends GenericInterface {
+public interface EncryptionKeyNotifyInterface extends GenericInterface {
 
     /**
-     * The Interface Endpoint Path.
+     * The Interface Notify Endpoint Path.
      */
-    public static final String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+    public static final String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/v1/encryptionkey/notify";
 
     /**
-     * GET /v1/capability : The purpose of the interface is to provide a dynamic
-     * method to ask a service instance at runtime what interfaces are
-     * accessible, and what payload formats and version are valid.
+     * POST /v1/encryptionkey/notify : The purpose of the interface is to
+     * exchange a temporary secret key. This operation enables a consumer to
+     * request an encrypted secret key from a producer by providing a reference
+     * to the encrypted data and a public certificate for symmetric key
+     * derivation used to protect the temporary encryption key during transfer.
      *
-     * @return the capability response object
+     * @return the encryption key response object
      */
-    @GetMapping(CAPABILITY_INTERFACE_PATH)
-    ResponseEntity<CapabilityResponseObject> capability();
+    @PostMapping(ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH)
+    ResponseEntity<EncryptionKeyResponseObject> encryptionKeyNotify(@RequestBody @Valid EncryptionKeyNotificationObject encryptionKeyNotificationObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -71,19 +75,26 @@ public interface CapabilityInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleCapabilityInterfaceExceptions(Exception ex,
+    default ResponseEntity<Object> handleEncryptionInterfaceExceptions(Exception ex,
                                                                        HttpServletRequest request,
                                                                        HttpServletResponse response) {
-        // Create the capability response
+
+        // Create the encryption key response
         HttpStatus httpStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        httpStatus = this.handleCommonExceptionResponseCode(ex);
+       if (ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            encryptionKeyResponseObject.setResponseText("Not authorized");
+        } else {
+            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            encryptionKeyResponseObject.setResponseText(httpStatus.getReasonPhrase());
+        }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(capabilityResponseObject);
+                .body(encryptionKeyResponseObject);
     }
 
 }

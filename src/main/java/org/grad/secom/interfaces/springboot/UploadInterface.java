@@ -14,17 +14,13 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomNotFoundException;
-import org.grad.secom.exceptions.SecomValidationException;
-import org.grad.secom.models.EncryptionKeyResponseObject;
-import org.grad.secom.models.SearchFilterObject;
-import org.grad.secom.models.SearchObjectResult;
-import org.springframework.data.domain.Pageable;
+import org.grad.secom.exceptions.*;
+import org.grad.secom.models.UploadObject;
+import org.grad.secom.models.UploadResponseObject;
+import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,10 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import java.util.List;
 
 /**
- * The SECOM Dervice Discovery Interface Definition.
+ * The SECOM Upload Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -47,24 +42,23 @@ import java.util.List;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface DiscoveryServiceInterface extends GenericInterface {
+public interface UploadInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String DISCOVERY_SERVICE_INTERFACE_PATH = "/v1/searchService";
+    public static final String UPLOAD_INTERFACE_PATH = "/v1/object";
 
     /**
-     * POST /v1/searchService : The purpose of this interface is to search for
-     * service instances to consume.
+     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * data to a consumer. The operation expects one single data object and
+     * its metadata.
      *
-     * @param searchFilterObject    The search filter object
-     * @param pageable the pageable information
-     * @return the result list of the search
+     * @param uploadObject  the upload object
+     * @return the upload response object
      */
-    @PostMapping(value = DISCOVERY_SERVICE_INTERFACE_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<List<SearchObjectResult>> search(@RequestBody @Valid SearchFilterObject searchFilterObject,
-                                                    Pageable pageable);
+    @PostMapping(UPLOAD_INTERFACE_PATH)
+    ResponseEntity<UploadResponseObject> upload(@RequestBody @Valid UploadObject uploadObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -80,28 +74,40 @@ public interface DiscoveryServiceInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleEncryptionInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
+    default ResponseEntity<UploadResponseObject> handleUploadInterfaceExceptions(Exception ex,
+                                                                                 HttpServletRequest request,
+                                                                                 HttpServletResponse response) {
 
-        // Create the encryption key response
+        // Create the upload response
         HttpStatus httpStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        UploadResponseObject uploadResponseObject = new UploadResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            encryptionKeyResponseObject.setResponseText("Bad Request");
-        } else if(ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.NOT_FOUND;
-            encryptionKeyResponseObject.setResponseText("Information not found");
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
+            uploadResponseObject.setResponseText("Missing required data for the service");
+        } else if(ex instanceof SecomSignatureVerificationException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
+            uploadResponseObject.setResponseText("Failed signature verification");
+        } else if(ex instanceof SecomInvalidCertificateException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
+            uploadResponseObject.setResponseText("Invalid Certificate");
+        } else if(ex instanceof SecomSchemaValidationException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
+            uploadResponseObject.setResponseText("Schema validation error");
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            uploadResponseObject.setSECOM_ResponseCode(null);
+            uploadResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(encryptionKeyResponseObject);
+                .body(uploadResponseObject);
     }
+
 }

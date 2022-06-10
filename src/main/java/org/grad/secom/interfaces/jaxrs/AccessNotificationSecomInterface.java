@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomNotFoundException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.AccessNotificationObject;
 import org.grad.secom.models.AccessNotificationResponseObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * The SECOM Access Notification Interface Definition.
@@ -43,12 +42,12 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface AccessNotificationInterface extends GenericInterface {
+public interface AccessNotificationSecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String ACCESS_NOTIFICATION_INTERFACE_PATH = "/v1/access/notification";
+    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/v1/access/notification";
 
     /**
      * POST /v1/access/notification : Result from Access Request performed on a
@@ -58,8 +57,11 @@ public interface AccessNotificationInterface extends GenericInterface {
      * @param accessNotificationObject  the access notification object
      * @return the access notification response object
      */
-    @PostMapping(ACCESS_NOTIFICATION_INTERFACE_PATH)
-    ResponseEntity<AccessNotificationResponseObject> accessNotification(@Valid @RequestBody AccessNotificationObject accessNotificationObject);
+    @Path(ACCESS_NOTIFICATION_INTERFACE_PATH)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    AccessNotificationResponseObject accessNotification(@Valid AccessNotificationObject accessNotificationObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -69,31 +71,26 @@ public interface AccessNotificationInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<Object> handleAccessNotificationInterfaceExceptions(Exception ex,
-                                                                               HttpServletRequest request,
-                                                                               HttpServletResponse response) {
+    static Response handleAccessNotificationInterfaceExceptions(Exception ex,
+                                                                HttpServletRequest request,
+                                                                HttpServletResponse response) {
         // Create the access notification response
-        HttpStatus httpStatus;
+        Response.Status responseStatus;
         AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException || ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             accessNotificationResponseObject.setResponseText("Bad Request");
         } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
-            accessNotificationResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            accessNotificationResponseObject.setResponseText(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(accessNotificationResponseObject);
+        return Response.status(responseStatus)
+                .entity(accessNotificationResponseObject)
+                .build();
     }
 
 }

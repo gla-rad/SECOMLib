@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
 import org.grad.secom.exceptions.*;
-import org.grad.secom.models.SubscriptionRequestObject;
-import org.grad.secom.models.SubscriptionResponseObject;
+import org.grad.secom.models.RemoveSubscriptionObject;
+import org.grad.secom.models.RemoveSubscriptionResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -33,7 +33,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Subscription Interface Definition.
+ * The SECOM Remove Subscription Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -41,23 +41,24 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SubscriptionInterface extends GenericInterface {
+public interface RemoveSubscriptionInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
+    public static final String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
 
     /**
-     * POST /v1/subscription : Request subscription on information, either
-     * specific information according to parameters, or the information
-     * accessible upon decision by the information provider.
+     * DELETE /v1/subscription : Subscription(s) can be removed either
+     * internally by information owner, or externally by the consumer. This
+     * interface shall be used by the consumer to request removal of
+     * subscription.
      *
-     * @param subscriptionRequestObject the subscription object
-     * @return the subscription response object
+     * @param removeSubscriptionObject the remove subscription object
+     * @return the remove subscription response object
      */
-    @PostMapping(SUBSCRIPTION_INTERFACE_PATH)
-    ResponseEntity<SubscriptionResponseObject> subscription(@Valid  @RequestBody SubscriptionRequestObject subscriptionRequestObject);
+    @DeleteMapping(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
+    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestBody @Valid RemoveSubscriptionObject removeSubscriptionObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -73,28 +74,31 @@ public interface SubscriptionInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleSubscriptionInterfaceExceptions(Exception ex,
-                                                                         HttpServletRequest request,
-                                                                         HttpServletResponse response) {
-        // Create the subscription response
+    default ResponseEntity<Object> handleRemoveSubscriptionInterfaceExceptions(Exception ex,
+                                                                               HttpServletRequest request,
+                                                                               HttpServletResponse response) {
+        // Create the remove subscription response
         HttpStatus httpStatus;
-        SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
+        RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            subscriptionResponseObject.setResponseText("Bad Request");
+            removeSubscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            subscriptionResponseObject.setResponseText("Not authorized to requested information");
+            removeSubscriptionResponseObject.setResponseText("Not authorized to remove subscription");
+        } else if(ex instanceof SecomNotFoundException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            removeSubscriptionResponseObject.setResponseText("Subscriber identifier not found");
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            subscriptionResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            removeSubscriptionResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(subscriptionResponseObject);
+                .body(removeSubscriptionResponseObject);
     }
 
 }

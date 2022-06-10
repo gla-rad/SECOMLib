@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.*;
+import org.grad.secom.exceptions.SecomInvalidCertificateException;
+import org.grad.secom.exceptions.SecomSchemaValidationException;
+import org.grad.secom.exceptions.SecomSignatureVerificationException;
+import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.UploadObject;
 import org.grad.secom.models.UploadResponseObject;
 import org.grad.secom.models.enums.SECOM_ResponseCodeEnum;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 /**
  * The SECOM Upload Interface Definition.
@@ -42,12 +45,12 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface UploadInterface extends GenericInterface {
+public interface UploadSecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String UPLOAD_INTERFACE_PATH = "/v1/object";
+    String UPLOAD_INTERFACE_PATH = "/v1/object";
 
     /**
      * POST /v1/object : The interface shall be used for uploading (pushing)
@@ -57,8 +60,11 @@ public interface UploadInterface extends GenericInterface {
      * @param uploadObject  the upload object
      * @return the upload response object
      */
-    @PostMapping(UPLOAD_INTERFACE_PATH)
-    ResponseEntity<UploadResponseObject> upload(@Valid  @RequestBody UploadObject uploadObject);
+    @Path(UPLOAD_INTERFACE_PATH)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    UploadResponseObject upload(@Valid UploadObject uploadObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -68,46 +74,41 @@ public interface UploadInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<UploadResponseObject> handleUploadInterfaceExceptions(Exception ex,
-                                                                                 HttpServletRequest request,
-                                                                                 HttpServletResponse response) {
+    static Response handleUploadInterfaceExceptions(Exception ex,
+                                                    HttpServletRequest request,
+                                                    HttpServletResponse response) {
 
         // Create the upload response
-        HttpStatus httpStatus;
+        Response.Status responseStatus;
         UploadResponseObject uploadResponseObject = new UploadResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             uploadResponseObject.setResponseText("Missing required data for the service");
         } else if(ex instanceof SecomSignatureVerificationException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
             uploadResponseObject.setResponseText("Failed signature verification");
         } else if(ex instanceof SecomInvalidCertificateException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             uploadResponseObject.setResponseText("Invalid Certificate");
         } else if(ex instanceof SecomSchemaValidationException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
             uploadResponseObject.setResponseText("Schema validation error");
         } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             uploadResponseObject.setSECOM_ResponseCode(null);
-            uploadResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            uploadResponseObject.setResponseText(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(uploadResponseObject);
+        return Response.status(responseStatus)
+                .entity(uploadResponseObject)
+                .build();
     }
 
 }

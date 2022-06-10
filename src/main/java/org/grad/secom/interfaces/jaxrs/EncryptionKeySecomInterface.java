@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.jaxrs;
 
-import org.grad.secom.exceptions.SecomGenericException;
 import org.grad.secom.exceptions.SecomValidationException;
 import org.grad.secom.models.EncryptionKeyObject;
 import org.grad.secom.models.EncryptionKeyResponseObject;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Response;
 
 /**
  * The SECOM Encryption Key Interface Definition.
@@ -42,12 +40,12 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface EncryptionKeyInterface extends GenericInterface {
+public interface EncryptionKeySecomInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String ENCRYPTION_KEY_INTERFACE_PATH = "/v1/encryptionkey";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/v1/encryptionkey";
 
     /**
      * POST /v1/encryptionkey : The purpose of the interface is to exchange a
@@ -56,8 +54,11 @@ public interface EncryptionKeyInterface extends GenericInterface {
      *
      * @return the encryption key response object
      */
-    @PostMapping(ENCRYPTION_KEY_INTERFACE_PATH)
-    ResponseEntity<EncryptionKeyResponseObject> encryptionKey(@Valid @RequestBody EncryptionKeyObject encryptionKeyObject);
+    @Path(ENCRYPTION_KEY_INTERFACE_PATH)
+    @POST
+    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    EncryptionKeyResponseObject encryptionKey(@Valid EncryptionKeyObject encryptionKeyObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -67,32 +68,27 @@ public interface EncryptionKeyInterface extends GenericInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    @ExceptionHandler({
-            SecomGenericException.class,
-            ValidationException.class,
-            HttpRequestMethodNotSupportedException.class,
-            MethodArgumentTypeMismatchException.class
-    })
-    default ResponseEntity<Object> handleEncryptionInterfaceExceptions(Exception ex,
-                                                                       HttpServletRequest request,
-                                                                       HttpServletResponse response) {
+    static Response handleEncryptionInterfaceExceptions(Exception ex,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
 
         // Create the encryption key response
-        HttpStatus httpStatus;
+        Response.Status responseStatus;
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
-            httpStatus = HttpStatus.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");
         } else {
-            httpStatus = this.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            encryptionKeyResponseObject.setResponseText(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
-        return ResponseEntity.status(httpStatus)
-                .body(encryptionKeyResponseObject);
+        return Response.status(responseStatus)
+                .entity(encryptionKeyResponseObject)
+                .build();
     }
 
 }

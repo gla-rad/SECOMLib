@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package org.grad.secom.interfaces;
+package org.grad.secom.interfaces.springboot;
 
-import org.grad.secom.exceptions.SecomGenericException;
-import org.grad.secom.exceptions.SecomValidationException;
-import org.grad.secom.models.SubscriptionNotificationObject;
-import org.grad.secom.models.SubscriptionNotificationResponseObject;
+import org.grad.secom.exceptions.*;
+import org.grad.secom.models.SubscriptionRequestObject;
+import org.grad.secom.models.SubscriptionResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -34,7 +33,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 
 /**
- * The SECOM Subscription Notification Interface Definition.
+ * The SECOM Subscription Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -42,22 +41,23 @@ import javax.validation.ValidationException;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SubscriptionNotificationInterface extends GenericInterface {
+public interface SubscriptionInterface extends GenericInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    public static final String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/v1/subscription/notification";
+    public static final String SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
 
     /**
-     * POST /v1/subscription/notification : The interface receives notifications
-     * when a subscription is created or removed by the information provider.
+     * POST /v1/subscription : Request subscription on information, either
+     * specific information according to parameters, or the information
+     * accessible upon decision by the information provider.
      *
-     * @param subscriptionNotificationObject the subscription notification request object
-     * @return the subscription notification response object
+     * @param subscriptionRequestObject the subscription object
+     * @return the subscription response object
      */
-    @PostMapping(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
-    ResponseEntity<SubscriptionNotificationResponseObject> subscriptionNotification(@Valid  @RequestBody SubscriptionNotificationObject subscriptionNotificationObject);
+    @PostMapping(SUBSCRIPTION_INTERFACE_PATH)
+    ResponseEntity<SubscriptionResponseObject> subscription(@RequestBody @Valid SubscriptionRequestObject subscriptionRequestObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -73,25 +73,28 @@ public interface SubscriptionNotificationInterface extends GenericInterface {
             HttpRequestMethodNotSupportedException.class,
             MethodArgumentTypeMismatchException.class
     })
-    default ResponseEntity<Object> handleSubscriptionNotificationInterfaceExceptions(Exception ex,
-                                                                                     HttpServletRequest request,
-                                                                                     HttpServletResponse response) {
-        // Create the subscription notification response
+    default ResponseEntity<Object> handleSubscriptionInterfaceExceptions(Exception ex,
+                                                                         HttpServletRequest request,
+                                                                         HttpServletResponse response) {
+        // Create the subscription response
         HttpStatus httpStatus;
-        SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
+        SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
+        if(ex instanceof  SecomValidationException || ex instanceof ValidationException || ex instanceof MethodArgumentTypeMismatchException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            subscriptionNotificationResponseObject.setResponseText("Bad Request");
+            subscriptionResponseObject.setResponseText("Bad Request");
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+            subscriptionResponseObject.setResponseText("Not authorized to requested information");
         } else {
             httpStatus = this.handleCommonExceptionResponseCode(ex);
-            subscriptionNotificationResponseObject.setResponseText(httpStatus.getReasonPhrase());
+            subscriptionResponseObject.setResponseText(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity.status(httpStatus)
-                .body(subscriptionNotificationResponseObject);
+                .body(subscriptionResponseObject);
     }
 
 }
