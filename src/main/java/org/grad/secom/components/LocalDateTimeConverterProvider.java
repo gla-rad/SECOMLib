@@ -84,7 +84,7 @@ public class LocalDateTimeConverterProvider implements ParamConverterProvider {
         public String toString(LocalDateTime value) {
             if (value == null) return "";
             try {
-                return value.format(DateTimeFormatter.ISO_DATE_TIME);
+                return value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }
