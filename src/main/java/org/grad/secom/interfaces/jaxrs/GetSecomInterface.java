@@ -33,6 +33,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -72,7 +73,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
      */
     @Path(GET_INTERFACE_PATH)
     @GET
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     GetResponseObject get(@QueryParam("dataReference") UUID dataReference,
                           @QueryParam("containerType") ContainerTypeEnum containerType,
                           @QueryParam("dataProductType") SECOM_DataProductType dataProductType,

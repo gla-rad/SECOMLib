@@ -29,6 +29,7 @@ import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
@@ -59,8 +60,8 @@ public interface DiscoveryServiceSecomInterface extends GenericSecomInterface {
      */
     @Path(DISCOVERY_SERVICE_INTERFACE_PATH)
     @POST
-    @Consumes(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     List<SearchObjectResult> search(@Valid SearchFilterObject searchFilterObject,
                                     @QueryParam("page") @Min(0) Integer page,
                                     @QueryParam("pageSize") @Min(0) Integer pageSize);

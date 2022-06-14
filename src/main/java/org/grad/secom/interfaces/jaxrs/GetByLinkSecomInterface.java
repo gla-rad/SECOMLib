@@ -29,6 +29,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
 
@@ -60,8 +61,8 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
      */
     @Path(GET_BY_LINK_INTERFACE_PATH)
     @GET
-    @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
-    String getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    Object getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
