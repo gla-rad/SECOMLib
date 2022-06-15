@@ -32,7 +32,7 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.grad.secom.core</groupId>
+            <groupId>org.grad.secom</groupId>
             <artifactId>secom-core</artifactId>
             <version>${project.version}</version>
         </dependency>
