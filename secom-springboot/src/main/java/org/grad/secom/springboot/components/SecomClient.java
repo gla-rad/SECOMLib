@@ -77,17 +77,17 @@ public class SecomClient {
      */
     public SecomClient(URL url, boolean useSSL) throws SSLException {
         // Initialise the HTTP connection configuration
-        final HttpClient httpConnector = HttpClient
+        HttpClient httpConnector = HttpClient
                 .create()
                 .followRedirect(true);
 
         // Add the SSL configuration if required
         if(useSSL) {
-            final SslContext sslContext = SslContextBuilder
+            SslContext sslContext = SslContextBuilder
                     .forClient()
                     .trustManager(InsecureTrustManagerFactory.INSTANCE)
                     .build();
-            httpConnector.secure(t -> t.sslContext(sslContext) );
+            httpConnector = httpConnector.secure(t -> t.sslContext(sslContext) );
         }
 
         // And create the SECOM web client

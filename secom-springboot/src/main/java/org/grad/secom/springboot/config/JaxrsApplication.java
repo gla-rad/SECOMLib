@@ -23,12 +23,14 @@ import org.grad.secom.core.components.ContainerTypeConverterProvider;
 import org.grad.secom.core.components.LocalDateTimeConverterProvider;
 import org.grad.secom.core.components.ObjectMapperProvider;
 import org.grad.secom.core.components.SecomExceptionMapper;
+import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -85,13 +87,26 @@ public class JaxrsApplication extends Application {
     }
 
     /**
-     * Register the required classes to Swagger.
+     * Register the required classes to the RESTEasy server.
      *
      * @return the set of classes to be registered.
      */
     @Override
     public Set<Class<?>> getClasses() {
         return Stream.of(OpenApiResource.class, AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
+    }
+
+    /**
+     * Register the required singletons to the RESTEasy server.
+     *
+     * @return the set of singletons to be registered.
+     */
+    @Override
+    public Set<Object> getSingletons() {
+        CorsFilter corsFilter = new CorsFilter();
+        corsFilter.getAllowedOrigins().add("*");
+        corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+        return Collections.singleton(corsFilter);
     }
 
 }
