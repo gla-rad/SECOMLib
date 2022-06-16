@@ -106,6 +106,7 @@ public class JaxrsApplication extends Application {
         CorsFilter corsFilter = new CorsFilter();
         corsFilter.getAllowedOrigins().add("*");
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
+        corsFilter.setAllowCredentials(false);
         return Collections.singleton(corsFilter);
     }
 
