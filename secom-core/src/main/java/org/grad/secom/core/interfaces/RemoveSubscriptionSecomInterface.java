@@ -81,7 +81,7 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
         RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             removeSubscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

@@ -79,7 +79,7 @@ public interface SubscriptionSecomInterface extends GenericSecomInterface {
         SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

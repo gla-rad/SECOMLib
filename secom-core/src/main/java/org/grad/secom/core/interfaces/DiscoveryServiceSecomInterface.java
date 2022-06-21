@@ -83,7 +83,7 @@ public interface DiscoveryServiceSecomInterface extends GenericSecomInterface {
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {

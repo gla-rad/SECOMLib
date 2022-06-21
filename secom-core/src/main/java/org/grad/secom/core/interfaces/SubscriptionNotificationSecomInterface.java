@@ -78,7 +78,7 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
         SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionNotificationResponseObject.setResponseText("Bad Request");
         } else {

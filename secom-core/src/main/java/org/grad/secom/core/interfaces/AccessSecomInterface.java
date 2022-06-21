@@ -79,7 +79,7 @@ public interface AccessSecomInterface extends GenericSecomInterface {
         AccessResponseObject accessResponseObject = new AccessResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException || ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             accessResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
