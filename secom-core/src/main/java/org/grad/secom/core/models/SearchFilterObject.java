@@ -24,9 +24,7 @@ package org.grad.secom.core.models;
 public class SearchFilterObject {
 
     // Class Variables
-    private String query; // This is supposed to be SearchFilterParams but that
-                          // doesn't make sense since we can't AND/OR the
-                          // individual filters, while paging doesn't fit there
+    private SearchParameters query;
     private String geometry;
     private String freetext;
 
@@ -35,7 +33,7 @@ public class SearchFilterObject {
      *
      * @return the query
      */
-    public String getQuery() {
+    public SearchParameters getQuery() {
         return query;
     }
 
@@ -44,7 +42,7 @@ public class SearchFilterObject {
      *
      * @param query the query
      */
-    public void setQuery(String query) {
+    public void setQuery(SearchParameters query) {
         this.query = query;
     }
 
