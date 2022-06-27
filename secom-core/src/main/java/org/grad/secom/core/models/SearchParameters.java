@@ -42,9 +42,12 @@ public class SearchParameters {
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
+    @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
     private String mmsi;
+    @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
     private String imo;
     private String serviceType;
+    @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}")
     private String unlocode;
     private URI endpointUri;
     @Min(value = 0L, message = "The page value must be positive")
