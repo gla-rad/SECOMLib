@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models;
 
+import javax.validation.constraints.Pattern;
+
 /**
  * The SECOM Search Filter Object Class.
  *
@@ -26,6 +28,7 @@ public class SearchFilterObject {
     // Class Variables
     private SearchParameters query;
     private String geometry;
+    @Pattern(regexp = "^[a-zA-Z0-9 +_:\\-,.]*$")
     private String freetext;
 
     /**
