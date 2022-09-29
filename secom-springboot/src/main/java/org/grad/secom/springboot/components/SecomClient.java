@@ -19,9 +19,11 @@ package org.grad.secom.springboot.components;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.apache.logging.log4j.util.Strings;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -29,11 +31,23 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLException;
+import javax.net.ssl.TrustManagerFactory;
 import javax.validation.constraints.Min;
 import javax.ws.rs.QueryParam;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -71,23 +85,59 @@ public class SecomClient {
     /**
      * The SECOM Client Constructor.
      *
+     * The client constructor is build as a simple class, not a Spring component
+     * as it can be used for multiple connections. According to the provided
+     * SECOM configuration properties, the SSL can be configured to pick up
+     * and also provide client certificates for the communication.
+     *
      * @param url       the URL of the SECOM service
-     * @param useSSL    whether to use SSL to connect to the service
+     * @param config    the SECOM configuration properties bundle
      * @throws SSLException for any exceptions while configuring the SSL connection
      */
-    public SecomClient(URL url, boolean useSSL) throws SSLException {
+    public SecomClient(URL url, SecomConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, SSLException {
         // Initialise the HTTP connection configuration
         HttpClient httpConnector = HttpClient
                 .create()
                 .followRedirect(true);
 
-        // Add the SSL configuration if required
-        if(useSSL) {
-            SslContext sslContext = SslContextBuilder
-                    .forClient()
-                    .trustManager(InsecureTrustManagerFactory.INSTANCE)
-                    .build();
-            httpConnector = httpConnector.secure(t -> t.sslContext(sslContext) );
+        // When a valid SECOM configuration is provided, use it
+        if(Objects.nonNull(config)) {
+            // Start Setting up the SSL context builder.
+            SslContextBuilder sslContextBuilder = SslContextBuilder
+                    .forClient();
+
+            // If we have a keystore and a valid password
+            if (Strings.isNotBlank(config.getKeystore()) && Strings.isNotBlank(config.getKeystorePassword())) {
+                KeyStore clientKeyStore = KeyStore.getInstance(Optional.ofNullable(config.getKeystoreType()).orElse(KeyStore.getDefaultType()));
+                KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+
+                try (InputStream ksFileInputStream = new ClassPathResource(config.getKeystore()).getInputStream()) {
+                    clientKeyStore.load(ksFileInputStream, config.getKeystorePassword().toCharArray());
+                    keyManagerFactory.init(clientKeyStore, config.getKeystorePassword().toCharArray());
+                    sslContextBuilder.keyManager(keyManagerFactory);
+                }
+            }
+
+            // If we have a truststore and a valid password
+            if (Strings.isNotBlank(config.getTruststore()) && Strings.isNotBlank(config.getTruststorePassword())) {
+                KeyStore clientTrustStore = KeyStore.getInstance(Optional.ofNullable(config.getTruststoreType()).orElse(KeyStore.getDefaultType()));
+                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+
+                try (InputStream tsFileInputStream = new ClassPathResource(config.getTruststore()).getInputStream()) {
+                    clientTrustStore.load(tsFileInputStream, config.getTruststorePassword().toCharArray());
+                    trustManagerFactory.init(clientTrustStore);
+                    sslContextBuilder.trustManager(trustManagerFactory);
+                }
+            }
+            // Otherwise, check is an insecure policy it to be applied
+            else if (config.getInsecureSslPolicy()) {
+                 sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
+            }
+
+            // Add the SSL context to the HTTP connector
+            SslContext sslContext = sslContextBuilder.build();
+            httpConnector = httpConnector.secure(spec -> spec.sslContext(sslContext)
+                    .handshakeTimeout(Duration.of(2, ChronoUnit.SECONDS)));
         }
 
         // And create the SECOM web client
