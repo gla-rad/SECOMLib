@@ -36,7 +36,7 @@ public class EnvelopeLinkObject {
     @NotNull
     private SECOM_DataProductType dataProductType;
     @NotNull
-    private SECOM_ExchangeMetadata exchangeMetadata;
+    private SECOM_ExchangeMetadataObject exchangeMetadata;
     @NotNull
     private Boolean fromSubscription;
     @NotNull
@@ -95,7 +95,7 @@ public class EnvelopeLinkObject {
      *
      * @return the exchange metadata
      */
-    public SECOM_ExchangeMetadata getExchangeMetadata() {
+    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -104,7 +104,7 @@ public class EnvelopeLinkObject {
      *
      * @param exchangeMetadata the exchange metadata
      */
-    public void setExchangeMetadata(SECOM_ExchangeMetadata exchangeMetadata) {
+    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 

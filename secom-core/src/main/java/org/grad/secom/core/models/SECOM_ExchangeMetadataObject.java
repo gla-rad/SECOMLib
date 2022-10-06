@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SECOM_ExchangeMetadata {
+public class SECOM_ExchangeMetadataObject {
 
     // Class Variables
     @NotNull

@@ -19,10 +19,9 @@ package org.grad.secom.springboot.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
-import org.grad.secom.core.components.ContainerTypeConverterProvider;
-import org.grad.secom.core.components.LocalDateTimeConverterProvider;
-import org.grad.secom.core.components.ObjectMapperProvider;
-import org.grad.secom.core.components.SecomExceptionMapper;
+import org.grad.secom.core.components.*;
+import org.grad.secom.core.interfaces.SecomSignatureProvider;
+import org.grad.secom.core.interfaces.SecomSignatureValidator;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -52,6 +51,26 @@ public class JaxrsApplication extends Application {
     @Bean
     SecomExceptionMapper secomExceptionMapper() {
         return new SecomExceptionMapper();
+    }
+
+    /**
+     * Initialise the SECOM signature interceptor.
+     *
+     * @return the SECOM signature interceptor bean
+     */
+    @Bean
+    SecomSignatureInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomSignatureInterceptor(signatureProvider);
+    }
+
+    /**
+     * Initialise the SECOM signature filter.
+     *
+     * @return the SECOM signature filter bean
+     */
+    @Bean
+    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomSignatureValidator signatureValidator) {
+        return new SecomSignatureFilter(signatureValidator);
     }
 
     /**

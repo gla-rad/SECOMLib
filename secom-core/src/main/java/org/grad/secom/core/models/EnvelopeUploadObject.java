@@ -40,7 +40,7 @@ public class EnvelopeUploadObject {
     @NotNull
     private SECOM_DataProductType dataProductType;
     @NotNull
-    private SECOM_ExchangeMetadata exchangeMetadata;
+    private SECOM_ExchangeMetadataObject exchangeMetadata;
     private Boolean fromSubscription;
     private AckRequestEnum ackRequest;
     private URL ackEndpoint;
@@ -112,7 +112,7 @@ public class EnvelopeUploadObject {
      *
      * @return the exchange metadata
      */
-    public SECOM_ExchangeMetadata getExchangeMetadata() {
+    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -121,7 +121,7 @@ public class EnvelopeUploadObject {
      *
      * @param exchangeMetadata the exchange metadata
      */
-    public void setExchangeMetadata(SECOM_ExchangeMetadata exchangeMetadata) {
+    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 

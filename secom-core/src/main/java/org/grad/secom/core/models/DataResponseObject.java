@@ -31,7 +31,7 @@ public class DataResponseObject {
     @NotNull
     private String data;
     @NotNull
-    private SECOM_ExchangeMetadata exchangeMetadata;
+    private SECOM_ExchangeMetadataObject exchangeMetadata;
     @NotNull
     private AckRequestEnum ackRequest;
 
@@ -58,7 +58,7 @@ public class DataResponseObject {
      *
      * @return the exchange metadata
      */
-    public SECOM_ExchangeMetadata getExchangeMetadata() {
+    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -67,7 +67,7 @@ public class DataResponseObject {
      *
      * @param exchangeMetadata the exchange metadata
      */
-    public void setExchangeMetadata(SECOM_ExchangeMetadata exchangeMetadata) {
+    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 

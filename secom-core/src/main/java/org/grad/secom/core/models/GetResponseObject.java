@@ -96,7 +96,7 @@ public class GetResponseObject {
      * @param payloadObject the object to be encoded and assigned to the data
      */
     @JsonIgnore
-    public void encodeData(String payloadObject, SECOM_ExchangeMetadata exchangeMetadata) {
+    public void encodeData(String payloadObject, SECOM_ExchangeMetadataObject exchangeMetadata) {
         if(this.dataResponseObject == null) {
             this.dataResponseObject = new DataResponseObject();
         }

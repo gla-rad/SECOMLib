@@ -23,7 +23,7 @@ import org.apache.logging.log4j.util.Strings;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
-import org.springframework.core.io.ClassPathResource;
+import org.grad.secom.core.utils.KeyStoreUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -31,15 +31,11 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLException;
-import javax.net.ssl.TrustManagerFactory;
 import javax.validation.constraints.Min;
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
@@ -108,27 +104,16 @@ public class SecomClient {
 
             // If we have a keystore and a valid password
             if (Strings.isNotBlank(config.getKeystore()) && Strings.isNotBlank(config.getKeystorePassword())) {
-                KeyStore clientKeyStore = KeyStore.getInstance(Optional.ofNullable(config.getKeystoreType()).orElse(KeyStore.getDefaultType()));
-                KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-
-                try (InputStream ksFileInputStream = new ClassPathResource(config.getKeystore()).getInputStream()) {
-                    clientKeyStore.load(ksFileInputStream, config.getKeystorePassword().toCharArray());
-                    keyManagerFactory.init(clientKeyStore, config.getKeystorePassword().toCharArray());
-                    sslContextBuilder.keyManager(keyManagerFactory);
-                }
+                sslContextBuilder.keyManager(KeyStoreUtils.getKeyManagerFactory(
+                        config.getKeystore(), config.getKeystorePassword(), config.getKeystoreType(), null));
             }
 
             // If we have a truststore and a valid password
             if (Strings.isNotBlank(config.getTruststore()) && Strings.isNotBlank(config.getTruststorePassword())) {
-                KeyStore clientTrustStore = KeyStore.getInstance(Optional.ofNullable(config.getTruststoreType()).orElse(KeyStore.getDefaultType()));
-                TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-
-                try (InputStream tsFileInputStream = new ClassPathResource(config.getTruststore()).getInputStream()) {
-                    clientTrustStore.load(tsFileInputStream, config.getTruststorePassword().toCharArray());
-                    trustManagerFactory.init(clientTrustStore);
-                    sslContextBuilder.trustManager(trustManagerFactory);
-                }
+                sslContextBuilder.trustManager(KeyStoreUtils.getTrustManagerFactory(
+                        config.getTruststore(), config.getTruststorePassword(), config.getTruststoreType(), null));
             }
+
             // Otherwise, check is an insecure policy it to be applied
             else if (config.getInsecureSslPolicy()) {
                  sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
