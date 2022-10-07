@@ -25,7 +25,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum AckRequestEnum {
+public enum AckRequestEnum implements SECOM_Enum {
     NO_ACK_REQUESTED(0),
     DELIVERED_ACK_REQUESTED(1),
     OPENED_ACK_REQUESTED(2),
@@ -62,5 +62,15 @@ public enum AckRequestEnum {
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return String.valueOf(this.value);
     }
 }

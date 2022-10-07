@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SECOM_DataProductType {
+public enum SECOM_DataProductType implements SECOM_Enum {
     OTHER("Other data types not covered in this table"),
     S57("S-57 Electronic Navigational Chart (ENC)"),
     S101("S-101 Electronic Navigational Chart (ENC)"),
@@ -87,4 +87,13 @@ public enum SECOM_DataProductType {
                 .orElse(null);
     }
 
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return this.name();
+    }
 }

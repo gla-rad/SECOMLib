@@ -25,7 +25,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SECOM_ResponseCodeEnum {
+public enum SECOM_ResponseCodeEnum implements SECOM_Enum {
     MISSING_REQUIRED_DATA_FOR_SERVICE(0),
     FAILED_SIGNATURE_VERIFICATION(1),
     INVALID_CERTIFICATE(2),
@@ -62,5 +62,15 @@ public enum SECOM_ResponseCodeEnum {
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return String.valueOf(this.value);
     }
 }

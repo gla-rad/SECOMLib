@@ -25,7 +25,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum NackTypeEnum {
+public enum NackTypeEnum implements SECOM_Enum {
     XML_SCHEMA_VALIDATION_ERROR(0),
     UNKNOWN_DATA_TYPE_OR_VERSION(1),
     FAILED_DATA_SIGNATURE_VERIFICATION(2),
@@ -63,5 +63,15 @@ public enum NackTypeEnum {
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return String.valueOf(this.value);
     }
 }

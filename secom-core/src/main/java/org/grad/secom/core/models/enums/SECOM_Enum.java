@@ -16,52 +16,22 @@
 
 package org.grad.secom.core.models.enums;
 
-
-import com.fasterxml.jackson.annotation.JsonValue;
-
 /**
- * The Info Status Enum Class.
+ * THe SECOM Enum Interface.
  *
- * This is a custom implementation for the status options of an object, to
- * make life a bit easier.
+ * This interface is used to describe and identify Java enumerations used in
+ * SECOM. It also includes some common functionality that these enums should
+ * have, such as the conversion to a string representation.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum InfoStatusEnum implements SECOM_Enum {
-    PRESENT("present"),
-    DELETED("deleted"),
-    INVALID("invalid"),
-    DEPRECATED("deprecated"),
-    ERROR("error");
-
-    // Enum Variables
-    private final String value;
-
-    /**
-     * Enum Constructor
-     *
-     * @param newValue the enum value
-     */
-    InfoStatusEnum(final String newValue) {
-        value = newValue;
-    }
-
-    /**
-     * Gets value.
-     *
-     * @return the value
-     */
-    @JsonValue
-    public String getValue() { return value; }
-
+public interface SECOM_Enum {
 
     /**
      * The conversion to a string operation.
      *
      * @return the SECOM string representation of the enum
      */
-    @Override
-    public String asString() {
-        return this.value;
-    }
+    String asString();
+
 }

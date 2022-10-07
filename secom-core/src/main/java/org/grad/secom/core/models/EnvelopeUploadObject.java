@@ -30,7 +30,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeUploadObject {
+public class EnvelopeUploadObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
@@ -43,15 +43,8 @@ public class EnvelopeUploadObject {
     private SECOM_ExchangeMetadataObject exchangeMetadata;
     private Boolean fromSubscription;
     private AckRequestEnum ackRequest;
-    private URL ackEndpoint;
     @NotNull
     private UUID transactionIdentifier;
-    @NotNull
-    private String envelopeSignatureCertificate;
-    @NotNull
-    private String envelopeRootCertificateThumbprint;
-    @NotNull
-    private LocalDateTime envelopeSignatureTime;
 
     /**
      * Get data.
@@ -162,24 +155,6 @@ public class EnvelopeUploadObject {
     }
 
     /**
-     * Gets ack endpoint.
-     *
-     * @return the ack endpoint
-     */
-    public URL getAckEndpoint() {
-        return ackEndpoint;
-    }
-
-    /**
-     * Sets ack endpoint.
-     *
-     * @param ackEndpoint the ack endpoint
-     */
-    public void setAckEndpoint(URL ackEndpoint) {
-        this.ackEndpoint = ackEndpoint;
-    }
-
-    /**
      * Gets transaction identifier.
      *
      * @return the transaction identifier
@@ -198,56 +173,24 @@ public class EnvelopeUploadObject {
     }
 
     /**
-     * Gets envelope signature certificate.
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
      *
-     * @return the envelope signature certificate
+     * @return the generated signature CSV attribute array
      */
-    public String getEnvelopeSignatureCertificate() {
-        return envelopeSignatureCertificate;
-    }
-
-    /**
-     * Sets envelope signature certificate.
-     *
-     * @param envelopeSignatureCertificate the envelope signature certificate
-     */
-    public void setEnvelopeSignatureCertificate(String envelopeSignatureCertificate) {
-        this.envelopeSignatureCertificate = envelopeSignatureCertificate;
-    }
-
-    /**
-     * Gets envelope root certificate thumbprint.
-     *
-     * @return the envelope root certificate thumbprint
-     */
-    public String getEnvelopeRootCertificateThumbprint() {
-        return envelopeRootCertificateThumbprint;
-    }
-
-    /**
-     * Sets envelope root certificate thumbprint.
-     *
-     * @param envelopeRootCertificateThumbprint the envelope root certificate thumbprint
-     */
-    public void setEnvelopeRootCertificateThumbprint(String envelopeRootCertificateThumbprint) {
-        this.envelopeRootCertificateThumbprint = envelopeRootCertificateThumbprint;
-    }
-
-    /**
-     * Gets envelope signature time.
-     *
-     * @return the envelope signature time
-     */
-    public LocalDateTime getEnvelopeSignatureTime() {
-        return envelopeSignatureTime;
-    }
-
-    /**
-     * Sets envelope signature time.
-     *
-     * @param envelopeSignatureTime the envelope signature time
-     */
-    public void setEnvelopeSignatureTime(LocalDateTime envelopeSignatureTime) {
-        this.envelopeSignatureTime = envelopeSignatureTime;
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                data,
+                containerType,
+                dataProductType,
+                exchangeMetadata,
+                fromSubscription,
+                ackRequest,
+                transactionIdentifier,
+                envelopeSignatureCertificate,
+                envelopeRootCertificateThumbprint,
+                envelopeSignatureTime
+        };
     }
 }

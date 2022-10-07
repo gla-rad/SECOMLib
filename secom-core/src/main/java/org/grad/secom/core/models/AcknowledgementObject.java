@@ -27,7 +27,7 @@ public class AcknowledgementObject {
 
     // Class Variables
     @NotNull
-    private EnvelopeAckObj envelope;
+    private EnvelopeAckObject envelope;
     @NotNull
     private String digitalSignature;
 
@@ -36,7 +36,7 @@ public class AcknowledgementObject {
      *
      * @return the envelope
      */
-    public EnvelopeAckObj getEnvelope() {
+    public EnvelopeAckObject getEnvelope() {
         return envelope;
     }
 
@@ -45,7 +45,7 @@ public class AcknowledgementObject {
      *
      * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeAckObj envelope) {
+    public void setEnvelope(EnvelopeAckObject envelope) {
         this.envelope = envelope;
     }
 

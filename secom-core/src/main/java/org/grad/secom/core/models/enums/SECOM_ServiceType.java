@@ -24,7 +24,7 @@ import java.util.Objects;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SECOM_ServiceType {
+public enum SECOM_ServiceType implements SECOM_Enum {
     VTS_INFORMATION_SERVICE("MS 1 - VTS Information service (INS)"),
     VTS_NAVIGATIONAL_ASSISTANCE_SERVICE("MS 2 - VTS Navigational assistance service (NAS)"),
     TRAFFIC_ORGANIZATION_SERVICE("MS 3 - Traffic organization service (TOS)"),
@@ -75,5 +75,15 @@ public enum SECOM_ServiceType {
                 .filter(t -> Objects.equals(t.getDescription(), description))
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return this.name();
     }
 }

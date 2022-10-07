@@ -22,13 +22,14 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * The SECOM Envelope Link Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeLinkObject {
+public class EnvelopeLinkObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
@@ -42,17 +43,11 @@ public class EnvelopeLinkObject {
     @NotNull
     private AckRequestEnum ackRequest;
     @NotNull
-    private String transactionIdentifier;
-    @NotNull
-    private String envelopeSignatureCertificate;
-    @NotNull
-    private String envelopeRootCertificateThumbprint;
+    private UUID transactionIdentifier;
     @NotNull
     private Integer size;
     @NotNull
     private LocalDateTime timeToLive;
-    @NotNull
-    private LocalDateTime envelopeSignatureTime;
 
     /**
      * Gets container type.
@@ -149,7 +144,7 @@ public class EnvelopeLinkObject {
      *
      * @return the transaction identifier
      */
-    public String getTransactionIdentifier() {
+    public UUID getTransactionIdentifier() {
         return transactionIdentifier;
     }
 
@@ -158,44 +153,8 @@ public class EnvelopeLinkObject {
      *
      * @param transactionIdentifier the transaction identifier
      */
-    public void setTransactionIdentifier(String transactionIdentifier) {
+    public void setTransactionIdentifier(UUID transactionIdentifier) {
         this.transactionIdentifier = transactionIdentifier;
-    }
-
-    /**
-     * Gets envelope signature certificate.
-     *
-     * @return the envelope signature certificate
-     */
-    public String getEnvelopeSignatureCertificate() {
-        return envelopeSignatureCertificate;
-    }
-
-    /**
-     * Sets envelope signature certificate.
-     *
-     * @param envelopeSignatureCertificate the envelope signature certificate
-     */
-    public void setEnvelopeSignatureCertificate(String envelopeSignatureCertificate) {
-        this.envelopeSignatureCertificate = envelopeSignatureCertificate;
-    }
-
-    /**
-     * Gets envelope root certificate thumbprint.
-     *
-     * @return the envelope root certificate thumbprint
-     */
-    public String getEnvelopeRootCertificateThumbprint() {
-        return envelopeRootCertificateThumbprint;
-    }
-
-    /**
-     * Sets envelope root certificate thumbprint.
-     *
-     * @param envelopeRootCertificateThumbprint the envelope root certificate thumbprint
-     */
-    public void setEnvelopeRootCertificateThumbprint(String envelopeRootCertificateThumbprint) {
-        this.envelopeRootCertificateThumbprint = envelopeRootCertificateThumbprint;
     }
 
     /**
@@ -235,20 +194,25 @@ public class EnvelopeLinkObject {
     }
 
     /**
-     * Gets envelope signature time.
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
      *
-     * @return the envelope signature time
+     * @return the generated signature CSV attribute array
      */
-    public LocalDateTime getEnvelopeSignatureTime() {
-        return envelopeSignatureTime;
-    }
-
-    /**
-     * Sets envelope signature time.
-     *
-     * @param envelopeSignatureTime the envelope signature time
-     */
-    public void setEnvelopeSignatureTime(LocalDateTime envelopeSignatureTime) {
-        this.envelopeSignatureTime = envelopeSignatureTime;
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                containerType,
+                dataProductType,
+                exchangeMetadata,
+                fromSubscription,
+                ackRequest,
+                transactionIdentifier,
+                envelopeSignatureCertificate,
+                envelopeRootCertificateThumbprint,
+                size,
+                timeToLive,
+                envelopeSignatureTime
+        };
     }
 }

@@ -20,6 +20,8 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.logging.log4j.util.Strings;
+import org.grad.secom.core.interfaces.SecomSignatureProvider;
+import org.grad.secom.core.interfaces.SecomSignatureValidator;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
@@ -77,6 +79,8 @@ public class SecomClient {
 
     // Class Variables
     WebClient secomClient;
+    SecomSignatureProvider signatureProvider;
+    SecomSignatureValidator signatureValidator;
 
     /**
      * The SECOM Client Constructor.
@@ -131,6 +135,42 @@ public class SecomClient {
                 .baseUrl(url.toString())
                 //.filter(setJWT())
                 .build();
+    }
+
+    /**
+     * Gets signature provider.
+     *
+     * @return the signature provider
+     */
+    public SecomSignatureProvider getSignatureProvider() {
+        return signatureProvider;
+    }
+
+    /**
+     * Sets signature provider.
+     *
+     * @param signatureProvider the signature provider
+     */
+    public void setSignatureProvider(SecomSignatureProvider signatureProvider) {
+        this.signatureProvider = signatureProvider;
+    }
+
+    /**
+     * Gets signature validator.
+     *
+     * @return the signature validator
+     */
+    public SecomSignatureValidator getSignatureValidator() {
+        return signatureValidator;
+    }
+
+    /**
+     * Sets signature validator.
+     *
+     * @param signatureValidator the signature validator
+     */
+    public void setSignatureValidator(SecomSignatureValidator signatureValidator) {
+        this.signatureValidator = signatureValidator;
     }
 
     /**
@@ -473,6 +513,34 @@ public class SecomClient {
     }
 
     /**
+     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * data to a consumer. The operation expects one single data object and
+     * its metadata.
+     *
+     * @param uploadObject  the upload object
+     * @return the upload response object
+     */
+    public Optional<UploadResponseObject> upload(UploadObject uploadObject) {
+        // If a signature provider has been assigned, use it to sign the
+        // upload object envelop data.
+        if(this.signatureProvider != null) {
+            this.signatureProvider.generateSignature(
+                    uploadObject.getEnvelope().getData().getBytes(),
+                    uploadObject.getEnvelope().getExchangeMetadata());
+        }
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(UPLOAD_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(uploadObject))
+                .retrieve()
+                .bodyToMono(UploadResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
      * POST /v1/object/link : The REST operation POST /object/link. The
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
@@ -489,26 +557,6 @@ public class SecomClient {
                 .body(BodyInserters.fromValue(uploadLinkObject))
                 .retrieve()
                 .bodyToMono(UploadLinkResponseObject.class)
-                .blockOptional();
-    }
-
-    /**
-     * POST /v1/object : The interface shall be used for uploading (pushing)
-     * data to a consumer. The operation expects one single data object and
-     * its metadata.
-     *
-     * @param uploadObject  the upload object
-     * @return the upload response object
-     */
-    public Optional<UploadResponseObject> upload(UploadObject uploadObject) {
-        return this.secomClient
-                .post()
-                .uri(UPLOAD_INTERFACE_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(uploadObject))
-                .retrieve()
-                .bodyToMono(UploadResponseObject.class)
                 .blockOptional();
     }
 

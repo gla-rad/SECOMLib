@@ -25,7 +25,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum SubscriptionEventEnum {
+public enum SubscriptionEventEnum implements SECOM_Enum {
     SUBSCRIPTION_CREATED(1),
     SUBSCRIPTION_REMOVED(2);
 
@@ -60,5 +60,15 @@ public enum SubscriptionEventEnum {
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return String.valueOf(this.value);
     }
 }

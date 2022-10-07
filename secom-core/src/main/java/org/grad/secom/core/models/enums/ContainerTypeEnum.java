@@ -25,7 +25,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum ContainerTypeEnum {
+public enum ContainerTypeEnum implements SECOM_Enum{
     S100_DataSet(0),
     S100_ExchangeSet(1),
     NONE(2);
@@ -61,5 +61,15 @@ public enum ContainerTypeEnum {
                 .filter(t -> t.getValue() == value)
                 .findFirst()
                 .orElse(null);
+    }
+
+    /**
+     * The conversion to a string operation.
+     *
+     * @return the SECOM string representation of the enum
+     */
+    @Override
+    public String asString() {
+        return String.valueOf(this.value);
     }
 }
