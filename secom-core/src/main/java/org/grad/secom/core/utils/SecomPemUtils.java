@@ -45,8 +45,8 @@ public class SecomPemUtils {
 
     /**
      * During the build of a payload JSON object and before adding the public
-     * key to the same object, the original key is minified into one single line
-     * string by:
+     * certificate to the same object, the original key is minified into one
+     * single line string by:
      * <ul>
      *     <li>Remove all line feed characters</li>
      *     <li>Remove header -----BEGIN CERTIFICATE-----</li>
@@ -60,14 +60,14 @@ public class SecomPemUtils {
      * @return the original key minified into a single line string
      * @throws CertificateEncodingException When the certificate encoded provided is wrong
      */
-    public static String getMinifiedPemFromCertString(X509Certificate cert) throws CertificateEncodingException {
+    public static String getMinifiedPemFromCert(X509Certificate cert) throws CertificateEncodingException {
         return Base64.getEncoder().encodeToString(cert.getEncoded());
     }
 
     /**
      * During the build of a payload JSON object and before adding the public
-     * key to the same object, the original key is minified into one single line
-     * string by:
+     * certificate to the same object, the original certificate is minified into
+     * one single line string by:
      * <ul>
      *     <li>Remove all line feed characters</li>
      *     <li>Remove header -----BEGIN CERTIFICATE-----</li>
@@ -89,6 +89,34 @@ public class SecomPemUtils {
         minifiedPem = minifiedPem.replaceAll("-----BEGIN CERTIFICATE-----", "");
         // 3. Remove footer -----END CERTIFICATE-----
         minifiedPem = minifiedPem.replaceAll("-----END CERTIFICATE-----", "");
+        return minifiedPem;
+    }
+
+    /**
+     * During the build of a payload JSON object and before adding the public
+     * key to the same object, the original key is minified into one single line
+     * string by:
+     * <ul>
+     *     <li>Remove all line feed characters</li>
+     *     <li>Remove header -----BEGIN CERTIFICATE-----</li>
+     *     <li>Remove footer -----END CERTIFICATE-----</li>
+     * </ul>
+     * <p/>
+     * For Java Strings, we need to perform these operations manually, by
+     * replacing all the sub-string matches with empty strings.
+     *
+     * @param publicKey  The public key string to be minified
+     * @return the original public key minified into a single line string
+     * @throws CertificateEncodingException When the certificate encoded provided is wrong
+     */
+    public static String getMinifiedPemFromPublicKeyString(String publicKey) {
+        String minifiedPem = publicKey;
+        // 1. Remove all line feed characters
+        minifiedPem = minifiedPem.replaceAll(System.lineSeparator(), "");
+        // 2. Remove header -----BEGIN PUBLIC KEY-----
+        minifiedPem = minifiedPem.replaceAll("-----BEGIN PUBLIC KEY-----", "");
+        // 3. Remove footer -----END PUBLIC KEY-----
+        minifiedPem = minifiedPem.replaceAll("-----END PUBLIC KEY-----", "");
         return minifiedPem;
     }
 

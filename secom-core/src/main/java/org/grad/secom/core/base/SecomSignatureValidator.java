@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.interfaces;
+package org.grad.secom.core.base;
 
 /**
  * The SECOM Signature Validator Interface.

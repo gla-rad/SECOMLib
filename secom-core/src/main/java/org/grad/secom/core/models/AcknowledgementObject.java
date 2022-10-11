@@ -16,6 +16,9 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.grad.secom.core.base.EnvelopeSignatureBearer;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,13 +26,13 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AcknowledgementObject {
+public class AcknowledgementObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
     private EnvelopeAckObject envelope;
     @NotNull
-    private String digitalSignature;
+    private String envelopeSignature;
 
     /**
      * Gets envelope.
@@ -49,21 +52,26 @@ public class AcknowledgementObject {
         this.envelope = envelope;
     }
 
+
     /**
-     * Gets digital signature.
+     * Gets envelope signature.
+     * <p/>
+     * NOTE: For some reason this field here should be titles (according to
+     * SECOM) digitalSignature.
      *
-     * @return the digital signature
+     * @return the envelope signature
      */
-    public String getDigitalSignature() {
-        return digitalSignature;
+    @JsonProperty("digitalSignature")
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets digital signature.
+     * Sets envelope signature.
      *
-     * @param digitalSignature the digital signature
+     * @param envelopeSignature the envelope signature
      */
-    public void setDigitalSignature(String digitalSignature) {
-        this.digitalSignature = digitalSignature;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

@@ -16,6 +16,9 @@
 
 package org.grad.secom.core.models;
 
+import org.grad.secom.core.base.CsvGenerator;
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -31,7 +34,7 @@ public class SECOM_ExchangeMetadataObject implements CsvGenerator {
     @NotNull
     private String protectionScheme;
     @NotNull
-    private String digitalSignatureReference;
+    private DigitalSignatureAlgorithmEnum digitalSignatureReference;
     @NotNull
     private DigitalSignatureValue digitalSignatureValue;
     @NotNull
@@ -78,7 +81,7 @@ public class SECOM_ExchangeMetadataObject implements CsvGenerator {
      *
      * @return the digital signature reference
      */
-    public String getDigitalSignatureReference() {
+    public DigitalSignatureAlgorithmEnum getDigitalSignatureReference() {
         return digitalSignatureReference;
     }
 
@@ -87,7 +90,7 @@ public class SECOM_ExchangeMetadataObject implements CsvGenerator {
      *
      * @param digitalSignatureReference the digital signature reference
      */
-    public void setDigitalSignatureReference(String digitalSignatureReference) {
+    public void setDigitalSignatureReference(DigitalSignatureAlgorithmEnum digitalSignatureReference) {
         this.digitalSignatureReference = digitalSignatureReference;
     }
 

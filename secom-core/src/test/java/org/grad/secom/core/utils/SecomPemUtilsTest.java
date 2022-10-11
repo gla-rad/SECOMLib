@@ -36,7 +36,9 @@ class SecomPemUtilsTest {
     // Test Variables
     protected String resourceCertString;
     protected X509Certificate resourceCert;
+    protected String resourcePublicKey;
     protected String resourceMinifiedCert;
+    protected String resourceMinifiedPublicKey;
 
     @BeforeEach
     void init() throws CertificateException, IOException {
@@ -46,9 +48,17 @@ class SecomPemUtilsTest {
         this.resourceCertString = new String(certInputStream.readAllBytes(), StandardCharsets.UTF_8);
         this.resourceCert = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(this.resourceCertString.getBytes()));
 
+        // Retrieve the public key from the resources
+        final InputStream publicKeyInputStream = getClass().getClassLoader().getResourceAsStream("publicKey.pem");
+        this.resourcePublicKey = new String(publicKeyInputStream.readAllBytes(), StandardCharsets.UTF_8);
+
         // Retrieve the minified certificate string from the resources
-        final InputStream minifiedPublicKeyInputStream = getClass().getClassLoader().getResourceAsStream("minifiedCert.txt");
-        this.resourceMinifiedCert = new String(minifiedPublicKeyInputStream.readAllBytes(), StandardCharsets.UTF_8);
+        final InputStream minifiedCertInputStream = getClass().getClassLoader().getResourceAsStream("minifiedCert.txt");
+        this.resourceMinifiedCert = new String(minifiedCertInputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+        // Retrieve the minified public key from the resources
+        final InputStream minifiedPublicKeyInputStream = getClass().getClassLoader().getResourceAsStream("minifiedPublicKey.txt");
+        this.resourceMinifiedPublicKey = new String(minifiedPublicKeyInputStream.readAllBytes(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -60,7 +70,7 @@ class SecomPemUtilsTest {
     @Test
     void testGetMinifiedPemFromCert() throws CertificateException {
         // Minify the certificate
-        final String minifiedPemFromCert = SecomPemUtils.getMinifiedPemFromCertString(resourceCert);
+        final String minifiedPemFromCert = SecomPemUtils.getMinifiedPemFromCert(this.resourceCert);
 
         // Assert that it's correct
         assertNotNull(minifiedPemFromCert);
@@ -74,11 +84,26 @@ class SecomPemUtilsTest {
     @Test
     void testGetMinifiedPemFromCertString() {
         // Minify the certificate
-        final String minifiedPemFromCert = SecomPemUtils.getMinifiedPemFromCertString(resourceCertString);
+        final String minifiedPemFromCert = SecomPemUtils.getMinifiedPemFromCertString(this.resourceCertString);
 
         // Assert that it's correct
         assertNotNull(minifiedPemFromCert);
         assertEquals(this.resourceMinifiedCert, minifiedPemFromCert);
+    }
+
+    /**
+     * Test that we can correctly minify a String PEM representation of an X.509
+     * certificate public key, so that the headers and line separators are
+     * removed.
+     */
+    @Test
+    void testGetMinifiedPemFromPublicKeyString() {
+        // Minify the certificate
+        final String minifiedPemFromPublicKey = SecomPemUtils.getMinifiedPemFromPublicKeyString(this.resourcePublicKey);
+
+        // Assert that it's correct
+        assertNotNull(minifiedPemFromPublicKey);
+        assertEquals(this.resourceMinifiedPublicKey, minifiedPemFromPublicKey);
     }
 
     /**
@@ -89,7 +114,7 @@ class SecomPemUtilsTest {
     @Test
     void testGetCertFromPem() throws CertificateException {
         // Restore the minified public key to an X.509 certificate
-        final X509Certificate certFromPem = SecomPemUtils.getCertFromPem(resourceMinifiedCert);
+        final X509Certificate certFromPem = SecomPemUtils.getCertFromPem(this.resourceMinifiedCert);
 
         // Assert that it's correct
         assertNotNull(certFromPem);
@@ -112,7 +137,7 @@ class SecomPemUtilsTest {
     @Test
     void testGetCertFromPemString() throws CertificateException {
         // Restore the minified public key to an X.509 PEM String
-        final String stringCertFromPem = SecomPemUtils.getCertStringFromPem(resourceMinifiedCert);
+        final String stringCertFromPem = SecomPemUtils.getCertStringFromPem(this.resourceMinifiedCert);
 
         // Assert that it's correct
         assertNotNull(stringCertFromPem);

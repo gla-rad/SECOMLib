@@ -20,8 +20,8 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.logging.log4j.util.Strings;
-import org.grad.secom.core.interfaces.SecomSignatureProvider;
-import org.grad.secom.core.interfaces.SecomSignatureValidator;
+import org.grad.secom.core.base.SecomSignatureProvider;
+import org.grad.secom.core.base.SecomSignatureValidator;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
@@ -224,6 +224,13 @@ public class SecomClient {
      * @return the acknowledgement response object
      */
     public Optional<AcknowledgementResponseObject> acknowledgment(AcknowledgementObject acknowledgementObject) {
+        // If a signature provider has been assigned, use it to sign the
+        // acknowledgment object envelop data.
+        if(this.signatureProvider != null) {
+            acknowledgementObject.signEnvelope(this.signatureProvider);
+        }
+
+        // And perform the web-call
         return this.secomClient
                 .post()
                 .uri(ACKNOWLEDGMENT_INTERFACE_PATH)
@@ -308,6 +315,13 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
+        // If a signature provider has been assigned, use it to sign the
+        // encryption key object envelop data.
+        if(this.signatureProvider != null) {
+            encryptionKeyObject.signEnvelope(this.signatureProvider);
+        }
+
+        // And perform the web-call
         return this.secomClient
                 .post()
                 .uri(ENCRYPTION_KEY_INTERFACE_PATH)
@@ -524,10 +538,9 @@ public class SecomClient {
         // If a signature provider has been assigned, use it to sign the
         // upload object envelop data.
         if(this.signatureProvider != null) {
-            this.signatureProvider.generateSignature(
-                    uploadObject.getEnvelope().getData().getBytes(),
-                    uploadObject.getEnvelope().getExchangeMetadata());
+            uploadObject.getEnvelope().signData(signatureProvider);
         }
+
         // And perform the web-call
         return this.secomClient
                 .post()
@@ -549,6 +562,13 @@ public class SecomClient {
      * @return the upload link response object
      */
     public Optional<UploadLinkResponseObject> uploadLink(UploadLinkObject uploadLinkObject) {
+        // If a signature provider has been assigned, use it to sign the
+        // upload object envelop data.
+        if(this.signatureProvider != null) {
+            uploadLinkObject.signEnvelope(this.signatureProvider);
+        }
+
+        // And perform the web-call
         return this.secomClient
                 .post()
                 .uri(UPLOAD_LINK_INTERFACE_PATH)

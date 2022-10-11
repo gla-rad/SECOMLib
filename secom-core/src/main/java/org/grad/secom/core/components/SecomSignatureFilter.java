@@ -17,7 +17,7 @@
 package org.grad.secom.core.components;
 
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
-import org.grad.secom.core.interfaces.SecomSignatureValidator;
+import org.grad.secom.core.base.SecomSignatureValidator;
 import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
 import org.grad.secom.core.interfaces.UploadSecomInterface;
 import org.json.simple.JSONObject;
@@ -31,6 +31,7 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 /**
  * The SECOM Signature Filter
@@ -72,7 +73,7 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
             if(this.signatureValidator != null) {
                 try {
                     JSONObject jsonObject = (JSONObject) new JSONParser().parse(
-                            new InputStreamReader(rqstCtx.getEntityStream(), "UTF-8"));
+                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
                 } catch (ParseException ex) {
                     throw new SecomSignatureVerificationException(ex.getMessage());
                 }
@@ -84,7 +85,7 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
             if(this.signatureValidator != null) {
                 try {
                     JSONObject jsonObject = (JSONObject)new JSONParser().parse(
-                            new InputStreamReader(rqstCtx.getEntityStream(), "UTF-8"));
+                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
                 } catch (ParseException ex) {
                     throw new SecomSignatureVerificationException(ex.getMessage());
                 }

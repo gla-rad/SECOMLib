@@ -17,17 +17,19 @@
 package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.grad.secom.core.base.DigitalSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Optional;
 
 /**
  * The SECOM Get Response Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetResponseObject {
+public class GetResponseObject implements DigitalSignatureBearer {
 
     // Class Variables
     private DataResponseObject dataResponseObject;
@@ -118,4 +120,36 @@ public class GetResponseObject {
         }
         return new String(Base64.getDecoder().decode(this.dataResponseObject.getData()));
     }
+
+    /**
+     * Allows the data signature bearer object to access to data included to
+     * be signed.
+     *
+     * @return the data included in the data signature bearer
+     */
+    @Override
+    public String getData() {
+        return Optional.of(this.dataResponseObject)
+                .map(DataResponseObject::getData)
+                .orElse(null);
+    }
+
+    /**
+     * Allows the data signature bearer object to access the SECOM exchange
+     * metadata that will contain the signature information.
+     *
+     * @return the signature information of the data signature bearer
+     */
+    @Override
+    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
+        // Sanity Checks
+        if(this.dataResponseObject == null) {
+            return null;
+        }
+        if(this.dataResponseObject.getExchangeMetadata() == null) {
+            this.dataResponseObject.setExchangeMetadata(new SECOM_ExchangeMetadataObject());
+        }
+        return this.dataResponseObject.getExchangeMetadata();
+    }
+
 }

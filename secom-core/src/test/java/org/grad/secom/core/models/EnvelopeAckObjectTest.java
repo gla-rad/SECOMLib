@@ -38,7 +38,7 @@ class EnvelopeAckObjectTest {
         // Generate a new object
         EnvelopeAckObject obj = new EnvelopeAckObject();
         obj.setCreatedAt(LocalDateTime.now());
-        obj.setEnvelopeCertificate("envelopeCertificate");
+        obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         obj.setTransactionIdentifier(UUID.randomUUID());
         obj.setAckType(AckTypeEnum.OPENED_ACK);

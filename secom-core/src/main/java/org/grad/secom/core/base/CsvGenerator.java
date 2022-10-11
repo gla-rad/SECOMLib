@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.models;
+package org.grad.secom.core.base;
 
 import org.grad.secom.core.models.enums.SECOM_Enum;
 

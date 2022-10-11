@@ -52,7 +52,7 @@ public class ContainerTypeConverterProvider implements ParamConverterProvider {
     }
 
     /**
-     * The LocalDateTime Converter Class.
+     * The Container Type Converter Class.
      *
      * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
      */

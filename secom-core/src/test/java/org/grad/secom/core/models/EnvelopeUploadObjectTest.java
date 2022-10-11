@@ -18,6 +18,7 @@ package org.grad.secom.core.models;
 
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.Test;
 
@@ -45,7 +46,7 @@ class EnvelopeUploadObjectTest {
         SECOM_ExchangeMetadataObject exchangeMetadata = new SECOM_ExchangeMetadataObject();
         exchangeMetadata.setDataProtection(Boolean.TRUE);
         exchangeMetadata.setProtectionScheme("SECOM");
-        exchangeMetadata.setDigitalSignatureReference("signatureReference");
+        exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         exchangeMetadata.setDigitalSignatureValue(digitalSignatureValue);
         exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
@@ -73,7 +74,7 @@ class EnvelopeUploadObjectTest {
         assertEquals(obj.getDataProductType().name(), csv[2]);
         assertEquals(obj.getExchangeMetadata().getDataProtection().toString(), csv[3]);
         assertEquals(obj.getExchangeMetadata().getProtectionScheme(), csv[4]);
-        assertEquals(obj.getExchangeMetadata().getDigitalSignatureReference(), csv[5]);
+        assertEquals(obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[5]);
         assertEquals(obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[6]);
         assertEquals(obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), csv[7]);
         assertEquals(obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[8]);

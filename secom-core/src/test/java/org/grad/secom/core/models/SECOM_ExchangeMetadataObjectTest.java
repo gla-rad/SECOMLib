@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +38,7 @@ class SECOM_ExchangeMetadataObjectTest {
         SECOM_ExchangeMetadataObject obj = new SECOM_ExchangeMetadataObject();
         obj.setDataProtection(Boolean.TRUE);
         obj.setProtectionScheme("SECOM");
-        obj.setDigitalSignatureReference("signatureReference");
+        obj.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         obj.setDigitalSignatureValue(digitalSignatureValue);
         obj.setCompressionFlag(Boolean.FALSE);
 
@@ -48,7 +49,7 @@ class SECOM_ExchangeMetadataObjectTest {
         String[] csv = signatureCSV.split("\\.");
         assertEquals(obj.getDataProtection().toString(), csv[0]);
         assertEquals(obj.getProtectionScheme(), csv[1]);
-        assertEquals(obj.getDigitalSignatureReference(), csv[2]);
+        assertEquals(obj.getDigitalSignatureReference().toString().toLowerCase(), csv[2]);
         assertEquals(obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
         assertEquals(obj.getDigitalSignatureValue().getPublicCertificate(), csv[4]);
         assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);

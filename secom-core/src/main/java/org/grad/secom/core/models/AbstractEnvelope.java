@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models;
 
+import org.grad.secom.core.base.CsvGenerator;
+
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 

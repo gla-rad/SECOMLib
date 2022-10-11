@@ -16,13 +16,12 @@
 
 package org.grad.secom.core.components;
 
-import org.grad.secom.core.interfaces.SecomSignatureProvider;
+import org.grad.secom.core.base.SecomSignatureProvider;
 import org.grad.secom.core.models.*;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.ext.*;
 import java.io.IOException;
-import java.util.Optional;
 
 /**
  * The SECOM Signature Interceptor.
@@ -74,42 +73,11 @@ public class SecomSignatureInterceptor implements WriterInterceptor {
         Object entity = ctx.getEntity();
 
         /*
-         * Only use this interceptor for the correct body objects
+         * Only use this interceptor for data signature bearer objects such as:
          *  1. GetResponseObject
-         *  2. UploadObject
-         *  3. UploadLinkObject
          */
         if(entity instanceof GetResponseObject) {
-            // Get the data response object
-            final DataResponseObject dataResponseObject = Optional.of(entity)
-                    .map(GetResponseObject.class::cast)
-                    .map(GetResponseObject::getDataResponseObject)
-                    .orElse(null);
-
-            // If not data is detected, them move on
-            if(dataResponseObject == null) {
-                ctx.proceed();
-                return;
-            }
-            // Otherwise get the payload and metadata
-            final byte[] payload = Optional.ofNullable(dataResponseObject)
-                    .map(DataResponseObject::getData)
-                    .map(String::getBytes)
-                    .orElse(new byte[]{});
-            final SECOM_ExchangeMetadataObject metadata = Optional.ofNullable(dataResponseObject)
-                    .map(DataResponseObject::getExchangeMetadata)
-                    .orElseGet(SECOM_ExchangeMetadataObject::new);
-
-            // Make sure there is a Digital Signature object
-            if(metadata.getDigitalSignatureValue() == null) {
-                metadata.setDigitalSignatureValue(new DigitalSignatureValue());
-            }
-
-            // Generate the signature
-            this.signatureProvider.generateSignature(payload, metadata);
-
-            // And update the metadata
-            dataResponseObject.setExchangeMetadata(metadata);
+            ((GetResponseObject)entity).signData(this.signatureProvider);
         }
 
         // Proceed

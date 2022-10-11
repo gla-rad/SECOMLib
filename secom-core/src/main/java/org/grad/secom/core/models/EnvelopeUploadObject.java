@@ -16,13 +16,14 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.grad.secom.core.base.DigitalSignatureBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
-import java.net.URL;
-import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -30,7 +31,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeUploadObject extends AbstractEnvelope {
+public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSignatureBearer {
 
     // Class Variables
     @NotNull
@@ -193,4 +194,5 @@ public class EnvelopeUploadObject extends AbstractEnvelope {
                 envelopeSignatureTime
         };
     }
+
 }

@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models;
 
+import org.grad.secom.core.base.EnvelopeSignatureBearer;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,7 +25,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyObject {
+public class EncryptionKeyObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull

@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.grad.secom.core.models.enums.AckTypeEnum;
 import org.grad.secom.core.models.enums.NackTypeEnum;
 
@@ -121,12 +122,17 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     }
 
     /**
-     * Sets envelope certificate.
+     * Gets envelope signature certificate.
+     * <p/>
+     * NOTE: For some reason this field here should be titles (according to
+     * SECOM) envelopeCertificate.
      *
-     * @param envelopeCertificate the envelope certificate
+     * @return the envelope signature certificate
      */
-    public void setEnvelopeCertificate(String envelopeCertificate) {
-        this.envelopeSignatureCertificate = envelopeCertificate;
+    @JsonProperty("envelopeCertificate")
+    @Override
+    public String getEnvelopeSignatureCertificate() {
+        return envelopeSignatureCertificate;
     }
 
     /**

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.interfaces;
+package org.grad.secom.core.base;
 
+import org.grad.secom.core.models.DigitalSignatureValue;
 import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 
 /**
@@ -30,14 +31,21 @@ import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 public interface SecomSignatureProvider {
 
     /**
+     * This function can be overridden by the provider to enable the provision
+     * of the certificate to be used for the signing operation.
+     * @return
+     */
+    DigitalSignatureCertificate getSignatureCertificate();
+
+    /**
      * The signature generation function. It simply required the payload that
      * will be used to generate the signature, which will be returned as a
      * String.
      *
-     * @param payload       The payload to generate the signature for
-     * @param metadata      The SECOM service exchange metadata object
+     * @param algorithm     The algorithm to be used for the signature generation
+     * @param payload       The payload to be signed
      * @return The signature generated
      */
-    void generateSignature(byte[] payload, SECOM_ExchangeMetadataObject metadata);
+    String generateSignature(String algorithm, byte[] payload);
 
 }
