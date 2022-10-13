@@ -91,7 +91,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
         if(signatureCertificate != null && this.getExchangeMetadata() != null) {
             SECOM_ExchangeMetadataObject metadata = this.getExchangeMetadata();
             metadata.setDataProtection(Boolean.TRUE);
-            metadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
+            metadata.setDigitalSignatureReference(signatureProvider.getSignatureAlgorithm());
             metadata.setProtectionScheme(SecomConstants.SECOM_PROTECTION_SCHEME);
             metadata.setDigitalSignatureValue(Optional.of(metadata)
                     .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)

@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.base;
 
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
+
 /**
  * The SECOM Signature Provider Interface.
  *
@@ -26,6 +28,17 @@ package org.grad.secom.core.base;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface SecomSignatureProvider {
+
+    /**
+     * Returns the digital signature algorithm for the signature provider.
+     * In SECOM, by default this should be DSA, also ECDSA could be used
+     * to generate smaller signatures.
+     *
+     * @return the digital signature algorithm for the signature provider
+     */
+    default DigitalSignatureAlgorithmEnum getSignatureAlgorithm() {
+        return DigitalSignatureAlgorithmEnum.DSA;
+    }
 
     /**
      * The signature generation function. It simply required the payload that

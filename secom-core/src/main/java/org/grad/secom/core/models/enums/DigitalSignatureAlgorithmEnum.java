@@ -28,7 +28,7 @@ import java.util.Arrays;
  */
 public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
     DSA("SHA256withDSA"),
-    ECDSA("SHA256withCVC-ECDSA");
+    ECDSA("SHA256withECDSA");
 
     // Enum Variables
     private final String value;
