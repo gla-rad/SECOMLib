@@ -106,6 +106,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @return the exchange metadata
      */
+    @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
