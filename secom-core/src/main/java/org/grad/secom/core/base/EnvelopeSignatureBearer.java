@@ -52,6 +52,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      *
      * @param envelopeSignature the envelope signature
      */
+    @JsonIgnore
     void setEnvelopeSignature(String envelopeSignature);
 
     /**

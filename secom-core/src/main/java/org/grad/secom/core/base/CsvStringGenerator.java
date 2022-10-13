@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.models.enums.SECOM_Enum;
 
 import java.nio.charset.StandardCharsets;
@@ -46,6 +47,7 @@ public interface CsvStringGenerator {
      *
      * @return the envelope's CSV string representation
      */
+    @JsonIgnore
     default String getCsvString() {
         return Arrays.stream(this.getAttributeArray())
                 .map(this::attributeConversion)
@@ -58,6 +60,7 @@ public interface CsvStringGenerator {
      *
      * @return the generated signature CSV attribute array
      */
+    @JsonIgnore
     Object[] getAttributeArray();
 
     /**
@@ -67,6 +70,7 @@ public interface CsvStringGenerator {
      * @param attribute     The attribute to be converted onto a string
      * @return the converted string of the attribute value
      */
+    @JsonIgnore
     default String attributeConversion(Object attribute) {
         // Check for nulls and then use attribute type
         if(attribute == null) {
