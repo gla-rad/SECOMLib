@@ -19,6 +19,7 @@ package org.grad.secom.core.utils;
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyFactory;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -26,6 +27,8 @@ import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.stream.Collectors;
@@ -161,13 +164,13 @@ public class SecomPemUtils {
      * This implementation, as in the official SECOM guideline, returns the
      * reconstructed X509Certificate object.
      *
-     * @param publicKeyMinified The minified public key to be converted
+     * @param certMinified The minified certificate to be converted
      * @return the original X509Certificate object
      * @throws CertificateException When a certificate cannot be restored correctly
      */
-    public static X509Certificate getCertFromPem(String publicKeyMinified) throws CertificateException {
+    public static X509Certificate getCertFromPem(String certMinified) throws CertificateException {
         // Do the string conversion and reconstruct the X509Certificate object
-        final ByteArrayInputStream ins = new ByteArrayInputStream(getCertStringFromPem(publicKeyMinified).getBytes(StandardCharsets.UTF_8));
+        final ByteArrayInputStream ins = new ByteArrayInputStream(getCertStringFromPem(certMinified).getBytes(StandardCharsets.UTF_8));
         return (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(ins);
     }
 
@@ -193,7 +196,7 @@ public class SecomPemUtils {
      * headers and line separators.
      *
      * @param certMinified  The minified certificate to be converted
-     * @return the original X509Certificate PEM string representation
+     * @return the original X509 certificate PEM string representation
      */
     public static String getCertStringFromPem(String certMinified) {
         final StringBuilder sb = new StringBuilder();
@@ -237,20 +240,51 @@ public class SecomPemUtils {
      *     <li>Add OS specific line feed character</li>
      * </ul>
      * <p/>
+     * This implementation, as in the official SECOM guideline, returns the
+     * reconstructed PublicKey object.
+     *
+     * @param algorithm             The algorithm to be used for the public key factory
+     * @param publicKeyMinified     The minified X509 public key to be converted
+     * @return the original PublicKey object
+     */
+    public static PublicKey getPublicKeFromPem(String algorithm, String publicKeyMinified) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // Do the Base64 conversion and reconstruct the PublicKey object
+        final X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyMinified));
+        return KeyFactory.getInstance(algorithm).generatePublic(keySpec);
+    }
+
+    /**
+     * For SECOM receivers, the conversion is the opposite. When consuming the
+     * transferred payload, the X509 public key is converted back to its
+     * original format.
+     * <ul>
+     *     <li>Add header -----BEGIN PUBLIC KEY-----</li>
+     *     <li>Add OS specific line feed character</li>
+     *     <li>Split the public key string from the payload into an array of max 64 characters per row</li>
+     *     <li>For each element in the array
+     *          <ul>
+     *             <li>add element as new row</li>
+     *             <li>add OS specific line feed character</li>
+     *         </ul>
+     *     </li>
+     *     <li>Add footer -----END PUBLIC KEY-----</li>
+     *     <li>Add OS specific line feed character</li>
+     * </ul>
+     * <p/>
      * This implementation returns a simple string, augmented with the PEM
      * headers and line separators.
      *
-     * @param certMinified  The minified X509 public key to be converted
+     * @param publicKeyMinified     The minified X509 public key to be converted
      * @return the original PublicKey PEM string representation
      */
-    public static String getPublicKeyStringFromPem(String certMinified) {
+    public static String getPublicKeyStringFromPem(String publicKeyMinified) {
         final StringBuilder sb = new StringBuilder();
         // 1. Add header -----BEGIN PUBLIC KEY-----
         sb.append("-----BEGIN PUBLIC KEY-----");
         // 2. Add OS specific line feed character
         sb.append(System.lineSeparator());
         // 3. Split the public key string from the payload into an array of max 64 characters per row
-        Arrays.stream(certMinified.split("(?<=\\G.{64})"))
+        Arrays.stream(publicKeyMinified.split("(?<=\\G.{64})"))
                 // 4. For each element in the array
                 .forEach(row -> {
                     // 4a. add element as new row

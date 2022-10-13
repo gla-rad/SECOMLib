@@ -133,7 +133,6 @@ class SecomPemUtilsTest {
     /**
      * Test that we can reconstruct an X509Certificate object from the provided
      * minified PEM version.
-     * @throws CertificateException
      */
     @Test
     void testGetCertFromPem() throws CertificateException {
@@ -159,7 +158,7 @@ class SecomPemUtilsTest {
      * certificate from the provided minified PEM version.
      */
     @Test
-    void testGetCertFromPemString() {
+    void testGetCertStringFromPem() {
         // Restore the minified certificate to an X.509 PEM String
         final String stringCertFromPem = SecomPemUtils.getCertStringFromPem(this.resourceMinifiedCert);
 
@@ -169,11 +168,25 @@ class SecomPemUtilsTest {
     }
 
     /**
+     * Test that we can reconstruct an PublicKey object from the provided
+     * minified PEM version.
+     */
+    @Test
+    void testGetPublicKeyFromPem() throws NoSuchAlgorithmException, InvalidKeySpecException {
+        // Restore the minified public key to an X.509 PEM String
+        final PublicKey publicKeyFromPem = SecomPemUtils.getPublicKeFromPem("RSA", this.resourceMinifiedPublicKey);
+
+        // Assert that it's correct
+        assertNotNull(publicKeyFromPem);
+        assertEquals(this.resourcePublicKey, publicKeyFromPem);
+    }
+
+    /**
      * Test that we can reconstruct a PEM String representation of an X.509
      * public key from the provided minified PEM version.
      */
     @Test
-    void testGetPublicKeyFromPemString() {
+    void testGetPublicKeyStringFromPem() {
         // Restore the minified public key to an X.509 PEM String
         final String stringPublicKeyFromPem = SecomPemUtils.getPublicKeyStringFromPem(this.resourceMinifiedPublicKey);
 
