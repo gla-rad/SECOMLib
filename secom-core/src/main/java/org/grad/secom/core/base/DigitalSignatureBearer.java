@@ -113,7 +113,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
                     .map(String::getBytes)
                     .orElse(new byte[]{});
 
-            this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+            this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm().getValue(), payload));
         }
     }
 
