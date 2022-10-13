@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.components;
 
+import org.grad.secom.core.base.SecomCertificateProvider;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secom.core.base.SecomSignatureValidator;
 import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
@@ -47,6 +48,7 @@ import java.nio.charset.StandardCharsets;
 public class SecomSignatureFilter implements ContainerResponseFilter {
 
     // Class Variables
+    private SecomCertificateProvider certificateProvider;
     private SecomSignatureValidator signatureValidator;
 
     /**
@@ -54,7 +56,8 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
      *
      * @param signatureValidator    The signature validator
      */
-    public SecomSignatureFilter(SecomSignatureValidator signatureValidator) {
+    public SecomSignatureFilter(SecomCertificateProvider certificateProvider, SecomSignatureValidator signatureValidator) {
+        this.certificateProvider = certificateProvider;
         this.signatureValidator = signatureValidator;
     }
 

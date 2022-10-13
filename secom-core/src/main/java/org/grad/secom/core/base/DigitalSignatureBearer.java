@@ -76,20 +76,25 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
      * to perform the signing wich will be used to generate and attach the
      * SECOM exchange metadata.
      *
+     * @param certificateProvider   The SECOM certificate provider to be used
      * @param signatureProvider     The SECOM signature provider to be used.
      */
     @JsonIgnore
-    default void signData(SecomSignatureProvider signatureProvider) {
+    default void signData(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
         // Get the certificate to be used for singing the message
-        DigitalSignatureCertificate signatureCertificate = signatureProvider.getSignatureCertificate();
+        DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
+                .map(SecomCertificateProvider::getDigitalSignatureCertificate)
+                .orElse(null);
 
-        // Update the metadata for a signature
-        if(this.getExchangeMetadata() != null) {
+        // If we have a signature certificate and metadata, update the metadata
+        if(signatureCertificate != null && this.getExchangeMetadata() != null) {
             SECOM_ExchangeMetadataObject metadata = this.getExchangeMetadata();
             metadata.setDataProtection(Boolean.TRUE);
             metadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
             metadata.setProtectionScheme(SecomConstants.SECOM_PROTECTION_SCHEME);
-            metadata.setDigitalSignatureValue(Optional.of(metadata).map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue).orElseGet(() -> new DigitalSignatureValue()));
+            metadata.setDigitalSignatureValue(Optional.of(metadata)
+                    .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                    .orElseGet(DigitalSignatureValue::new));
 
             try {
                 metadata.getDigitalSignatureValue().setPublicCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
@@ -99,14 +104,16 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
             }
         }
 
-        // Get the data to be signed
-        final byte[] payload = Optional.ofNullable(this)
-                .map(DigitalSignatureBearer::getData)
-                .map(String::getBytes)
-                .orElse(new byte[]{});
+        // If we have a signature provider, generate the signature
+        if(signatureCertificate != null) {
+            // Get the data to be signed
+            final byte[] payload = Optional.ofNullable(this)
+                    .map(DigitalSignatureBearer::getData)
+                    .map(String::getBytes)
+                    .orElse(new byte[]{});
 
-        // Generate the signature
-        this.setDigitalSignature(signatureProvider.generateSignature(DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+            this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+        }
     }
 
 }

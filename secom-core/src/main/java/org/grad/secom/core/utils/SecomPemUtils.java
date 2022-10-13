@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -53,8 +54,8 @@ public class SecomPemUtils {
      *     <li>Remove footer -----END CERTIFICATE-----</li>
      * </ul>
      * <p/>
-     * In Java this can be easily done by just retrieving the encoded bit of the
-     * certificate object, which is exactly what we want.
+     * For Java X509 certificates, this can be easily done by just retrieving
+     * the encoded bit of the certificate object, which is exactly what we want.
      *
      * @param cert  The certificate to be minified
      * @return the original key minified into a single line string
@@ -82,14 +83,13 @@ public class SecomPemUtils {
      * @throws CertificateEncodingException When the certificate encoded provided is wrong
      */
     public static String getMinifiedPemFromCertString(String cert) {
-        String minifiedPem = cert;
-        // 1. Remove all line feed characters
-        minifiedPem = minifiedPem.replaceAll(System.lineSeparator(), "");
-        // 2. Remove header -----BEGIN CERTIFICATE-----
-        minifiedPem = minifiedPem.replaceAll("-----BEGIN CERTIFICATE-----", "");
-        // 3. Remove footer -----END CERTIFICATE-----
-        minifiedPem = minifiedPem.replaceAll("-----END CERTIFICATE-----", "");
-        return minifiedPem;
+        return cert
+            // 1. Remove all line feed characters
+            .replaceAll(System.lineSeparator(), "")
+            // 2. Remove header -----BEGIN CERTIFICATE-----
+            .replaceAll("-----BEGIN CERTIFICATE-----", "")
+            // 3. Remove footer -----END CERTIFICATE-----
+            .replaceAll("-----END CERTIFICATE-----", "");
     }
 
     /**
@@ -98,8 +98,29 @@ public class SecomPemUtils {
      * string by:
      * <ul>
      *     <li>Remove all line feed characters</li>
-     *     <li>Remove header -----BEGIN CERTIFICATE-----</li>
-     *     <li>Remove footer -----END CERTIFICATE-----</li>
+     *     <li>Remove header -----BEGIN PUBLIC KEY-----</li>
+     *     <li>Remove footer -----END PUBLIC KEY-----</li>
+     * </ul>
+     * <p/>
+     * For Java Public Keys, we need to perform these operations manually, by
+     * replacing all the sub-string matches with empty strings.
+     *
+     * @param publicKey  The public key string to be minified
+     * @return the original public key minified into a single line string
+     * @throws CertificateEncodingException When the certificate encoded provided is wrong
+     */
+    public static String getMinifiedPemFromPublicKey(PublicKey publicKey) {
+        return Base64.getEncoder().encodeToString(publicKey.getEncoded());
+    }
+
+    /**
+     * During the build of a payload JSON object and before adding the public
+     * key to the same object, the original key is minified into one single line
+     * string by:
+     * <ul>
+     *     <li>Remove all line feed characters</li>
+     *     <li>Remove header -----BEGIN PUBLIC KEY-----</li>
+     *     <li>Remove footer -----END PUBLIC KEY-----</li>
      * </ul>
      * <p/>
      * For Java Strings, we need to perform these operations manually, by
@@ -110,14 +131,13 @@ public class SecomPemUtils {
      * @throws CertificateEncodingException When the certificate encoded provided is wrong
      */
     public static String getMinifiedPemFromPublicKeyString(String publicKey) {
-        String minifiedPem = publicKey;
-        // 1. Remove all line feed characters
-        minifiedPem = minifiedPem.replaceAll(System.lineSeparator(), "");
-        // 2. Remove header -----BEGIN PUBLIC KEY-----
-        minifiedPem = minifiedPem.replaceAll("-----BEGIN PUBLIC KEY-----", "");
-        // 3. Remove footer -----END PUBLIC KEY-----
-        minifiedPem = minifiedPem.replaceAll("-----END PUBLIC KEY-----", "");
-        return minifiedPem;
+        return publicKey
+            // 1. Remove all line feed characters
+            .replaceAll(System.lineSeparator(), "")
+            // 2. Remove header -----BEGIN PUBLIC KEY-----
+            .replaceAll("-----BEGIN PUBLIC KEY-----", "")
+            // 3. Remove footer -----END PUBLIC KEY-----
+            .replaceAll("-----END PUBLIC KEY-----", "");
     }
 
     /**
@@ -153,8 +173,8 @@ public class SecomPemUtils {
 
     /**
      * For SECOM receivers, the conversion is the opposite. When consuming the
-     * transferred payload, the public key is converted back to its original
-     * format.
+     * transferred payload, the X509 certificate is converted back to its
+     * original format.
      * <ul>
      *     <li>Add header -----BEGIN CERTIFICATE-----</li>
      *     <li>Add OS specific line feed character</li>
@@ -172,18 +192,17 @@ public class SecomPemUtils {
      * This implementation returns a simple string, augmented with the PEM
      * headers and line separators.
      *
-     * @param publicKeyMinified The minified public key to be converted
-     * @return the original X509Certificate object
-     * @throws CertificateException When a certificate cannot be restored correctly
+     * @param certMinified  The minified certificate to be converted
+     * @return the original X509Certificate PEM string representation
      */
-    public static String getCertStringFromPem(String publicKeyMinified) {
+    public static String getCertStringFromPem(String certMinified) {
         final StringBuilder sb = new StringBuilder();
         // 1. Add header -----BEGIN CERTIFICATE-----
         sb.append("-----BEGIN CERTIFICATE-----");
         // 2. Add OS specific line feed character
         sb.append(System.lineSeparator());
         // 3. Split the public key string from the payload into an array of max 64 characters per row
-        Arrays.stream(publicKeyMinified.split("(?<=\\G.{64})"))
+        Arrays.stream(certMinified.split("(?<=\\G.{64})"))
                 // 4. For each element in the array
                 .forEach(row -> {
                     // 4a. add element as new row
@@ -193,6 +212,54 @@ public class SecomPemUtils {
                 });
         // 5. Add footer -----END CERTIFICATE-----
         sb.append("-----END CERTIFICATE-----");
+        // 6. Add OS specific line feed character
+        sb.append(System.lineSeparator());
+
+        // And finally return the reconstructed string
+        return sb.toString();
+    }
+
+    /**
+     * For SECOM receivers, the conversion is the opposite. When consuming the
+     * transferred payload, the X509 public key is converted back to its
+     * original format.
+     * <ul>
+     *     <li>Add header -----BEGIN PUBLIC KEY-----</li>
+     *     <li>Add OS specific line feed character</li>
+     *     <li>Split the public key string from the payload into an array of max 64 characters per row</li>
+     *     <li>For each element in the array
+     *          <ul>
+     *             <li>add element as new row</li>
+     *             <li>add OS specific line feed character</li>
+     *         </ul>
+     *     </li>
+     *     <li>Add footer -----END PUBLIC KEY-----</li>
+     *     <li>Add OS specific line feed character</li>
+     * </ul>
+     * <p/>
+     * This implementation returns a simple string, augmented with the PEM
+     * headers and line separators.
+     *
+     * @param certMinified  The minified X509 public key to be converted
+     * @return the original PublicKey PEM string representation
+     */
+    public static String getPublicKeyStringFromPem(String certMinified) {
+        final StringBuilder sb = new StringBuilder();
+        // 1. Add header -----BEGIN PUBLIC KEY-----
+        sb.append("-----BEGIN PUBLIC KEY-----");
+        // 2. Add OS specific line feed character
+        sb.append(System.lineSeparator());
+        // 3. Split the public key string from the payload into an array of max 64 characters per row
+        Arrays.stream(certMinified.split("(?<=\\G.{64})"))
+                // 4. For each element in the array
+                .forEach(row -> {
+                    // 4a. add element as new row
+                    sb.append(row);
+                    // 4b. add OS specific line feed character
+                    sb.append(System.lineSeparator());
+                });
+        // 5. Add footer -----END PUBLIC KEY-----
+        sb.append("-----END PUBLIC KEY-----");
         // 6. Add OS specific line feed character
         sb.append(System.lineSeparator());
 
@@ -221,4 +288,5 @@ public class SecomPemUtils {
                 .map(b -> String.format("%02x", b))
                 .collect(Collectors.joining());
     }
+
 }

@@ -16,7 +16,7 @@
 
 package org.grad.secom.core.models;
 
-import org.grad.secom.core.base.CsvGenerator;
+import org.grad.secom.core.base.CsvStringGenerator;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 
 import javax.validation.constraints.NotNull;
@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SECOM_ExchangeMetadataObject implements CsvGenerator {
+public class SECOM_ExchangeMetadataObject implements CsvStringGenerator {
 
     // Class Variables
     @NotNull

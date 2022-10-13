@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.base;
 
+import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
 /**
@@ -30,9 +31,28 @@ import java.security.cert.X509Certificate;
 public class DigitalSignatureCertificate {
 
     // Class Variables
+    private String certificateAlias;
     private X509Certificate certificate;
-    private String publicKey;
+    private PublicKey publicKey;
     private X509Certificate rootCertificate;
+
+    /**
+     * Gets certificate alias.
+     *
+     * @return the certificate alias
+     */
+    public String getCertificateAlias() {
+        return certificateAlias;
+    }
+
+    /**
+     * Sets certificate alias.
+     *
+     * @param certificateAlias the certificate alias
+     */
+    public void setCertificateAlias(String certificateAlias) {
+        this.certificateAlias = certificateAlias;
+    }
 
     /**
      * Gets certificate.
@@ -57,7 +77,7 @@ public class DigitalSignatureCertificate {
      *
      * @return the public key
      */
-    public String getPublicKey() {
+    public PublicKey getPublicKey() {
         return publicKey;
     }
 
@@ -66,7 +86,7 @@ public class DigitalSignatureCertificate {
      *
      * @param publicKey the public key
      */
-    public void setPublicKey(String publicKey) {
+    public void setPublicKey(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 

@@ -16,12 +16,12 @@
 
 package org.grad.secom.core.models;
 
-import org.grad.secom.core.base.CsvGenerator;
+import org.grad.secom.core.base.CsvStringGenerator;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
-public abstract class AbstractEnvelope implements CsvGenerator {
+public abstract class AbstractEnvelope implements CsvStringGenerator {
 
     // Class Variables
     @NotNull

@@ -73,36 +73,44 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      * to perform the signing wich will be used to generate and attach the
      * SECOM exchange metadata.
      *
+     * @param certificateProvider   The SECOM certificate provider to be used
      * @param signatureProvider     The SECOM signature provider to be used.
      */
     @JsonIgnore
-    default void signEnvelope(SecomSignatureProvider signatureProvider) {
+    default void signEnvelope(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
         // Get the certificate to be used for singing the envelope
-        DigitalSignatureCertificate signatureCertificate = signatureProvider.getSignatureCertificate();
+        DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
+                .map(SecomCertificateProvider::getDigitalSignatureCertificate)
+                .orElse(null);
 
-        // Update the envelope with the certificate information
-        try {
-            this.getEnvelope().setEnvelopeSignatureCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
-            this.getEnvelope().setEnvelopeRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
-            this.getEnvelope().setEnvelopeSignatureTime(LocalDateTime.now());
-        } catch (CertificateEncodingException | NoSuchAlgorithmException exception) {
-            throw new SecomInvalidCertificateException(exception.getMessage());
+        // If we have a signature certificate, update the envelope
+        if(signatureCertificate != null) {
+            try {
+                this.getEnvelope().setEnvelopeSignatureCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
+                this.getEnvelope().setEnvelopeRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
+                this.getEnvelope().setEnvelopeSignatureTime(LocalDateTime.now());
+            } catch (CertificateEncodingException | NoSuchAlgorithmException exception) {
+                throw new SecomInvalidCertificateException(exception.getMessage());
+            }
         }
 
         // Sign the envelope context as well if possible
         if(this.getEnvelope() instanceof DigitalSignatureBearer) {
-            ((DigitalSignatureBearer)this.getEnvelope()).signData(signatureProvider);
+            ((DigitalSignatureBearer)this.getEnvelope()).signData(certificateProvider, signatureProvider);
         }
 
-        // Get the envelope as a CSV string to be signed
-        final byte[] payload = Optional.of(this)
-                .map(EnvelopeSignatureBearer::getEnvelope)
-                .map(AbstractEnvelope::getCsvString)
-                .map(String::getBytes)
-                .orElse(new byte[]{});
+        // If we have a signature provider, generate the signature
+        if(signatureCertificate != null) {
+            // Get the envelope as a CSV string to be signed
+            final byte[] payload = Optional.of(this)
+                    .map(EnvelopeSignatureBearer::getEnvelope)
+                    .map(AbstractEnvelope::getCsvString)
+                    .map(String::getBytes)
+                    .orElse(new byte[]{});
 
-        // And update the metadata
-        this.setEnvelopeSignature(signatureProvider.generateSignature(DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+            // And update the metadata
+            this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+        }
     }
 
 }

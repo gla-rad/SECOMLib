@@ -16,7 +16,7 @@
 
 package org.grad.secom.core.models;
 
-import org.grad.secom.core.base.CsvGenerator;
+import org.grad.secom.core.base.CsvStringGenerator;
 
 import javax.validation.constraints.NotNull;
 
@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DigitalSignatureValue implements CsvGenerator {
+public class DigitalSignatureValue implements CsvStringGenerator {
 
     // Class Variables
     private String publicRootCertificateThumbprint;

@@ -19,6 +19,7 @@ package org.grad.secom.springboot.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import org.grad.secom.core.base.SecomCertificateProvider;
 import org.grad.secom.core.components.*;
 import org.grad.secom.core.base.SecomSignatureProvider;
 import org.grad.secom.core.base.SecomSignatureValidator;
@@ -59,8 +60,9 @@ public class JaxrsApplication extends Application {
      * @return the SECOM signature interceptor bean
      */
     @Bean
-    SecomSignatureInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomSignatureProvider signatureProvider) {
-        return new SecomSignatureInterceptor(signatureProvider);
+    SecomSignatureInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomCertificateProvider certificateProvider,
+                                                        @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomSignatureInterceptor(certificateProvider, signatureProvider);
     }
 
     /**
@@ -69,8 +71,9 @@ public class JaxrsApplication extends Application {
      * @return the SECOM signature filter bean
      */
     @Bean
-    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomSignatureValidator signatureValidator) {
-        return new SecomSignatureFilter(signatureValidator);
+    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCertificateProvider certificateProvider,
+                                              @Autowired(required = false) SecomSignatureValidator signatureValidator) {
+        return new SecomSignatureFilter(certificateProvider, signatureValidator);
     }
 
     /**

@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CsvGenerator {
+public interface CsvStringGenerator {
 
     /**
      * This function provides SECOM envelope objects with the ability to convert
@@ -72,10 +72,10 @@ public interface CsvGenerator {
         if(attribute == null) {
             return "";
         }
-        else if(attribute instanceof CsvGenerator) {
+        else if(attribute instanceof CsvStringGenerator) {
             return Optional.of(attribute)
-                    .map(CsvGenerator.class::cast)
-                    .map(CsvGenerator::getCsvString)
+                    .map(CsvStringGenerator.class::cast)
+                    .map(CsvStringGenerator::getCsvString)
                     .orElse("");
         }
         else if(attribute instanceof LocalDateTime) {

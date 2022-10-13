@@ -16,6 +16,9 @@
 
 package org.grad.secom.core.components;
 
+import org.grad.secom.core.base.DigitalSignatureBearer;
+import org.grad.secom.core.base.DigitalSignatureCertificate;
+import org.grad.secom.core.base.SecomCertificateProvider;
 import org.grad.secom.core.base.SecomSignatureProvider;
 import org.grad.secom.core.models.*;
 
@@ -33,10 +36,9 @@ import java.io.IOException;
  *     <il>GetResponseObject</il>
  * </ul>
  * <p/>
- * In the first two cases, the server is supposed to just validate the provided
- * signatures since they are POST operations. The third case however is a GET
- * and the server is supposed to generate a signature and attach it to the
- * message. This takes place automatically using this JAX-RS interceptor.
+ * The method used for this case is a GET and the server is supposed to generate
+ * a signature and attach it to the message. This takes place automatically
+ * using this JAX-RS interceptor.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -44,6 +46,7 @@ import java.io.IOException;
 public class SecomSignatureInterceptor implements WriterInterceptor {
 
     // Class Variables
+    private SecomCertificateProvider certificateProvider;
     private SecomSignatureProvider signatureProvider;
 
     /**
@@ -51,7 +54,8 @@ public class SecomSignatureInterceptor implements WriterInterceptor {
      *
      * @param signatureProvider The SECOM signature provider
      */
-    public SecomSignatureInterceptor(SecomSignatureProvider signatureProvider) {
+    public SecomSignatureInterceptor(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
+        this.certificateProvider = certificateProvider;
         this.signatureProvider = signatureProvider;
     }
 
@@ -70,14 +74,14 @@ public class SecomSignatureInterceptor implements WriterInterceptor {
         }
 
         // First pick up the interceptor context
-        Object entity = ctx.getEntity();
+        final Object entity = ctx.getEntity();
 
         /*
          * Only use this interceptor for data signature bearer objects such as:
          *  1. GetResponseObject
          */
-        if(entity instanceof GetResponseObject) {
-            ((GetResponseObject)entity).signData(this.signatureProvider);
+        if(entity instanceof DigitalSignatureBearer) {
+            ((DigitalSignatureBearer)entity).signData(this.certificateProvider, this.signatureProvider);
         }
 
         // Proceed
