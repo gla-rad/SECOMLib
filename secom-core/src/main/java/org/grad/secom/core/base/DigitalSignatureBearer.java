@@ -64,7 +64,8 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
     @JsonIgnore
     @Override
     default void setDigitalSignature(String digitalSignature) {
-        Optional.ofNullable(this.getExchangeMetadata())
+        Optional.of(this)
+                .map(DigitalSignatureBearer::getExchangeMetadata)
                 .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
                 .ifPresent(digitalSignatureValue -> digitalSignatureValue.setDigitalSignature(digitalSignature));
     }
@@ -107,7 +108,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
         // If we have a signature provider, generate the signature
         if(signatureCertificate != null) {
             // Get the data to be signed
-            final byte[] payload = Optional.ofNullable(this)
+            final byte[] payload = Optional.of(this)
                     .map(DigitalSignatureBearer::getData)
                     .map(String::getBytes)
                     .orElse(new byte[]{});

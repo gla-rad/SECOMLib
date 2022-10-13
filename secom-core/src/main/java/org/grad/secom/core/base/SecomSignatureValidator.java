@@ -33,10 +33,11 @@ public interface SecomSignatureValidator {
      * of the message content (preferably in a Base64 format) and the signature
      * to validate the content against.
      *
-     * @param content       The context (in Base64 format) to be validated
-     * @param signature     The signature to validate the context against
+     * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+     * @param content               The context (in Base64 format) to be validated
+     * @param signature             The signature to validate the context against
      * @return whether the signature validation was successful or not
      */
-    boolean validateSignature(String content, String signature);
+    boolean validateSignature(DigitalSignatureCertificate signatureCertificate, String content, String signature);
 
 }

@@ -129,7 +129,8 @@ public class GetResponseObject implements DigitalSignatureBearer {
      */
     @Override
     public String getData() {
-        return Optional.of(this.dataResponseObject)
+        return Optional.of(this)
+                .map(GetResponseObject::getDataResponseObject)
                 .map(DataResponseObject::getData)
                 .orElse(null);
     }
