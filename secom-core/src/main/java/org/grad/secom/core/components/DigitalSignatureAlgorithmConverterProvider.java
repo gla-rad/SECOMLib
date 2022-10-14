@@ -68,7 +68,7 @@ public class DigitalSignatureAlgorithmConverterProvider implements ParamConverte
         public DigitalSignatureAlgorithmEnum fromString(String value) {
             if (value == null || value.isEmpty()) return null;
             try {
-                return DigitalSignatureAlgorithmEnum.fromValue(value);
+                return DigitalSignatureAlgorithmEnum.valueOf(value);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }

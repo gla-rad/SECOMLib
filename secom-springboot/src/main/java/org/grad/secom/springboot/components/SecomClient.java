@@ -553,7 +553,7 @@ public class SecomClient {
     public Optional<UploadResponseObject> upload(UploadObject uploadObject) {
         // If a signature provider has been assigned, use it to sign the
         // upload object envelop data.
-        uploadObject.getEnvelope().signData(this.certificateProvider, signatureProvider);
+        uploadObject.signEnvelope(this.certificateProvider, signatureProvider);
 
         // And perform the web-call
         return this.secomClient
