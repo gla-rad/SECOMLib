@@ -50,6 +50,6 @@ public interface SecomSignatureProvider {
      * @param payload               The payload to be signed
      * @return The signature generated
      */
-    String generateSignature(DigitalSignatureCertificate signatureCertificate, String algorithm, byte[] payload);
+    String generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload);
 
 }

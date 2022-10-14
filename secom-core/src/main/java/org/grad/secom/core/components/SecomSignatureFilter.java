@@ -31,8 +31,10 @@ import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * The SECOM Signature Filter
@@ -70,30 +72,27 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
      */
     @Override
     public void filter(ContainerRequestContext rqstCtx, ContainerResponseContext rspnCtx) throws IOException {
+        // Get the request body if it exists
+        JSONObject body = Optional.of(rqstCtx)
+                .map(ContainerRequestContext::getEntityStream)
+                .map(InputStreamReader::new)
+                .map(in -> { try {return new JSONParser().parse(in);} catch (Exception ex) {return null;} })
+                .filter(JSONObject.class::isInstance)
+                .map(JSONObject.class::cast)
+                .orElse(null);
+
         // For the Upload Interface Requests, validate the signature
-//        if(rqstCtx.getRequest().getMethod().equals("POST")
-//                && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
-//            if(this.signatureValidator != null) {
-//                try {
-//                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(
-//                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
-//                } catch (ParseException ex) {
-//                    throw new SecomSignatureVerificationException(ex.getMessage());
-//                }
-//            }
-//        }
+        if(rqstCtx.getRequest().getMethod().equals("POST") && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
+            if(this.signatureValidator != null) {
+                System.out.println(body);
+            }
+        }
         // For the Upload Link Interface Requests, validate the signature
-//        else if(rqstCtx.getRequest().getMethod().equals("POST")
-//                && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
-//            if(this.signatureValidator != null) {
-//                try {
-//                    JSONObject jsonObject = (JSONObject)new JSONParser().parse(
-//                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
-//                } catch (ParseException ex) {
-//                    throw new SecomSignatureVerificationException(ex.getMessage());
-//                }
-//            }
-//        }
+        else if(rqstCtx.getRequest().getMethod().equals("POST")  && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
+            if(this.signatureValidator != null) {
+                System.out.println(body);
+            }
+        }
         // For everything else just move one
     }
 }

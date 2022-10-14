@@ -113,7 +113,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
                 .orElse(new byte[]{});
 
         // And sign the data
-        this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm().getValue(), payload));
+        this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload));
     }
 
 }

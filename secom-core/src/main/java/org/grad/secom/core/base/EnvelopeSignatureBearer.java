@@ -108,7 +108,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
                 .orElse(new byte[]{});
 
         // And sign the envelope
-        this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
+        this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload));
     }
 
 }
