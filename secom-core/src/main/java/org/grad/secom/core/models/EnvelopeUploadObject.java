@@ -16,7 +16,7 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.grad.secom.core.base.DigitalSignatureBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
@@ -33,12 +33,14 @@ import java.util.UUID;
 public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSignatureBearer {
 
     // Class Variables
+    @JsonProperty
     @NotNull
     private String data;
     @NotNull
     private ContainerTypeEnum containerType;
     @NotNull
     private SECOM_DataProductType dataProductType;
+    @JsonProperty
     @NotNull
     private SECOM_ExchangeMetadataObject exchangeMetadata;
     private Boolean fromSubscription;
@@ -58,7 +60,6 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @return the data
      */
-    @JsonInclude
     @Override
     public String getData() {
         return data;
@@ -114,7 +115,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @return the exchange metadata
      */
-    @JsonInclude
+    @JsonProperty
     @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;

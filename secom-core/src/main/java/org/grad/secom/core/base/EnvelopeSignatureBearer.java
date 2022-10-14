@@ -52,7 +52,6 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      *
      * @param envelopeSignature the envelope signature
      */
-    @JsonIgnore
     void setEnvelopeSignature(String envelopeSignature);
 
     /**
@@ -61,7 +60,6 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      *
      * @param digitalSignature  The digital signature to be set
      */
-    @JsonIgnore
     @Override
     default void setDigitalSignature(String digitalSignature) {
         this.setEnvelopeSignature(digitalSignature);
