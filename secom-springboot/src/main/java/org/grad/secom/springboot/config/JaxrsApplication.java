@@ -99,6 +99,16 @@ public class JaxrsApplication extends Application {
     }
 
     /**
+     * Initialise the DigitalSignatureAlgorithmEnum Converter Provider bean.
+     *
+     * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
+     */
+    @Bean
+    DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
+        return new DigitalSignatureAlgorithmConverterProvider();
+    }
+
+    /**
      * Initialise the LocalDateTime Converter Provider bean.
      *
      * @return the LocalDateTime Converter Provider bean
