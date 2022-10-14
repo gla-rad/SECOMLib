@@ -106,16 +106,14 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
             }
         }
 
-        // If we have a signature provider, generate the signature
-        if(signatureCertificate != null) {
-            // Get the data to be signed
-            final byte[] payload = Optional.of(this)
-                    .map(DigitalSignatureBearer::getData)
-                    .map(String::getBytes)
-                    .orElse(new byte[]{});
+        // Get the data to be signed
+        final byte[] payload = Optional.of(this)
+                .map(DigitalSignatureBearer::getData)
+                .map(String::getBytes)
+                .orElse(new byte[]{});
 
-            this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm().getValue(), payload));
-        }
+        // And sign the data
+        this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm().getValue(), payload));
     }
 
 }

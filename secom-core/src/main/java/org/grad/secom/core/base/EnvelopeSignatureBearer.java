@@ -100,18 +100,15 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
             ((DigitalSignatureBearer)this.getEnvelope()).signData(certificateProvider, signatureProvider);
         }
 
-        // If we have a signature provider, generate the signature
-        if(signatureCertificate != null) {
-            // Get the envelope as a CSV string to be signed
-            final byte[] payload = Optional.of(this)
-                    .map(EnvelopeSignatureBearer::getEnvelope)
-                    .map(AbstractEnvelope::getCsvString)
-                    .map(String::getBytes)
-                    .orElse(new byte[]{});
+        // Get the envelope as a CSV string to be signed
+        final byte[] payload = Optional.of(this)
+                .map(EnvelopeSignatureBearer::getEnvelope)
+                .map(AbstractEnvelope::getCsvString)
+                .map(String::getBytes)
+                .orElse(new byte[]{});
 
-            // And update the metadata
-            this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
-        }
+        // And sign the envelope
+        this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, DigitalSignatureAlgorithmEnum.DSA.getValue(), payload));
     }
 
 }
