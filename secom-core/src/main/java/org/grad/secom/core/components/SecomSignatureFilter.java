@@ -71,29 +71,29 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
     @Override
     public void filter(ContainerRequestContext rqstCtx, ContainerResponseContext rspnCtx) throws IOException {
         // For the Upload Interface Requests, validate the signature
-        if(rqstCtx.getRequest().getMethod().equals("POST")
-                && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
-            if(this.signatureValidator != null) {
-                try {
-                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(
-                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
-                } catch (ParseException ex) {
-                    throw new SecomSignatureVerificationException(ex.getMessage());
-                }
-            }
-        }
+//        if(rqstCtx.getRequest().getMethod().equals("POST")
+//                && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
+//            if(this.signatureValidator != null) {
+//                try {
+//                    JSONObject jsonObject = (JSONObject) new JSONParser().parse(
+//                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
+//                } catch (ParseException ex) {
+//                    throw new SecomSignatureVerificationException(ex.getMessage());
+//                }
+//            }
+//        }
         // For the Upload Link Interface Requests, validate the signature
-        else if(rqstCtx.getRequest().getMethod().equals("POST")
-                && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
-            if(this.signatureValidator != null) {
-                try {
-                    JSONObject jsonObject = (JSONObject)new JSONParser().parse(
-                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
-                } catch (ParseException ex) {
-                    throw new SecomSignatureVerificationException(ex.getMessage());
-                }
-            }
-        }
+//        else if(rqstCtx.getRequest().getMethod().equals("POST")
+//                && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
+//            if(this.signatureValidator != null) {
+//                try {
+//                    JSONObject jsonObject = (JSONObject)new JSONParser().parse(
+//                            new InputStreamReader(rqstCtx.getEntityStream(), StandardCharsets.UTF_8));
+//                } catch (ParseException ex) {
+//                    throw new SecomSignatureVerificationException(ex.getMessage());
+//                }
+//            }
+//        }
         // For everything else just move one
     }
 }

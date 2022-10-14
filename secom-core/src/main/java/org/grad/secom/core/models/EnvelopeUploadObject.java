@@ -16,14 +16,13 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.grad.secom.core.base.DigitalSignatureBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -48,10 +47,19 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     private UUID transactionIdentifier;
 
     /**
+     * Instantiates a new Envelope upload object.
+     */
+    public EnvelopeUploadObject() {
+        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+    }
+
+    /**
      * Get data.
      *
      * @return the data
      */
+    @JsonInclude
+    @Override
     public String getData() {
         return data;
     }
@@ -106,6 +114,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @return the exchange metadata
      */
+    @JsonInclude
     @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;

@@ -38,6 +38,7 @@ public class EncryptionKeyObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeKeyObject getEnvelope() {
         return envelope;
     }
@@ -65,6 +66,7 @@ public class EncryptionKeyObject implements EnvelopeSignatureBearer {
      *
      * @param envelopeSignature the envelope signature
      */
+    @Override
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }

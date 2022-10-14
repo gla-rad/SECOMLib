@@ -39,6 +39,7 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeAckObject getEnvelope() {
         return envelope;
     }
@@ -71,6 +72,7 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
      *
      * @param envelopeSignature the envelope signature
      */
+    @Override
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }

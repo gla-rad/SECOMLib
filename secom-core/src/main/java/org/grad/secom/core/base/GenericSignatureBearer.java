@@ -17,7 +17,6 @@
 package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.grad.secom.core.models.DigitalSignatureValue;
 
 /**
  * The SECOM Generic Signature Beader Interface.

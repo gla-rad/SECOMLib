@@ -36,6 +36,13 @@ public class DataResponseObject {
     private AckRequestEnum ackRequest;
 
     /**
+     * Instantiates a new Data response object.
+     */
+    public DataResponseObject() {
+        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+    }
+
+    /**
      * Gets data.
      *
      * @return the data

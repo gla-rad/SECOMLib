@@ -143,14 +143,10 @@ public class GetResponseObject implements DigitalSignatureBearer {
      */
     @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
-        // Sanity Checks
-        if(this.dataResponseObject == null) {
-            return null;
-        }
-        if(this.dataResponseObject.getExchangeMetadata() == null) {
-            this.dataResponseObject.setExchangeMetadata(new SECOM_ExchangeMetadataObject());
-        }
-        return this.dataResponseObject.getExchangeMetadata();
+        return Optional.of(this)
+                .map(GetResponseObject::getDataResponseObject)
+                .map(DataResponseObject::getExchangeMetadata)
+                .orElse(null);
     }
 
 }

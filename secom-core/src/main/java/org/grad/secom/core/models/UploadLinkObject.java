@@ -38,6 +38,7 @@ public class UploadLinkObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeLinkObject getEnvelope() {
         return envelope;
     }
@@ -65,6 +66,7 @@ public class UploadLinkObject implements EnvelopeSignatureBearer {
      *
      * @param envelopeSignature the envelope signature
      */
+    @Override
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }
