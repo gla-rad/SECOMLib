@@ -80,7 +80,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
     @JsonIgnore
     default void signEnvelope(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
         // Get the certificate to be used for singing the envelope
-        DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
+        final DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
                 .map(SecomCertificateProvider::getDigitalSignatureCertificate)
                 .orElse(null);
 

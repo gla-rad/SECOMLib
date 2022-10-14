@@ -83,7 +83,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
     @JsonIgnore
     default void signData(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
         // Get the certificate to be used for singing the message
-        DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
+        final DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
                 .map(SecomCertificateProvider::getDigitalSignatureCertificate)
                 .orElse(null);
 
