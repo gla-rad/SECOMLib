@@ -17,23 +17,18 @@
 package org.grad.secom.core.components;
 
 import org.grad.secom.core.base.SecomCertificateProvider;
-import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secom.core.base.SecomSignatureValidator;
 import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
 import org.grad.secom.core.interfaces.UploadSecomInterface;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
+import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -47,7 +42,7 @@ import java.util.Optional;
  */
 @Provider
 @PreMatching
-public class SecomSignatureFilter implements ContainerResponseFilter {
+public class SecomSignatureFilter implements ContainerRequestFilter {
 
     // Class Variables
     private SecomCertificateProvider certificateProvider;
@@ -67,11 +62,10 @@ public class SecomSignatureFilter implements ContainerResponseFilter {
      * The ContainerResponseFilter filter function implementation.
      *
      * @param rqstCtx   The filter's request context
-     * @param rspnCtx   The filter's response context
      * @throws IOException When IO Exceptions occur
      */
     @Override
-    public void filter(ContainerRequestContext rqstCtx, ContainerResponseContext rspnCtx) throws IOException {
+    public void filter(ContainerRequestContext rqstCtx) throws IOException {
         // Get the request body if it exists
         JSONObject body = Optional.of(rqstCtx)
                 .map(ContainerRequestContext::getEntityStream)
