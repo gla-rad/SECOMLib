@@ -45,6 +45,18 @@ import java.util.stream.Stream;
 public class JaxrsApplication extends Application {
 
     /**
+     * Initialise the SECOM object mapping operation with the Springboot object
+     * mapper.
+     *
+     * @param objectMapper the autowired object mapper
+     * @return the object mapper provider
+     */
+    @Bean
+    ObjectMapperProvider objectMapperProvider(@Autowired ObjectMapper objectMapper) {
+        return new ObjectMapperProvider(objectMapper);
+    }
+
+    /**
      * Initialise the SECOM exception mapper.
      *
      * @return the SECOM exception mapper bean
@@ -74,18 +86,6 @@ public class JaxrsApplication extends Application {
     SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCertificateProvider certificateProvider,
                                               @Autowired(required = false) SecomSignatureValidator signatureValidator) {
         return new SecomSignatureFilter(certificateProvider, signatureValidator);
-    }
-
-    /**
-     * Initialise the SECOM object mapping operation with the Springboot object
-     * mapper.
-     *
-     * @param objectMapper the autowired object mapper
-     * @return the object mapper provider
-     */
-    @Bean
-    ObjectMapperProvider objectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new ObjectMapperProvider(objectMapper);
     }
 
     /**
