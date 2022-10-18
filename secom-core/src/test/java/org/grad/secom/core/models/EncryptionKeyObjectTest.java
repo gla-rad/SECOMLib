@@ -46,13 +46,13 @@ class EncryptionKeyObjectTest {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JSR310Module());
 
-        // Generate a digital signature value
+        // Create a digital signature value
         this.digitalSignatureValue = new DigitalSignatureValue();
         this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
         this.digitalSignatureValue.setPublicCertificate("certificate");
         this.digitalSignatureValue.setDigitalSignature("signature");
 
-        // Generate a new envelope upload object
+        // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeKeyObject();
         this.envelopeLinkObject.setEncryptionKey("encryptionKey");
         this.envelopeLinkObject.setIv("iv");

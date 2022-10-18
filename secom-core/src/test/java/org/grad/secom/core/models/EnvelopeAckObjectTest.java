@@ -16,47 +16,85 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.grad.secom.core.models.enums.AckTypeEnum;
 import org.grad.secom.core.models.enums.NackTypeEnum;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.platform.commons.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class EnvelopeAckObjectTest {
+
+    // Class Variables
+    private EnvelopeAckObject obj;
+
+    private ObjectMapper mapper;
+
+    /**
+     * Set up some base data.
+     */
+    @BeforeEach
+    void setup() {
+        //Setup an object mapper
+        this.mapper = new ObjectMapper();
+        this.mapper.registerModule(new JSR310Module());
+
+        // Generate a new object
+        this.obj = new EnvelopeAckObject();
+        this.obj.setCreatedAt(LocalDateTime.now());
+        this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
+        this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
+        this.obj.setTransactionIdentifier(UUID.randomUUID());
+        this.obj.setAckType(AckTypeEnum.OPENED_ACK);
+        this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
+        this.obj.setEnvelopeSignatureTime(LocalDateTime.now());
+    }
+
+    /**
+     * Test that we can translate correctly the object onto JSON and back again.
+     */
+    @Test
+    void testJson() throws JsonProcessingException {
+        // Get the JSON format of the object
+        String jsonString = this.mapper.writeValueAsString(this.obj);
+        EnvelopeAckObject result = this.mapper.readValue(jsonString, EnvelopeAckObject.class);
+
+        // Make sure it looks OK
+        assertNotNull(result);
+        assertEquals(this.obj.getCreatedAt(), result.getCreatedAt());
+        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
+        assertEquals(this.obj.getAckType(), result.getAckType());
+        assertEquals(this.obj.getNackType(), result.getNackType());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+    }
 
     /**
      * Test that we can correctly generate the SECOM signature CSV.
      */
     @Test
     void testGetCsvString() {
-        // Generate a new object
-        EnvelopeAckObject obj = new EnvelopeAckObject();
-        obj.setCreatedAt(LocalDateTime.now());
-        obj.setEnvelopeSignatureCertificate("envelopeCertificate");
-        obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        obj.setTransactionIdentifier(UUID.randomUUID());
-        obj.setAckType(AckTypeEnum.OPENED_ACK);
-        obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
-        obj.setEnvelopeSignatureTime(LocalDateTime.now());
-
         // Generate the signature CSV
-        String signatureCSV = obj.getCsvString();
+        String signatureCSV = this.obj.getCsvString();
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(obj.getCreatedAt().toEpochSecond(ZoneOffset.UTC), Long.parseLong(csv[0]));
-        assertEquals(obj.getEnvelopeCertificate(), csv[1]);
-        assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
-        assertEquals(obj.getTransactionIdentifier().toString(), csv[3]);
-        assertEquals(String.valueOf(obj.getAckType().getValue()), csv[4]);
-        assertEquals(String.valueOf(obj.getNackType().getValue()), csv[5]);
-        assertEquals(String.valueOf(obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC)), csv[6]);
+        assertEquals(this.obj.getCreatedAt().toEpochSecond(ZoneOffset.UTC), Long.parseLong(csv[0]));
+        assertEquals(this.obj.getEnvelopeCertificate(), csv[1]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
+        assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
+        assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC)), csv[6]);
     }
 
 }

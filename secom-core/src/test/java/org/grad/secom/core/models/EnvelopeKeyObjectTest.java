@@ -16,39 +16,83 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class EnvelopeKeyObjectTest {
+
+    // Class Variables
+    private DigitalSignatureValue digitalSignatureValue;
+    private EnvelopeKeyObject obj;
+
+    private ObjectMapper mapper;
+
+    /**
+     * Set up some base data.
+     */
+    @BeforeEach
+    void setup() {
+        //Setup an object mapper
+        this.mapper = new ObjectMapper();
+        this.mapper.registerModule(new JSR310Module());
+
+        // Create a digital signature value
+        this.digitalSignatureValue = new DigitalSignatureValue();
+        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValue.setPublicCertificate("certificate");
+        this.digitalSignatureValue.setDigitalSignature("signature");
+
+        // Generate a new object
+        this.obj = new EnvelopeKeyObject();
+        this.obj.setEncryptionKey("encryptionKey");
+        this.obj.setIv("iv");
+        this.obj.setTransactionIdentifier(UUID.randomUUID());
+        this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
+        this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
+        this.obj.setEnvelopeSignatureTime(LocalDateTime.now());
+    }
+
+    /**
+     * Test that we can translate correctly the object onto JSON and back again.
+     */
+    @Test
+    void testJson() throws JsonProcessingException {
+        // Get the JSON format of the object
+        String jsonString = this.mapper.writeValueAsString(this.obj);
+        EnvelopeKeyObject result = this.mapper.readValue(jsonString, EnvelopeKeyObject.class);
+
+        // Make sure it looks OK
+        assertNotNull(result);
+        assertEquals(this.obj.getEncryptionKey(), result.getEncryptionKey());
+        assertEquals(this.obj.getIv(), result.getIv());
+        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
+        assertNotNull(result.getDigitalSignatureValue());
+        assertEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
+        assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDigitalSignatureValue().getPublicRootCertificateThumbprint());
+        assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), result.getDigitalSignatureValue().getDigitalSignature());
+        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+    }
 
     /**
      * Test that we can correctly generate the SECOM signature CSV.
      */
     @Test
     void testGetCsvString() {
-        // Generate a digital signature value
-        DigitalSignatureValue digitalSignatureValue = new DigitalSignatureValue();
-        digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        digitalSignatureValue.setPublicCertificate("certificate");
-        digitalSignatureValue.setDigitalSignature("signature");
-
-        // Generate a new object
-        EnvelopeKeyObject obj = new EnvelopeKeyObject();
-        obj.setEncryptionKey("encryptionKey");
-        obj.setIv("iv");
-        obj.setTransactionIdentifier(UUID.randomUUID());
-        obj.setDigitalSignatureValue(digitalSignatureValue);
-        obj.setEnvelopeSignatureCertificate("envelopeCertificate");
-        obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        obj.setEnvelopeSignatureTime(LocalDateTime.now());
-
         // Generate the signature CSV
-        String signatureCSV = obj.getCsvString();
+        String signatureCSV = this.obj.getCsvString();
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");

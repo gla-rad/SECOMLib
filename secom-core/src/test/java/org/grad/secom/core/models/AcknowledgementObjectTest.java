@@ -47,13 +47,13 @@ class AcknowledgementObjectTest {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JSR310Module());
 
-        // Generate a digital signature value
+        // Create a digital signature value
         this.digitalSignatureValue = new DigitalSignatureValue();
         this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
         this.digitalSignatureValue.setPublicCertificate("certificate");
         this.digitalSignatureValue.setDigitalSignature("signature");
 
-        // Generate SECOM exchange metadata
+        // Create SECOM exchange metadata
         this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
@@ -61,7 +61,7 @@ class AcknowledgementObjectTest {
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValue);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
-        // Generate a new envelope upload object
+        // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeAckObject();
         this.envelopeLinkObject.setCreatedAt(LocalDateTime.now());
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
@@ -71,7 +71,7 @@ class AcknowledgementObjectTest {
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now());
 
-        // Generate a new upload object
+        // Generate a new object
         this.obj = new AcknowledgementObject();
         this.obj.setEnvelope(this.envelopeLinkObject);
         this.obj.setEnvelopeSignature("signature");

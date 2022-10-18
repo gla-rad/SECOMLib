@@ -44,13 +44,13 @@ class DataResponseObjectTest {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JSR310Module());
 
-        // Generate a digital signature value
+        // Create a digital signature value
         this.digitalSignatureValue = new DigitalSignatureValue();
         this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
         this.digitalSignatureValue.setPublicCertificate("certificate");
         this.digitalSignatureValue.setDigitalSignature("signature");
 
-        // Generate SECOM exchange metadata
+        // Create SECOM exchange metadata
         this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");

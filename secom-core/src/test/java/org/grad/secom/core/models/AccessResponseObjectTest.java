@@ -19,17 +19,16 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import org.grad.secom.core.models.enums.AckRequestEnum;
-import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DigitalSignatureValueTest {
+class AccessResponseObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue obj;
+    private AccessResponseObject obj;
+
     private ObjectMapper mapper;
 
     /**
@@ -42,10 +41,8 @@ class DigitalSignatureValueTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Generate a new object
-        this.obj = new DigitalSignatureValue();
-        this.obj.setPublicRootCertificateThumbprint("thumbprint");
-        this.obj.setPublicCertificate("certificate");
-        this.obj.setDigitalSignature("signature");
+        this.obj = new AccessResponseObject();
+        this.obj.setResponseText("Test");
     }
 
     /**
@@ -55,34 +52,11 @@ class DigitalSignatureValueTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        DigitalSignatureValue result = this.mapper.readValue(jsonString, DigitalSignatureValue.class);
+        AccessResponseObject result = this.mapper.readValue(jsonString, AccessResponseObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getPublicRootCertificateThumbprint(), result.getPublicRootCertificateThumbprint());
-        assertEquals(this.obj.getPublicCertificate(), result.getPublicCertificate());
-        assertEquals(this.obj.getDigitalSignature(), result.getDigitalSignature());
-    }
-
-    /**
-     * Test that we can correctly generate the SECOM signature CSV.
-     */
-    @Test
-    void testGetCsvString() {
-        // Generate a new object
-        DigitalSignatureValue obj = new DigitalSignatureValue();
-        obj.setPublicRootCertificateThumbprint("thumbprint");
-        obj.setPublicCertificate("certificate");
-        obj.setDigitalSignature("signature");
-
-        // Generate the signature CSV
-        String signatureCSV = obj.getCsvString();
-
-        // Match the individual entries of the string
-        String[] csv = signatureCSV.split("\\.");
-        assertEquals(obj.getPublicRootCertificateThumbprint(), csv[0]);
-        assertEquals(obj.getPublicCertificate(), csv[1]);
-        assertEquals(obj.getDigitalSignature(), csv[2]);
+        assertEquals(this.obj.getResponseText(), result.getResponseText());
     }
 
 }

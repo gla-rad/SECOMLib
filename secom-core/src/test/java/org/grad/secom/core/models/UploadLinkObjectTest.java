@@ -51,13 +51,13 @@ class UploadLinkObjectTest {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JSR310Module());
 
-        // Generate a digital signature value
+        // Create a digital signature value
         this.digitalSignatureValue = new DigitalSignatureValue();
         this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
         this.digitalSignatureValue.setPublicCertificate("certificate");
         this.digitalSignatureValue.setDigitalSignature("signature");
 
-        // Generate SECOM exchange metadata
+        // Create SECOM exchange metadata
         this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
@@ -65,7 +65,7 @@ class UploadLinkObjectTest {
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValue);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
-        // Generate a new envelope upload object
+        // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeLinkObject();
         this.envelopeLinkObject.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.envelopeLinkObject.setDataProductType(SECOM_DataProductType.S101);
@@ -77,7 +77,7 @@ class UploadLinkObjectTest {
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now());
 
-        // Generate a new upload object
+        // Generate a new object
         this.obj = new UploadLinkObject();
         this.obj.setEnvelope(this.envelopeLinkObject);
         this.obj.setEnvelopeSignature("signature");
@@ -97,9 +97,11 @@ class UploadLinkObjectTest {
         assertNotNull(result.getEnvelope());
         assertEquals(this.obj.getEnvelope().getContainerType(), result.getEnvelope().getContainerType());
         assertEquals(this.obj.getEnvelope().getDataProductType(), result.getEnvelope().getDataProductType());
+        assertNotNull(result.getEnvelope().getExchangeMetadata());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDataProtection(), result.getEnvelope().getExchangeMetadata().getDataProtection());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getProtectionScheme(), result.getEnvelope().getExchangeMetadata().getProtectionScheme());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureReference(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureReference());
+        assertNotNull(result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());

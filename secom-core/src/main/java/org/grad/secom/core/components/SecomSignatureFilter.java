@@ -67,24 +67,24 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext rqstCtx) throws IOException {
         // Get the request body if it exists
-        JSONObject body = Optional.of(rqstCtx)
-                .map(ContainerRequestContext::getEntityStream)
-                .map(InputStreamReader::new)
-                .map(in -> { try {return new JSONParser().parse(in);} catch (Exception ex) {return null;} })
-                .filter(JSONObject.class::isInstance)
-                .map(JSONObject.class::cast)
-                .orElse(null);
+//        JSONObject body = Optional.of(rqstCtx)
+//                .map(ContainerRequestContext::getEntityStream)
+//                .map(InputStreamReader::new)
+//                .map(in -> { try {return new JSONParser().parse(in);} catch (Exception ex) {return null;} })
+//                .filter(JSONObject.class::isInstance)
+//                .map(JSONObject.class::cast)
+//                .orElse(null);
 
         // For the Upload Interface Requests, validate the signature
         if(rqstCtx.getRequest().getMethod().equals("POST") && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
             if(this.signatureValidator != null) {
-                System.out.println(body);
+                System.out.println("gotcha");
             }
         }
         // For the Upload Link Interface Requests, validate the signature
         else if(rqstCtx.getRequest().getMethod().equals("POST")  && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
             if(this.signatureValidator != null) {
-                System.out.println(body);
+                System.out.println("gotcha");
             }
         }
         // For everything else just move one
