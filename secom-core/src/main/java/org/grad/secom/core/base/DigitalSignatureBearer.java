@@ -115,7 +115,8 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
 
         // And sign the data
         byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
-        this.setDigitalSignature(DatatypeConverter.printHexBinary(signature));
+        final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
+        this.setDigitalSignature(signatureHex);
     }
 
 }

@@ -114,8 +114,9 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
                 .orElse(new byte[]{});
 
         // And sign the envelope
-        byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
-        this.setEnvelopeSignature(DatatypeConverter.printHexBinary(signature));
+        final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
+        final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
+        this.setEnvelopeSignature(signatureHex);
     }
 
 }
