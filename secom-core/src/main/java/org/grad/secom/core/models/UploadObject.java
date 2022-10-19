@@ -57,6 +57,7 @@ public class UploadObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

@@ -23,6 +23,7 @@ import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.util.Optional;
@@ -113,7 +114,8 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
                 .orElse(new byte[]{});
 
         // And sign the data
-        this.setDigitalSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload));
+        byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
+        this.setDigitalSignature(DatatypeConverter.printHexBinary(signature));
     }
 
 }

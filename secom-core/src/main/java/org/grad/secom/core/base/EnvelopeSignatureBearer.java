@@ -24,6 +24,7 @@ import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
+import javax.xml.bind.DatatypeConverter;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.time.LocalDateTime;
@@ -53,6 +54,13 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      * @param envelopeSignature the envelope signature
      */
     void setEnvelopeSignature(String envelopeSignature);
+
+    /**
+     * gets envelope signature.
+     *
+     * @return the envelope signature
+     */
+    String getEnvelopeSignature();
 
     /**
      * This is the main function that sets the digital signature onto a SECOM
@@ -106,7 +114,8 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
                 .orElse(new byte[]{});
 
         // And sign the envelope
-        this.setEnvelopeSignature(signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload));
+        byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
+        this.setEnvelopeSignature(DatatypeConverter.printHexBinary(signature));
     }
 
 }

@@ -16,6 +16,10 @@
 
 package org.grad.secom.core.base;
 
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
+
+import java.security.cert.X509Certificate;
+
 /**
  * The SECOM Signature Validator Interface.
  *
@@ -29,15 +33,27 @@ package org.grad.secom.core.base;
 public interface SecomSignatureValidator {
 
     /**
+     * Returns the digital signature algorithm for the signature validator.
+     * In SECOM, by default this should be DSA, also ECDSA could be used
+     * to generate smaller signatures.
+     *
+     * @return the digital signature algorithm for the signature provider
+     */
+    default DigitalSignatureAlgorithmEnum getSignatureAlgorithm() {
+        return DigitalSignatureAlgorithmEnum.DSA;
+    }
+
+    /**
      * The signature validation operation. This should support the provision
      * of the message content (preferably in a Base64 format) and the signature
      * to validate the content against.
      *
      * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+     * @param algorithm             The algorithm used for the signature generation
      * @param content               The context (in Base64 format) to be validated
      * @param signature             The signature to validate the context against
      * @return whether the signature validation was successful or not
      */
-    boolean validateSignature(DigitalSignatureCertificate signatureCertificate, String content, String signature);
+    boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] content, byte[] signature);
 
 }

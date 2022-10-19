@@ -17,12 +17,17 @@
 package org.grad.secom.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.grad.secom.core.base.SecomCertificateProvider;
-import org.grad.secom.core.base.SecomSignatureValidator;
+import org.grad.secom.core.base.*;
+import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
+import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
+import org.grad.secom.core.interfaces.AcknowledgementSecomInterface;
+import org.grad.secom.core.interfaces.EncryptionKeySecomInterface;
 import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
 import org.grad.secom.core.interfaces.UploadSecomInterface;
-import org.grad.secom.core.models.UploadLinkObject;
-import org.grad.secom.core.models.UploadObject;
+import org.grad.secom.core.models.*;
+import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
+import org.grad.secom.core.utils.KeyStoreUtils;
+import org.grad.secom.core.utils.SecomPemUtils;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -30,10 +35,15 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
+import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.cert.*;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * The SECOM Signature Filter
@@ -76,30 +86,89 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
      */
     @Override
     public void filter(ContainerRequestContext rqstCtx) throws IOException {
-        // For the Upload Interface Requests, validate the signature
-        if(rqstCtx.getRequest().getMethod().equals("POST") && rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)) {
-            if(this.signatureValidator != null) {
-                final UploadObject obj = this.parseRequestBody(rqstCtx, UploadObject.class);
-
-                // If we have an object, validate the signature
-                if(obj != null) {
-                    this.signatureValidator.validateSignature(this.certificateProvider.getDigitalSignatureCertificate(), obj.getEnvelope().getData(), obj.getEnvelopeSignature());
-                }
-            }
-        }
-        // For the Upload Link Interface Requests, validate the signature
-        else if(rqstCtx.getRequest().getMethod().equals("POST")  && rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
-            if(this.signatureValidator != null) {
-                UploadLinkObject obj = this.parseRequestBody(rqstCtx, UploadLinkObject.class);
-
-                // If we have an object, validate the signature
-                if(obj != null) {
-                    this.signatureValidator.validateSignature(this.certificateProvider.getDigitalSignatureCertificate(), obj.getEnvelope().getTransactionIdentifier().toString(), obj.getEnvelopeSignature());
-                }
-            }
+        // No need to do anything without a signature validator
+        if(this.signatureValidator == null) {
+             return;
         }
 
-        // For everything else just move one
+        // Start with a true valid flag
+        boolean valid = true;
+        EnvelopeSignatureBearer obj = null;
+
+        // Currently SECOM only needs to validate POST requests
+        if(rqstCtx.getRequest().getMethod().equals("POST")) {
+            // For the Upload Interface Requests
+            if (rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, UploadObject.class);
+            }
+            // For the Upload Link Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, UploadLinkObject.class);
+            }
+            // For the Acknowledgement Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, AcknowledgementObject.class);
+            }
+            // For the Encryption Key Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, EncryptionKeyObject.class);
+            }
+        }
+
+        // If we have an object, validate the signatures
+        if(obj != null && obj.getEnvelope() != null) {
+            // First decide on the signature algorithm
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.ofNullable(this.signatureValidator)
+                    .map(SecomSignatureValidator::getSignatureAlgorithm)
+                    .orElse(DigitalSignatureAlgorithmEnum.DSA);
+
+            // First validate the envelope signature
+            valid &= this.signatureValidator.validateSignature(
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelope)
+                            .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
+                            .orElse(null),
+                    digitalSignatureAlgorithm,
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelope)
+                            .map(AbstractEnvelope::getCsvString)
+                            .map(String::getBytes)
+                            .orElse(null),
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelopeSignature)
+                            .map(DatatypeConverter::parseHexBinary)
+                            .orElse(null));
+
+            // Then validate the data signature if present
+            if(obj.getEnvelope() instanceof DigitalSignatureBearer) {
+                final DigitalSignatureBearer dataObj = (DigitalSignatureBearer)obj.getEnvelope();
+                valid &= this.signatureValidator.validateSignature(
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValue::getPublicCertificate)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
+                                .orElse(digitalSignatureAlgorithm),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getData)
+                                .map(String::getBytes)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValue::getDigitalSignature)
+                                .map(DatatypeConverter::parseHexBinary)
+                                .orElse(null));
+            }
+        }
+
+        // For everything else just move one if valid
+        if(!valid) {
+            throw new SecomSignatureVerificationException("Received message signature could not be verified!");
+        }
     }
 
     /**
@@ -131,7 +200,72 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         return providers.getContextResolver(ObjectMapper.class, rqstCtx.getMediaType())
                 .getContext(UploadObject.class)
                 .readValue(body, clazz);
-
     }
+
+//    private DigitalSignatureCertificate checkCertificate(String certificate, String rootCertificateThumbnail) {
+//        // Get our own root certificate
+//        final X509Certificate rootCertificate = Optional.ofNullable(this.certificateProvider)
+//                .map(SecomCertificateProvider::getDigitalSignatureCertificate)
+//                .map(DigitalSignatureCertificate::getRootCertificate)
+//                .orElse(null);
+//
+//        // Without a root certificate there is nothing to trust
+//        if(rootCertificate == null) {
+//            return null;
+//        }
+//
+//        // Create the digital signature certificate
+//        final DigitalSignatureCertificate digitalSignatureCertificate = new DigitalSignatureCertificate();
+//        digitalSignatureCertificate.setCertificateAlias("incoming");
+//
+//        // Check the root certificate
+//        try {
+//            final String localRootCertificateThumbprint = SecomPemUtils.getCertThumbprint(rootCertificate, SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
+//            if(localRootCertificateThumbprint.compareTo(rootCertificateThumbnail) == 0) {
+//                digitalSignatureCertificate.setRootCertificate(rootCertificate);
+//            } else {
+//                throw new SecomInvalidCertificateException("The provided SECOM CA root certificate is not recognised");
+//            }
+//        } catch(NoSuchAlgorithmException | CertificateEncodingException ex) {
+//            throw new SecomInvalidCertificateException(ex.getMessage());
+//        }
+//
+//        // Now check the provided certificate
+//        try {
+//            final X509Certificate x509Certificate = SecomPemUtils.getCertFromPem(certificate);
+//            x509Certificate.checkValidity();
+//            digitalSignatureCertificate.setRootCertificate(x509Certificate);
+//        } catch (CertificateException ex) {
+//            throw new SecomInvalidCertificateException(ex.getMessage());
+//        }
+//
+//        try {
+//            final KeyStore trustStore = KeyStoreUtils.getKeyStore("truststore.jks", "KsbduAEpfFA68m6V", "JKS");
+//
+//            final CertPathBuilder certPathBuilder = CertPathBuilder.getInstance("PKIX");
+//            final X509CertSelector certSelector = new X509CertSelector();
+//            certSelector.setCertificate(digitalSignatureCertificate.getCertificate());
+//
+//            final CertPathParameters certPathParameters = new PKIXBuilderParameters(trustStore, certSelector);
+//            final CertPathBuilderResult certPathBuilderResult = certPathBuilder.build(certPathParameters);
+//            final CertPath certPath = certPathBuilderResult.getCertPath();
+//
+//            final CertPathValidator certPathValidator = CertPathValidator.getInstance("PKIX");
+//            final PKIXParameters validationParameters = new PKIXParameters(trustStore);
+//            validationParameters.setRevocationEnabled(true); // if you want to check CRL
+//            final X509CertSelector keyUsageSelector = new X509CertSelector();
+//            keyUsageSelector.setKeyUsage(new boolean[]{true, false, true}); // to check digitalSignature and keyEncipherment bits
+//            validationParameters.setTargetCertConstraints(keyUsageSelector);
+//            final PKIXCertPathValidatorResult result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, validationParameters);
+//        } catch (Exception ex) {
+//            throw new SecomInvalidCertificateException(ex.getMessage());
+//        }
+//
+//        // Then also get the public key for easy access
+//        digitalSignatureCertificate.setPublicKey(digitalSignatureCertificate.getPublicKey());
+//
+//        // And finally return the verified digital signature certificate
+//        return digitalSignatureCertificate;
+//    }
 
 }
