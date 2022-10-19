@@ -26,7 +26,6 @@ import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
 import org.grad.secom.core.interfaces.UploadSecomInterface;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
-import org.grad.secom.core.utils.KeyStoreUtils;
 import org.grad.secom.core.utils.SecomPemUtils;
 
 import javax.ws.rs.container.ContainerRequestContext;
@@ -40,11 +39,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.*;
+import java.security.GeneralSecurityException;
 import java.security.cert.*;
-import java.time.LocalDateTime;
-import java.util.Base64;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * The SECOM Signature Filter
@@ -123,7 +123,13 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                     .map(SecomSignatureValidator::getSignatureAlgorithm)
                     .orElse(DigitalSignatureAlgorithmEnum.DSA);
 
-            // First validate the envelope signature
+            // First validate the envelope certificate
+            checkCertificate(
+                    obj.getEnvelope().getEnvelopeSignatureCertificate(),
+                    obj.getEnvelope().getEnvelopeRootCertificateThumbprint()
+            );
+
+            // Then validate the envelope signature
             valid &= this.signatureValidator.validateSignature(
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelope)
@@ -142,6 +148,22 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             // Then validate the data signature if present
             if(obj.getEnvelope() instanceof DigitalSignatureBearer) {
                 final DigitalSignatureBearer dataObj = (DigitalSignatureBearer)obj.getEnvelope();
+
+                // First validate the data certificate
+                checkCertificate(
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValue::getPublicCertificate)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValue::getPublicRootCertificateThumbprint)
+                                .orElse(null)
+                );
+
+                // Then validate the data signature
                 valid &= this.signatureValidator.validateSignature(
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
@@ -201,70 +223,104 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 .readValue(body, clazz);
     }
 
-//    private DigitalSignatureCertificate checkCertificate(String certificate, String rootCertificateThumbnail) {
-//        // Get our own root certificate
-//        final X509Certificate rootCertificate = Optional.ofNullable(this.certificateProvider)
-//                .map(SecomCertificateProvider::getDigitalSignatureCertificate)
-//                .map(DigitalSignatureCertificate::getRootCertificate)
-//                .orElse(null);
-//
-//        // Without a root certificate there is nothing to trust
-//        if(rootCertificate == null) {
-//            return null;
-//        }
-//
-//        // Create the digital signature certificate
-//        final DigitalSignatureCertificate digitalSignatureCertificate = new DigitalSignatureCertificate();
-//        digitalSignatureCertificate.setCertificateAlias("incoming");
-//
-//        // Check the root certificate
-//        try {
-//            final String localRootCertificateThumbprint = SecomPemUtils.getCertThumbprint(rootCertificate, SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
-//            if(localRootCertificateThumbprint.compareTo(rootCertificateThumbnail) == 0) {
-//                digitalSignatureCertificate.setRootCertificate(rootCertificate);
-//            } else {
-//                throw new SecomInvalidCertificateException("The provided SECOM CA root certificate is not recognised");
-//            }
-//        } catch(NoSuchAlgorithmException | CertificateEncodingException ex) {
-//            throw new SecomInvalidCertificateException(ex.getMessage());
-//        }
-//
-//        // Now check the provided certificate
-//        try {
-//            final X509Certificate x509Certificate = SecomPemUtils.getCertFromPem(certificate);
-//            x509Certificate.checkValidity();
-//            digitalSignatureCertificate.setRootCertificate(x509Certificate);
-//        } catch (CertificateException ex) {
-//            throw new SecomInvalidCertificateException(ex.getMessage());
-//        }
-//
-//        try {
-//            final KeyStore trustStore = KeyStoreUtils.getKeyStore("truststore.jks", "KsbduAEpfFA68m6V", "JKS");
-//
-//            final CertPathBuilder certPathBuilder = CertPathBuilder.getInstance("PKIX");
-//            final X509CertSelector certSelector = new X509CertSelector();
-//            certSelector.setCertificate(digitalSignatureCertificate.getCertificate());
-//
-//            final CertPathParameters certPathParameters = new PKIXBuilderParameters(trustStore, certSelector);
-//            final CertPathBuilderResult certPathBuilderResult = certPathBuilder.build(certPathParameters);
-//            final CertPath certPath = certPathBuilderResult.getCertPath();
-//
-//            final CertPathValidator certPathValidator = CertPathValidator.getInstance("PKIX");
-//            final PKIXParameters validationParameters = new PKIXParameters(trustStore);
-//            validationParameters.setRevocationEnabled(true); // if you want to check CRL
-//            final X509CertSelector keyUsageSelector = new X509CertSelector();
-//            keyUsageSelector.setKeyUsage(new boolean[]{true, false, true}); // to check digitalSignature and keyEncipherment bits
-//            validationParameters.setTargetCertConstraints(keyUsageSelector);
-//            final PKIXCertPathValidatorResult result = (PKIXCertPathValidatorResult) certPathValidator.validate(certPath, validationParameters);
-//        } catch (Exception ex) {
-//            throw new SecomInvalidCertificateException(ex.getMessage());
-//        }
-//
-//        // Then also get the public key for easy access
-//        digitalSignatureCertificate.setPublicKey(digitalSignatureCertificate.getPublicKey());
-//
-//        // And finally return the verified digital signature certificate
-//        return digitalSignatureCertificate;
-//    }
+    /**
+     * As specified in section 6.2.2 of SECOM, the procedure to verify the
+     * client’s certificate shall be:
+     * <ul>
+     *     <li>the server shall verify that the client’s certificate is valid;</li>
+     *     <li>the server shall verify that the client’s certificate is issued by SECOM PKI.</li>
+     * </ul>
+     * @param certificate                   The received certificate to be verified
+     * @param rootCertificateThumbprint     The received root certificate thumbprint
+     */
+    private void checkCertificate(String certificate, String rootCertificateThumbprint) {
+        // Get our own root certificate
+        final X509Certificate rootX509Certificate = Optional.ofNullable(this.certificateProvider)
+                .map(SecomCertificateProvider::getDigitalSignatureCertificate)
+                .map(DigitalSignatureCertificate::getRootCertificate)
+                .orElse(null);
 
+        // Get the whole list of trusted certificates
+        final X509Certificate[] trustedCertificates = Optional.ofNullable(this.certificateProvider)
+                .map(SecomCertificateProvider::getTrustedCertificates)
+                .orElse(null);
+
+        // In SECOM the root certificate is actually optional, so just check if
+        // it exists and id so match the thumbprint with our root certificate
+        if(rootCertificateThumbprint != null) {
+            Optional.ofNullable(rootX509Certificate)
+                    .map(rc -> {
+                        try {
+                            return SecomPemUtils.getCertThumbprint(rc, SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
+                        } catch (Exception ex) {
+                            return null;
+                        }
+                    })
+                    .filter(thumbprint -> thumbprint.compareTo(rootCertificateThumbprint) == 0)
+                    .orElseThrow(() -> new SecomInvalidCertificateException("The provided SECOM CA root certificate is not recognised"));
+        }
+
+        // Now parse the provided certificate into an X509 Certificate object
+        final X509Certificate x509Certificate;
+        try {
+            x509Certificate = SecomPemUtils.getCertFromPem(certificate);
+        } catch (CertificateException ex) {
+            throw new SecomInvalidCertificateException(ex.getMessage());
+        }
+
+        // Now verify the provided certificate and check its validity
+        try {
+            x509Certificate.checkValidity();
+            this.verifyCertificateChain(x509Certificate, new HashSet<>(Arrays.asList(rootX509Certificate)), new HashSet<>(Arrays.asList(trustedCertificates)));
+        } catch (Exception ex) {
+            throw new SecomInvalidCertificateException(ex.getMessage());
+        }
+    }
+
+    /**
+     * This function uses the CertPathBuilder method to build the certificate
+     * path, including the SECOM X.509 certificate received with this request
+     * to verify that it's valid and a part of the chain that includes the
+     * root certificate of the SECOM service. It does not return an output
+     * but will raise a GeneralSecurityException if the operation fails.
+     *
+     * @param cert                  the certificate to be validated
+     * @param trustedRootCerts      the list of trusted certificates
+     * @param intermediateCerts     the list of intermediate certificates
+     * @throws GeneralSecurityException An exception will be raised if the validation fails
+     */
+    private void verifyCertificateChain(X509Certificate cert,
+                                       Set<X509Certificate> trustedRootCerts,
+                                       Set<X509Certificate> intermediateCerts) throws GeneralSecurityException {
+        // Create the selector that specifies the starting certificate
+        final X509CertSelector selector = new X509CertSelector();
+        selector.setCertificate(cert);
+
+        // Create the trust anchors (set of root CA certificates)
+        final Set<TrustAnchor> trustAnchors = new HashSet<>();
+        for (X509Certificate trustedRootCert : trustedRootCerts) {
+            trustAnchors.add(new TrustAnchor(trustedRootCert, null));
+        }
+
+        // Configure the PKIX certificate builder algorithm parameters
+        final PKIXBuilderParameters pkixParams = new PKIXBuilderParameters(trustAnchors, selector);
+
+        // Disable CRL checks (this is done manually as additional step)
+        pkixParams.setRevocationEnabled(false);
+
+        // To check digitalSignature and keyEncipherment bits
+        final X509CertSelector keyUsageSelector = new X509CertSelector();
+        keyUsageSelector.setKeyUsage(new boolean[]{true, false, true});
+        pkixParams.setTargetCertConstraints(keyUsageSelector);
+
+        // Specify a list of intermediate certificates
+        // certificate itself has to be added to the list
+        intermediateCerts.add(cert);
+        final CertStore intermediateCertStore = CertStore.getInstance("Collection", new CollectionCertStoreParameters(intermediateCerts), "BC");
+        pkixParams.addCertStore(intermediateCertStore);
+
+        // Build and verify the certification chain
+        final CertPathBuilder builder = CertPathBuilder.getInstance("PKIX", "BC");
+        builder.build(pkixParams);
+    }
 }

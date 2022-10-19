@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.base;
 
+import java.security.cert.X509Certificate;
+
 /**
  * The SECOM Certificate Provider Interface.
  *
@@ -27,6 +29,17 @@ package org.grad.secom.core.base;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public interface SecomCertificateProvider {
+
+    /**
+     * Returns a list of trusted certificates for the signature validation.
+     * This is only required for SECOM consumers so the default operation does
+     * not return any certificates.
+     *
+     * @return the list of trusted certificates for SECOM
+     */
+    default X509Certificate[] getTrustedCertificates() {
+        return new X509Certificate[]{};
+    }
 
     /**
      * This function can be overridden by the provider to enable the provision

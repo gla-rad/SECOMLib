@@ -119,7 +119,6 @@ public class SecomClient {
                 sslContextBuilder.trustManager(KeyStoreUtils.getTrustManagerFactory(
                         config.getTruststore(), config.getTruststorePassword(), config.getTruststoreType(), null));
             }
-
             // Otherwise, check is an insecure policy it to be applied
             else if (config.getInsecureSslPolicy()) {
                  sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
