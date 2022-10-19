@@ -43,6 +43,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.cert.*;
 import java.time.LocalDateTime;
+import java.util.Base64;
 import java.util.Optional;
 
 /**
@@ -132,7 +133,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelope)
                             .map(AbstractEnvelope::getCsvString)
-                            .map(String::getBytes)
+                            .map(Base64.getDecoder()::decode)
                             .orElse(null),
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelopeSignature)
@@ -154,7 +155,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                                 .orElse(digitalSignatureAlgorithm),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getData)
-                                .map(String::getBytes)
+                                .map(Base64.getDecoder()::decode)
                                 .orElse(null),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
