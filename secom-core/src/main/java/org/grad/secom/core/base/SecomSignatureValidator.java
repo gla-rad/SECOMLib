@@ -45,8 +45,8 @@ public interface SecomSignatureValidator {
 
     /**
      * The signature validation operation. This should support the provision
-     * of the message content (after the bytes have been decoded from the Base64
-     * format) and the signature to validate the content against.
+     * of the message content (preferably in a Base64 format) and the signature
+     * to validate the content against.
      *
      * @param signatureCertificate  The digital signature certificate to be used for the signature generation
      * @param algorithm             The algorithm used for the signature generation
@@ -54,6 +54,6 @@ public interface SecomSignatureValidator {
      * @param signature             The signature to validate the context against
      * @return whether the signature validation was successful or not
      */
-    boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] content, byte[] signature);
+    boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, String content, byte[] signature);
 
 }

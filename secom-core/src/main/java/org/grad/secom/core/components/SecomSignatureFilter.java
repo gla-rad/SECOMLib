@@ -133,7 +133,6 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelope)
                             .map(AbstractEnvelope::getCsvString)
-                            .map(Base64.getDecoder()::decode)
                             .orElse(null),
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelopeSignature)
@@ -155,7 +154,6 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                                 .orElse(digitalSignatureAlgorithm),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getData)
-                                .map(Base64.getDecoder()::decode)
                                 .orElse(null),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
