@@ -106,15 +106,8 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
             ((DigitalSignatureBearer)this.getEnvelope()).signData(certificateProvider, signatureProvider);
         }
 
-        // Get the envelope as a CSV string to be signed
-        final byte[] payload = Optional.of(this)
-                .map(EnvelopeSignatureBearer::getEnvelope)
-                .map(AbstractEnvelope::getCsvString)
-                .map(String::getBytes)
-                .orElse(new byte[]{});
-
         // And sign the envelope
-        final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
+        final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getEnvelope().getCsvString());
         final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
         this.setEnvelopeSignature(signatureHex);
     }

@@ -107,14 +107,8 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
             }
         }
 
-        // Get the data to be signed
-        final byte[] payload = Optional.of(this)
-                .map(DigitalSignatureBearer::getData)
-                .map(String::getBytes)
-                .orElse(new byte[]{});
-
         // And sign the data
-        byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), payload);
+        byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getData());
         final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
         this.setDigitalSignature(signatureHex);
     }

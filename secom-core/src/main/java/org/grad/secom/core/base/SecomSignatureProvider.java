@@ -47,9 +47,9 @@ public interface SecomSignatureProvider {
      *
      * @param signatureCertificate  The digital signature certificate to be used for the signature generation
      * @param algorithm             The algorithm to be used for the signature generation
-     * @param payload               The payload to be signed
+     * @param payload               The payload to be signed, (preferably Base64 encoded)
      * @return The signature generated
      */
-    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload);
+    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, String payload);
 
 }
