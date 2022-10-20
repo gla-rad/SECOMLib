@@ -130,6 +130,11 @@ public class SecomClient {
                     .handshakeTimeout(Duration.of(2, ChronoUnit.SECONDS)));
         }
 
+        // Initialise the provider beans by default if possible
+        this.certificateProvider = SecomSpringContext.getBean(SecomCertificateProvider.class);
+        this.signatureProvider = SecomSpringContext.getBean(SecomSignatureProvider.class);
+        this.signatureValidator = SecomSpringContext.getBean(SecomSignatureValidator.class);
+
         // And create the SECOM web client
         this.secomClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpConnector))

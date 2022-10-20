@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 org.grad.secom.springboot.config.JaxrsApplication,\
-org.grad.secom.springboot.components.SecomConfigProperties
+org.grad.secom.springboot.components.SecomConfigProperties,\
+org.grad.secom.springboot.components.SecomSpringContext
