@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import org.grad.secom.core.base.SecomCertificateProvider;
+import org.grad.secom.core.base.SecomTrustStoreProvider;
 import org.grad.secom.core.components.*;
 import org.grad.secom.core.base.SecomSignatureProvider;
 import org.grad.secom.core.base.SecomSignatureValidator;
@@ -83,9 +84,9 @@ public class JaxrsApplication extends Application {
      * @return the SECOM signature filter bean
      */
     @Bean
-    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCertificateProvider certificateProvider,
+    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
                                               @Autowired(required = false) SecomSignatureValidator signatureValidator) {
-        return new SecomSignatureFilter(certificateProvider, signatureValidator);
+        return new SecomSignatureFilter(trustStoreProvider, signatureValidator);
     }
 
     /**

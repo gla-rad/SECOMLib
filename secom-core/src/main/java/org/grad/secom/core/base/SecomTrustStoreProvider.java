@@ -16,25 +16,37 @@
 
 package org.grad.secom.core.base;
 
+import java.security.KeyStore;
+
 /**
- * The SECOM Certificate Provider Interface.
+ * The SECOM Trust Store Provider Interface.
  *
- * This interface dictates the implementation of the SECOM certificate provider.
+ * This interface dictates the implementation of the SECOM trust store provider.
  * This is required for the SECOM library to be able to automatically pick up
- * the certificates used for signing and verifying the messages sent and
- * received respectively.
+ * the keystore that contains the trusted SECOM CA certificate chain.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SecomCertificateProvider {
+public interface SecomTrustStoreProvider {
 
     /**
-     * This function can be overridden by the provider to enable the provision
-     * of the certificate to be used for the signing and verification
-     * operations.
+     * Returns the alias of the root certificate as it is contained in the
+     * provided trust store. This can be used to pinpoint the actual root
+     * certificate entry.
      *
-     * @return the digital signature certificate to be used for signing/verification
+     * @return the alias of the root certificate
      */
-    DigitalSignatureCertificate getDigitalSignatureCertificate();
+    default String getCARootCertificateAlias() {
+        return "root";
+    }
+
+    /**
+     * Returns the trust store that contains the trusted SECOm certificate chain.
+     * This is required to validate the received certificate for every applicable
+     * request.
+     *
+     * @return the SECOM trust store
+     */
+    KeyStore getTrustStore();
 
 }
