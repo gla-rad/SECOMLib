@@ -70,6 +70,7 @@ public interface GenericExchangeMetadataBearer {
 
         // Populate the known values
         metadata.setProtectionScheme(signatureProvider != null ? SecomConstants.SECOM_PROTECTION_SCHEME : metadata.getProtectionScheme());
+        metadata.setDigitalSignatureReference(signatureProvider != null ? signatureProvider.getSignatureAlgorithm() : metadata.getDigitalSignatureReference());
         metadata.setDataProtection(encryptionProvider != null);
         metadata.setCompressionFlag(compressionProvider != null);
 
