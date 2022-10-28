@@ -70,6 +70,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @param data the data
      */
+    @Override
     public void setData(String data) {
         this.data = data;
     }
@@ -115,7 +116,6 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @return the exchange metadata
      */
-    @JsonProperty
     @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
@@ -126,6 +126,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      *
      * @param exchangeMetadata the exchange metadata
      */
+    @Override
     public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }

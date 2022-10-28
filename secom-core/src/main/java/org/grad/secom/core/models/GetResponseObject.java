@@ -92,40 +92,9 @@ public class GetResponseObject implements DigitalSignatureBearer {
     }
 
     /**
-     * A helper function that automatically encodes the provided data into
-     * a Base64 string.
+     * This function allows access to the data payload of the data bearer.
      *
-     * @param payloadObject the object to be encoded and assigned to the data
-     */
-    @JsonIgnore
-    public void encodeData(String payloadObject, SECOM_ExchangeMetadataObject exchangeMetadata) {
-        if(this.dataResponseObject == null) {
-            this.dataResponseObject = new DataResponseObject();
-        }
-        this.dataResponseObject.setData(Base64.getEncoder().encodeToString(payloadObject.getBytes()));
-        this.dataResponseObject.setExchangeMetadata(exchangeMetadata);
-    }
-
-    /**
-     * A helper function that automatically decodes the Base 64 data into the
-     * required string.
-     *
-     * @return the decoded data string
-     * @throws IOException the io exception
-     */
-    @JsonIgnore
-    public String decodeData() throws IOException {
-        if(this.dataResponseObject == null) {
-            return null;
-        }
-        return new String(Base64.getDecoder().decode(this.dataResponseObject.getData()));
-    }
-
-    /**
-     * Allows the data signature bearer object to access to data included to
-     * be signed.
-     *
-     * @return the data included in the data signature bearer
+     * @return the data payload of the data bearer
      */
     @Override
     public String getData() {
@@ -136,7 +105,19 @@ public class GetResponseObject implements DigitalSignatureBearer {
     }
 
     /**
-     * Allows the data signature bearer object to access the SECOM exchange
+     * This function allows updating the data payload of the data bearer.
+     *
+     * @param data the data payload of the data bearer
+     */
+    @Override
+    public void setData(String data) {
+        Optional.of(this)
+                .map(GetResponseObject::getDataResponseObject)
+                .ifPresent(dro -> dro.setData(data));
+    }
+
+    /**
+     * Allows the get response object to access the SECOM exchange
      * metadata that will contain the signature information.
      *
      * @return the signature information of the data signature bearer
@@ -147,6 +128,20 @@ public class GetResponseObject implements DigitalSignatureBearer {
                 .map(GetResponseObject::getDataResponseObject)
                 .map(DataResponseObject::getExchangeMetadata)
                 .orElse(null);
+    }
+
+    /**
+     * Allows the get response bearer object to update the SECOM exchange
+     * metadata that will contain amongst other info, the signature
+     * information.
+     *
+     * @param exchangeMetadata  the SECOM Exchange metadata
+     */
+    @Override
+    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
+        Optional.of(this)
+                .map(GetResponseObject::getDataResponseObject)
+                .ifPresent(dro -> dro.setExchangeMetadata(exchangeMetadata));
     }
 
 }

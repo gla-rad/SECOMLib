@@ -19,11 +19,8 @@ package org.grad.secom.springboot.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
-import org.grad.secom.core.base.SecomCertificateProvider;
-import org.grad.secom.core.base.SecomTrustStoreProvider;
+import org.grad.secom.core.base.*;
 import org.grad.secom.core.components.*;
-import org.grad.secom.core.base.SecomSignatureProvider;
-import org.grad.secom.core.base.SecomSignatureValidator;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -73,9 +70,11 @@ public class JaxrsApplication extends Application {
      * @return the SECOM signature interceptor bean
      */
     @Bean
-    SecomSignatureInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomCertificateProvider certificateProvider,
-                                                        @Autowired(required = false) SecomSignatureProvider signatureProvider) {
-        return new SecomSignatureInterceptor(certificateProvider, signatureProvider);
+    SecomWriterInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                                     @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
+                                                     @Autowired(required = false) SecomCertificateProvider certificateProvider,
+                                                     @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider);
     }
 
     /**
@@ -84,9 +83,11 @@ public class JaxrsApplication extends Application {
      * @return the SECOM signature filter bean
      */
     @Bean
-    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
-                                              @Autowired(required = false) SecomSignatureValidator signatureValidator) {
-        return new SecomSignatureFilter(trustStoreProvider, signatureValidator);
+    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                              @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
+                                              @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
+                                              @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider);
     }
 
     /**

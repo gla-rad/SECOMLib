@@ -49,18 +49,18 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
     AbstractEnvelope getEnvelope();
 
     /**
-     * Sets envelope signature.
-     *
-     * @param envelopeSignature the envelope signature
-     */
-    void setEnvelopeSignature(String envelopeSignature);
-
-    /**
      * gets envelope signature.
      *
      * @return the envelope signature
      */
     String getEnvelopeSignature();
+
+    /**
+     * Sets envelope signature.
+     *
+     * @param envelopeSignature the envelope signature
+     */
+    void setEnvelopeSignature(String envelopeSignature);
 
     /**
      * This is the main function that sets the digital signature onto a SECOM
@@ -82,9 +82,15 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      *
      * @param certificateProvider   The SECOM certificate provider to be used
      * @param signatureProvider     The SECOM signature provider to be used.
+     * @return the updated envelope signature bearer
      */
     @JsonIgnore
-    default void signEnvelope(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
+    default EnvelopeSignatureBearer signEnvelope(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
+        // Sanity Check
+        if(signatureProvider == null) {
+            return this;
+        }
+
         // Get the certificate to be used for singing the envelope
         final DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
                 .map(SecomCertificateProvider::getDigitalSignatureCertificate)
@@ -101,15 +107,13 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
             }
         }
 
-        // Sign the envelope context as well if possible
-        if(this.getEnvelope() instanceof DigitalSignatureBearer) {
-            ((DigitalSignatureBearer)this.getEnvelope()).signData(certificateProvider, signatureProvider);
-        }
-
         // And sign the envelope
         final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getEnvelope().getCsvString());
         final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
         this.setEnvelopeSignature(signatureHex);
+
+        // Return the same object for further processing
+        return this;
     }
 
 }

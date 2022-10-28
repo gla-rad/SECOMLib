@@ -32,7 +32,6 @@ class AcknowledgementObjectTest {
 
     // Class Variables
     private DigitalSignatureValue digitalSignatureValue;
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
     private EnvelopeAckObject envelopeLinkObject;
     private AcknowledgementObject obj;
 
@@ -52,14 +51,6 @@ class AcknowledgementObjectTest {
         this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
         this.digitalSignatureValue.setPublicCertificate("certificate");
         this.digitalSignatureValue.setDigitalSignature("signature");
-
-        // Create SECOM exchange metadata
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
-        this.exchangeMetadata.setDataProtection(Boolean.TRUE);
-        this.exchangeMetadata.setProtectionScheme("SECOM");
-        this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
-        this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValue);
-        this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
         // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeAckObject();

@@ -35,4 +35,9 @@ public class SecomConstants {
      */
     public static final String CERTIFICATE_THUMBPRINT_HASH = "SHA-1";
 
+    /**
+     * The SECOM Maximum Payload Size in KiloBytes.
+     */
+    public static final int MAX_PAYLOAD_SIZE_IN_KB = 350;
+
 }

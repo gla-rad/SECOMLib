@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.grad.secom.core.base.GenericExchangeMetadataBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
@@ -29,13 +31,14 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeLinkObject extends AbstractEnvelope {
+public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExchangeMetadataBearer {
 
     // Class Variables
     @NotNull
     private ContainerTypeEnum containerType;
     @NotNull
     private SECOM_DataProductType dataProductType;
+    @JsonProperty
     @NotNull
     private SECOM_ExchangeMetadataObject exchangeMetadata;
     @NotNull
@@ -48,6 +51,13 @@ public class EnvelopeLinkObject extends AbstractEnvelope {
     private Integer size;
     @NotNull
     private LocalDateTime timeToLive;
+
+    /**
+     * Instantiates a new Envelope link object.
+     */
+    public EnvelopeLinkObject() {
+        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+    }
 
     /**
      * Gets container type.

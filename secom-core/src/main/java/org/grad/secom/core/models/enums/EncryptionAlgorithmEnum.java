@@ -19,50 +19,49 @@ package org.grad.secom.core.models.enums;
 import java.util.Arrays;
 
 /**
- * The Digital Signature Algorithm Enum.
+ * The Encryption Algorithm Enum.
  *
- * This enumeration describes the algorithms supported for generating SECOM
- * signatures.
+ * This enumeration describes the algorithms supported for encrypting SECOM
+ * payloads.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
-    DSA("SHA256withDSA"),
-    ECDSA("SHA256withECDSA");
+public enum EncryptionAlgorithmEnum implements SECOM_Enum {
+    AES_CBC_PKCS7("AES", "AES/CBC/PKCS7Padding");
 
     // Enum Variables
-    private final String value;
+    private final String algorithm;
+    private final String cipher;
 
     /**
      * Enum Constructor.
      *
-     * @param value     the Java signature instance algorithm to be used
+     * @param algorithm the encryption algorithm
+     * @param cipher    the Java encryption cipher
      */
-    DigitalSignatureAlgorithmEnum(String value) {
-        this.value = value;
+    EncryptionAlgorithmEnum(String algorithm, String cipher) {
+        this.algorithm = algorithm;
+        this.cipher = cipher;
     }
 
     /**
-     * Gets value.
+     * Gets algorithm.
      *
-     * @return the value
+     * @return the algorithm
      */
-    public String getValue() {
-        return value;
+    public String getAlgorithm() {
+        return algorithm;
     }
 
     /**
-     * Find the enum entry that corresponds to the provided value.
+     * Gets cipher.
      *
-     * @param value     the enum value
-     * @return The respective enum entry
+     * @return the cipher
      */
-    public static DigitalSignatureAlgorithmEnum fromValue(String value) {
-        return Arrays.stream(DigitalSignatureAlgorithmEnum.values())
-                .filter(t -> t.getValue().compareTo(value) == 0)
-                .findFirst()
-                .orElse(null);
+    public String getCipher() {
+        return cipher;
     }
+
 
     /**
      * The conversion to a string operation.

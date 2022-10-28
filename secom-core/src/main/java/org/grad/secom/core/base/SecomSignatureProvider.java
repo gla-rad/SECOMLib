@@ -41,7 +41,7 @@ public interface SecomSignatureProvider {
     }
 
     /**
-     * The signature generation function. It simply required the payload that
+     * The signature generation operation. It simply required the payload that
      * will be used to generate the signature, which will be returned as a
      * String.
      *
@@ -51,5 +51,18 @@ public interface SecomSignatureProvider {
      * @return The signature generated
      */
     byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, String payload);
+
+    /**
+     * The signature validation operation. This should support the provision
+     * of the message content (preferably in a Base64 format, and the signature
+     * to validate the content against.
+     *
+     * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+     * @param algorithm             The algorithm used for the signature generation
+     * @param signature             The signature to validate the content against
+     * @param content               The content to be validated
+     * @return whether the signature validation was successful or not
+     */
+    boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content);
 
 }

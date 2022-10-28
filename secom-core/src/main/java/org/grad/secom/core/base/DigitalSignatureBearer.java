@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.models.DigitalSignatureValue;
 import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
-import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
 import javax.xml.bind.DatatypeConverter;
@@ -36,25 +35,7 @@ import java.util.Optional;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface DigitalSignatureBearer extends GenericSignatureBearer {
-
-    /**
-     * Allows the data signature bearer object to access to data included to
-     * be signed.
-     *
-     * @return the data included in the data signature bearer
-     */
-    @JsonIgnore
-    String getData();
-
-    /**
-     * Allows the data signature bearer object to access the SECOM exchange
-     * metadata that will contain the signature information.
-     *
-     * @return the signature information of the data signature bearer
-     */
-    @JsonIgnore
-    SECOM_ExchangeMetadataObject getExchangeMetadata();
+public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericExchangeMetadataBearer, GenericDataBearer {
 
     /**
      * This is the main function that sets the digital signature onto a SECOM
@@ -62,13 +43,97 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
      *
      * @param digitalSignature  The digital signature to be set
      */
-    @JsonIgnore
     @Override
     default void setDigitalSignature(String digitalSignature) {
         Optional.of(this)
                 .map(DigitalSignatureBearer::getExchangeMetadata)
                 .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
                 .ifPresent(digitalSignatureValue -> digitalSignatureValue.setDigitalSignature(digitalSignature));
+    }
+
+    /**
+     * This is a helper function to initialise the populate the SECOM exchange
+     * metadata object with the appropriate values, depending on the current
+     * configuration and available resources.
+     *
+     * @param signatureProvider     The SECOM signature provider, if it exists
+     * @param encryptionProvider    The SECOM encryption provider if it exists
+     * @param compressionProvider   The SECOM compression provider if, it exists
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer prepareMetadata(SecomSignatureProvider signatureProvider, SecomEncryptionProvider encryptionProvider, SecomCompressionProvider compressionProvider) {
+        return (DigitalSignatureBearer) GenericExchangeMetadataBearer.super.prepareMetadata(signatureProvider, encryptionProvider, compressionProvider);
+    }
+
+    /**
+     * A helper function that automatically encodes the provided data into
+     * a Base64 string.
+     *
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer encodeData() {
+        return (DigitalSignatureBearer) GenericDataBearer.super.encodeData();
+    }
+
+    /**
+     * A helper function that automatically decodes the Base64 data into the
+     * required string.
+     *
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer decodeData() {
+        return (DigitalSignatureBearer) GenericDataBearer.super.decodeData();
+    }
+
+    /**
+     * A helper function that automatically encrypts the data bearers data
+     * payload using the SECOM encryption provider.
+     *
+     * @param encryptionProvider    The SECOM encryption provider
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer encryptData(SecomEncryptionProvider encryptionProvider) {
+        return (DigitalSignatureBearer) GenericDataBearer.super.encryptData(encryptionProvider);
+    }
+
+    /**
+     * A helper function that automatically dencrypts the data bearers data
+     * payload using the SECOM encryption provider.
+     *
+     * @param encryptionProvider    The SECOM encryption provider
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer decryptData(SecomEncryptionProvider encryptionProvider) {
+        return (DigitalSignatureBearer) GenericDataBearer.super.decryptData(encryptionProvider);
+    }
+
+    /**
+     * A helper function that automatically compresses the data bearers data
+     * payload using the SECOM compression provider.
+     *
+     * @param compressionProvider   The SECOM compression provider
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer compressData(SecomCompressionProvider compressionProvider) {
+        return (DigitalSignatureBearer) GenericDataBearer.super.compressData(compressionProvider);
+    }
+
+    /**
+     * A helper function that automatically decompresses the data bearers data
+     * payload using the SECOM compression provider.
+     *
+     * @param compressionProvider   The SECOM compression provider
+     * @return the updated digital signature bearer
+     */
+    @Override
+    default DigitalSignatureBearer decompressData(SecomCompressionProvider compressionProvider) {
+        return (DigitalSignatureBearer) GenericDataBearer.super.decompressData(compressionProvider);
     }
 
     /**
@@ -80,30 +145,35 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
      *
      * @param certificateProvider   The SECOM certificate provider to be used
      * @param signatureProvider     The SECOM signature provider to be used.
+     * @return the upated digital signature bearer
      */
     @JsonIgnore
-    default void signData(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
+    default DigitalSignatureBearer signData(SecomCertificateProvider certificateProvider, SecomSignatureProvider signatureProvider) {
+        // Sanity Check
+        if(signatureProvider == null) {
+            return this;
+        }
+
         // Get the certificate to be used for singing the message
         final DigitalSignatureCertificate signatureCertificate = Optional.ofNullable(certificateProvider)
                 .map(SecomCertificateProvider::getDigitalSignatureCertificate)
                 .orElse(null);
 
         // If we have a signature certificate and metadata, update the metadata
-        if(signatureCertificate != null && this.getExchangeMetadata() != null) {
-            SECOM_ExchangeMetadataObject metadata = this.getExchangeMetadata();
-            metadata.setDataProtection(Boolean.TRUE);
-            metadata.setCompressionFlag(Optional.of(metadata).map(SECOM_ExchangeMetadataObject::getCompressionFlag).orElse(Boolean.FALSE));
-            metadata.setDigitalSignatureReference(signatureProvider.getSignatureAlgorithm());
-            metadata.setProtectionScheme(SecomConstants.SECOM_PROTECTION_SCHEME);
+        if(this.getExchangeMetadata() != null) {
+            final SECOM_ExchangeMetadataObject metadata = this.getExchangeMetadata();
             metadata.setDigitalSignatureValue(Optional.of(metadata)
                     .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
                     .orElseGet(DigitalSignatureValue::new));
 
-            try {
-                metadata.getDigitalSignatureValue().setPublicCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
-                metadata.getDigitalSignatureValue().setPublicRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
-            } catch (CertificateEncodingException | NoSuchAlgorithmException ex) {
-                throw new SecomInvalidCertificateException(ex.getMessage());
+            // If we have a certificate set it in the metadata
+            if(signatureCertificate != null) {
+                try {
+                    metadata.getDigitalSignatureValue().setPublicCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
+                    metadata.getDigitalSignatureValue().setPublicRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
+                } catch (CertificateEncodingException | NoSuchAlgorithmException ex) {
+                    throw new SecomInvalidCertificateException(ex.getMessage());
+                }
             }
         }
 
@@ -111,6 +181,9 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer {
         byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getData());
         final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
         this.setDigitalSignature(signatureHex);
+
+        // Return the same object for further processing
+        return this;
     }
 
 }

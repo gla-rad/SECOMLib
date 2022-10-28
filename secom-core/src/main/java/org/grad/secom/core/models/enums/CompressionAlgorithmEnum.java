@@ -19,16 +19,15 @@ package org.grad.secom.core.models.enums;
 import java.util.Arrays;
 
 /**
- * The Digital Signature Algorithm Enum.
+ * The Compression Algorithm Enum.
  *
- * This enumeration describes the algorithms supported for generating SECOM
- * signatures.
+ * This enumeration describes the algorithms supported for compressing SECOM
+ * payloads.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
-    DSA("SHA256withDSA"),
-    ECDSA("SHA256withECDSA");
+public enum CompressionAlgorithmEnum implements SECOM_Enum {
+    ZIP("zip");
 
     // Enum Variables
     private final String value;
@@ -36,9 +35,9 @@ public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
     /**
      * Enum Constructor.
      *
-     * @param value     the Java signature instance algorithm to be used
+     * @param value     the compression algorithm
      */
-    DigitalSignatureAlgorithmEnum(String value) {
+    CompressionAlgorithmEnum(String value) {
         this.value = value;
     }
 
@@ -57,8 +56,8 @@ public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
      * @param value     the enum value
      * @return The respective enum entry
      */
-    public static DigitalSignatureAlgorithmEnum fromValue(String value) {
-        return Arrays.stream(DigitalSignatureAlgorithmEnum.values())
+    public static CompressionAlgorithmEnum fromValue(String value) {
+        return Arrays.stream(CompressionAlgorithmEnum.values())
                 .filter(t -> t.getValue().compareTo(value) == 0)
                 .findFirst()
                 .orElse(null);

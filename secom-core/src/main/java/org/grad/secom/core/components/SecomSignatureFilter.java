@@ -67,17 +67,25 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
     Providers providers;
 
     // Class Variables
+    private SecomCompressionProvider compressionProvider;
+    private SecomEncryptionProvider encryptionProvider;
     private SecomTrustStoreProvider trustStoreProvider;
-    private SecomSignatureValidator signatureValidator;
+    private SecomSignatureProvider signatureProvider;
 
     /**
      * The Class Constructor.
      *
-     * @param signatureValidator    The signature validator
+     * @param trustStoreProvider    The SECOM trust store provider
+     * @param signatureProvider     The SECOM signature provider
      */
-    public SecomSignatureFilter(SecomTrustStoreProvider trustStoreProvider, SecomSignatureValidator signatureValidator) {
+    public SecomSignatureFilter(SecomCompressionProvider compressionProvider,
+                                SecomEncryptionProvider encryptionProvider,
+                                SecomTrustStoreProvider trustStoreProvider,
+                                SecomSignatureProvider signatureProvider) {
+        this.compressionProvider = compressionProvider;
+        this.encryptionProvider = encryptionProvider;
         this.trustStoreProvider = trustStoreProvider;
-        this.signatureValidator = signatureValidator;
+        this.signatureProvider = signatureProvider;
     }
 
     /**
@@ -89,7 +97,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext rqstCtx) throws IOException {
         // No need to do anything without a signature validator
-        if(this.signatureValidator == null) {
+        if(this.signatureProvider == null) {
              return;
         }
 
@@ -97,7 +105,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         boolean valid = true;
         EnvelopeSignatureBearer obj = null;
 
-        // Currently SECOM only needs to validate POST requests
+        // Currently, SECOM only needs to validate POST requests
         if(rqstCtx.getRequest().getMethod().equals("POST")) {
             // For the Upload Interface Requests
             if (rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)){
@@ -120,8 +128,8 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         // If we have an object, validate the signatures
         if(obj != null && obj.getEnvelope() != null) {
             // First decide on the signature algorithm
-            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.ofNullable(this.signatureValidator)
-                    .map(SecomSignatureValidator::getSignatureAlgorithm)
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.ofNullable(this.signatureProvider)
+                    .map(SecomSignatureProvider::getSignatureAlgorithm)
                     .orElse(DigitalSignatureAlgorithmEnum.DSA);
 
             // First validate the envelope certificate
@@ -133,19 +141,20 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             }
 
             // Then validate the envelope signature
-            valid &= this.signatureValidator.validateSignature(
+            valid &= this.signatureProvider.validateSignature(
                     Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelope)
                             .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
                             .orElse(null),
                     digitalSignatureAlgorithm,
                     Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelope)
-                            .map(AbstractEnvelope::getCsvString)
-                            .orElse(null),
-                    Optional.of(obj)
                             .map(EnvelopeSignatureBearer::getEnvelopeSignature)
                             .map(DatatypeConverter::parseHexBinary)
+                            .orElse(null),
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelope)
+                            .map(AbstractEnvelope::getCsvString)
+                            .map(String::getBytes)
                             .orElse(null));
 
             // Then validate the data signature if present
@@ -169,7 +178,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 }
 
                 // Then validate the data signature
-                valid &= this.signatureValidator.validateSignature(
+                valid &= this.signatureProvider.validateSignature(
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
                                 .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
@@ -180,13 +189,16 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                                 .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
                                 .orElse(digitalSignatureAlgorithm),
                         Optional.of(dataObj)
-                                .map(DigitalSignatureBearer::getData)
-                                .orElse(null),
-                        Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
                                 .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
                                 .map(DigitalSignatureValue::getDigitalSignature)
                                 .map(DatatypeConverter::parseHexBinary)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::decodeData)
+                                .map(dataBearer -> dataBearer.decompressData(this.compressionProvider))
+                                .map(dataBearer -> dataBearer.decryptData(this.encryptionProvider))
+                                .map(GenericDataBearer::getDataBytes)
                                 .orElse(null));
             }
         }

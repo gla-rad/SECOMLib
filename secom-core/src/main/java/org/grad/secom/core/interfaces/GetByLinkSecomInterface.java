@@ -62,7 +62,7 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
     @Path(GET_BY_LINK_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    Object getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
+    byte[] getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.

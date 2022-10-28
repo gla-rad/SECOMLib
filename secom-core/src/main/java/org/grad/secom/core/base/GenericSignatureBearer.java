@@ -19,7 +19,7 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * The SECOM Generic Signature Beader Interface.
+ * The SECOM Generic Signature Bearer Interface.
  *
  * This class can be used to identify all SECOM objects that bear a signature
  * for data security.
