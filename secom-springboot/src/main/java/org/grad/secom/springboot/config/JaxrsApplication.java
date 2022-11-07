@@ -65,15 +65,15 @@ public class JaxrsApplication extends Application {
     }
 
     /**
-     * Initialise the SECOM signature interceptor.
+     * Initialise the SECOM writer interceptor.
      *
-     * @return the SECOM signature interceptor bean
+     * @return the SECOM writer interceptor bean
      */
     @Bean
-    SecomWriterInterceptor secomSignatureInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
-                                                     @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
-                                                     @Autowired(required = false) SecomCertificateProvider certificateProvider,
-                                                     @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+    SecomWriterInterceptor secomWriterInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
+                                                  @Autowired(required = false) SecomCertificateProvider certificateProvider,
+                                                  @Autowired(required = false) SecomSignatureProvider signatureProvider) {
         return new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider);
     }
 
@@ -88,6 +88,17 @@ public class JaxrsApplication extends Application {
                                               @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
                                               @Autowired(required = false) SecomSignatureProvider signatureProvider) {
         return new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider);
+    }
+
+    /**
+     * Initialise the SECOM reader interceptor.
+     *
+     * @return the SECOM reader interceptor bean
+     */
+    @Bean
+    SecomReaderInterceptor secomReaderInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider) {
+        return new SecomReaderInterceptor(compressionProvider, encryptionProvider);
     }
 
     /**

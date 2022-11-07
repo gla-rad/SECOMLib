@@ -545,7 +545,7 @@ public class SecomClient {
         //Prepare the upload envelope if valid
         final EnvelopeUploadObject envelope = uploadObject.getEnvelope();
         if(envelope != null) {
-            envelope.prepareMetadata(this.signatureProvider, this.encryptionProvider, this.compressionProvider)
+            envelope.prepareMetadata(this.signatureProvider)
                     .signData(this.certificateProvider, this.signatureProvider)
                     .encryptData(this.encryptionProvider)
                     .compressData(this.compressionProvider)
@@ -582,7 +582,7 @@ public class SecomClient {
         //Prepare the upload link envelope if valid
         final EnvelopeLinkObject envelope = uploadLinkObject.getEnvelope();
         if(envelope != null) {
-            envelope.prepareMetadata(this.signatureProvider, this.encryptionProvider, this.compressionProvider);
+            envelope.prepareMetadata(this.signatureProvider);
         }
 
         // If a signature provider has been assigned, use it to sign the
