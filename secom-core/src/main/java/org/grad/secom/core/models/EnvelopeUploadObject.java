@@ -17,7 +17,11 @@
 package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.grad.secom.core.base.DigitalSignatureBearer;
+import org.grad.secom.core.components.ByteArrayDeSerializer;
+import org.grad.secom.core.components.ByteArraySerializer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
@@ -34,8 +38,10 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
 
     // Class Variables
     @JsonProperty
+    @JsonSerialize(using = ByteArraySerializer.class)
+    @JsonDeserialize(using = ByteArrayDeSerializer.class)
     @NotNull
-    private String data;
+    private byte[] data;
     @NotNull
     private ContainerTypeEnum containerType;
     @NotNull
@@ -61,7 +67,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @return the data
      */
     @Override
-    public String getData() {
+    public byte[] getData() {
         return data;
     }
 
@@ -71,7 +77,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @param data the data
      */
     @Override
-    public void setData(String data) {
+    public void setData(byte[] data) {
         this.data = data;
     }
 

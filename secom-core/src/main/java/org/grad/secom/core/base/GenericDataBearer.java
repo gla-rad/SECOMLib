@@ -38,7 +38,7 @@ public interface GenericDataBearer {
      * @return the data payload of the data bearer
      */
     @JsonIgnore
-    String getData();
+    byte[] getData();
 
     /**
      * This function allows updating the data payload of the data bearer.
@@ -46,38 +46,7 @@ public interface GenericDataBearer {
      * @param data the data payload of the data bearer
      */
     @JsonIgnore
-    void setData(String data);
-
-    /**
-     * This function allows updating the data payload of the data bearer
-     * using a byte array as an input.
-     *
-     * @param data the data payload of the data bearer as a byte array
-     */
-    @JsonIgnore
-    default void setDataBytes(byte[] data) {
-        // Sanity Check
-        if(data == null) {
-            this.setData(null);
-            return;
-        }
-        this.setData(new String(data, StandardCharsets.UTF_8));
-    }
-
-    /**
-     * This function allows access to the data payload of the data bearer
-     * as a byte array.
-     *
-     * @return the data payload of the data bearer as a byte array
-     */
-    @JsonIgnore
-    default byte[] getDataBytes() {
-        // Sanity Check
-        if(this.getData() == null) {
-            return null;
-        }
-        return this.getData().getBytes();
-    }
+    void setData( byte[] data);
 
     /**
      * A helper function that automatically encodes the provided data into
@@ -93,8 +62,8 @@ public interface GenericDataBearer {
         }
 
         // Encode the data
-        final byte[] encodedData = Base64.getEncoder().encode(this.getDataBytes());
-        this.setDataBytes(encodedData);
+        final byte[] encodedData = Base64.getEncoder().encode(this.getData());
+        this.setData(encodedData);
 
         // Return the same object for further processing
         return this;
@@ -114,8 +83,8 @@ public interface GenericDataBearer {
         }
 
         // Decode the data
-        final byte[] decodedData = Base64.getDecoder().decode(this.getDataBytes());
-        this.setDataBytes(decodedData);
+        final byte[] decodedData = Base64.getDecoder().decode(this.getData());
+        this.setData(decodedData);
 
         // Return the same object for further processing
         return this;
@@ -138,9 +107,9 @@ public interface GenericDataBearer {
         final byte[] encryptedData = encryptionProvider.encrypt(
                 encryptionProvider.getEncryptionAlgorithm(),
                 encryptionProvider.getEncryptionKey(),
-                this.getDataBytes()
+                this.getData()
         );
-        this.setDataBytes(encryptedData);
+        this.setData(encryptedData);
 
         // Return the same object for further processing
         return this;
@@ -163,9 +132,9 @@ public interface GenericDataBearer {
         final byte[] decryptedData = encryptionProvider.decrypt(
                 encryptionProvider.getEncryptionAlgorithm(),
                 encryptionProvider.getEncryptionKey(),
-                this.getDataBytes()
+                this.getData()
         );
-        this.setDataBytes(decryptedData);
+        this.setData(decryptedData);
 
         // Return the same object for further processing
         return this;
@@ -187,9 +156,9 @@ public interface GenericDataBearer {
         // Compress the data
         final byte[] compressedData = compressionProvider.compress(
                 compressionProvider.getCompressionAlgorithm(),
-                this.getDataBytes()
+                this.getData()
         );
-        this.setDataBytes(compressedData);
+        this.setData(compressedData);
 
         // Return the same object for further processing
         return this;
@@ -209,11 +178,11 @@ public interface GenericDataBearer {
         }
 
         // Decompress the data
-        final byte[] decompressedData = compressionProvider.compress(
+        final byte[] decompressedData = compressionProvider.decompress(
                 compressionProvider.getCompressionAlgorithm(),
-                this.getDataBytes()
+                this.getData()
         );
-        this.setDataBytes(decompressedData);
+        this.setData(decompressedData);
 
         // Return the same object for further processing
         return this;

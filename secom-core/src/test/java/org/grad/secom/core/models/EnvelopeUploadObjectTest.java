@@ -26,8 +26,10 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.Base64;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,7 +68,7 @@ class EnvelopeUploadObjectTest {
 
         // Generate a new object
         this.obj = new EnvelopeUploadObject();
-        this.obj.setData("data");
+        this.obj.setData("data".getBytes(StandardCharsets.UTF_8));
         this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setExchangeMetadata(this.exchangeMetadata);
@@ -117,7 +119,7 @@ class EnvelopeUploadObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(this.obj.getData(), csv[0]);
+        assertEquals(new String(this.obj.getData()), new String(Base64.getDecoder().decode(csv[0])));
         assertEquals(String.valueOf(this.obj.getContainerType().getValue()), csv[1]);
         assertEquals(this.obj.getDataProductType().name(), csv[2]);
         assertEquals(this.obj.getExchangeMetadata().getDataProtection().toString(), csv[3]);

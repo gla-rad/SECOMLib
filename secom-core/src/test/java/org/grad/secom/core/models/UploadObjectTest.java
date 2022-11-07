@@ -26,6 +26,7 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -67,7 +68,7 @@ class UploadObjectTest {
 
         // Create a new envelope upload object
         this.envelopeUploadObject = new EnvelopeUploadObject();
-        this.envelopeUploadObject.setData("data");
+        this.envelopeUploadObject.setData("data".getBytes(StandardCharsets.UTF_8));
         this.envelopeUploadObject.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.envelopeUploadObject.setDataProductType(SECOM_DataProductType.S101);
         this.envelopeUploadObject.setExchangeMetadata(this.exchangeMetadata);
@@ -96,7 +97,7 @@ class UploadObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertNotNull(result.getEnvelope());
-        assertEquals(this.obj.getEnvelope().getData(), result.getEnvelope().getData());
+        assertEquals(new String(this.obj.getEnvelope().getData()), new String(result.getEnvelope().getData()));
         assertEquals(this.obj.getEnvelope().getContainerType(), result.getEnvelope().getContainerType());
         assertEquals(this.obj.getEnvelope().getDataProductType(), result.getEnvelope().getDataProductType());
         assertNotNull(result.getEnvelope().getExchangeMetadata());

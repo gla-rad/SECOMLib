@@ -25,6 +25,7 @@ import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
 import javax.xml.bind.DatatypeConverter;
+import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.time.LocalDateTime;
@@ -108,7 +109,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
         }
 
         // And sign the envelope
-        final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getEnvelope().getCsvString());
+        final byte[] signature = signatureProvider.generateSignature(signatureCertificate, signatureProvider.getSignatureAlgorithm(), this.getEnvelope().getCsvString().getBytes(StandardCharsets.UTF_8));
         final String signatureHex =  Optional.ofNullable(signature).filter(ba -> ba.length>0).map(DatatypeConverter::printHexBinary).orElse(null);
         this.setEnvelopeSignature(signatureHex);
 

@@ -56,13 +56,9 @@ public interface GenericExchangeMetadataBearer {
      * configuration and available resources.
      *
      * @param signatureProvider     The SECOM signature provider, if it exists
-     * @param encryptionProvider    The SECOM encryption provider if it exists
-     * @param compressionProvider   The SECOM compression provider if, it exists
      * @return the update generic exchange metadata bearer
      */
-    default GenericExchangeMetadataBearer prepareMetadata(SecomSignatureProvider signatureProvider,
-                                 SecomEncryptionProvider encryptionProvider,
-                                 SecomCompressionProvider compressionProvider) {
+    default GenericExchangeMetadataBearer prepareMetadata(SecomSignatureProvider signatureProvider) {
         // Get the current (or new) SECOM exchange metadata
         final SECOM_ExchangeMetadataObject metadata = Optional.of(this)
                 .map(GenericExchangeMetadataBearer::getExchangeMetadata)
@@ -71,8 +67,8 @@ public interface GenericExchangeMetadataBearer {
         // Populate the known values
         metadata.setProtectionScheme(signatureProvider != null ? SecomConstants.SECOM_PROTECTION_SCHEME : metadata.getProtectionScheme());
         metadata.setDigitalSignatureReference(signatureProvider != null ? signatureProvider.getSignatureAlgorithm() : metadata.getDigitalSignatureReference());
-        metadata.setDataProtection(encryptionProvider != null);
-        metadata.setCompressionFlag(compressionProvider != null);
+        metadata.setDataProtection(Boolean.FALSE);
+        metadata.setCompressionFlag(Boolean.FALSE);
 
         // Set the new updated version
         this.setExchangeMetadata(metadata);

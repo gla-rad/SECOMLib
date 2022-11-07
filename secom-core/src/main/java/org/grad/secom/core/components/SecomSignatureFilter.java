@@ -198,7 +198,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                                 .map(DigitalSignatureBearer::decodeData)
                                 .map(dataBearer -> dataBearer.decompressData(this.compressionProvider))
                                 .map(dataBearer -> dataBearer.decryptData(this.encryptionProvider))
-                                .map(GenericDataBearer::getDataBytes)
+                                .map(GenericDataBearer::getData)
                                 .orElse(null));
             }
         }

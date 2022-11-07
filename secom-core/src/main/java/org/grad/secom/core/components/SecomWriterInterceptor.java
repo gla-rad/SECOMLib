@@ -17,15 +17,13 @@
 package org.grad.secom.core.components;
 
 import org.grad.secom.core.base.*;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.ext.*;
+import javax.ws.rs.ext.Provider;
+import javax.ws.rs.ext.WriterInterceptor;
+import javax.ws.rs.ext.WriterInterceptorContext;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Optional;
 
 /**
  * The SECOM Writer Interceptor.
@@ -99,15 +97,15 @@ public class SecomWriterInterceptor implements WriterInterceptor {
          *  1. GetResponseObject
          */
         if (entity instanceof DigitalSignatureBearer digitalSignatureBearer) {
-            digitalSignatureBearer.prepareMetadata(this.signatureProvider, this.encryptionProvider, this.compressionProvider)
+            digitalSignatureBearer.prepareMetadata(this.signatureProvider)
                     .signData(this.certificateProvider, this.signatureProvider)
                     .encryptData(this.encryptionProvider)
                     .compressData(this.compressionProvider)
                     .encodeData();
         }
         /*
-         * For plain binary data, we can also try to encrypt if possible. This
-         * can be used in the following cases:
+         * For plain binary data, we can also try to encrypt and compress if
+         * possible. This can be used in the following cases:
          *  1. GetByLink
          */
         else if (ctx.getEntity() instanceof byte[] payload) {

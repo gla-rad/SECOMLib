@@ -16,6 +16,10 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.grad.secom.core.components.ByteArrayDeSerializer;
+import org.grad.secom.core.components.ByteArraySerializer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 
 import javax.validation.constraints.NotNull;
@@ -29,7 +33,9 @@ public class DataResponseObject {
 
     // Class Variables
     @NotNull
-    private String data;
+    @JsonSerialize(using = ByteArraySerializer.class)
+    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    private byte[] data;
     @NotNull
     private SECOM_ExchangeMetadataObject exchangeMetadata;
     @NotNull
@@ -47,7 +53,7 @@ public class DataResponseObject {
      *
      * @return the data
      */
-    public String getData() {
+    public byte[] getData() {
         return data;
     }
 
@@ -56,7 +62,7 @@ public class DataResponseObject {
      *
      * @param data the data
      */
-    public void setData(String data) {
+    public void setData(byte[] data) {
         this.data = data;
     }
 

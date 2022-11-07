@@ -16,12 +16,9 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.base.DigitalSignatureBearer;
 
 import javax.validation.constraints.NotNull;
-import java.io.IOException;
-import java.util.Base64;
 import java.util.Optional;
 
 /**
@@ -97,7 +94,7 @@ public class GetResponseObject implements DigitalSignatureBearer {
      * @return the data payload of the data bearer
      */
     @Override
-    public String getData() {
+    public byte[] getData() {
         return Optional.of(this)
                 .map(GetResponseObject::getDataResponseObject)
                 .map(DataResponseObject::getData)
@@ -110,7 +107,7 @@ public class GetResponseObject implements DigitalSignatureBearer {
      * @param data the data payload of the data bearer
      */
     @Override
-    public void setData(String data) {
+    public void setData(byte[] data) {
         Optional.of(this)
                 .map(GetResponseObject::getDataResponseObject)
                 .ifPresent(dro -> dro.setData(data));

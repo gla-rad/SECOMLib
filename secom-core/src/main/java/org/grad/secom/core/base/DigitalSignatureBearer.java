@@ -62,8 +62,8 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      * @return the updated digital signature bearer
      */
     @Override
-    default DigitalSignatureBearer prepareMetadata(SecomSignatureProvider signatureProvider, SecomEncryptionProvider encryptionProvider, SecomCompressionProvider compressionProvider) {
-        return (DigitalSignatureBearer) GenericExchangeMetadataBearer.super.prepareMetadata(signatureProvider, encryptionProvider, compressionProvider);
+    default DigitalSignatureBearer prepareMetadata(SecomSignatureProvider signatureProvider) {
+        return (DigitalSignatureBearer) GenericExchangeMetadataBearer.super.prepareMetadata(signatureProvider);
     }
 
     /**
@@ -97,6 +97,9 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      */
     @Override
     default DigitalSignatureBearer encryptData(SecomEncryptionProvider encryptionProvider) {
+        if(encryptionProvider != null) {
+            this.getExchangeMetadata().setDataProtection(Boolean.TRUE);
+        }
         return (DigitalSignatureBearer) GenericDataBearer.super.encryptData(encryptionProvider);
     }
 
@@ -109,7 +112,10 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      */
     @Override
     default DigitalSignatureBearer decryptData(SecomEncryptionProvider encryptionProvider) {
-        return (DigitalSignatureBearer) GenericDataBearer.super.decryptData(encryptionProvider);
+        if(this.getExchangeMetadata().getDataProtection()) {
+            return (DigitalSignatureBearer) GenericDataBearer.super.decryptData(encryptionProvider);
+        }
+        return this;
     }
 
     /**
@@ -121,6 +127,9 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      */
     @Override
     default DigitalSignatureBearer compressData(SecomCompressionProvider compressionProvider) {
+        if(compressionProvider != null) {
+            this.getExchangeMetadata().setCompressionFlag(Boolean.TRUE);
+        }
         return (DigitalSignatureBearer) GenericDataBearer.super.compressData(compressionProvider);
     }
 
@@ -133,7 +142,10 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      */
     @Override
     default DigitalSignatureBearer decompressData(SecomCompressionProvider compressionProvider) {
-        return (DigitalSignatureBearer) GenericDataBearer.super.decompressData(compressionProvider);
+        if(this.getExchangeMetadata().getCompressionFlag()) {
+            return (DigitalSignatureBearer) GenericDataBearer.super.decompressData(compressionProvider);
+        }
+        return this;
     }
 
     /**

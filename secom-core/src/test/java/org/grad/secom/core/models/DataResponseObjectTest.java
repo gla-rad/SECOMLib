@@ -24,6 +24,8 @@ import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -60,7 +62,7 @@ class DataResponseObjectTest {
 
         // Generate a new object
         this.obj = new DataResponseObject();
-        this.obj.setData("data");
+        this.obj.setData("data".getBytes(StandardCharsets.UTF_8));
         this.obj.setExchangeMetadata(this.exchangeMetadata);
         this.obj.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
     }
@@ -76,7 +78,7 @@ class DataResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getData(), this.obj.getData());
+        assertEquals(new String(this.obj.getData()), new String(result.getData()));
         assertEquals(this.obj.getExchangeMetadata().getDataProtection(), result.getExchangeMetadata().getDataProtection());
         assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), result.getExchangeMetadata().getProtectionScheme());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference(), result.getExchangeMetadata().getDigitalSignatureReference());

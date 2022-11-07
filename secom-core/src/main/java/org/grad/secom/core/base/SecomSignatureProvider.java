@@ -50,7 +50,7 @@ public interface SecomSignatureProvider {
      * @param payload               The payload to be signed, (preferably Base64 encoded)
      * @return The signature generated
      */
-    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, String payload);
+    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload);
 
     /**
      * The signature validation operation. This should support the provision
