@@ -350,7 +350,7 @@ public class SecomClient {
      * @param transactionIdentifier the transaction identifier
      * @return the object in an "application/octet-stream" encoding
      */
-    public Optional<Object> getByLink(UUID transactionIdentifier) {
+    public Optional<byte[]> getByLink(UUID transactionIdentifier) {
         return this.secomClient
                 .get()
                 .uri(uriBuilder -> uriBuilder
@@ -359,7 +359,7 @@ public class SecomClient {
                         .build())
                 .accept(MediaType.APPLICATION_OCTET_STREAM)
                 .retrieve()
-                .bodyToMono(Object.class)
+                .bodyToMono(byte[].class)
                 .blockOptional();
     }
 

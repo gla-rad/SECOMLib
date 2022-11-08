@@ -106,7 +106,7 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
         else if (ctx.getType().isAssignableFrom(UploadObject.class)) {
             obj = this.parseRequestBody(is, ctx.getMediaType(), UploadObject.class);
         }
-        // For Upload Byte Array Messages
+        // For Get By Link Byte Array Messages
         else if(ctx.getType().isAssignableFrom(byte[].class)) {
             obj = this.parseRequestBody(is, ctx.getMediaType(), byte[].class);
         }

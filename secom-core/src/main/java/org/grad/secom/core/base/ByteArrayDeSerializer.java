@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.components;
+package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -28,7 +28,7 @@ import java.nio.charset.StandardCharsets;
  * The ByteArrayDeSerializer Class
  * <p/>
  * In SECOM the data byte arrays should be potentially encrypted and compressed
- * and definitely encoded into Base64. However, the encoding is already handled
+ * and definitely encoded into Base64. However, the decoding is already handled
  * by the SECOM reader, writer and filter interceptors and therefore allowing
  * that operation to be directly controlled by the library is better that doing
  * it through the JSON object mapper. Therefore, this de-serializer will just

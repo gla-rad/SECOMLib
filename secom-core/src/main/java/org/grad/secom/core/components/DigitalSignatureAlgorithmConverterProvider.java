@@ -53,7 +53,7 @@ public class DigitalSignatureAlgorithmConverterProvider implements ParamConverte
     }
 
     /**
-     * The Container Type Converter Class.
+     * The Digital Signature Algorithm Converter Class.
      *
      * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
      */

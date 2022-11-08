@@ -33,6 +33,7 @@ import java.util.Base64;
  * to SECOM is supported for the following message types:
  * <ul>
  *     <il>GetResponseObject</il>
+ *     <il>GetByLink</il>
  * </ul>
  * </p>
  * <p>

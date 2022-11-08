@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.components;
+package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
@@ -56,7 +55,7 @@ public class ByteArraySerializer extends StdSerializer<byte[]> {
     }
 
     /**
-     * Implements the erialization procedure of the serializer.
+     * Implements the serialization procedure of the serializer.
      *
      * @param bytes                 The input to be serialized
      * @param jg                    The JSON generator

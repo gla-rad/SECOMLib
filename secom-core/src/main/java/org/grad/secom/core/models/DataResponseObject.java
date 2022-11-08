@@ -18,8 +18,8 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.grad.secom.core.components.ByteArrayDeSerializer;
-import org.grad.secom.core.components.ByteArraySerializer;
+import org.grad.secom.core.base.ByteArrayDeSerializer;
+import org.grad.secom.core.base.ByteArraySerializer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 
 import javax.validation.constraints.NotNull;
