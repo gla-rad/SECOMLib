@@ -408,7 +408,11 @@ public class SecomClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(GetResponseObject.class)
-                .blockOptional();
+                .blockOptional()
+                .map(response -> response.decodeData())
+                .map(response -> response.decompressData(this.compressionProvider))
+                .map(response -> response.decryptData(this.encryptionProvider))
+                .map(GetResponseObject.class::cast);
     }
 
     /**
