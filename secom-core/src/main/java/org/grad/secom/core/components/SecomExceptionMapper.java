@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
@@ -69,7 +70,7 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
-        if(Objects.nonNull(this.request) && Objects.nonNull(this.request.getPathInfo())) {
+        if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {
                 case ACCESS_INTERFACE_PATH:
                     return AccessSecomInterface.handleAccessInterfaceExceptions(ex, this.request, null);
