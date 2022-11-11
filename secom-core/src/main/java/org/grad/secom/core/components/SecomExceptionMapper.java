@@ -69,7 +69,7 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
-        if(Objects.nonNull(this.request)) {
+        if(Objects.nonNull(this.request) && Objects.nonNull(this.request.getPathInfo())) {
             switch(this.request.getPathInfo()) {
                 case ACCESS_INTERFACE_PATH:
                     return AccessSecomInterface.handleAccessInterfaceExceptions(ex, this.request, null);
