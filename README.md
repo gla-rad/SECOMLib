@@ -18,9 +18,9 @@ update the *.gitignore* file appropriately.
 ## Description
 A SECOM-compliant service endpoints is quite standardised so a simple library
 with the required data structures and endpoint definitions should be very handy
-while developing these type of services. The first two digits of the version of
-the library should follow the implemented version of the SECOM standard to keep
-things tidy. For example, if the SECOM standard in at version 1.0 then the
+while developing these types of services. The first two digits of the version
+of the library should follow the implemented version of the SECOM standard to
+keep things tidy. For example, if the SECOM standard in at version 1.0 then the
 library version should be at 1.0.X. The use of snapshots during the development
 is also strongly encouraged.
 
@@ -54,13 +54,13 @@ exception handling and standardised field conversions.
   interfaces.
 * **models**: Contains the definition of all the SECOM message classes and
   sub-classes.
-* **utils**: Contains a set of static utility function, mainly for loading and
+* **utils**: Contains a set of static utility functions, mainly for loading and
   manipulating the security information (certificates, keys, etc.) used in
   SECOM.
 
 ### The Springboot Module
-Since the whole idea behind SECOM is to standardise the implementation of
-digital services in the maritime context, the widest number of implementation
+The whole idea behind SECOM is to standardise the implementation of digital
+services in the maritime context, the widest number of implementation
 frameworks should be supported. One of the most popular methods of implementing
 service in Java is the Springboot framework. Therefore, this module provides
 the ability of introducing the library into existing Springboot projects as
@@ -72,14 +72,14 @@ The module is activated using the **JaxrsApplication** configuration and it
 also provides a SECOM client implementation using the Springboot
 [WebClient](https://www.baeldung.com/spring-5-webclient) utility. The client is
 able to perform all calls described by SECOM onto an existing SECOM-compliant
-service and returns the retrieved responses. THe configuration of the client is
+service and returns the retrieved responses. The configuration of the client is
 achieved via the **SecomConfigProperties** class. This class allows access to
 the application's *application.properties* file. 
 
 ## How to Use
 For the time being, the library has only been tested on Springboot applications
-and is compatible with Springboot version 2.5+. There is no reason whoever that
-the core module won't be able to be used in other frameworks such as the Redhat
+and is compatible with Springboot version 2.5+. There is no reason however that
+the core module won't be compatible with other frameworks such as the Redhat
 [Quarkus](https://www.redhat.com/en/topics/cloud-native-apps/what-is-quarkus).
 
 The rest of this section is assuming a Springboot use of the library.
@@ -102,7 +102,7 @@ access is add the following repositories in your pom.xml
         </snapshots>
     </repository>
 
-Then you can add the following repositories|:
+Then you can add the following repositories:
 
     <!-- SECOM -->
     <dependency>
@@ -132,7 +132,7 @@ interface that implements the **CapabilitySecomInterface** class.
      * The SECOM Capability Interface Controller.
      */
     @Component
-    @Path("/")
+    @Path("/") // <-- This should be the root path of the SECOM interfaces
     @Validated
     @Slf4j
     public class CapabilitySecomController implements CapabilitySecomInterface {
@@ -173,10 +173,10 @@ addition, all exception handing takes place in the background. If additional
 errors are to be handled, simply raise an appropriate SECOM exception.
 
 ### SECOM Functionality Customisation
-The actual implementation of the signature generation, the encryption and the
-compression operations is left to the application developer. This is achieved
-via a set of Java interfaces called **providers**, which is not to be confused
-with the JAX-RS @Provider classes. These are just interfaces embeded into the
+The actual implementations of the signature generation, the encryption and the
+compression operations are left to the application developer. This is achieved
+via a set of Java interfaces called **providers**, which are not to be confused
+with the JAX-RS @Provider classes. These are just interfaces embedded into the
 SECOM library operation that provide the required functionality. Here is a list
 of the available provider classes:
 
@@ -190,25 +190,21 @@ of the available provider classes:
   for generating the signatures, based on the provided certificate and the
   data payload available.
 * **SecomEncryptionProvider**: This interface provides the main functionality
-  for encrypting th4 available data payload according to thr SECOM standard.
+  for encrypting the available data payload according to the SECOM standard.
 * **SecomCompressionProvider**: This interface provides the main functionality
- for comrpessing the available data payload according to the SECOM standard.
+ for compressing the available data payload according to the SECOM standard.
 
 The implementation of these providers is pretty self-explanatory and the 
-definition of each will introduce the respective functionality on the SECOM
+definition of each will introduce the respective functionality onto the SECOM
 service implementation. For example, if a *SecomCompressionProvider* is
-defined, then the library will provide compressed data.
+defined, then the library will produce compressed data.
 
 As expected, the provision of the *SecomSignatureProvider* is mandatory for
 SECOM to operate successfully, whether a provider or consumer of information. A
-common example for a SECOM client is the following:
+simple example for a SECOM client is the following:
 
     /**
      * The SECOM Signature Validator Implementation.
-     *
-     * In the current e-Navigation Service Architecture, it's the cKeeper
-     * microservice that is responsible for generating the validating the
-     * SECOM message signatures.
      *
      */
      @Component
@@ -216,10 +212,9 @@ common example for a SECOM client is the following:
      public class SecomSignatureValidatorImpl implements SecomSignatureProvider {
 
          /**
-          * This function overrides the interface definition to link the SECOM
-          * signature provision with the cKeeper operation. A service can request
-          * cKeeper to sign a payload, using a valid certificate based on the
-          * provided digital signature certificate information.
+          * This function overrides the interface definition to provide the SECOM
+          * signature provision operation. This can ve done locally, or ask another
+          * microservice to perform the actual singing for us.
           *
           * @param signatureCertificate  The digital signature certificate to be used for the signature generation
           * @param algorithm             The algorithm to be used for the signature generation
