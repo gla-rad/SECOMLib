@@ -258,9 +258,8 @@ Another example could be an implementation for a **SecomCompressionProvider**:
 
     /**
      * A SECOM Compression Provider Implementation.
-     *
      */
-    @Component**
+    @Component
     @Slf4j
     public class SecomCompressionProviderImpl  implements SecomCompressionProvider {
 
