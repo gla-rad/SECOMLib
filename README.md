@@ -141,29 +141,28 @@ interface that implements the **CapabilitySecomInterface** class.
          * GET /v1/capability : Returns the service instance capabilities.
          *
          * @return the SECOM-compliant service capabilities
-          */
-         @Tag(name = "SECOM")
-         public CapabilityResponseObject capability() {
-             // Populate the implemented SECOM interfaces
-             ImplementedInterfaces implementedInterfaces = new ImplementedInterfaces();
-             implementedInterfaces.setGetSummary(true);
-             
-             // Start building the capability entry
-             CapabilityObject capabilityObject = new CapabilityObject();
-             capabilityObject.setContainerType(ContainerTypeEnum.S100_DataSet);
-             capabilityObject.setDataProductType(SECOM_DataProductType.S125);
-             capabilityObject.setImplementedInterfaces(implementedInterfaces);
-
-             // Start building the capability response
-             CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
-
-             apabilityResponseObject.setCapability(Collections.singletonList(capabilityObject));
-             capabilityObject.setServiceVersion(this.appVersion);
-
-             // And return the Capability Response Object
-             return capabilityResponseObject;
-         }
-
+         */
+        @Tag(name = "SECOM")
+        public CapabilityResponseObject capability() {
+            // Populate the implemented SECOM interfaces
+            ImplementedInterfaces implementedInterfaces = new ImplementedInterfaces();
+            implementedInterfaces.setGetSummary(true);
+            
+            // Start building the capability entry
+            CapabilityObject capabilityObject = new CapabilityObject();
+            capabilityObject.setContainerType(ContainerTypeEnum.S100_DataSet);
+            capabilityObject.setDataProductType(SECOM_DataProductType.S125);
+            capabilityObject.setImplementedInterfaces(implementedInterfaces); 
+            
+            // Start building the capability response
+            CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+            
+            apabilityResponseObject.setCapability(Collections.singletonList(capabilityObject));
+            capabilityObject.setServiceVersion(this.appVersion);
+            
+            // And return the Capability Response Object
+            return capabilityResponseObject;
+        }
     }
 
 As you can see, all the required messages (in this case the
@@ -243,7 +242,7 @@ simple example for a SECOM client is the following:
                 Signature sign = Signature.getInstance(algorithm.getValue());
                 sign.initVerify(SecomPemUtils.getCertFromPem(signatureCertificate));
                 sign.update(content);
-     
+                
                 // Sign and return the signature
                 return sign.verify(signature);
             } catch (NoSuchAlgorithmException | CertificateException | SignatureException | InvalidKeyException ex) {
@@ -251,7 +250,6 @@ simple example for a SECOM client is the following:
                 return false;
             }
         }
-
     }
 
 Another example could be an implementation for a **SecomCompressionProvider**:
@@ -293,7 +291,7 @@ Another example could be an implementation for a **SecomCompressionProvider**:
             }
             return compressed;
         }
-
+        
         /**
          * A simple implementation of decompressing the SECOM payload data using
          * the standard GZIP method, as suggested by the SECOM standard.
@@ -321,7 +319,7 @@ Another example could be an implementation for a **SecomCompressionProvider**:
             }
             return decompressed;
         }
-
+        
         private boolean isCompressed(final byte[] compressed) {
             return (compressed[0] == (byte) (GZIPInputStream.GZIP_MAGIC)) && (compressed[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8));
         }
