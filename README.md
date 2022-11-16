@@ -222,7 +222,7 @@ simple example for a SECOM client is the following:
          */
         @Override
         public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload) {
-            throw new NotImplementedException("A Client does not have the capability of generating signatures");
+            throw new NotImplementedException("A SECOM client does not have the capability of generating signatures");
         }
 
         /**
