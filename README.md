@@ -204,56 +204,129 @@ SECOM to operate successfully, whether a provider or consumer of information. A
 simple example for a SECOM client is the following:
 
     /**
-     * The SECOM Signature Validator Implementation.
+     * A SECOM Signature Provider Implementation.
+     */
+    @Component
+    @Slf4j
+    public class SecomSignatureProviderImpl implements SecomSignatureProvider {
+
+        /**
+         * This function overrides the interface definition to provide the SECOM
+         * signature provision operation. This can ve done locally, or by asking
+         * another microservice to perform the atual singing for us.
+         *
+         * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+         * @param algorithm             The algorithm to be used for the signature generation
+         * @param payload               The payload to be signed, (preferably Base64 encoded)
+         * @return The signature generated
+         */
+        @Override
+        public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload) {
+            throw new NotImplementedException("A Client does not have the capability of generating signatures");
+        }
+
+        /**
+         * The signature validation operation. This should support the provision
+         * of the message content (preferably in a Base64 format) and the signature
+         * to validate the content against.
+         *
+         * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+         * @param algorithm             The algorithm used for the signature generation
+         * @param signature             The signature to validate the context against
+         * @param content               The context (in Base64 format) to be validated
+         * @return whether the signature validation was successful or not
+         */
+        @Override
+        public boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content) {
+            // Create a new signature to sign the provided content
+            try {
+                Signature sign = Signature.getInstance(algorithm.getValue());
+                sign.initVerify(SecomPemUtils.getCertFromPem(signatureCertificate));
+                sign.update(content);
+     
+                // Sign and return the signature
+                return sign.verify(signature);
+            } catch (NoSuchAlgorithmException | CertificateException | SignatureException | InvalidKeyException ex) {
+                log.error(ex.getMessage());
+                return false;
+            }
+        }
+
+    }
+
+Another example could be an implementation for a **SecomCompressionProvider**:
+
+    /**
+     * A SECOM Compression Provider Implementation.
      *
      */
-     @Component
-     @Slf4j
-     public class SecomSignatureValidatorImpl implements SecomSignatureProvider {
+    @Component**
+    @Slf4j
+    public class SecomCompressionProviderImpl  implements SecomCompressionProvider {
 
-         /**
-          * This function overrides the interface definition to provide the SECOM
-          * signature provision operation. This can ve done locally, or ask another
-          * microservice to perform the actual singing for us.
-          *
-          * @param signatureCertificate  The digital signature certificate to be used for the signature generation
-          * @param algorithm             The algorithm to be used for the signature generation
-          * @param payload               The payload to be signed, (preferably Base64 encoded)
-          * @return The signature generated
-          */
-         @Override
-         public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload) {
-             throw new NotImplementedException("A Client does not have the capability of generating signatures");
-         }
+        /**
+         * A simple implementation of compressing the SECOM payload data using
+         * the standard GZIP method, as suggested by the SECOM standard.
+         * 
+         * @param compressionAlgorithmEnum  The algorithm to be used for the compression operation
+         * @param bytes                      The payload to be compressed
+         * @return the compressed payload
+         */
+        @Override
+        public byte[] compress(CompressionAlgorithmEnum compressionAlgorithmEnum, byte[] bytes) {
+            final byte[] compressed;
+            if(compressionAlgorithmEnum == CompressionAlgorithmEnum.ZIP && !isCompressed(bytes)) {
+                if ((bytes == null) || (bytes.length == 0)) {
+                    return null;
+                }
+                try {
+                    final ByteArrayOutputStream obj = new ByteArrayOutputStream();
+                    final GZIPOutputStream gzip = new GZIPOutputStream(obj);
+                    gzip.write(bytes);
+                    gzip.flush();
+                    gzip.close();
+                    compressed = obj.toByteArray();
+                } catch (IOException ex) {
+                    throw new SecomGenericException(ex.getMessage());
+                }
+            } else {
+                compressed = bytes;
+            }
+            return compressed;
+        }
 
-         /**
-          * The signature validation operation. This should support the provision
-          * of the message content (preferably in a Base64 format) and the signature
-          * to validate the content against.
-          *
-          * @param signatureCertificate  The digital signature certificate to be used for the signature generation
-          * @param algorithm             The algorithm used for the signature generation
-          * @param signature             The signature to validate the context against
-          * @param content               The context (in Base64 format) to be validated
-          * @return whether the signature validation was successful or not
-          */
-         @Override
-         public boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content) {
-             // Create a new signature to sign the provided content
-             try {
-                 Signature sign = Signature.getInstance(algorithm.getValue());
-                 sign.initVerify(SecomPemUtils.getCertFromPem(signatureCertificate));
-                 sign.update(content);
-     
-                 // Sign and return the signature
-                 return sign.verify(signature);
-             } catch (NoSuchAlgorithmException | CertificateException | SignatureException | InvalidKeyException ex) {
-                 log.error(ex.getMessage());
-                 return false;
-             }
-         }
+        /**
+         * A simple implementation of decompressing the SECOM payload data using
+         * the standard GZIP method, as suggested by the SECOM standard.
+         *
+         * @param compressionAlgorithmEnum  The algorithm used for the compression
+         * @param bytes                     The compressed data
+         * @return the decompressed payload
+         */
+        @Override
+        public byte[] decompress(CompressionAlgorithmEnum compressionAlgorithmEnum, byte[] bytes) {
+            final byte[] decompressed;
+            if(compressionAlgorithmEnum == CompressionAlgorithmEnum.ZIP && isCompressed(bytes)) {
+                if ((bytes == null) || (bytes.length == 0)) {
+                    return null;
+                }
+                try {
+                    final ByteArrayInputStream obj = new ByteArrayInputStream(bytes);
+                    final GZIPInputStream gis = new GZIPInputStream(obj);
+                    decompressed = gis.readAllBytes();
+                } catch (IOException ex) {
+                    throw new SecomGenericException(ex.getMessage());
+                }
+            } else {
+                decompressed = bytes;
+            }
+            return decompressed;
+        }
 
-     }
+        private boolean isCompressed(final byte[] compressed) {
+            return (compressed[0] == (byte) (GZIPInputStream.GZIP_MAGIC)) && (compressed[1] == (byte) (GZIPInputStream.GZIP_MAGIC >> 8));
+        }
+    }
 
 ### SECOM Client Configuration
 As mentioned previously, the **application.properties** file can be used to 
