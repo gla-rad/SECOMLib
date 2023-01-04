@@ -91,11 +91,11 @@ access is add the following repositories in your pom.xml
 
     <repository>
         <id>grad</id>
-        <url>https://rnavlab.gla-rad.org:8081/repository/grad/</url>
+        <url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
     </repository>
     <repository>
         <id>grad-snapshots</id>
-        <url>https://rnavlab.gla-rad.org:8081/repository/grad-snapshots/</url>
+        <url>https://rnavlab.gla-rad.org/mvn/repository/grad-snapshots/</url>
         <snapshots>
             <enabled>true</enabled>
             <updatePolicy>always</updatePolicy>
