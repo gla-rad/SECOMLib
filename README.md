@@ -108,12 +108,12 @@ Then you can add the following repositories:
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-core</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.9</version>
     </dependency>
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-springboot</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.9</version>
     </dependency>
 
 Once the core and springboot modules have been imported, the JAX-RS application

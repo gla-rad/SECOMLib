@@ -21,13 +21,13 @@
     <parent>
         <artifactId>secom-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.9</version>
+        <version>0.0.10-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-core</artifactId>
-    <version>0.0.9</version>
+    <version>0.0.10-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -143,17 +143,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>grad</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad/</url>
-        </repository>
-        <snapshotRepository>
-            <id>grad-snapshots</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <prerequisites>
         <maven>${maven.min.version}</maven>
