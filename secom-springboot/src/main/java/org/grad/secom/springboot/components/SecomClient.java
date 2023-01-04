@@ -30,6 +30,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
 
 import javax.net.ssl.SSLException;
@@ -392,19 +393,20 @@ public class SecomClient {
                                            @QueryParam("pageSize") @Min(0) Integer pageSize) {
         return this.secomClient
                 .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(GET_INTERFACE_PATH)
-                        .queryParam("dataReference", dataReference)
-                        .queryParam("containerType", containerType.getValue())
-                        .queryParam("dataProductType", dataProductType.name())
-                        .queryParam("productVersion", productVersion)
-                        .queryParam("geometry", geometry)
-                        .queryParam("unlocode", unlocode)
-                        .queryParam("validFrom", validFrom)
-                        .queryParam("validTo", validTo)
-                        .queryParam("page", page)
-                        .queryParam("pageSize", pageSize)
-                        .build())
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_INTERFACE_PATH);
+                    builder = dataReference != null ? builder.queryParam("dataReference", dataReference) : builder;
+                    builder = containerType != null ? builder.queryParam("containerType", containerType.getValue()) : builder;
+                    builder = dataProductType != null ? builder .queryParam("dataProductType", dataProductType.name()) : builder;
+                    builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
+                    builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
+                    builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", validFrom) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", validTo) : builder;
+                    builder = page != null ? builder.queryParam("page", page) : builder;
+                    builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
+                    return builder.build();
+                })
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(GetResponseObject.class)
@@ -443,18 +445,19 @@ public class SecomClient {
                                                          @QueryParam("pageSize") @Min(0) Integer pageSize) {
         return this.secomClient
                 .get()
-                .uri(uriBuilder -> uriBuilder
-                        .path(GET_SUMMARY_INTERFACE_PATH)
-                        .queryParam("containerType", containerType.getValue())
-                        .queryParam("dataProductType", dataProductType.name())
-                        .queryParam("productVersion", productVersion)
-                        .queryParam("geometry", geometry)
-                        .queryParam("unlocode", unlocode)
-                        .queryParam("validFrom", validFrom)
-                        .queryParam("validTo", validTo)
-                        .queryParam("page", page)
-                        .queryParam("pageSize", pageSize)
-                        .build())
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_SUMMARY_INTERFACE_PATH);
+                    builder = containerType != null ? builder.queryParam("containerType", containerType.getValue()) : builder;
+                    builder = dataProductType != null ? builder .queryParam("dataProductType", dataProductType.name()) : builder;
+                    builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
+                    builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
+                    builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", validFrom) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", validTo) : builder;
+                    builder = page != null ? builder.queryParam("page", page) : builder;
+                    builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
+                    return builder.build();
+                })
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(GetSummaryResponseObject.class)
