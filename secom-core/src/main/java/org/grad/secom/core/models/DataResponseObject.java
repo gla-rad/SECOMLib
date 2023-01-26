@@ -16,10 +16,12 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.grad.secom.core.base.ByteArrayDeSerializer;
 import org.grad.secom.core.base.ByteArraySerializer;
+import org.grad.secom.core.base.DigitalSignatureBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 
 import javax.validation.constraints.NotNull;
@@ -29,13 +31,15 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DataResponseObject {
+public class DataResponseObject implements DigitalSignatureBearer {
 
     // Class Variables
+    @JsonProperty
     @NotNull
     @JsonSerialize(using = ByteArraySerializer.class)
     @JsonDeserialize(using = ByteArrayDeSerializer.class)
     private byte[] data;
+    @JsonProperty
     @NotNull
     private SECOM_ExchangeMetadataObject exchangeMetadata;
     @NotNull
@@ -53,6 +57,7 @@ public class DataResponseObject {
      *
      * @return the data
      */
+    @Override
     public byte[] getData() {
         return data;
     }
@@ -62,6 +67,7 @@ public class DataResponseObject {
      *
      * @param data the data
      */
+    @Override
     public void setData(byte[] data) {
         this.data = data;
     }
@@ -71,6 +77,7 @@ public class DataResponseObject {
      *
      * @return the exchange metadata
      */
+    @Override
     public SECOM_ExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
@@ -80,6 +87,7 @@ public class DataResponseObject {
      *
      * @param exchangeMetadata the exchange metadata
      */
+    @Override
     public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }

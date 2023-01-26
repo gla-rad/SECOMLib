@@ -17,19 +17,21 @@
 package org.grad.secom.core.models;
 
 import org.grad.secom.core.base.DigitalSignatureBearer;
+import org.grad.secom.core.base.DigitalSignatureCollectionBearer;
 
 import javax.validation.constraints.NotNull;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The SECOM Get Response Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetResponseObject implements DigitalSignatureBearer {
+public class GetResponseObject implements DigitalSignatureCollectionBearer {
 
     // Class Variables
-    private DataResponseObject dataResponseObject;
+    private List<DataResponseObject> dataResponseObject;
     @NotNull
     private PaginationObject pagination;
     private String responseText;
@@ -39,7 +41,7 @@ public class GetResponseObject implements DigitalSignatureBearer {
      *
      * @return the data response object
      */
-    public DataResponseObject getDataResponseObject() {
+    public List<DataResponseObject> getDataResponseObject() {
         return dataResponseObject;
     }
 
@@ -48,7 +50,7 @@ public class GetResponseObject implements DigitalSignatureBearer {
      *
      * @param dataResponseObject the data response object
      */
-    public void setDataResponseObject(DataResponseObject dataResponseObject) {
+    public void setDataResponseObject(List<DataResponseObject> dataResponseObject) {
         this.dataResponseObject = dataResponseObject;
     }
 
@@ -89,56 +91,27 @@ public class GetResponseObject implements DigitalSignatureBearer {
     }
 
     /**
-     * This function allows access to the data payload of the data bearer.
+     * Gets digital signature collection.
      *
-     * @return the data payload of the data bearer
+     * @return the digital signature collection
      */
     @Override
-    public byte[] getData() {
+    public Collection<DigitalSignatureBearer> getDigitalSignatureCollection() {
         return Optional.of(this)
                 .map(GetResponseObject::getDataResponseObject)
-                .map(DataResponseObject::getData)
-                .orElse(null);
+                .orElse(Collections.emptyList())
+                .stream()
+                .map(DigitalSignatureBearer.class::cast)
+                .collect(Collectors.toList());
     }
 
     /**
-     * This function allows updating the data payload of the data bearer.
+     * Sets digital signature collection.
      *
-     * @param data the data payload of the data bearer
+     * @param digitalSignatureCollection the digital signature collection
      */
     @Override
-    public void setData(byte[] data) {
-        Optional.of(this)
-                .map(GetResponseObject::getDataResponseObject)
-                .ifPresent(dro -> dro.setData(data));
+    public void setDigitalSignatureCollection(Collection<DigitalSignatureBearer> digitalSignatureCollection) {
+        this.dataResponseObject = new ArrayList(digitalSignatureCollection);
     }
-
-    /**
-     * Allows the get response object to access the SECOM exchange
-     * metadata that will contain the signature information.
-     *
-     * @return the signature information of the data signature bearer
-     */
-    @Override
-    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
-        return Optional.of(this)
-                .map(GetResponseObject::getDataResponseObject)
-                .map(DataResponseObject::getExchangeMetadata)
-                .orElse(null);
-    }
-
-    /**
-     * Allows the get response bearer object to update the SECOM exchange
-     * metadata that will contain amongst other info, the signature
-     * information.
-     *
-     * @param exchangeMetadata  the SECOM Exchange metadata
-     */
-    @Override
-    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
-        Optional.of(this)
-                .map(GetResponseObject::getDataResponseObject)
-                .ifPresent(dro -> dro.setExchangeMetadata(exchangeMetadata));
-    }
-
 }

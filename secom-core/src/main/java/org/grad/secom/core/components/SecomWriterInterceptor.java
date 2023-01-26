@@ -97,8 +97,8 @@ public class SecomWriterInterceptor implements WriterInterceptor {
          * Only use this interceptor for data signature bearer objects such as:
          *  1. GetResponseObject
          */
-        if (entity instanceof DigitalSignatureBearer digitalSignatureBearer) {
-            digitalSignatureBearer.prepareMetadata(this.signatureProvider)
+        if (entity instanceof DigitalSignatureCollectionBearer digitalSignatureCollectionBearer) {
+            digitalSignatureCollectionBearer.prepareMetadata(this.signatureProvider)
                     .signData(this.certificateProvider, this.signatureProvider)
                     .encryptData(this.encryptionProvider)
                     .compressData(this.compressionProvider)

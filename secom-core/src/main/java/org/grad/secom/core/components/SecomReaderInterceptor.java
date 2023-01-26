@@ -17,10 +17,7 @@
 package org.grad.secom.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.grad.secom.core.base.EnvelopeSignatureBearer;
-import org.grad.secom.core.base.GenericDataBearer;
-import org.grad.secom.core.base.SecomCompressionProvider;
-import org.grad.secom.core.base.SecomEncryptionProvider;
+import org.grad.secom.core.base.*;
 import org.grad.secom.core.models.AbstractEnvelope;
 import org.grad.secom.core.models.GetResponseObject;
 import org.grad.secom.core.models.UploadObject;
@@ -119,12 +116,11 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
          * Use this interceptor for generic data bearer objects such as:
          *  1. GetResponseObject
          */
-        if(obj instanceof final GenericDataBearer genericDataBearer) {
-            genericDataBearer
+        if(obj instanceof final DigitalSignatureCollectionBearer digitalSignatureCollectionBearer) {
+            digitalSignatureCollectionBearer
                     .decodeData()
                     .decompressData(this.compressionProvider)
                     .decryptData(this.encryptionProvider);
-
         }
         /*
          * Use this interceptor for envelope signature bearer objects such as:

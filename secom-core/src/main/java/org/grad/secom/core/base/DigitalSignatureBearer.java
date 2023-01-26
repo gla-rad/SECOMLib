@@ -57,8 +57,6 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
      * configuration and available resources.
      *
      * @param signatureProvider     The SECOM signature provider, if it exists
-     * @param encryptionProvider    The SECOM encryption provider if it exists
-     * @param compressionProvider   The SECOM compression provider if, it exists
      * @return the updated digital signature bearer
      */
     @Override

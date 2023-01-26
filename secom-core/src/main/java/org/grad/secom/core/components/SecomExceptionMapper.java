@@ -26,12 +26,13 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.DiscoveryServiceSecomInterface.DISCOVERY_SERVICE_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
@@ -70,6 +71,16 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
+        //First log the message
+        Logger.getLogger(Optional.of(ex)
+                        .map(Exception::getCause)
+                        .map(Throwable::toString)
+                        .orElse("SecomExceptionMapper.class"))
+                .severe(Optional.of(ex)
+                        .map(Exception::getMessage)
+                        .orElse("Unknown error..."));
+
+        // Then handle
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {
                 case ACCESS_INTERFACE_PATH:
@@ -80,8 +91,8 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
                     return AcknowledgementSecomInterface.handleAcknowledgementInterfaceExceptions(ex, this.request, null);
                 case CAPABILITY_INTERFACE_PATH:
                     return CapabilitySecomInterface.handleCapabilityInterfaceExceptions(ex, this.request, null);
-                case DISCOVERY_SERVICE_INTERFACE_PATH:
-                    return DiscoveryServiceSecomInterface.handleDiscoveryServiceInterfaceExceptions(ex, this.request, null);
+                case SEARCH_SERVICE_INTERFACE_PATH:
+                    return SearchServiceSecomInterface.handleSearchServiceInterfaceExceptions(ex, this.request, null);
                 case ENCRYPTION_KEY_INTERFACE_PATH:
                     return EncryptionKeySecomInterface.handleEncryptionInterfaceExceptions(ex, this.request, null);
                 case ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH:

@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -75,7 +76,7 @@ class GetResponseObjectTest {
 
         // Generate a new object
         this.obj = new GetResponseObject();
-        this.obj.setDataResponseObject(this.dataResponseObject);
+        this.obj.setDataResponseObject(Collections.singletonList(this.dataResponseObject));
         this.obj.setPagination(this.paginationObject);
         this.obj.setResponseText("Test");
     }
@@ -92,17 +93,18 @@ class GetResponseObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertNotNull(result.getDataResponseObject());
-        assertEquals(new String(this.obj.getDataResponseObject().getData()), new String(result.getDataResponseObject().getData()));
-        assertNotNull(result.getDataResponseObject().getExchangeMetadata());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getDataProtection(), result.getDataResponseObject().getExchangeMetadata().getDataProtection());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getProtectionScheme(), result.getDataResponseObject().getExchangeMetadata().getProtectionScheme());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getDigitalSignatureReference(), result.getDataResponseObject().getExchangeMetadata().getDigitalSignatureReference());
-        assertNotNull(result.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getDataResponseObject().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
-        assertEquals(this.obj.getDataResponseObject().getExchangeMetadata().getCompressionFlag(), result.getDataResponseObject().getExchangeMetadata().getCompressionFlag());
-        assertEquals(this.obj.getDataResponseObject().getAckRequest(), result.getDataResponseObject().getAckRequest());
+        assertEquals(this.obj.getDataResponseObject().size(), result.getDataResponseObject().size());
+        assertEquals(new String(this.obj.getDataResponseObject().get(0).getData()), new String(result.getDataResponseObject().get(0).getData()));
+        assertNotNull(result.getDataResponseObject().get(0).getExchangeMetadata());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDataProtection(), result.getDataResponseObject().get(0).getExchangeMetadata().getDataProtection());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getProtectionScheme(), result.getDataResponseObject().get(0).getExchangeMetadata().getProtectionScheme());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference());
+        assertNotNull(result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
+        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getCompressionFlag(), result.getDataResponseObject().get(0).getExchangeMetadata().getCompressionFlag());
+        assertEquals(this.obj.getDataResponseObject().get(0).getAckRequest(), result.getDataResponseObject().get(0).getAckRequest());
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());

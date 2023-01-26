@@ -20,7 +20,10 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.logging.log4j.util.Strings;
-import org.grad.secom.core.base.*;
+import org.grad.secom.core.base.SecomCertificateProvider;
+import org.grad.secom.core.base.SecomCompressionProvider;
+import org.grad.secom.core.base.SecomEncryptionProvider;
+import org.grad.secom.core.base.SecomSignatureProvider;
 import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
@@ -53,7 +56,6 @@ import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.AC
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.DiscoveryServiceSecomInterface.DISCOVERY_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
@@ -61,6 +63,7 @@ import static org.grad.secom.core.interfaces.GetSecomInterface.GET_INTERFACE_PAT
 import static org.grad.secom.core.interfaces.GetSummarySecomInterface.GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.PingSecomInterface.PING_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.SubscriptionNotificationSecomInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH;
@@ -275,13 +278,13 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the result list of the search
      */
-    public Optional<SearchObjectResult[]> search(SearchFilterObject searchFilterObject,
-                                                 Integer page,
-                                                 Integer pageSize) {
+    public Optional<ResponseSearchObject> searchService(SearchFilterObject searchFilterObject,
+                                                        Integer page,
+                                                        Integer pageSize) {
         return this.secomClient
                 .post()
                 .uri(uriBuilder -> uriBuilder
-                        .path(DISCOVERY_SERVICE_INTERFACE_PATH)
+                        .path(SEARCH_SERVICE_INTERFACE_PATH)
                         .queryParam("page", page)
                         .queryParam("pageSize", pageSize)
                         .build())
@@ -289,7 +292,7 @@ public class SecomClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(searchFilterObject))
                 .retrieve()
-                .bodyToMono(SearchObjectResult[].class)
+                .bodyToMono(ResponseSearchObject.class)
                 .blockOptional();
     }
 
