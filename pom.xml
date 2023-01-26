@@ -7,7 +7,7 @@
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.10-SNAPSHOT</version>
+    <version>0.0.10</version>
     <modules>
         <module>secom-core</module>
         <module>secom-springboot</module>
