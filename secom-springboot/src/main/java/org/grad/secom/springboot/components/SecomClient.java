@@ -36,7 +36,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
 
-import javax.net.ssl.SSLException;
 import javax.validation.constraints.Min;
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
@@ -97,9 +96,13 @@ public class SecomClient {
      *
      * @param url       the URL of the SECOM service
      * @param config    the SECOM configuration properties bundle
-     * @throws SSLException for any exceptions while configuring the SSL connection
+     * @throws IOException for IO exceptions
+     * @throws KeyStoreException for exceptions while handling the key-store
+     * @throws NoSuchAlgorithmException for exceptions onthe key-store alghorithm
+     * @throws CertificateException for certificate exceptions
+     * @throws UnrecoverableKeyException for certificate key exceptions
      */
-    public SecomClient(URL url, SecomConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException, SSLException {
+    public SecomClient(URL url, SecomConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
         // Initialise the HTTP connection configuration
         HttpClient httpConnector = HttpClient
                 .create()

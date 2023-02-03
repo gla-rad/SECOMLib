@@ -29,6 +29,10 @@
     <artifactId>secom-springboot3</artifactId>
     <version>0.0.12-SNAPSHOT</version>
 
+    <properties>
+        <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
+    </properties>
+
     <dependencies>
 
         <dependency>

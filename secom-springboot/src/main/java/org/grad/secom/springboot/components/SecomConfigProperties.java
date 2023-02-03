@@ -17,7 +17,6 @@
 package org.grad.secom.springboot.components;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 /**
  * The SECOM Configuration properties.
