@@ -30,6 +30,7 @@
     <version>0.0.12-SNAPSHOT</version>
 
     <properties>
+        <springframework3.version>6.0.2</springframework3.version>
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
     </properties>
 
@@ -37,21 +38,21 @@
 
         <dependency>
             <groupId>org.grad.secom</groupId>
-            <artifactId>secom-core</artifactId>
+            <artifactId>secom-core-jakarta</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${springframework.version}</version>
+            <version>${springframework3.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
-            <version>${springframework.version}</version>
+            <version>${springframework3.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -69,7 +70,7 @@
 
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2</artifactId>
+            <artifactId>swagger-jaxrs2-jakarta</artifactId>
             <version>${swagger.version}</version>
         </dependency>
 

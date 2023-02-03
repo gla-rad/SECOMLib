@@ -10,6 +10,7 @@
     <version>0.0.12-SNAPSHOT</version>
     <modules>
         <module>secom-core</module>
+        <module>secom-core-jakarta</module>
         <module>secom-springboot</module>
         <module>secom-springboot3</module>
     </modules>
@@ -22,13 +23,10 @@
         <maven-deploy-plugin.version>3.0.0-M2</maven-deploy-plugin.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <jackson.version>2.13.2</jackson.version>
-        <resteasy-api.version>2.1.1</resteasy-api.version>
-        <servlet-api.version>2.5</servlet-api.version>
-        <validation-api.version>2.0.1.Final</validation-api.version>
-        <springframework.version>5.3.18</springframework.version>
-        <springframework3.version>6.0.2</springframework3.version>
         <netty.version>1.0.17</netty.version>
-        <swagger.version>2.2.0</swagger.version>
+        <swagger.version>2.2.8</swagger.version>
+        <junit.jupiter.version>5.9.1</junit.jupiter.version>
+        <junit.platform.version>1.9.1</junit.platform.version>
     </properties>
 
     <repositories>

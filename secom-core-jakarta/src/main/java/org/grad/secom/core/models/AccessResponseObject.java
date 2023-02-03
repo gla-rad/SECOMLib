@@ -14,41 +14,33 @@
  * limitations under the License.
  */
 
-package org.grad.secom.core.components;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import javax.ws.rs.ext.ContextResolver;
-import javax.ws.rs.ext.Provider;
+package org.grad.secom.core.models;
 
 /**
- * The ObjetMapper Provider.
+ * The SECOM Access Response Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
-public class ObjectMapperProvider implements ContextResolver<ObjectMapper> {
+public class AccessResponseObject {
 
     // Class Variables
-    ObjectMapper objectMapper;
+    private String responseText;
 
     /**
-     * The ObjetMapper Provider Constructor.
+     * Gets response text.
      *
-     * @param objectMapper the provided object mapper
+     * @return the response text
      */
-    public ObjectMapperProvider(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
+    public String getResponseText() {
+        return responseText;
     }
 
     /**
-     * Return the acquired object mapper when required.
+     * Sets response text.
      *
-     * @param type the type of the class to return the object mapper for
-     * @return the appropriate object mapper
+     * @param responseText the response text
      */
-    @Override
-    public ObjectMapper getContext(Class<?> type) {
-        return this.objectMapper;
+    public void setResponseText(String responseText) {
+        this.responseText = responseText;
     }
 }

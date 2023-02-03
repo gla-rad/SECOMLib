@@ -23,8 +23,7 @@ import org.grad.secom.core.base.*;
 import org.grad.secom.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
@@ -50,8 +49,8 @@ public class JaxrsApplication extends Application {
      * @return the object mapper provider
      */
     @Bean
-    ObjectMapperProvider objectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new ObjectMapperProvider(objectMapper);
+    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
+        return new SecomObjectMapperProvider(objectMapper);
     }
 
     /**

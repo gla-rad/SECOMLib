@@ -19,15 +19,15 @@ package org.grad.secom.springboot3.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 import org.grad.secom.core.base.*;
 import org.grad.secom.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-import jakarta.ws.rs.ApplicationPath;
-import jakarta.ws.rs.core.Application;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Configuration
+@Component
 @ApplicationPath("/api/secom/")
 public class JaxrsApplication extends Application {
 
@@ -49,9 +49,9 @@ public class JaxrsApplication extends Application {
      * @param objectMapper the autowired object mapper
      * @return the object mapper provider
      */
-    @Bean
-    ObjectMapperProvider objectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new ObjectMapperProvider(objectMapper);
+    @Bean()
+    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
+        return new SecomObjectMapperProvider(objectMapper);
     }
 
     /**
