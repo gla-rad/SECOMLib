@@ -26,7 +26,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.grad.secom</groupId>
-    <artifactId>secom-springboot</artifactId>
+    <artifactId>secom-springboot2</artifactId>
     <version>0.0.12-SNAPSHOT</version>
 
     <properties>

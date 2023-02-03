@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.springboot.components;
+package org.grad.secom.springboot2.components;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;

@@ -11,7 +11,7 @@
     <modules>
         <module>secom-core</module>
         <module>secom-core-jakarta</module>
-        <module>secom-springboot</module>
+        <module>secom-springboot2</module>
         <module>secom-springboot3</module>
     </modules>
 
