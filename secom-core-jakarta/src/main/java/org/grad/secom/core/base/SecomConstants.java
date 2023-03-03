@@ -52,7 +52,9 @@ public class SecomConstants {
     public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
             .appendPattern(SECOM_DATE_TIME_FORMAT)
             .parseLenient()
+            .optionalStart()
             .appendOffset("+HHmm", "Z")
+            .optionalEnd()
             .toFormatter();
 
 }
