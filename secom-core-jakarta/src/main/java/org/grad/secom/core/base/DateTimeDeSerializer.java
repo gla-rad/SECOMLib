@@ -20,29 +20,32 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.grad.secom.core.exceptions.SecomValidationException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
+import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
- * The ByteArrayDeSerializer Class
+ * The DateTimeDeSerializer Class
  * <p/>
- * In SECOM the data byte arrays should be potentially encrypted and compressed
- * and definitely encoded into Base64. However, the decoding is already handled
- * by the SECOM reader, writer and filter interceptors and therefore allowing
- * that operation to be directly controlled by the library is better that doing
- * it through the JSON object mapper. Therefore, this de-serializer will just
- * decode byte arrays from a UTF-8 string, assuming the Base64 (or any other
- * specified encoding) is handled by the library.
+ * In SECOM the date-time format is not the frequently used ISO. According to
+ * the standard A DateTime is a combination of a date and a time type.
+ * Character encoding of a DateTime shall follow the example:
+ * EXAMPLE: 19850412T101530
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
+public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
 
     /**
      * Instantiates a new Byte array de serializer.
      */
-    protected ByteArrayDeSerializer() {
+    protected DateTimeDeSerializer() {
         this(null);
     }
 
@@ -51,7 +54,7 @@ public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
      *
      * @param t the byte array class
      */
-    protected ByteArrayDeSerializer(Class<byte[]> t) {
+    protected DateTimeDeSerializer(Class<LocalDateTime> t) {
         super(t);
     }
 
@@ -62,15 +65,15 @@ public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
      * @param ctxt  The deserialization context
      * @return the deserialized output
      * @throws IOException for any IO exceptions
-     * @throws JsonProcessingException for any JSON processing exceptions
      */
     @Override
-    public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         final String value = jp.getCodec().readValue(jp, String.class);
-        if(value == null) {
+        if (value == null || value.isEmpty()) return null;
+        try {
+            return LocalDateTime.parse(value, SECOM_DATE_TIME_FORMATTER);
+        } catch (Exception ex) {
             return null;
         }
-        return value.getBytes(StandardCharsets.UTF_8);
     }
-
 }

@@ -16,6 +16,11 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.DateTimeSerializer;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
@@ -38,7 +43,13 @@ public class SubscriptionRequestObject {
     private String geometry;
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
+    @Schema(example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime subscriptionPeriodStart;
+    @Schema(example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime subscriptionPeriodEnd;
 
     /**

@@ -16,7 +16,13 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.DateTimeSerializer;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -35,6 +41,9 @@ public class EnvelopeKeyNotificationObject {
     @NotNull
     private String envelopeSignatureCertificate;
     @NotNull
+    @Schema(example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime envelopeSignatureTime;
 
     /**

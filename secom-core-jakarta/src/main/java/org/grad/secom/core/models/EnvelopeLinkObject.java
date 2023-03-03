@@ -17,6 +17,11 @@
 package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.DateTimeSerializer;
 import org.grad.secom.core.base.GenericExchangeMetadataBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
@@ -50,6 +55,9 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     private Integer size;
     @NotNull
+    @Schema(example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime timeToLive;
 
     /**

@@ -19,6 +19,7 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.base.ByteArrayDeSerializer;
 import org.grad.secom.core.base.ByteArraySerializer;
 import org.grad.secom.core.base.DigitalSignatureBearer;
@@ -36,6 +37,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
     // Class Variables
     @JsonProperty
     @NotNull
+    @Schema(type = "string", format = "byte")
     @JsonSerialize(using = ByteArraySerializer.class)
     @JsonDeserialize(using = ByteArrayDeSerializer.class)
     private byte[] data;

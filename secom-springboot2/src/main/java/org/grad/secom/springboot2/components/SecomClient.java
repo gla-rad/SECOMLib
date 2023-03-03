@@ -51,6 +51,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
@@ -407,8 +408,8 @@ public class SecomClient {
                     builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
                     builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
                     builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
-                    builder = validFrom != null ? builder.queryParam("validFrom", validFrom) : builder;
-                    builder = validTo != null ? builder.queryParam("validTo", validTo) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", SECOM_DATE_TIME_FORMATTER.format(validFrom)) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", SECOM_DATE_TIME_FORMATTER.format(validTo)) : builder;
                     builder = page != null ? builder.queryParam("page", page) : builder;
                     builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
                     return builder.build();
@@ -458,8 +459,8 @@ public class SecomClient {
                     builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
                     builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
                     builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
-                    builder = validFrom != null ? builder.queryParam("validFrom", validFrom) : builder;
-                    builder = validTo != null ? builder.queryParam("validTo", validTo) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", SECOM_DATE_TIME_FORMATTER.format(validFrom)) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", SECOM_DATE_TIME_FORMATTER.format(validTo)) : builder;
                     builder = page != null ? builder.queryParam("page", page) : builder;
                     builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
                     return builder.build();

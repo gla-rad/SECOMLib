@@ -16,15 +16,16 @@
 
 package org.grad.secom.core.components;
 
-import org.grad.secom.core.exceptions.SecomValidationException;
-
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
 import jakarta.ws.rs.ext.Provider;
+import org.grad.secom.core.exceptions.SecomValidationException;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
+import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
  * The LocalDateTime Converter Provider.
@@ -68,7 +69,7 @@ public class LocalDateTimeConverterProvider implements ParamConverterProvider {
         public LocalDateTime fromString(String value) {
             if (value == null || value.isEmpty()) return null;
             try {
-                return LocalDateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                return LocalDateTime.parse(value, SECOM_DATE_TIME_FORMATTER);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }
@@ -84,7 +85,7 @@ public class LocalDateTimeConverterProvider implements ParamConverterProvider {
         public String toString(LocalDateTime value) {
             if (value == null) return "";
             try {
-                return value.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+                return value.format(SECOM_DATE_TIME_FORMATTER);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }

@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,13 +50,13 @@ class EnvelopeAckObjectTest {
 
         // Generate a new object
         this.obj = new EnvelopeAckObject();
-        this.obj.setCreatedAt(LocalDateTime.now());
+        this.obj.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setTransactionIdentifier(UUID.randomUUID());
         this.obj.setAckType(AckTypeEnum.OPENED_ACK);
         this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now());
+        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
