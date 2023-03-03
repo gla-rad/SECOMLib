@@ -24,6 +24,8 @@ import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
@@ -85,7 +87,8 @@ public class LocalDateTimeConverterProvider implements ParamConverterProvider {
         public String toString(LocalDateTime value) {
             if (value == null) return "";
             try {
-                return value.format(SECOM_DATE_TIME_FORMATTER);
+                final ZonedDateTime zonedValue = value.atZone(ZoneId.systemDefault());
+                return zonedValue.format(SECOM_DATE_TIME_FORMATTER);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }

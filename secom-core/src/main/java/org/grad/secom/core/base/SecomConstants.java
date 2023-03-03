@@ -17,6 +17,7 @@
 package org.grad.secom.core.base;
 
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 /**
  * The SECOM Constants class
@@ -43,11 +44,15 @@ public class SecomConstants {
     public static final int MAX_PAYLOAD_SIZE_IN_KB = 350;
 
     /**
-     * THe SECOM DATE, TIME and DATE_TIME formats.
+     * The SECOM DATE, TIME and DATE_TIME formats.
      */
     public static final String SECOM_DATE_FORMAT = "yyyyMMdd";
     public static final String SECOM_TIME_FORMAT = "HHmmss";
     public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
-    public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(SECOM_DATE_TIME_FORMAT);
+    public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+            .appendPattern(SECOM_DATE_TIME_FORMAT)
+            .parseLenient()
+            .appendOffset("+HHmm", "Z")
+            .toFormatter();
 
 }
