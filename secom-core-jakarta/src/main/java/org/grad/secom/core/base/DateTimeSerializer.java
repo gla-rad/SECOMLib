@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
@@ -64,13 +65,8 @@ public class DateTimeSerializer extends StdSerializer<LocalDateTime> {
      */
     @Override
     public void serialize(LocalDateTime localDateTime, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-        String input;
-        if (localDateTime == null) input = "";
-        try {
-            input = localDateTime.format(SECOM_DATE_TIME_FORMATTER);
-        } catch (Exception ex) {
-            input = "";
-        }
-        jg.writeString(input);
+        jg.writeString(Optional.ofNullable(localDateTime)
+                .map(SECOM_DATE_TIME_FORMATTER::format)
+                .orElse(""));
     }
 }

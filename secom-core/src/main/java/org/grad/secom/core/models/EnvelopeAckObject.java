@@ -38,7 +38,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The creation date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime createdAt;

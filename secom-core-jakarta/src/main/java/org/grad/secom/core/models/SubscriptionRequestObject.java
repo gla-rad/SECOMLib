@@ -43,11 +43,11 @@ public class SubscriptionRequestObject {
     private String geometry;
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The subscription period start", type = "string", example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime subscriptionPeriodStart;
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime subscriptionPeriodEnd;

@@ -22,9 +22,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
-import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
+import static java.util.function.Predicate.not;
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
@@ -66,11 +66,9 @@ public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
     @Override
     public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         final String value = jp.getCodec().readValue(jp, String.class);
-        if (value == null || value.isEmpty()) return null;
-        try {
-            return LocalDateTime.parse(value, SECOM_DATE_TIME_FORMATTER);
-        } catch (Exception ex) {
-            return null;
-        }
+        return Optional.ofNullable(value)
+                .filter(not(String::isBlank))
+                .map(v -> LocalDateTime.parse(v, SECOM_DATE_TIME_FORMATTER))
+                .orElse(null);
     }
 }

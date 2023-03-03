@@ -41,7 +41,7 @@ public class EnvelopeKeyNotificationObject {
     @NotNull
     private String envelopeSignatureCertificate;
     @NotNull
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The envelope signature date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime envelopeSignatureTime;

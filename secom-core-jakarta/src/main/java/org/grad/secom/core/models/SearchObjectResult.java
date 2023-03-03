@@ -59,11 +59,11 @@ public class SearchObjectResult {
     private String instanceAsXml;
 
     // Non-standard fields (mentioned but not standardised)
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The publication date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime publishedAt;
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The last updated date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime lastUpdatedAt;

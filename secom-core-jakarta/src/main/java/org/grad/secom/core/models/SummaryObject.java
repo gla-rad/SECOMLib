@@ -50,7 +50,7 @@ public class SummaryObject {
     private String info_name;
     private String info_status;
     private String info_description;
-    @Schema(example = "19850412T101530")
+    @Schema(description = "The last modified date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime info_lastModifiedDate;
