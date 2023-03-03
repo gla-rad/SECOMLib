@@ -21,13 +21,13 @@
     <parent>
         <artifactId>secom-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.13-SNAPSHOT</version>
+        <version>0.0.13</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-core-jakarta</artifactId>
-    <version>0.0.13-SNAPSHOT</version>
+    <version>0.0.13</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -110,7 +110,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>secom-core</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -123,6 +123,7 @@
                 <version>${maven-deploy-plugin.version}</version>
                 <configuration>
                     <skip>false</skip>
+                    <classifier>jakarta</classifier>
                 </configuration>
             </plugin>
             <plugin>
@@ -131,6 +132,7 @@
                 <version>${maven-source-plugin.version}</version>
                 <configuration>
                     <skipSource>false</skipSource>
+                    <classifier>jakarta</classifier>
                 </configuration>
                 <executions>
                     <execution>
