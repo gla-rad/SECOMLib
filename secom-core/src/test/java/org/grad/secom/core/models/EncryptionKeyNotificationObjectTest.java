@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,7 @@ class EncryptionKeyNotificationObjectTest {
         this.envelopeKeyNotificationObject.setDataReference(UUID.randomUUID());
         this.envelopeKeyNotificationObject.setEnvelopeSignatureCertificate("signatureCertificate");
         this.envelopeKeyNotificationObject.setPublicCertificate("publicCertificate");
-        this.envelopeKeyNotificationObject.setEnvelopeSignatureTime(LocalDateTime.now());
+        this.envelopeKeyNotificationObject.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
         this.obj = new EncryptionKeyNotificationObject();

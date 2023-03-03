@@ -19,6 +19,7 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.base.DigitalSignatureBearer;
 import org.grad.secom.core.base.ByteArrayDeSerializer;
 import org.grad.secom.core.base.ByteArraySerializer;
@@ -38,6 +39,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
 
     // Class Variables
     @JsonProperty
+    @Schema(type = "string", format = "byte")
     @JsonSerialize(using = ByteArraySerializer.class)
     @JsonDeserialize(using = ByteArrayDeSerializer.class)
     @NotNull

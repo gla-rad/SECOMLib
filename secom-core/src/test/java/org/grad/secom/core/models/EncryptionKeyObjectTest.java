@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,7 +61,7 @@ class EncryptionKeyObjectTest {
         this.envelopeLinkObject.setDigitalSignatureValue(this.digitalSignatureValue);
         this.envelopeLinkObject.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now());
+        this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new upload object
         this.obj = new EncryptionKeyObject();

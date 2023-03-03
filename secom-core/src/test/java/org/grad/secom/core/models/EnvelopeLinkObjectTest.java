@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,8 +76,8 @@ class EnvelopeLinkObjectTest {
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setSize(1);
-        this.obj.setTimeToLive(LocalDateTime.now());
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now());
+        this.obj.setTimeToLive(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

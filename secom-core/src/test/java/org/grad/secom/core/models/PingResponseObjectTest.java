@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,7 +44,7 @@ class PingResponseObjectTest {
 
         // Generate a new object
         this.obj = new PingResponseObject();
-        this.obj.setLastPrivateInteractionTime(LocalDateTime.now());
+        this.obj.setLastPrivateInteractionTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

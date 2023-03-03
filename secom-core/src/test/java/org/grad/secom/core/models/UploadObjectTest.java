@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -77,7 +78,7 @@ class UploadObjectTest {
         this.envelopeUploadObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeUploadObject.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.envelopeUploadObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.envelopeUploadObject.setEnvelopeSignatureTime(LocalDateTime.now());
+        this.envelopeUploadObject.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
         this.obj = new UploadObject();

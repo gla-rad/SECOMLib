@@ -16,6 +16,11 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.DateTimeSerializer;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
@@ -45,6 +50,9 @@ public class SummaryObject {
     private String info_name;
     private String info_status;
     private String info_description;
+    @Schema(example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     private LocalDateTime info_lastModifiedDate;
     private String info_productVersion;
     private Long info_size;

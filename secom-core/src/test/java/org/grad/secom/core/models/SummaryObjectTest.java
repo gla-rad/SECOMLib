@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -55,7 +56,7 @@ class SummaryObjectTest {
         this.obj.setInfo_name("infoName");
         this.obj.setInfo_status("infoStatus");
         this.obj.setInfo_description("infoDescription");
-        this.obj.setInfo_lastModifiedDate(LocalDateTime.now());
+        this.obj.setInfo_lastModifiedDate(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setInfo_productVersion("infoProductVersion");
         this.obj.setInfo_size(1L);
     }

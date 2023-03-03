@@ -25,6 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,8 +62,8 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setKeywords(Collections.singletonList("keywords"));
         this.searchObjectResult.setUnlocode(Collections.singletonList("unlocode"));
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
-        this.searchObjectResult.setPublishedAt(LocalDateTime.now());
-        this.searchObjectResult.setLastUpdatedAt(LocalDateTime.now());
+        this.searchObjectResult.setPublishedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.searchObjectResult.setLastUpdatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
         this.searchObjectResult.setMmsi("mmsi");
         this.searchObjectResult.setImo("imo");
         this.searchObjectResult.setGeometry("geometry");
