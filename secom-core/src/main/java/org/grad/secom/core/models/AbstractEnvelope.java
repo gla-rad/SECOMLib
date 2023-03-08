@@ -16,7 +16,12 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.base.CsvStringGenerator;
+import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.DateTimeSerializer;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -29,6 +34,9 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @NotNull
     protected String envelopeRootCertificateThumbprint;
     @NotNull
+    @Schema(description = "The last modified date-time", type = "string",example = "19850412T101530")
+    @JsonSerialize(using = DateTimeSerializer.class)
+    @JsonDeserialize(using = DateTimeDeSerializer.class)
     protected LocalDateTime envelopeSignatureTime;
 
     /**
