@@ -123,7 +123,6 @@
                 <version>${maven-deploy-plugin.version}</version>
                 <configuration>
                     <skip>false</skip>
-                    <classifier>jakarta</classifier>
                 </configuration>
             </plugin>
             <plugin>
@@ -132,7 +131,6 @@
                 <version>${maven-source-plugin.version}</version>
                 <configuration>
                     <skipSource>false</skipSource>
-                    <classifier>jakarta</classifier>
                 </configuration>
                 <executions>
                     <execution>
