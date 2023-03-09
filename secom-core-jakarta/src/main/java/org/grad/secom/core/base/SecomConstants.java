@@ -47,14 +47,39 @@ public class SecomConstants {
      * THe SECOM DATE, TIME and DATE_TIME formats.
      */
     public static final String SECOM_DATE_FORMAT = "yyyyMMdd";
+    public static final DateTimeFormatter SECOM_DATE_FORMATTER;
+    static {
+        SECOM_DATE_FORMATTER = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_DATE_FORMAT)
+                .parseStrict()
+                .toFormatter();
+    }
+
     public static final String SECOM_TIME_FORMAT = "HHmmss";
+    public static final DateTimeFormatter SECOM_TIME_FORMATTER;
+    static {
+        SECOM_TIME_FORMATTER = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_TIME_FORMAT)
+                .optionalStart()
+                .parseLenient()
+                .appendOffset("+HHMM", "Z")
+                .parseStrict()
+                .toFormatter();
+    }
     public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
-    public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
-            .appendPattern(SECOM_DATE_TIME_FORMAT)
-            .parseLenient()
-            .optionalStart()
-            .appendOffset("+HHmm", "Z")
-            .optionalEnd()
-            .toFormatter();
+
+    public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER;
+    static {
+        SECOM_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_DATE_TIME_FORMAT)
+                .optionalStart()
+                .parseLenient()
+                .appendOffset("+HHMM", "Z")
+                .parseStrict()
+                .toFormatter();
+    }
 
 }

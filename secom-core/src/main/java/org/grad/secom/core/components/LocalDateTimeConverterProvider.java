@@ -88,7 +88,7 @@ public class LocalDateTimeConverterProvider implements ParamConverterProvider {
             if (value == null) return "";
             try {
                 final ZonedDateTime zonedValue = value.atZone(ZoneId.systemDefault());
-                return zonedValue.format(SECOM_DATE_TIME_FORMATTER);
+                return SECOM_DATE_TIME_FORMATTER.format(zonedValue);
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }
