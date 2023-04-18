@@ -17,6 +17,7 @@
 package org.grad.secom.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Arrays;
 
@@ -25,6 +26,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Schema(implementation = Integer.class)
 public enum SubscriptionEventEnum implements SECOM_Enum {
     SUBSCRIPTION_CREATED(1),
     SUBSCRIPTION_REMOVED(2);

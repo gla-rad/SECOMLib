@@ -17,6 +17,7 @@
 package org.grad.secom.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Arrays;
 
@@ -25,7 +26,8 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public enum ContainerTypeEnum implements SECOM_Enum{
+@Schema(implementation = Integer.class)
+public enum ContainerTypeEnum implements SECOM_Enum {
     S100_DataSet(0),
     S100_ExchangeSet(1),
     NONE(2);

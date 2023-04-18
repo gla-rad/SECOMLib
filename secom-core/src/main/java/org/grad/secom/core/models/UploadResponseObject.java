@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
 
 /**
@@ -26,6 +27,7 @@ import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
 public class UploadResponseObject {
 
     // Class Variables
+    @JsonProperty("SECOM_ResponseCode")
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
     private String responseText;
 

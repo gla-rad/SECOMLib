@@ -17,6 +17,7 @@
 package org.grad.secom.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Arrays;
 
@@ -25,6 +26,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Schema(implementation = Integer.class)
 public enum NackTypeEnum implements SECOM_Enum {
     XML_SCHEMA_VALIDATION_ERROR(0),
     UNKNOWN_DATA_TYPE_OR_VERSION(1),

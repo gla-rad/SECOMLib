@@ -17,6 +17,7 @@
 package org.grad.secom.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.Arrays;
 
@@ -25,6 +26,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Schema(implementation = Integer.class)
 public enum SECOM_ResponseCodeEnum implements SECOM_Enum {
     MISSING_REQUIRED_DATA_FOR_SERVICE(0),
     FAILED_SIGNATURE_VERIFICATION(1),
