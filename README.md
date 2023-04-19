@@ -108,12 +108,12 @@ Then you can add the following repositories:
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-core-jakarta</artifactId>
-        <version>0.0.14</version>
+        <version>0.0.17</version>
     </dependency>
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-springboot3</artifactId>
-        <version>0.0.14</version>
+        <version>0.0.17</version>
     </dependency>
 
 Once the core and springboot modules have been imported, the JAX-RS application
@@ -221,7 +221,18 @@ simple example for a SECOM client is the following:
          */
         @Override
         public byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload) {
-            throw new NotImplementedException("A SECOM client does not have the capability of generating signatures");
+            // Create a new signature to sign the provided content
+            try {
+                Signature sign = Signature.getInstance(algorithm.getValue());
+                sign.initSign(X509Utils.privateKeyFromPem(new String(this.privateKeyFile.getInputStream().readAllBytes(), StandardCharsets.UTF_8), this.keyPairCurve));
+                sign.update(payload);
+    
+                // Sign and return the signature
+                return sign.sign();
+            } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException| SignatureException | InvalidKeyException ex) {
+                log.error(ex.getMessage());
+                return null;
+            }
         }
 
         /**
