@@ -83,7 +83,7 @@ public class DigitalSignatureAlgorithmConverterProvider implements ParamConverte
         public String toString(DigitalSignatureAlgorithmEnum value) {
             if (value == null) return "";
             try {
-                return String.valueOf(value.getValue().toLowerCase());
+                return value.getValue().toLowerCase();
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }
