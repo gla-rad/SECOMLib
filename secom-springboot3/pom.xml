@@ -30,7 +30,7 @@
     <version>0.0.19-SNAPSHOT</version>
 
     <properties>
-        <springframework3.version>6.0.2</springframework3.version>
+        <springframework3.version>6.0.11</springframework3.version>
         <resteasy-spring-boot.version>6.0.0.Alpha2</resteasy-spring-boot.version>
     </properties>
 
