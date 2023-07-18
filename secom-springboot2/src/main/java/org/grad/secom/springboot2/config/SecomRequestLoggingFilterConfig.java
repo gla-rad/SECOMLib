@@ -66,7 +66,7 @@ public class SecomRequestLoggingFilterConfig {
         secomRequestLoggingFilter.setIncludePayload(true);
         secomRequestLoggingFilter.setMaxPayloadLength(4096);
         secomRequestLoggingFilter.setBeforeMessagePrefix("SECOM REQUEST DATA: ");
-        secomRequestLoggingFilter.setAfterMessagePrefix("SECOM RESPONSE DATA: ");
+        secomRequestLoggingFilter.setAfterMessagePrefix("SECOM REQUEST DATA AFTER PROCESSING: ");
 
         // Now register the bean just for the SECOM interfaces
         final FilterRegistrationBean<CommonsRequestLoggingFilter> secomRequestLogging = new FilterRegistrationBean<>();
