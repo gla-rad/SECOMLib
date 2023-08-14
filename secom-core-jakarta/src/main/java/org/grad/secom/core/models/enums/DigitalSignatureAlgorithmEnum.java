@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models.enums;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Arrays;
 
 /**
@@ -27,8 +29,11 @@ import java.util.Arrays;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
+    @JsonProperty("dsa")
     DSA("SHA256withDSA"),
+    @JsonProperty("ecdsa")
     ECDSA("SHA256withECDSA"),
+    @JsonProperty("cvc_ecdsa")
     CVC_ECDSA("SHA256withCVC-ECDSA");
 
     // Enum Variables

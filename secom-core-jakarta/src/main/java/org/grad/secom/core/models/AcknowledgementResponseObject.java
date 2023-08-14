@@ -27,7 +27,6 @@ import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
 public class AcknowledgementResponseObject {
 
     // Class Variables
-    @JsonProperty("SECOM_ResponseCode")
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
     private String responseText;
 
@@ -36,6 +35,7 @@ public class AcknowledgementResponseObject {
      *
      * @return the secom response code
      */
+    @JsonProperty("SECOM_ResponseCode")
     public SECOM_ResponseCodeEnum getSECOM_ResponseCode() {
         return SECOM_ResponseCode;
     }

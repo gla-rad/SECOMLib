@@ -30,7 +30,7 @@
     <version>0.0.17-SNAPSHOT</version>
 
     <properties>
-        <springframework.version>5.3.18</springframework.version>
+        <springframework.version>5.3.29</springframework.version>
         <resteasy-spring-boot.version>5.1.0.Final</resteasy-spring-boot.version>
     </properties>
 
