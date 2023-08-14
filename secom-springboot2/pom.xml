@@ -31,7 +31,7 @@
 
     <properties>
         <springframework.version>5.3.18</springframework.version>
-        <resteasy-spring-boot.version>5.0.0.Final</resteasy-spring-boot.version>
+        <resteasy-spring-boot.version>5.1.0.Final</resteasy-spring-boot.version>
     </properties>
 
     <dependencies>
@@ -64,7 +64,7 @@
 
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-spring-boot-starter</artifactId>
+            <artifactId>resteasy-servlet-spring-boot-starter</artifactId>
             <version>${resteasy-spring-boot.version}</version>
         </dependency>
 

@@ -19,7 +19,7 @@ package org.grad.secom.springboot2.components;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import org.apache.logging.log4j.util.Strings;
+import org.apache.commons.lang3.StringUtils;
 import org.grad.secom.core.base.SecomCertificateProvider;
 import org.grad.secom.core.base.SecomCompressionProvider;
 import org.grad.secom.core.base.SecomEncryptionProvider;
@@ -116,13 +116,13 @@ public class SecomClient {
                     .forClient();
 
             // If we have a keystore and a valid password
-            if (Strings.isNotBlank(config.getKeystore()) && Strings.isNotBlank(config.getKeystorePassword())) {
+            if (StringUtils.isNotBlank(config.getKeystore()) && StringUtils.isNotBlank(config.getKeystorePassword())) {
                 sslContextBuilder.keyManager(KeyStoreUtils.getKeyManagerFactory(
                         config.getKeystore(), config.getKeystorePassword(), config.getKeystoreType(), null));
             }
 
             // If we have a truststore and a valid password
-            if (Strings.isNotBlank(config.getTruststore()) && Strings.isNotBlank(config.getTruststorePassword())) {
+            if (StringUtils.isNotBlank(config.getTruststore()) && StringUtils.isNotBlank(config.getTruststorePassword())) {
                 sslContextBuilder.trustManager(KeyStoreUtils.getTrustManagerFactory(
                         config.getTruststore(), config.getTruststorePassword(), config.getTruststoreType(), null));
             }
