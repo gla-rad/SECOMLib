@@ -83,11 +83,11 @@
     <distributionManagement>
         <repository>
             <id>grad</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad/</url>
         </repository>
         <snapshotRepository>
             <id>grad-snapshots</id>
-            <url>https://palatia.grad-rrnav.pub:8081/repository/grad-snapshots/</url>
+            <url>https://rnavlab.gla-rad.org/mvn/repository/grad-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
