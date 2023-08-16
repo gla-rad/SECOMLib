@@ -26,7 +26,7 @@ import org.grad.secom.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Collections;
 import java.util.Set;
@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Component
+@Configuration
 @ApplicationPath("/api/secom/")
 public class JaxrsApplication extends Application {
 
