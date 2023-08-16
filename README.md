@@ -108,12 +108,12 @@ Then you can add the following repositories:
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-core-jakarta</artifactId>
-        <version>0.0.22</version>
+        <version>0.0.23</version>
     </dependency>
     <dependency>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-springboot3</artifactId>
-        <version>0.0.22</version>
+        <version>0.0.23</version>
     </dependency>
 
 Once the core and springboot modules have been imported, the JAX-RS application
@@ -209,10 +209,13 @@ simple example for a SECOM client is the following:
     @Slf4j
     public class SecomSignatureProviderImpl implements SecomSignatureProvider {
 
+        // TODO: Define a private key
+        PrivateKey privateKey;
+    
         /**
          * This function overrides the interface definition to provide the SECOM
          * signature provision operation. This can ve done locally, or by asking
-         * another microservice to perform the atual singing for us.
+         * another microservice to perform the actual singing for us.
          *
          * @param signatureCertificate  The digital signature certificate to be used for the signature generation
          * @param algorithm             The algorithm to be used for the signature generation
@@ -224,12 +227,12 @@ simple example for a SECOM client is the following:
             // Create a new signature to sign the provided content
             try {
                 Signature sign = Signature.getInstance(algorithm.getValue());
-                sign.initSign(X509Utils.privateKeyFromPem(new String(this.privateKeyFile.getInputStream().readAllBytes(), StandardCharsets.UTF_8), this.keyPairCurve));
+                sign.initSign(this.privateKey);
                 sign.update(payload);
     
                 // Sign and return the signature
                 return sign.sign();
-            } catch (NoSuchAlgorithmException | IOException | InvalidKeySpecException| SignatureException | InvalidKeyException ex) {
+            } catch (NoSuchAlgorithmException | SignatureException | InvalidKeyException ex) {
                 log.error(ex.getMessage());
                 return null;
             }
