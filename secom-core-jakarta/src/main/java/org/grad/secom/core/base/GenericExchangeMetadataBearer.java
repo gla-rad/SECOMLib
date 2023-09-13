@@ -67,8 +67,12 @@ public interface GenericExchangeMetadataBearer {
         // Populate the known values
         metadata.setProtectionScheme(signatureProvider != null ? SecomConstants.SECOM_PROTECTION_SCHEME : metadata.getProtectionScheme());
         metadata.setDigitalSignatureReference(signatureProvider != null ? signatureProvider.getSignatureAlgorithm() : metadata.getDigitalSignatureReference());
-        metadata.setDataProtection(Boolean.FALSE);
-        metadata.setCompressionFlag(Boolean.FALSE);
+        metadata.setDataProtection(Optional.of(metadata)
+                .map(SECOM_ExchangeMetadataObject::getDataProtection)
+                .orElse(Boolean.FALSE));
+        metadata.setCompressionFlag(Optional.of(metadata)
+                .map(SECOM_ExchangeMetadataObject::getCompressionFlag)
+                .orElse(Boolean.FALSE));
 
         // Set the new updated version
         this.setExchangeMetadata(metadata);
