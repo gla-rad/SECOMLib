@@ -20,6 +20,9 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManagerFactory;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -40,7 +43,10 @@ public class KeyStoreUtils {
 
     /**
      * Loads the specified key-store, using the provided algorithm type and
-     * password.
+     * password. The keystore will first be checked if it exists as a file in
+     * the filesystem, and if not, it will be loaded directly from the
+     * classpath.
+     *
      *
      * @param keystore              The location of the keystore to be loaded
      * @param keystorePassword      The password for the keystore to be loaded
@@ -54,9 +60,11 @@ public class KeyStoreUtils {
     public static KeyStore getKeyStore(String keystore,
                                        String keystorePassword,
                                        String keystoreType) throws KeyStoreException, NoSuchAlgorithmException, IOException, CertificateException {
+        Path keystorePath = Paths.get(keystore);
         KeyStore clientKeyStore = KeyStore.getInstance(Optional.ofNullable(keystoreType).orElse(KeyStore.getDefaultType()));
 
-        try (InputStream ksFileInputStream = KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystore)) {
+        // Check if keystore exists as a file, otherwise get it from the classpath
+        try (InputStream ksFileInputStream = Files.exists(keystorePath) ? Files.newInputStream(keystorePath) : KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystore)) {
             clientKeyStore.load(ksFileInputStream, keystorePassword.toCharArray());
             return clientKeyStore;
         }
