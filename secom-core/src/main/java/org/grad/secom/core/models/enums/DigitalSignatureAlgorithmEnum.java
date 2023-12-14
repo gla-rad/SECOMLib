@@ -30,11 +30,11 @@ import java.util.Arrays;
  */
 public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
     @JsonProperty("dsa")
-    DSA("SHA256withDSA"),
+    DSA("SHA3-384withDSA"),
     @JsonProperty("ecdsa")
-    ECDSA("SHA256withECDSA"),
+    ECDSA("SHA3-384withECDSA"),
     @JsonProperty("cvc_ecdsa")
-    CVC_ECDSA("SHA256withCVC-ECDSA");
+    CVC_ECDSA("SHA-384withCVC-ECDSA");
 
     // Enum Variables
     private final String value;
