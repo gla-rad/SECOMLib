@@ -34,6 +34,13 @@ public class GetSummaryResponseObject {
     private String responseText;
 
     /**
+     * Instantiates a new Get Summary response object.
+     */
+    public GetSummaryResponseObject() {
+        this.responseText = "";
+    }
+
+    /**
      * Gets summary object.
      *
      * @return the summary object

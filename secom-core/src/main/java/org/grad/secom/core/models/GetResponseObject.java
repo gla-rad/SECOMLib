@@ -37,7 +37,7 @@ public class GetResponseObject implements DigitalSignatureCollectionBearer {
     private String responseText;
 
     /**
-     * Instantiates a new Gey response object.
+     * Instantiates a new Get response object.
      */
     public GetResponseObject() {
         this.responseText = "";
