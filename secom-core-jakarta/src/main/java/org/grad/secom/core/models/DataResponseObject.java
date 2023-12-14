@@ -52,6 +52,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
      */
     public DataResponseObject() {
         this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.ackRequest = AckRequestEnum.NO_ACK_REQUESTED;
     }
 
     /**
