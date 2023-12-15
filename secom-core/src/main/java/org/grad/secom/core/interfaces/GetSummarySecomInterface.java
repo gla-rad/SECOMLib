@@ -29,10 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
@@ -99,7 +96,11 @@ public interface GetSummarySecomInterface extends GenericSecomInterface {
         GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof InvalidFormatException
+                || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             getSummaryResponseObject.setResponseText("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {

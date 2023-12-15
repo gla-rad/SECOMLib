@@ -17,6 +17,7 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.ws.rs.*;
 import org.grad.secom.core.exceptions.*;
 import org.grad.secom.core.models.AcknowledgementObject;
 import org.grad.secom.core.models.AcknowledgementResponseObject;
@@ -26,10 +27,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -86,7 +83,11 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(null);
             acknowledgementResponseObject.setResponseText("Bad Request");
-        } else if (ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException) {
+        } else if (ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof InvalidFormatException
+                || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setResponseText("Missing required data for the service");

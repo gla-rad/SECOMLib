@@ -17,6 +17,7 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import jakarta.ws.rs.*;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.AccessNotificationObject;
@@ -26,10 +27,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -79,7 +76,12 @@ public interface AccessNotificationSecomInterface extends GenericSecomInterface 
         AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException || ex.getCause() instanceof SecomValidationException || ex instanceof ValidationException || ex instanceof InvalidFormatException || ex instanceof SecomNotFoundException) {
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof InvalidFormatException
+                || ex instanceof SecomNotFoundException
+                || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             accessNotificationResponseObject.setResponseText("Bad Request");
         } else {
