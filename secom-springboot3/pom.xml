@@ -30,8 +30,8 @@
     <version>0.0.28</version>
 
     <properties>
-        <springframework3.version>6.0.11</springframework3.version>
-        <resteasy-spring-boot.version>6.0.3.Final</resteasy-spring-boot.version>
+        <springframework3.version>6.1.1</springframework3.version>
+        <resteasy-spring-boot.version>6.0.4.Final</resteasy-spring-boot.version>
         <swagger.version>2.2.15</swagger.version>
     </properties>
 
