@@ -44,7 +44,7 @@ class AcknowledgementResponseObjectTest {
         // Generate a new object
         this.obj = new AcknowledgementResponseObject();
         this.obj.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
     }
 
     /**
@@ -59,7 +59,7 @@ class AcknowledgementResponseObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertEquals(this.obj.getSECOM_ResponseCode(), result.getSECOM_ResponseCode());
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
     }
 
 }

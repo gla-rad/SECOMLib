@@ -28,7 +28,7 @@ public class AcknowledgementResponseObject {
 
     // Class Variables
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
-    private String responseText;
+    private String message;
 
     /**
      * Gets secom response code.
@@ -54,16 +54,16 @@ public class AcknowledgementResponseObject {
      *
      * @return the response text
      */
-    public String getResponseText() {
-        return responseText;
+    public String getMessage() {
+        return message;
     }
 
     /**
      * Sets response text.
      *
-     * @param responseText the response text
+     * @param message the response text
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }
