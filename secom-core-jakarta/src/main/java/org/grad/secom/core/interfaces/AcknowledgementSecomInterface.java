@@ -79,14 +79,11 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
         AcknowledgementResponseObject acknowledgementResponseObject = new AcknowledgementResponseObject();
 
         // Handle according to the exception type
-        if (ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
-            acknowledgementResponseObject.setSECOM_ResponseCode(null);
-            acknowledgementResponseObject.setMessage("Bad Request");
-        } else if (ex instanceof SecomValidationException
+        if (ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof InvalidFormatException
+                || ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
@@ -96,18 +93,20 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
             acknowledgementResponseObject.setMessage("Failed signature verification");
         } else if (ex instanceof SecomInvalidCertificateException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+            responseStatus = Response.Status.FORBIDDEN;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             acknowledgementResponseObject.setMessage("Invalid Certificate");
         } else if (ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
+            acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             acknowledgementResponseObject.setMessage("Not authorized to upload ACK");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            acknowledgementResponseObject.setSECOM_ResponseCode(null);
+            acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
 
             // Divert from the common practice a little
-            responseStatus = responseStatus == Response.Status.INTERNAL_SERVER_ERROR ? Response.Status.BAD_REQUEST : responseStatus;
+            responseStatus = responseStatus == Response.Status.INTERNAL_SERVER_ERROR ?
+                    Response.Status.BAD_REQUEST : responseStatus;
             acknowledgementResponseObject.setMessage(responseStatus == Response.Status.FORBIDDEN ?
                     "Not authorized to upload ACK" : responseStatus.getReasonPhrase());
         }
