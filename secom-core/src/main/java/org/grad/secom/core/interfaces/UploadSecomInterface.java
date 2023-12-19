@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSchemaValidationException;
@@ -83,7 +84,7 @@ public interface UploadSecomInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof InvalidFormatException
+                || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);

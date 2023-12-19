@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.EncryptionKeyObject;
@@ -78,7 +79,7 @@ public interface EncryptionKeySecomInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof InvalidFormatException
+                || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setResponseText("Bad Request");

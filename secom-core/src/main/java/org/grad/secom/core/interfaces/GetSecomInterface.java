@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
@@ -101,7 +102,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof InvalidFormatException
+                || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             getResponseObject.setResponseText("Bad Request");
