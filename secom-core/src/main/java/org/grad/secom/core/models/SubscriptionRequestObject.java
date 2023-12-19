@@ -40,6 +40,7 @@ public class SubscriptionRequestObject {
     private SECOM_DataProductType dataProductType;
     private UUID dataReference;
     private String productVersion;
+    @Pattern(regexp = "^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$")
     private String geometry;
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;

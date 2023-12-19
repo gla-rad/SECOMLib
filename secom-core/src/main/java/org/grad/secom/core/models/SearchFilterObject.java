@@ -27,6 +27,7 @@ public class SearchFilterObject {
 
     // Class Variables
     private SearchParameters query;
+    @Pattern(regexp = "^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$")
     private String geometry;
     @Pattern(regexp = "^[a-zA-Z0-9 _:()+\\-,.*?\"]*$")
     private String freetext;
