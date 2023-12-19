@@ -19,6 +19,7 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import org.grad.secom.core.exceptions.SecomValidationException;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -69,6 +70,6 @@ public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
         return Optional.ofNullable(value)
                 .filter(not(String::isBlank))
                 .map(v -> LocalDateTime.parse(v, SECOM_DATE_TIME_FORMATTER))
-                .orElse(null);
+                .orElseThrow(() -> new SecomValidationException("The provided date-time format seems invalid"));
     }
 }
