@@ -45,7 +45,7 @@ class SubscriptionResponseObjectTest {
         // Generate a new object
         this.obj = new SubscriptionResponseObject();
         this.obj.setSubscriptionIdentifier(UUID.randomUUID());
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
     }
 
     /**
@@ -60,7 +60,7 @@ class SubscriptionResponseObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
     }
 
 }

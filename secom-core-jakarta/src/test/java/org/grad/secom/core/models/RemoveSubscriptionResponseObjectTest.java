@@ -42,7 +42,7 @@ class RemoveSubscriptionResponseObjectTest {
 
         // Generate a new object
         this.obj = new RemoveSubscriptionResponseObject();
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
     }
 
     /**
@@ -56,7 +56,7 @@ class RemoveSubscriptionResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
     }
 
 }

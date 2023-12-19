@@ -82,13 +82,13 @@ public interface SubscriptionSecomInterface extends GenericSecomInterface {
                 || ex instanceof InvalidFormatException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            subscriptionResponseObject.setResponseText("Bad Request");
+            subscriptionResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            subscriptionResponseObject.setResponseText("Not authorized to requested information");
+            subscriptionResponseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            subscriptionResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

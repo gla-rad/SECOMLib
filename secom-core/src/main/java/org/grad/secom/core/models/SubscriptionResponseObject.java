@@ -27,7 +27,7 @@ public class SubscriptionResponseObject {
 
     // Class Variables
     private UUID subscriptionIdentifier;
-    private String responseText;
+    private String message;
 
     /**
      * Gets subscription identifier.
@@ -48,20 +48,20 @@ public class SubscriptionResponseObject {
     }
 
     /**
-     * Gets response text.
+     * Gets message.
      *
-     * @return the response text
+     * @return the message
      */
-    public String getResponseText() {
-        return responseText;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets response text.
+     * Sets message.
      *
-     * @param responseText the response text
+     * @param message the message
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

@@ -84,16 +84,16 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
                 || ex instanceof InvalidFormatException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            removeSubscriptionResponseObject.setResponseText("Bad Request");
+            removeSubscriptionResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            removeSubscriptionResponseObject.setResponseText("Not authorized to remove subscription");
+            removeSubscriptionResponseObject.setMessage("Not authorized to remove subscription");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.FORBIDDEN;
-            removeSubscriptionResponseObject.setResponseText("Subscriber identifier not found");
+            removeSubscriptionResponseObject.setMessage("Subscriber identifier not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            removeSubscriptionResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            removeSubscriptionResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

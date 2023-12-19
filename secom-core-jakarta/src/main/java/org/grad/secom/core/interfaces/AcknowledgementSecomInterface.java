@@ -102,13 +102,16 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
             acknowledgementResponseObject.setMessage("Not authorized to upload ACK");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
 
             // Divert from the common practice a little
             responseStatus = responseStatus == Response.Status.INTERNAL_SERVER_ERROR ?
                     Response.Status.BAD_REQUEST : responseStatus;
-            acknowledgementResponseObject.setMessage(responseStatus == Response.Status.FORBIDDEN ?
-                    "Not authorized to upload ACK" : responseStatus.getReasonPhrase());
+            var responseMessage = responseStatus == Response.Status.FORBIDDEN ?
+                    "Not authorized to upload ACK" : responseStatus.getReasonPhrase();
+
+            // And populate the acknowledgement response object
+            acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
+            acknowledgementResponseObject.setMessage(responseMessage);
         }
 
         // And send the error response back
