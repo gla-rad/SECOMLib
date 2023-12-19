@@ -89,7 +89,7 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
             responseStatus = Response.Status.FORBIDDEN;
             removeSubscriptionResponseObject.setMessage("Not authorized to remove subscription");
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.FORBIDDEN;
+            responseStatus = Response.Status.NOT_FOUND;
             removeSubscriptionResponseObject.setMessage("Subscriber identifier not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);

@@ -32,6 +32,7 @@ import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.AC
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -113,8 +114,12 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
                     return GetSummarySecomInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
                 case PING_INTERFACE_PATH:
                     return PingSecomInterface.handlePingInterfaceExceptions(ex, this.request, null);
-                case SUBSCRIPTION_INTERFACE_PATH:
-                    return SubscriptionSecomInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
+                    if(Objects.equals(this.request.getMethod(), "POST")) {
+                        return SubscriptionSecomInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                    } else if(Objects.equals(this.request.getMethod(), "DELETE")) {
+                        return RemoveSubscriptionSecomInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
+                    }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationSecomInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 default:

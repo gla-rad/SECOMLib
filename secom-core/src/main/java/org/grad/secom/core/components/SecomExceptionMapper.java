@@ -113,8 +113,12 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
                     return GetSummarySecomInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
                 case PING_INTERFACE_PATH:
                     return PingSecomInterface.handlePingInterfaceExceptions(ex, this.request, null);
-                case SUBSCRIPTION_INTERFACE_PATH:
-                    return SubscriptionSecomInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
+                    if(Objects.equals(this.request.getMethod(), "POST")) {
+                        return SubscriptionSecomInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                    } else if(Objects.equals(this.request.getMethod(), "DELETE")) {
+                        return RemoveSubscriptionSecomInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
+                    }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationSecomInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 default:
