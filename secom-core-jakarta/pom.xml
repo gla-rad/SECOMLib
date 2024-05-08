@@ -21,13 +21,13 @@
     <parent>
         <artifactId>secom-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.38</version>
+        <version>0.0.39-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-core-jakarta</artifactId>
-    <version>0.0.38</version>
+    <version>0.0.39-SNAPSHOT</version>
 
     <properties>
         <version.maven.jakartaee>9.0.0</version.maven.jakartaee>

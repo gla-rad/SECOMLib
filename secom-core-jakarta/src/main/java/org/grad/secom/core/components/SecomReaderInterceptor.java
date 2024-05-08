@@ -18,6 +18,7 @@ package org.grad.secom.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secom.core.base.*;
+import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.AbstractEnvelope;
 import org.grad.secom.core.models.GetResponseObject;
 import org.grad.secom.core.models.UploadObject;
@@ -109,7 +110,15 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
         }
         // For everything else just proceed
         else {
-            return ctx.proceed();
+            // For some reason in the latest version of the RESTEasy Spring Boot
+            // starter exceptions in this point are not caught by the exception
+            // mapper. It seems like our specific SECOM exceptions though are
+            // handled properly so this is a temporary solution....
+            try {
+                return ctx.proceed();
+            } catch(Exception ex) {
+                throw new SecomValidationException(ex.getMessage());
+            }
         }
 
         /*
