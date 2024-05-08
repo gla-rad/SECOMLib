@@ -40,8 +40,10 @@ public class SubscriptionRequestObject {
     private SECOM_DataProductType dataProductType;
     private UUID dataReference;
     private String productVersion;
+    @Schema(description = "The subscription geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$")
     private String geometry;
+    @Schema(description = "The subscription area as UNLOCODE", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
     @Schema(description = "The subscription period start", type = "string",example = "19850412T101530")

@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.Min;
@@ -47,6 +48,7 @@ public class SearchParameters {
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
     private String imo;
     private String serviceType;
+    @Schema(description = "The search area as UNLOCODE", type = "string", example = "GBHRW")
     @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}")
     private String unlocode;
     private URI endpointUri;
