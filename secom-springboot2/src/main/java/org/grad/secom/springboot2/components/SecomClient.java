@@ -18,6 +18,7 @@ package org.grad.secom.springboot2.components;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.commons.lang3.StringUtils;
 import org.grad.secom.core.base.SecomCertificateProvider;
@@ -132,7 +133,9 @@ public class SecomClient {
             }
 
             // Add the SSL context to the HTTP connector
-            SslContext sslContext = sslContextBuilder.build();
+            SslContext sslContext = sslContextBuilder
+                    .sslProvider(SslProvider.JDK)
+                    .build();
             httpConnector = httpConnector.secure(spec -> spec.sslContext(sslContext)
                     .handshakeTimeout(Duration.of(2, ChronoUnit.SECONDS)));
         }
