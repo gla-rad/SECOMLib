@@ -31,8 +31,14 @@ import java.util.Arrays;
 public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
     @JsonProperty("dsa")
     DSA("SHA3-384withDSA"),
-    @JsonProperty("ecdsa")
-    ECDSA("SHA3-384withECDSA"),
+    @JsonProperty("ecdsa-256-sha2-256")
+    SHA2_256_WITH_ECDSA("SHA256withECDSA"),
+    @JsonProperty("ecdsa-256-sha3-256")
+    SHA3_256_WITH_ECDSA("SHA3-256withECDSA"),
+    @JsonProperty("ecdsa-384-sha2")
+    SHA2_384_WITH_ECDSA("SHA384withECDSA"),
+    @JsonProperty("ecdsa-384-sha3")
+    SHA3_384_WITH_ECDSA("SHA3-384withECDSA"),
     @JsonProperty("cvc_ecdsa")
     CVC_ECDSA("SHA-384withCVC-ECDSA");
 
@@ -65,7 +71,7 @@ public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
      */
     public static DigitalSignatureAlgorithmEnum fromValue(String value) {
         return Arrays.stream(DigitalSignatureAlgorithmEnum.values())
-                .filter(t -> t.getValue().compareTo(value) == 0)
+                .filter(t -> t.getValue().equalsIgnoreCase(value))
                 .findFirst()
                 .orElse(null);
     }
