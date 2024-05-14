@@ -71,7 +71,7 @@ public enum DigitalSignatureAlgorithmEnum implements SECOM_Enum {
      */
     public static DigitalSignatureAlgorithmEnum fromValue(String value) {
         return Arrays.stream(DigitalSignatureAlgorithmEnum.values())
-                .filter(t -> t.getValue().compareTo(value) == 0)
+                .filter(t -> t.getValue().equalsIgnoreCase(value))
                 .findFirst()
                 .orElse(null);
     }
