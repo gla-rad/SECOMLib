@@ -40,6 +40,7 @@ public enum SECOM_DataProductType implements SECOM_Enum {
     S128("S-128 Catalogue of Nautical Products"),
     S129("S-129 Under Keel Clearance Management (UKCM)"),
     S131("S-131 Marine Harbour Infrastructure"),
+    S201("S-201 Aids to Navigation (AtoN) Information"),
     S210("S-210 Inter-VTS Exchange Format"),
     S211("S-211 Port Call Message Format"),
     S212("S-212 VTS Digital Information Service"),
