@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.components;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.grad.secom.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -72,13 +73,16 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception ex) {
         //First log the message
-        Logger.getLogger(Optional.of(ex)
-                        .map(Exception::getCause)
-                        .map(Throwable::toString)
-                        .orElse("SecomExceptionMapper.class"))
-                .severe(Optional.of(ex)
-                        .map(Exception::getMessage)
-                        .orElse("Unknown error..."));
+        final Logger secomLogger = Logger.getLogger(Optional.of(ex)
+                .map(Exception::getCause)
+                .map(Throwable::toString)
+                .orElse("SecomExceptionMapper.class"));
+        secomLogger.severe(Optional.of(ex)
+                .map(Exception::getMessage)
+                .orElse("Unknown error..."));
+        secomLogger.fine(Optional.of(ex)
+                .map(ExceptionUtils::getStackTrace)
+                .orElse("Unknown stacktrace..."));
 
         // Then handle
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
