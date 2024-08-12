@@ -151,6 +151,11 @@ public class SecomClient {
         this.secomClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpConnector))
                 .baseUrl(url.toString())
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(Optional.of(config)
+                                .map(SecomConfigProperties::getClientMaxMemorySize)
+                                .orElse(-1)))
                 //.filter(setJWT())
                 .build();
     }

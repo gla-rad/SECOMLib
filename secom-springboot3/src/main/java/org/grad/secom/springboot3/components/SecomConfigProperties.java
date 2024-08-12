@@ -34,6 +34,7 @@ public class SecomConfigProperties {
     private String truststoreType;
     private String truststorePassword;
     private Boolean insecureSslPolicy;
+    private Integer clientMaxMemorySize;
 
     /**
      * Gets keystore.
@@ -159,5 +160,23 @@ public class SecomConfigProperties {
      */
     public void setInsecureSslPolicy(Boolean insecureSslPolicy) {
         this.insecureSslPolicy = insecureSslPolicy;
+    }
+
+    /**
+     * Gets client max memory size.
+     *
+     * @return the client max memory size
+     */
+    public Integer getClientMaxMemorySize() {
+        return clientMaxMemorySize;
+    }
+
+    /**
+     * Sets client max memory size.
+     *
+     * @param clientMaxMemorySize the client max memory size
+     */
+    public void setClientMaxMemorySize(Integer clientMaxMemorySize) {
+        this.clientMaxMemorySize = clientMaxMemorySize;
     }
 }
