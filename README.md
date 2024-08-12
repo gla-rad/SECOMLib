@@ -157,7 +157,7 @@ interface that implements the **CapabilitySecomInterface** class.
             // Start building the capability response
             CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
             
-            apabilityResponseObject.setCapability(Collections.singletonList(capabilityObject));
+            capabilityResponseObject.setCapability(Collections.singletonList(capabilityObject));
             capabilityObject.setServiceVersion(this.appVersion);
             
             // And return the Capability Response Object
