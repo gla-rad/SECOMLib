@@ -152,7 +152,7 @@ public class SecomClient {
                 .baseUrl(url.toString())
                 .codecs(configurer -> configurer
                         .defaultCodecs()
-                        .maxInMemorySize(Optional.of(config)
+                        .maxInMemorySize(Optional.ofNullable(config)
                                 .map(SecomConfigProperties::getClientMaxMemorySize)
                                 .orElse(-1)))
                 //.filter(setJWT())
