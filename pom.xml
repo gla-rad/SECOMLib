@@ -6,7 +6,7 @@
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.46</version>
+    <version>0.0.47</version>
 
     <modules>
         <module>secom-core</module>
@@ -18,8 +18,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.min.version>3.0.0</maven.min.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
