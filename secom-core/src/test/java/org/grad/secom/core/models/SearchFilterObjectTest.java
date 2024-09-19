@@ -50,7 +50,7 @@ class SearchFilterObjectTest {
         this.searchParameters.setName("name");
         this.searchParameters.setStatus("status");
         this.searchParameters.setVersion("version");
-        this.searchParameters.setKeywords("keywords");
+        this.searchParameters.setKeyword("keyword");
         this.searchParameters.setDescription("description");
         this.searchParameters.setDataProductType(SECOM_DataProductType.S101);
         this.searchParameters.setSpecificationId("specificationId");
@@ -61,14 +61,15 @@ class SearchFilterObjectTest {
         this.searchParameters.setServiceType("serviceType");
         this.searchParameters.setUnlocode("unlocode");
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
-        this.searchParameters.setPage(0);
-        this.searchParameters.setPageSize(100);
 
         // Generate a new object
         this.obj = new SearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
         this.obj.setFreetext("freeText");
+        this.obj.setPage(0);
+        this.obj.setPageSize(100);
+        this.obj.setIncludeXml(false);
     }
 
     /**
@@ -86,7 +87,7 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getName(), result.getQuery().getName());
         assertEquals(this.obj.getQuery().getStatus(), result.getQuery().getStatus());
         assertEquals(this.obj.getQuery().getVersion(), result.getQuery().getVersion());
-        assertEquals(this.obj.getQuery().getKeywords(), result.getQuery().getKeywords());
+        assertEquals(this.obj.getQuery().getKeyword(), result.getQuery().getKeyword());
         assertEquals(this.obj.getQuery().getDescription(), result.getQuery().getDescription());
         assertEquals(this.obj.getQuery().getDataProductType(), result.getQuery().getDataProductType());
         assertEquals(this.obj.getQuery().getSpecificationId(), result.getQuery().getSpecificationId());
@@ -97,10 +98,11 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getServiceType(), result.getQuery().getServiceType());
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
-        assertEquals(this.obj.getQuery().getPage(), result.getQuery().getPage());
-        assertEquals(this.obj.getQuery().getPageSize(), result.getQuery().getPageSize());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
         assertEquals(this.obj.getFreetext(), result.getFreetext());
+        assertEquals(this.obj.getPage(), result.getPage());
+        assertEquals(this.obj.getPageSize(), result.getPageSize());
+        assertEquals(this.obj.isIncludeXml(), result.isIncludeXml());
     }
 
 }

@@ -18,6 +18,7 @@ package org.grad.secom.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -34,6 +35,11 @@ public class SearchFilterObject {
     private String geometry;
     @Pattern(regexp = "^[a-zA-Z0-9 _:()+\\-,.*?\"]*$")
     private String freetext;
+    @Min(value = 0L, message = "The page value must be positive")
+    private Integer page;
+    @Min(value = 0L, message = "The page size value must be positive")
+    private Integer pageSize;
+    private boolean includeXml;
 
     /**
      * Gets query.
@@ -87,5 +93,59 @@ public class SearchFilterObject {
      */
     public void setFreetext(String freetext) {
         this.freetext = freetext;
+    }
+
+    /**
+     * Gets page.
+     *
+     * @return the page
+     */
+    public Integer getPage() {
+        return page;
+    }
+
+    /**
+     * Sets page.
+     *
+     * @param page the page
+     */
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    /**
+     * Gets page size.
+     *
+     * @return the page size
+     */
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * Sets page size.
+     *
+     * @param pageSize the page size
+     */
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    /**
+     * Is include xml boolean.
+     *
+     * @return the boolean
+     */
+    public boolean isIncludeXml() {
+        return includeXml;
+    }
+
+    /**
+     * Sets include xml.
+     *
+     * @param includeXml the include xml
+     */
+    public void setIncludeXml(boolean includeXml) {
+        this.includeXml = includeXml;
     }
 }

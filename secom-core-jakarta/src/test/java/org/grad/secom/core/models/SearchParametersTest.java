@@ -49,7 +49,7 @@ class SearchParametersTest {
         this.obj.setName("name");
         this.obj.setStatus("status");
         this.obj.setVersion("version");
-        this.obj.setKeywords("keywords");
+        this.obj.setKeyword("keyword");
         this.obj.setDescription("description");
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setSpecificationId("specificationId");
@@ -60,8 +60,6 @@ class SearchParametersTest {
         this.obj.setServiceType("serviceType");
         this.obj.setUnlocode("unlocode");
         this.obj.setEndpointUri(new URI("http://localhost"));
-        this.obj.setPage(0);
-        this.obj.setPageSize(100);
     }
 
     /**
@@ -78,7 +76,7 @@ class SearchParametersTest {
         assertEquals(this.obj.getName(), result.getName());
         assertEquals(this.obj.getStatus(), result.getStatus());
         assertEquals(this.obj.getVersion(), result.getVersion());
-        assertEquals(this.obj.getKeywords(), result.getKeywords());
+        assertEquals(this.obj.getKeyword(), result.getKeyword());
         assertEquals(this.obj.getDescription(), result.getDescription());
         assertEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getSpecificationId(), result.getSpecificationId());
@@ -89,8 +87,6 @@ class SearchParametersTest {
         assertEquals(this.obj.getServiceType(), result.getServiceType());
         assertEquals(this.obj.getUnlocode(), result.getUnlocode());
         assertEquals(this.obj.getEndpointUri(), result.getEndpointUri());
-        assertEquals(this.obj.getPage(), result.getPage());
-        assertEquals(this.obj.getPageSize(), result.getPageSize());
     }
 
 }
