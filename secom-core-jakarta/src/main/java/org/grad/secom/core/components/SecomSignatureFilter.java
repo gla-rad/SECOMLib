@@ -128,11 +128,13 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         // If we have an object, validate the signatures
         if(obj != null && obj.getEnvelope() != null) {
             // First decide on the signature algorithm
-            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.ofNullable(this.signatureProvider)
-                    .map(SecomSignatureProvider::getSignatureAlgorithm)
-                    .orElse(DigitalSignatureAlgorithmEnum.DSA);
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(obj)
+                    .map(EnvelopeSignatureBearer::getEnvelopeSignatureAlgorithm)
+                    .orElseGet(() -> Optional.of(this.signatureProvider)
+                            .map(SecomSignatureProvider::getSignatureAlgorithm)
+                            .orElse(DigitalSignatureAlgorithmEnum.DSA));
 
-            // First validate the envelope certificate
+            // Also0 validate the envelope certificate
             if(this.trustStoreProvider != null) {
                 checkCertificate(
                         obj.getEnvelope().getEnvelopeSignatureCertificate(),
@@ -157,7 +159,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                             .map(String::getBytes)
                             .orElse(null));
 
-            // Then validate the data signature if present
+            // Finally validate the data signature if present
             if(obj.getEnvelope() instanceof DigitalSignatureBearer) {
                 final DigitalSignatureBearer dataObj = (DigitalSignatureBearer)obj.getEnvelope();
 
