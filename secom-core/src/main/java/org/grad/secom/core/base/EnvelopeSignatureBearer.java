@@ -117,4 +117,21 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
         return this;
     }
 
+    /**
+     * A helper function that retrieves the envelope signature algorithm from
+     * the exchange metadata level (if that exists) and returns it so that is
+     * can be used during the signature checks.
+     *
+     * @return The digital signature algorithm type
+     */
+    @JsonIgnore
+    default DigitalSignatureAlgorithmEnum getEnvelopeSignatureAlgorithm() {
+        return Optional.ofNullable(this.getEnvelope())
+                .filter(GenericExchangeMetadataBearer.class::isInstance)
+                .map(GenericExchangeMetadataBearer.class::cast)
+                .map(GenericExchangeMetadataBearer::getExchangeMetadata)
+                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
+                .orElse(null);
+    }
+
 }
