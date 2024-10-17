@@ -59,7 +59,7 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setEndpointUri("http://localhost");
         this.searchObjectResult.setEndpointType("endpointType");
         this.searchObjectResult.setVersion("version");
-        this.searchObjectResult.setKeywords(Collections.singletonList("keywords"));
+        this.searchObjectResult.setKeywords("keywords");
         this.searchObjectResult.setUnlocode(Collections.singletonList("unlocode"));
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
         this.searchObjectResult.setPublishedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
@@ -96,9 +96,7 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointUri(), result.getSearchServiceResult().get(0).getEndpointUri());
         assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointType(), result.getSearchServiceResult().get(0).getEndpointType());
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
-        assertNotNull(result.getSearchServiceResult().get(0).getKeywords());
-        assertEquals(1, result.getSearchServiceResult().get(0).getKeywords().size());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getKeywords().get(0), result.getSearchServiceResult().get(0).getKeywords().get(0));
+        assertEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
         assertEquals(1, result.getSearchServiceResult().get(0).getUnlocode().size());
         assertEquals(this.obj.getSearchServiceResult().get(0).getUnlocode().get(0), result.getSearchServiceResult().get(0).getUnlocode().get(0));

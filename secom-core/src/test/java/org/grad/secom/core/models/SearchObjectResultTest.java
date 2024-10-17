@@ -58,7 +58,7 @@ class SearchObjectResultTest {
         this.obj.setEndpointUri("http://localhost");
         this.obj.setEndpointType("endpointType");
         this.obj.setVersion("version");
-        this.obj.setKeywords(Collections.singletonList("keywords"));
+        this.obj.setKeywords("keywords");
         this.obj.setUnlocode(Collections.singletonList("unlocode"));
         this.obj.setInstanceAsXml("instanceAsXml");
         this.obj.setPublishedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
@@ -88,9 +88,7 @@ class SearchObjectResultTest {
         assertEquals(this.obj.getEndpointUri(), result.getEndpointUri());
         assertEquals(this.obj.getEndpointType(), result.getEndpointType());
         assertEquals(this.obj.getVersion(), result.getVersion());
-        assertNotNull(result.getKeywords());
-        assertEquals(1, result.getKeywords().size());
-        assertEquals(this.obj.getKeywords().get(0), result.getKeywords().get(0));
+        assertEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
         assertEquals(1, result.getUnlocode().size());
         assertEquals(this.obj.getUnlocode().get(0), result.getUnlocode().get(0));

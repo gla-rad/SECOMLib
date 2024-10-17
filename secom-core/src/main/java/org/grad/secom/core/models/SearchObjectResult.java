@@ -54,7 +54,7 @@ public class SearchObjectResult {
     private String endpointUri;
     @NotNull
     private String endpointType;
-    private List<String> keywords;
+    private String keywords;
     private List<String> unlocode;
     private String instanceAsXml;
 
@@ -239,7 +239,7 @@ public class SearchObjectResult {
      *
      * @return the keywords
      */
-    public List<String> getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
@@ -248,7 +248,7 @@ public class SearchObjectResult {
      *
      * @param keywords the keywords
      */
-    public void setKeywords(List<String> keywords) {
+    public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
 
