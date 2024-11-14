@@ -21,7 +21,9 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static java.util.function.Predicate.not;
@@ -37,12 +39,12 @@ import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
+public class InstantDeSerializer extends StdDeserializer<Instant> {
 
     /**
      * Instantiates a new Byte array de serializer.
      */
-    protected DateTimeDeSerializer() {
+    protected InstantDeSerializer() {
         this(null);
     }
 
@@ -51,7 +53,7 @@ public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
      *
      * @param t the byte array class
      */
-    protected DateTimeDeSerializer(Class<LocalDateTime> t) {
+    protected InstantDeSerializer(Class<Instant> t) {
         super(t);
     }
 
@@ -64,11 +66,11 @@ public class DateTimeDeSerializer extends StdDeserializer<LocalDateTime> {
      * @throws IOException for any IO exceptions
      */
     @Override
-    public LocalDateTime deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+    public Instant deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
         final String value = jp.getCodec().readValue(jp, String.class);
         return Optional.ofNullable(value)
                 .filter(not(String::isBlank))
-                .map(v -> LocalDateTime.parse(v, SECOM_DATE_TIME_FORMATTER))
+                .map(v -> LocalDateTime.parse(v, SECOM_DATE_TIME_FORMATTER).toInstant(ZoneOffset.UTC))
                 .orElse(null);
     }
 }

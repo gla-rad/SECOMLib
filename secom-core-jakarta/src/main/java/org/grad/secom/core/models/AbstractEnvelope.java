@@ -22,10 +22,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeSerializer;
+import org.grad.secom.core.base.InstantSerializer;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 public abstract class AbstractEnvelope implements CsvStringGenerator {
 
@@ -36,9 +36,9 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     protected String envelopeRootCertificateThumbprint;
     @NotNull
     @Schema(description = "The envelope signature date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    protected LocalDateTime envelopeSignatureTime;
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeSerializer.class)
+    protected Instant envelopeSignatureTime;
 
     /**
      * Gets envelope signature certificate.
@@ -81,7 +81,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
      *
      * @return the envelope signature time
      */
-    public LocalDateTime getEnvelopeSignatureTime() {
+    public Instant getEnvelopeSignatureTime() {
         return envelopeSignatureTime;
     }
 
@@ -90,7 +90,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
      *
      * @param envelopeSignatureTime the envelope signature time
      */
-    public void setEnvelopeSignatureTime(LocalDateTime envelopeSignatureTime) {
+    public void setEnvelopeSignatureTime( Instant envelopeSignatureTime) {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
 

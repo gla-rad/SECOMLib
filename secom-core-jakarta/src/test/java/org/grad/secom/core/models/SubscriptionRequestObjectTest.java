@@ -25,7 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.URISyntaxException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -56,8 +56,8 @@ class SubscriptionRequestObjectTest {
         this.obj.setProductVersion("version");
         this.obj.setGeometry("geometry");
         this.obj.setUnlocode("unlocode");
-        this.obj.setSubscriptionPeriodStart(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setSubscriptionPeriodEnd(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setSubscriptionPeriodStart(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**

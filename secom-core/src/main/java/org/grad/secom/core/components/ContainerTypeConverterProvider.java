@@ -26,7 +26,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
 /**
- * The LocalDateTime Converter Provider.
+ * The ContainerType Converter Provider.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

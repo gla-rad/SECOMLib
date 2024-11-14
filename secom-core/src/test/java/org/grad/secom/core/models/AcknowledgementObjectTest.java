@@ -23,7 +23,7 @@ import org.grad.secom.core.models.enums.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -55,13 +55,13 @@ class AcknowledgementObjectTest {
 
         // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeAckObject();
-        this.envelopeLinkObject.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.envelopeLinkObject.setCreatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeLinkObject.setAckType(AckTypeEnum.DELIVERED_ACK);
         this.envelopeLinkObject.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.envelopeLinkObject.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.envelopeLinkObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
         this.obj = new AcknowledgementObject();

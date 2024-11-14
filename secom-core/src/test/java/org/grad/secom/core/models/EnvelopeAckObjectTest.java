@@ -24,7 +24,7 @@ import org.grad.secom.core.models.enums.NackTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -50,13 +50,13 @@ class EnvelopeAckObjectTest {
 
         // Generate a new object
         this.obj = new EnvelopeAckObject();
-        this.obj.setCreatedAt(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setCreatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setTransactionIdentifier(UUID.randomUUID());
         this.obj.setAckType(AckTypeEnum.OPENED_ACK);
         this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -89,13 +89,13 @@ class EnvelopeAckObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(this.obj.getCreatedAt().toEpochSecond(ZoneOffset.UTC), Long.parseLong(csv[0]));
+        assertEquals(this.obj.getCreatedAt().getEpochSecond(), Long.parseLong(csv[0]));
         assertEquals(this.obj.getEnvelopeCertificate(), csv[1]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
         assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
         assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC)), csv[6]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
     }
 
 }

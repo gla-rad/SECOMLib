@@ -26,7 +26,7 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -76,8 +76,8 @@ class EnvelopeLinkObjectTest {
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setSize(1);
-        this.obj.setTimeToLive(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setTimeToLive(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -136,8 +136,8 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getEnvelopeSignatureCertificate(), csv[12]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[13]);
         assertEquals(String.valueOf(this.obj.getSize()), csv[14]);
-        assertEquals(String.valueOf(this.obj.getTimeToLive().toEpochSecond(ZoneOffset.UTC)), csv[15]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC)), csv[16]);
+        assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[15]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[16]);
     }
 
 }

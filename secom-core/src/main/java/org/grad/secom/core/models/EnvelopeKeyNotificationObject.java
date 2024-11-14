@@ -19,11 +19,11 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.InstantDeSerializer;
 import org.grad.secom.core.base.DateTimeSerializer;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -43,8 +43,8 @@ public class EnvelopeKeyNotificationObject {
     @NotNull
     @Schema(description = "The envelope signature date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime envelopeSignatureTime;
+    @JsonDeserialize(using = InstantDeSerializer.class)
+    private Instant envelopeSignatureTime;
 
     /**
      * Gets data reference.
@@ -105,7 +105,7 @@ public class EnvelopeKeyNotificationObject {
      *
      * @return the envelope signature time
      */
-    public LocalDateTime getEnvelopeSignatureTime() {
+    public Instant getEnvelopeSignatureTime() {
         return envelopeSignatureTime;
     }
 
@@ -114,7 +114,7 @@ public class EnvelopeKeyNotificationObject {
      *
      * @param envelopeSignatureTime the envelope signature time
      */
-    public void setEnvelopeSignatureTime(LocalDateTime envelopeSignatureTime) {
+    public void setEnvelopeSignatureTime(Instant envelopeSignatureTime) {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
 }

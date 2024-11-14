@@ -33,7 +33,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * The SECOM Get Summary Interface Definition.
@@ -76,8 +76,8 @@ public interface GetSummarySecomInterface extends GenericSecomInterface {
                                         @QueryParam("productVersion") String productVersion,
                                         @QueryParam("geometry") String geometry,
                                         @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                        @QueryParam("validFrom") LocalDateTime validFrom,
-                                        @QueryParam("validTo") LocalDateTime validTo,
+                                        @QueryParam("validFrom") Instant validFrom,
+                                        @QueryParam("validTo") Instant validTo,
                                         @QueryParam("page") @Min(0) Integer page,
                                         @QueryParam("pageSize") @Min(0) Integer pageSize);
 

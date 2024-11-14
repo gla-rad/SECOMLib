@@ -19,13 +19,13 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeSerializer;
+import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 /**
@@ -60,13 +60,13 @@ public class SearchObjectResult {
 
     // Non-standard fields (mentioned but not standardised)
     @Schema(description = "The publication date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime publishedAt;
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeSerializer.class)
+    private Instant publishedAt;
     @Schema(description = "The last updated date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime lastUpdatedAt;
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeSerializer.class)
+    private Instant lastUpdatedAt;
     private String comment;
     private String mmsi;
     private String imo;
@@ -293,7 +293,7 @@ public class SearchObjectResult {
      *
      * @return the published at
      */
-    public LocalDateTime getPublishedAt() {
+    public Instant getPublishedAt() {
         return publishedAt;
     }
 
@@ -302,7 +302,7 @@ public class SearchObjectResult {
      *
      * @param publishedAt the published at
      */
-    public void setPublishedAt(LocalDateTime publishedAt) {
+    public void setPublishedAt( Instant publishedAt) {
         this.publishedAt = publishedAt;
     }
 
@@ -311,7 +311,7 @@ public class SearchObjectResult {
      *
      * @return the last updated at
      */
-    public LocalDateTime getLastUpdatedAt() {
+    public Instant getLastUpdatedAt() {
         return lastUpdatedAt;
     }
 
@@ -320,7 +320,7 @@ public class SearchObjectResult {
      *
      * @param lastUpdatedAt the last updated at
      */
-    public void setLastUpdatedAt(LocalDateTime lastUpdatedAt) {
+    public void setLastUpdatedAt( Instant lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 

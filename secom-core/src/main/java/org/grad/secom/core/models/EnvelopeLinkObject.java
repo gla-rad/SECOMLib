@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.DateTimeDeSerializer;
+import org.grad.secom.core.base.InstantDeSerializer;
 import org.grad.secom.core.base.DateTimeSerializer;
 import org.grad.secom.core.base.GenericExchangeMetadataBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
@@ -28,7 +28,7 @@ import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -57,8 +57,8 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     @Schema(description = "The time to live date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime timeToLive;
+    @JsonDeserialize(using = InstantDeSerializer.class)
+    private Instant timeToLive;
 
     /**
      * Instantiates a new Envelope link object.
@@ -198,7 +198,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @return the time to live
      */
-    public LocalDateTime getTimeToLive() {
+    public Instant getTimeToLive() {
         return timeToLive;
     }
 
@@ -207,7 +207,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @param timeToLive the time to live
      */
-    public void setTimeToLive(LocalDateTime timeToLive) {
+    public void setTimeToLive(Instant timeToLive) {
         this.timeToLive = timeToLive;
     }
 

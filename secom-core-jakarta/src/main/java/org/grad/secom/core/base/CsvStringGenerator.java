@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.models.enums.SECOM_Enum;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Base64;
@@ -82,10 +82,10 @@ public interface CsvStringGenerator {
                     .map(CsvStringGenerator::getCsvString)
                     .orElse("");
         }
-        else if(attribute instanceof LocalDateTime) {
+        else if(attribute instanceof Instant) {
             return Optional.of(attribute)
-                    .map(LocalDateTime.class::cast)
-                    .map(ldt -> ldt.toEpochSecond(ZoneOffset.UTC))
+                    .map(Instant.class::cast)
+                    .map(Instant::getEpochSecond)
                     .map(String::valueOf)
                     .orElse("");
         } else if(attribute instanceof Boolean) {

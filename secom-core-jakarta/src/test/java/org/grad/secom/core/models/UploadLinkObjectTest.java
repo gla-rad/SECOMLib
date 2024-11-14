@@ -26,7 +26,7 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -76,7 +76,7 @@ class UploadLinkObjectTest {
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeLinkObject.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.envelopeLinkObject.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.envelopeLinkObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
         this.obj = new UploadLinkObject();
