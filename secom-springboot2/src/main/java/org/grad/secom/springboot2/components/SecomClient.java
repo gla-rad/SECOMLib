@@ -485,13 +485,13 @@ public class SecomClient {
      *
      * @return the status response object
      */
-    public Optional<GetSummaryResponseObject> ping() {
+    public Optional<PingResponseObject> ping() {
         return this.secomClient
                 .get()
                 .uri(PING_INTERFACE_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(GetSummaryResponseObject.class)
+                .bodyToMono(PingResponseObject.class)
                 .blockOptional();
     }
 
