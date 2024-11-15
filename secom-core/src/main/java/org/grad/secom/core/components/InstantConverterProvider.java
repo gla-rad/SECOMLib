@@ -69,7 +69,7 @@ public class InstantConverterProvider implements ParamConverterProvider {
         public Instant fromString(String value) {
             if (value == null || value.isEmpty()) return null;
             try {
-                return LocalDateTime.parse(value, SECOM_DATE_TIME_FORMATTER).toInstant(ZoneOffset.UTC);
+                return Instant.from(SECOM_DATE_TIME_FORMATTER.parse(value));
             } catch (Exception ex) { // Direct to BAD_REQUEST
                 throw new SecomValidationException(ex.getMessage());
             }
