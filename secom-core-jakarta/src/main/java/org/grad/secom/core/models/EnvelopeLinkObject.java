@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.InstantDeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
 import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.base.GenericExchangeMetadataBearer;
 import org.grad.secom.core.models.enums.AckRequestEnum;
@@ -57,7 +57,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     @Schema(description = "The time to live date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant timeToLive;
 
     /**

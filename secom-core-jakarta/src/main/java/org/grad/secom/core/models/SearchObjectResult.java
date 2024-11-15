@@ -19,7 +19,7 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.InstantDeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
 import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
@@ -61,11 +61,11 @@ public class SearchObjectResult {
     // Non-standard fields (mentioned but not standardised)
     @Schema(description = "The publication date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant publishedAt;
     @Schema(description = "The last updated date-time", type = "string",example = "19850412T101530")
     @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
     private Instant lastUpdatedAt;
     private String comment;
     private String mmsi;

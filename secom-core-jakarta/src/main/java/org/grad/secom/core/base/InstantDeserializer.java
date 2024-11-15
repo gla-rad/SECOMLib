@@ -22,15 +22,13 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Optional;
 
 import static java.util.function.Predicate.not;
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
- * The DateTimeDeSerializer Class
+ * The DateTimeDeserializer Class
  * <p/>
  * In SECOM the date-time format is not the frequently used ISO. According to
  * the standard A DateTime is a combination of a date and a time type.
@@ -39,12 +37,12 @@ import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class InstantDeSerializer extends StdDeserializer<Instant> {
+public class InstantDeserializer extends StdDeserializer<Instant> {
 
     /**
      * Instantiates a new Byte array de serializer.
      */
-    protected InstantDeSerializer() {
+    protected InstantDeserializer() {
         this(null);
     }
 
@@ -53,24 +51,25 @@ public class InstantDeSerializer extends StdDeserializer<Instant> {
      *
      * @param t the byte array class
      */
-    protected InstantDeSerializer(Class<Instant> t) {
+    protected InstantDeserializer(Class<Instant> t) {
         super(t);
     }
 
     /**
      * Implements the de-serialization procedure of the de-serializer.
      *
-     * @param jp    The JSON Parser
-     * @param ctxt  The deserialization context
+     * @param jp        The JSON Parser
+     * @param context   The deserialization context
      * @return the deserialized output
      * @throws IOException for any IO exceptions
      */
     @Override
-    public Instant deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
+    public Instant deserialize(JsonParser jp, DeserializationContext context) throws IOException {
         final String value = jp.getCodec().readValue(jp, String.class);
         return Optional.ofNullable(value)
                 .filter(not(String::isBlank))
-                .map(v -> LocalDateTime.parse(v, SECOM_DATE_TIME_FORMATTER).toInstant(ZoneOffset.UTC))
+                .map(SECOM_DATE_TIME_FORMATTER::parse)
+                .map(Instant::from)
                 .orElse(null);
     }
 }
