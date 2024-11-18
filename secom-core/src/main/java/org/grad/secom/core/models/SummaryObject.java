@@ -50,7 +50,7 @@ public class SummaryObject {
     private String info_name;
     private String info_status;
     private String info_description;
-    @Schema(description = "The last modified date-time", type = "string",example = "19850412T101530")
+    @Schema(description = "The last modified date-time", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant info_lastModifiedDate;

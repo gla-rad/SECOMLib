@@ -46,11 +46,11 @@ public class SubscriptionRequestObject {
     @Schema(description = "The subscription area as UNLOCODE", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @Schema(description = "The subscription period start", type = "string", example = "19850412T101530")
+    @Schema(description = "The subscription period start", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant subscriptionPeriodStart;
-    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530")
+    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant subscriptionPeriodEnd;

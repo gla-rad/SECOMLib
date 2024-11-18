@@ -35,7 +35,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @NotNull
     protected String envelopeRootCertificateThumbprint;
     @NotNull
-    @Schema(description = "The envelope signature date-time", type = "string",example = "19850412T101530")
+    @Schema(description = "The envelope signature date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     protected Instant envelopeSignatureTime;

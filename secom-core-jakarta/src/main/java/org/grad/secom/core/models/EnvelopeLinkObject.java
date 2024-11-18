@@ -55,7 +55,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     private Integer size;
     @NotNull
-    @Schema(description = "The time to live date-time", type = "string",example = "19850412T101530")
+    @Schema(description = "The time to live date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant timeToLive;
