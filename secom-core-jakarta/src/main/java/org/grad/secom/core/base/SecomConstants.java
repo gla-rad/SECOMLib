@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.base;
 
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -66,7 +67,9 @@ public class SecomConstants {
                 .parseLenient()
                 .appendOffset("+HHMM", "Z")
                 .parseStrict()
-                .toFormatter();
+                .optionalEnd()
+                .toFormatter()
+                .withZone(ZoneId.systemDefault());
     }
     public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
 
@@ -79,7 +82,9 @@ public class SecomConstants {
                 .parseLenient()
                 .appendOffset("+HHMM", "Z")
                 .parseStrict()
-                .toFormatter();
+                .optionalEnd()
+                .toFormatter()
+                .withZone(ZoneId.systemDefault());
     }
 
 }

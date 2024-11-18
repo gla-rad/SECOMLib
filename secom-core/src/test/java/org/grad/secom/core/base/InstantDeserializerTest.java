@@ -46,10 +46,50 @@ class InstantDeserializerTest {
 
     /**
      * make sure we can correctly deserialize the incoming SECOM-compliant
-     * formatted dates.
+     * formatted local dates.
      */
     @Test
-    void testDeserializeDate() throws IOException {
+    void testDeserializeLocalDate() throws IOException {
+        // Make some mocks to test easily
+        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
+        doReturn("20010101T121314").when(objectCodecMock).readValue(any(), eq(String.class));
+        JsonParser jsonParserMock = mock(JsonParser.class);
+        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
+        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
+
+        // And deserialize
+        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+
+        // Make sure the result seems correct
+        assertEquals(Instant.parse("2001-01-01T12:13:14.00Z"), result);
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted local daylight-saving dates.
+     */
+    @Test
+    void testDeserializeLocalDateDLS() throws IOException {
+        // Make some mocks to test easily
+        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
+        doReturn("20080808T121314").when(objectCodecMock).readValue(any(), eq(String.class));
+        JsonParser jsonParserMock = mock(JsonParser.class);
+        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
+        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
+
+        // And deserialize
+        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+
+        // Make sure the result seems correct
+        assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted UTC dates.
+     */
+    @Test
+    void testDeserializeUTCDate() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20010101T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -62,6 +102,26 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2001-01-01T12:13:14.00Z"), result);
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted UTC daylight-saving dates.
+     */
+    @Test
+    void testDeserializeUTCDateDLS() throws IOException {
+        // Make some mocks to test easily
+        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
+        doReturn("20080808T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
+        JsonParser jsonParserMock = mock(JsonParser.class);
+        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
+        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
+
+        // And deserialize
+        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+
+        // Make sure the result seems correct
+        assertEquals(Instant.parse("2008-08-08T12:13:14.00Z"), result);
     }
 
     /**
@@ -82,6 +142,26 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2001-01-01T12:13:14.00+01:00"), result);
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted daylight-saving dates with offsets.
+     */
+    @Test
+    void testDeserializeDateWithOffsetDLS() throws IOException {
+        // Make some mocks to test easily
+        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
+        doReturn("20080808T121314+0100").when(objectCodecMock).readValue(any(), eq(String.class));
+        JsonParser jsonParserMock = mock(JsonParser.class);
+        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
+        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
+
+        // And deserialize
+        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+
+        // Make sure the result seems correct
+        assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);
     }
 
 }
