@@ -26,6 +26,8 @@ public class AccessResponseObject {
     // Class Variables
     private String responseText;
 
+    private String transactionIdentifier;
+
     /**
      * Gets response text.
      *
@@ -42,5 +44,23 @@ public class AccessResponseObject {
      */
     public void setResponseText(String responseText) {
         this.responseText = responseText;
+    }
+
+    /**
+     * Gets transaction identifier.
+     *
+     * @return the transactionIdentifier
+     */
+    public String getTransactionIdentifier() {
+        return transactionIdentifier;
+    }
+
+    /**
+     * Sets transaction identifier.
+     *
+     * @param transactionIdentifier the transactionIdentifier to set
+     */
+    public void setTransactionIdentifier(String transactionIdentifier) {
+        this.transactionIdentifier = transactionIdentifier;
     }
 }
