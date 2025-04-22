@@ -32,7 +32,7 @@
     <properties>
         <springframework.version>5.3.29</springframework.version>
         <resteasy-spring-boot.version>5.1.0.Final</resteasy-spring-boot.version>
-        <swagger.version>2.2.8</swagger.version>
+        <swagger.version>2.2.30</swagger.version>
     </properties>
 
     <dependencies>
