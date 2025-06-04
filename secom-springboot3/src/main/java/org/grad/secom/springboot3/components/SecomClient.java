@@ -16,20 +16,19 @@
 
 package org.grad.secom.springboot3.components;
 
-import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import org.apache.commons.lang3.StringUtils;
-import org.grad.secom.core.base.SecomCertificateProvider;
-import org.grad.secom.core.base.SecomCompressionProvider;
-import org.grad.secom.core.base.SecomEncryptionProvider;
-import org.grad.secom.core.base.SecomSignatureProvider;
-import org.grad.secom.core.models.*;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
-import org.grad.secom.core.utils.KeyStoreUtils;
+import org.grad.secom.v2.core.base.SecomCertificateProvider;
+import org.grad.secom.v2.core.base.SecomCompressionProvider;
+import org.grad.secom.v2.core.base.SecomEncryptionProvider;
+import org.grad.secom.v2.core.base.SecomSignatureProvider;
+import org.grad.secom.v2.core.models.*;
+import org.grad.secom.v2.core.models.enums.ContainerTypeEnum;
+import org.grad.secom.v2.core.models.enums.SECOM_DataProductType;
+import org.grad.secom.v2.core.utils.KeyStoreUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -53,23 +52,23 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
-import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSecomInterface.GET_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSummarySecomInterface.GET_SUMMARY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.PingSecomInterface.PING_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionNotificationSecomInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.UploadSecomInterface.UPLOAD_INTERFACE_PATH;
+import static org.grad.secom.v2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
+import static org.grad.secom.v2.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.GetSecomInterface.GET_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.GetSummarySecomInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.PingSecomInterface.PING_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.SubscriptionNotificationSecomInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.SubscriptionSecomInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH;
+import static org.grad.secom.v2.core.interfaces.UploadSecomInterface.UPLOAD_INTERFACE_PATH;
 
 /**
  * The SECOM Client Class.
