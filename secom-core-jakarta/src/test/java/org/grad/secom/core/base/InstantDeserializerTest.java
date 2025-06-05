@@ -19,6 +19,7 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,6 +38,7 @@ class InstantDeserializerTest {
 
     // Test Parameters
     InstantDeserializer instantDeserializer;
+    TimeZone defaultTimeZone;
 
     /**
      * Set up some base data.
@@ -44,6 +46,20 @@ class InstantDeserializerTest {
     @BeforeEach
     void setup() {
         this.instantDeserializer = new InstantDeserializer();
+
+        // Update the time zone to something with a summer flavour
+        this.defaultTimeZone = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Europe/London")));
+        System.setProperty("user.timezone", TimeZone.getDefault().getDisplayName());
+    }
+
+    /**
+     * Clear out the test configurations.
+     */
+    @AfterEach
+    void clear() {
+        TimeZone.setDefault(this.defaultTimeZone);
+        System.setProperty("user.timezone", TimeZone.getDefault().getDisplayName());
     }
 
     /**
@@ -72,10 +88,6 @@ class InstantDeserializerTest {
      */
     @Test
     void testDeserializeInstantDLS() throws IOException {
-        // Update the time zone to something with a summer flavour
-        final TimeZone defaultTimeZone = TimeZone.getDefault();
-        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Europe/London")));
-
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20080808T121314").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -88,9 +100,6 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);
-
-        // And back
-        TimeZone.setDefault(defaultTimeZone);
     }
 
     /**
@@ -119,10 +128,6 @@ class InstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDateDLS() throws IOException {
-        // Update the time zone to something with a summer flavour
-        final TimeZone defaultTimeZone = TimeZone.getDefault();
-        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Europe/London")));
-
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20080808T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -135,9 +140,6 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00Z"), result);
-
-        // And back
-        TimeZone.setDefault(defaultTimeZone);
     }
 
     /**
