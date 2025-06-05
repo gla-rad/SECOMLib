@@ -34,14 +34,6 @@ public class GetResponseObject implements DigitalSignatureCollectionBearer {
     private List<DataResponseObject> dataResponseObject;
     @NotNull
     private PaginationObject pagination;
-    private String responseText;
-
-    /**
-     * Instantiates a new Get response object.
-     */
-    public GetResponseObject() {
-        this.responseText = "";
-    }
 
     /**
      * Gets data response object.
@@ -77,24 +69,6 @@ public class GetResponseObject implements DigitalSignatureCollectionBearer {
      */
     public void setPagination(PaginationObject pagination) {
         this.pagination = pagination;
-    }
-
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
     }
 
     /**

@@ -20,11 +20,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,8 +31,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SECOM_ExchangeMetadataObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
-    private SECOM_ExchangeMetadataObject obj;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private SECOM_ServiceExchangeMetadataObject obj;
 
     private ObjectMapper mapper;
 
@@ -48,17 +46,17 @@ class SECOM_ExchangeMetadataObjectTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Generate a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Generate a new object
-        this.obj = new SECOM_ExchangeMetadataObject();
+        this.obj = new SECOM_ServiceExchangeMetadataObject();
         this.obj.setDataProtection(Boolean.TRUE);
         this.obj.setProtectionScheme("SECOM");
         this.obj.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
-        this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setCompressionFlag(Boolean.FALSE);
     }
 
@@ -69,7 +67,7 @@ class SECOM_ExchangeMetadataObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SECOM_ExchangeMetadataObject result = this.mapper.readValue(jsonString, SECOM_ExchangeMetadataObject.class);
+        SECOM_ServiceExchangeMetadataObject result = this.mapper.readValue(jsonString, SECOM_ServiceExchangeMetadataObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);

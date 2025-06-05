@@ -31,14 +31,6 @@ public class GetSummaryResponseObject {
     private List<SummaryObject> summaryObject;
     @NotNull
     private PaginationObject pagination;
-    private String responseText;
-
-    /**
-     * Instantiates a new Get Summary response object.
-     */
-    public GetSummaryResponseObject() {
-        this.responseText = "";
-    }
 
     /**
      * Gets summary object.
@@ -76,21 +68,4 @@ public class GetSummaryResponseObject {
         this.pagination = pagination;
     }
 
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 }

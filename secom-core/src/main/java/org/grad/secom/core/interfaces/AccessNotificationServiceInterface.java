@@ -17,12 +17,10 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.RemoveSubscriptionObject;
-import org.grad.secom.core.models.RemoveSubscriptionResponseObject;
+import org.grad.secom.core.models.AccessNotificationObject;
+import org.grad.secom.core.models.AccessNotificationResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +31,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Remove Subscription Interface Definition.
+ * The SECOM Access Notification Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -41,27 +39,26 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface {
+public interface AccessNotificationServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
+    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/v2/access/notification";
 
     /**
-     * DELETE /v1/subscription : Subscription(s) can be removed either
-     * internally by information owner, or externally by the consumer. This
-     * interface shall be used by the consumer to request removal of
-     * subscription.
+     * POST /v1/access/notification : Result from Access Request performed on a
+     * service instance shall be sent asynchronous through this client
+     * interface.
      *
-     * @param removeSubscriptionObject the remove subscription object
-     * @return the remove subscription response object
+     * @param accessNotificationObject  the access notification object
+     * @return the access notification response object
      */
-    @Path(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    @DELETE
+    @Path(ACCESS_NOTIFICATION_INTERFACE_PATH)
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    RemoveSubscriptionResponseObject removeSubscription(@Valid RemoveSubscriptionObject removeSubscriptionObject);
+    AccessNotificationResponseObject accessNotification(@Valid AccessNotificationObject accessNotificationObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -71,35 +68,30 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleRemoveSubscriptionInterfaceExceptions(Exception ex,
+    static Response handleAccessNotificationInterfaceExceptions(Exception ex,
                                                                 HttpServletRequest request,
                                                                 HttpServletResponse response) {
-        // Create the remove subscription response
+        // Create the access notification response
         Response.Status responseStatus;
-        RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
+        AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
+                || ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            removeSubscriptionResponseObject.setMessage("Bad Request");
-        } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
-            removeSubscriptionResponseObject.setMessage("Not authorized to remove subscription");
-        } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-            removeSubscriptionResponseObject.setMessage("Subscriber identifier not found");
+            accessNotificationResponseObject.setMessage("Bad Request");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            removeSubscriptionResponseObject.setMessage(responseStatus.getReasonPhrase());
+            accessNotificationResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(removeSubscriptionResponseObject)
+                .entity(accessNotificationResponseObject)
                 .build();
     }
 

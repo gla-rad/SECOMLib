@@ -18,13 +18,13 @@ package org.grad.secom.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secom.core.base.*;
+import org.grad.secom.core.models.*;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secom.core.interfaces.AcknowledgementSecomInterface;
 import org.grad.secom.core.interfaces.EncryptionKeySecomInterface;
 import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
 import org.grad.secom.core.interfaces.UploadSecomInterface;
-import org.grad.secom.core.models.*;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.PkiUtils;
 import org.grad.secom.core.utils.SecomPemUtils;

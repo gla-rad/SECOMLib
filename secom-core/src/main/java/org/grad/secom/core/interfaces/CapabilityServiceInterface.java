@@ -35,12 +35,12 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface CapabilitySecomInterface extends GenericSecomInterface {
+public interface CapabilityServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+    String CAPABILITY_INTERFACE_PATH = "/v2/capability";
 
     /**
      * GET /v1/capability : The purpose of the interface is to provide a dynamic

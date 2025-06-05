@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EncryptionKeyObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
     private EnvelopeKeyObject envelopeLinkObject;
     private EncryptionKeyObject obj;
 
@@ -48,17 +48,17 @@ class EncryptionKeyObjectTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeKeyObject();
         this.envelopeLinkObject.setEncryptionKey("encryptionKey");
         this.envelopeLinkObject.setIv("iv");
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
-        this.envelopeLinkObject.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.envelopeLinkObject.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.envelopeLinkObject.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.envelopeLinkObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -66,7 +66,7 @@ class EncryptionKeyObjectTest {
         // Generate a new upload object
         this.obj = new EncryptionKeyObject();
         this.obj.setEnvelope(this.envelopeLinkObject);
-        this.obj.setEnvelopeSignature("signature");
+        this.obj.setDigitalSignature("signature");
     }
 
     /**

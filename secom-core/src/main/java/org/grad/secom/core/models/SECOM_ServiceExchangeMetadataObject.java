@@ -26,7 +26,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SECOM_ExchangeMetadataObject implements CsvStringGenerator {
+public class SECOM_ServiceExchangeMetadataObject implements CsvStringGenerator {
 
     // Class Variables
     @NotNull
@@ -36,7 +36,7 @@ public class SECOM_ExchangeMetadataObject implements CsvStringGenerator {
     @NotNull
     private DigitalSignatureAlgorithmEnum digitalSignatureReference;
     @NotNull
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
     @NotNull
     private Boolean compressionFlag;
 
@@ -99,17 +99,17 @@ public class SECOM_ExchangeMetadataObject implements CsvStringGenerator {
      *
      * @return the digital signature value
      */
-    public DigitalSignatureValue getDigitalSignatureValue() {
-        return digitalSignatureValue;
+    public DigitalSignatureValueObject getDigitalSignatureValue() {
+        return digitalSignatureValueObject;
     }
 
     /**
      * Sets digital signature value.
      *
-     * @param digitalSignatureValue the digital signature value
+     * @param digitalSignatureValueObject the digital signature value
      */
-    public void setDigitalSignatureValue(DigitalSignatureValue digitalSignatureValue) {
-        this.digitalSignatureValue = digitalSignatureValue;
+    public void setDigitalSignatureValue(DigitalSignatureValueObject digitalSignatureValueObject) {
+        this.digitalSignatureValueObject = digitalSignatureValueObject;
     }
 
     /**
@@ -143,7 +143,7 @@ public class SECOM_ExchangeMetadataObject implements CsvStringGenerator {
                 dataProtection,
                 protectionScheme,
                 digitalSignatureReference,
-                digitalSignatureValue,
+                digitalSignatureValueObject,
                 compressionFlag
         };
     }

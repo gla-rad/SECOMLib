@@ -17,22 +17,21 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
+import org.grad.secom.core.models.SubscriptionResponseObject;
+import org.grad.secom.core.models.SubscriptionRequestObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.UUID;
 
 /**
- * The SECOM Get By Link Interface Definition.
+ * The SECOM Subscription Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -40,27 +39,26 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface GetByLinkSecomInterface extends GenericSecomInterface {
+public interface SubscriptionServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
+    String SUBSCRIPTION_INTERFACE_PATH = "/v2/subscription";
 
     /**
-     * GET /v1/object/link : The Get By Link interface is used for pulling
-     * information from a data storage handled by the information owner. The
-     * link to the data storage can be exchanged with Upload Link interface.
-     * The owner of the information (provider) is responsible for relevant
-     * authentication and authorization procedure before returning information.
+     * POST /v1/subscription : Request subscription on information, either
+     * specific information according to parameters, or the information
+     * accessible upon decision by the information provider.
      *
-     * @param transactionIdentifier the transaction identifier
-     * @return the object in an "application/octet-stream" encoding
+     * @param subscriptionRequestObject the subscription object
+     * @return the subscription response object
      */
-    @Path(GET_BY_LINK_INTERFACE_PATH)
-    @GET
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    byte[] getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
+    @Path(SUBSCRIPTION_INTERFACE_PATH)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    SubscriptionResponseObject subscription(@Valid SubscriptionRequestObject subscriptionRequestObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -70,12 +68,12 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleGetByLinkInterfaceExceptions(Exception ex,
-                                                       HttpServletRequest request,
-                                                       HttpServletResponse response) {
-        // Create the get by link response
-        Response.Status responseStatus = null;
-        String responseText = null;
+    static Response handleSubscriptionInterfaceExceptions(Exception ex,
+                                                          HttpServletRequest request,
+                                                          HttpServletResponse response) {
+        // Create the subscription response
+        Response.Status responseStatus;
+        SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,24 +82,18 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseText = "Bad Request";
+            subscriptionResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            responseText = "Not authorized to requested information";
-        } else if(ex instanceof SecomInvalidCertificateException) {
-            responseStatus = Response.Status.FORBIDDEN;
-            responseText = "Invalid Certificate";
-        }  else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
+            subscriptionResponseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseText = responseStatus.getReasonPhrase();
+            subscriptionResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(responseText)
+                .entity(subscriptionResponseObject)
                 .build();
     }
 

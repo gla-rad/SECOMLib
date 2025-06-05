@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -59,7 +58,7 @@ class SearchObjectResultTest {
         this.obj.setEndpointType("endpointType");
         this.obj.setVersion("version");
         this.obj.setKeywords("keywords");
-        this.obj.setUnlocode(Collections.singletonList("unlocode"));
+        this.obj.setUnlocode("unlocode");
         this.obj.setInstanceAsXml("instanceAsXml");
         this.obj.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -90,8 +89,6 @@ class SearchObjectResultTest {
         assertEquals(this.obj.getVersion(), result.getVersion());
         assertEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
-        assertEquals(1, result.getUnlocode().size());
-        assertEquals(this.obj.getUnlocode().get(0), result.getUnlocode().get(0));
         assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
         assertEquals(this.obj.getPublishedAt(), result.getPublishedAt());
         assertEquals(this.obj.getLastUpdatedAt(), result.getLastUpdatedAt());

@@ -14,44 +14,49 @@
  * limitations under the License.
  */
 
+
 package org.grad.secom.core.interfaces;
 
-import org.grad.secom.core.models.PingResponseObject;
+import org.grad.secom.core.models.CapabilityResponseObject;
+import org.grad.secom.core.models.PublicKeyObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Ping Interface Definition.
+ * The SECOM GET Public Key Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
  * the specified SECOM standard version.
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public interface PingSecomInterface extends GenericSecomInterface {
+public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String PING_INTERFACE_PATH = "/v1/ping";
+    String PUBLIC_KEY_INTERFACE_PATH = "/v2/publicKey";
 
     /**
-     * GET /v1/ping : The purpose of the interface is to provide a dynamic
-     * method to ask for the technical status of the specific service instance.
+     * GET /v2/publicKey : This operation receives a get request for a public key.
+     * If authorized, the key is sent back in the response. It is up to the service
+     * provider to apply relevant authorization procedure and access control to information.
      *
-     * @return the status response object
+     * @return the public key object
      */
-    @Path(PING_INTERFACE_PATH)
+    @Path(PUBLIC_KEY_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    PingResponseObject ping();
+    PublicKeyObject getPublicKey(@QueryParam("dataProtection") Boolean dataProtection,
+                                 @QueryParam("certificateThumbprint") String certificateThumbprint);
 
     /**
      * The exception handler implementation for the interface.
@@ -61,19 +66,19 @@ public interface PingSecomInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handlePingInterfaceExceptions(Exception ex,
-                                                  HttpServletRequest request,
-                                                  HttpServletResponse response) {
-        // Create the ping response
+    static Response handleCapabilityInterfaceExceptions(Exception ex,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
+        // Create the capability response
         Response.Status responseStatus;
-        PingResponseObject pingResponseObject = new PingResponseObject();
+        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
 
         // Handle according to the exception type
         responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(pingResponseObject)
+                .entity(capabilityResponseObject)
                 .build();
     }
 

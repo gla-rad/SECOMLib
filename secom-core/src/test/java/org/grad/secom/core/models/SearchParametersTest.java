@@ -60,8 +60,6 @@ class SearchParametersTest {
         this.obj.setServiceType("serviceType");
         this.obj.setUnlocode("unlocode");
         this.obj.setEndpointUri(new URI("http://localhost"));
-        this.obj.setPage(0);
-        this.obj.setPageSize(100);
     }
 
     /**
@@ -89,8 +87,7 @@ class SearchParametersTest {
         assertEquals(this.obj.getServiceType(), result.getServiceType());
         assertEquals(this.obj.getUnlocode(), result.getUnlocode());
         assertEquals(this.obj.getEndpointUri(), result.getEndpointUri());
-        assertEquals(this.obj.getPage(), result.getPage());
-        assertEquals(this.obj.getPageSize(), result.getPageSize());
+
     }
 
 }

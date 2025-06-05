@@ -17,10 +17,11 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.SubscriptionNotificationObject;
-import org.grad.secom.core.models.SubscriptionNotificationResponseObject;
+import org.grad.secom.core.models.EncryptionKeyResponseObject;
+import org.grad.secom.core.models.SearchFilterObject;
+import org.grad.secom.core.models.ResponseSearchObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Subscription Notification Interface Definition.
+ * The SECOM Search Service Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -39,26 +40,25 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Path("/")
-public interface SubscriptionNotificationSecomInterface extends GenericSecomInterface {
+public interface SearchServiceServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/v1/subscription/notification";
+    String SEARCH_SERVICE_INTERFACE_PATH = "/v2/searchService";
 
     /**
-     * POST /v1/subscription/notification : The interface receives notifications
-     * when a subscription is created or removed by the information provider.
+     * POST /v1/searchService : The purpose of this interface is to search for
+     * service instances to consume.
      *
-     * @param subscriptionNotificationObject the subscription notification request object
-     * @return the subscription notification response object
+     * @param searchFilterObject    The search filter object
+     * @return the result list of the search
      */
-    @Path(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
+    @Path(SEARCH_SERVICE_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    SubscriptionNotificationResponseObject subscriptionNotification(@Valid SubscriptionNotificationObject subscriptionNotificationObject);
+    ResponseSearchObject searchService(@Valid SearchFilterObject searchFilterObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -68,12 +68,13 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleSubscriptionNotificationInterfaceExceptions(Exception ex,
-                                                                      HttpServletRequest request,
-                                                                      HttpServletResponse response) {
-        // Create the subscription notification response
+    static Response handleSearchServiceInterfaceExceptions(Exception ex,
+                                                           HttpServletRequest request,
+                                                           HttpServletResponse response) {
+
+        // Create the encryption key response
         Response.Status responseStatus;
-        SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
+        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -82,15 +83,18 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            subscriptionNotificationResponseObject.setResponseText("Bad Request");
+            encryptionKeyResponseObject.setMessage("Bad Request");
+        } else if(ex instanceof SecomNotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+            encryptionKeyResponseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionNotificationResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(subscriptionNotificationResponseObject)
+                .entity(encryptionKeyResponseObject)
                 .build();
     }
 }

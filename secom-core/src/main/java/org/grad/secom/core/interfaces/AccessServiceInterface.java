@@ -16,22 +16,23 @@
 
 package org.grad.secom.core.interfaces;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
-import org.grad.secom.core.models.EncryptionKeyResponseObject;
-import org.grad.secom.core.models.EncryptionKeyNotificationObject;
+import org.grad.secom.core.exceptions.SecomNotFoundException;
+import org.grad.secom.core.exceptions.SecomValidationException;
+import org.grad.secom.core.models.AccessRequestObject;
+import org.grad.secom.core.models.AccessResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.validation.ValidationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Encryption Key Notify Interface Definition.
+ * The SECOM Access Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -39,27 +40,25 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface EncryptionKeyNotifySecomInterface extends GenericSecomInterface {
+public interface AccessServiceInterface extends GenericSecomInterface {
 
     /**
-     * The Interface Notify Endpoint Path.
+     * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/v1/encryptionkey/notify";
+    String ACCESS_INTERFACE_PATH = "/v2/access";
 
     /**
-     * POST /v1/encryptionkey/notify : The purpose of the interface is to
-     * exchange a temporary secret key. This operation enables a consumer to
-     * request an encrypted secret key from a producer by providing a reference
-     * to the encrypted data and a public certificate for symmetric key
-     * derivation used to protect the temporary encryption key during transfer.
+     * POST /v1/access : Access to the service instance information can be
+     * requested through the Request Access interface.
      *
-     * @return the encryption key response object
+     * @param accessRequestObject the request access object
+     * @return the request access response object
      */
-    @Path(ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH)
+    @Path(ACCESS_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    EncryptionKeyResponseObject encryptionKeyNotify(@Valid EncryptionKeyNotificationObject encryptionKeyNotificationObject);
+    AccessResponseObject requestAccess(@Valid AccessRequestObject accessRequestObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -69,26 +68,33 @@ public interface EncryptionKeyNotifySecomInterface extends GenericSecomInterface
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleEncryptionKeyNotifyInterfaceExceptions(Exception ex,
-                                                                 HttpServletRequest request,
-                                                                 HttpServletResponse response) {
-
-        // Create the encryption key response
+    static Response handleAccessInterfaceExceptions(Exception ex,
+                                                    HttpServletRequest request,
+                                                    HttpServletResponse response) {
+        // Create the access response
         Response.Status responseStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        AccessResponseObject accessResponseObject = new AccessResponseObject();
 
         // Handle according to the exception type
-       if (ex instanceof SecomNotAuthorisedException) {
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof JsonMappingException
+                || ex instanceof SecomNotFoundException
+                || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            encryptionKeyResponseObject.setResponseText("Not authorized");
+            accessResponseObject.setMessage("Bad Request");
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.FORBIDDEN;
+            accessResponseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            accessResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(encryptionKeyResponseObject)
+                .entity(accessResponseObject)
                 .build();
     }
 

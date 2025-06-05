@@ -47,6 +47,8 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     @NotNull
     private AckTypeEnum ackType;
     private NackTypeEnum nackType;
+    private String digitalSignatureReference;
+    private UUID dataReference;
 
     /**
      * Gets created at.
@@ -121,6 +123,20 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     }
 
     /**
+     * Get digital signature reference
+     *
+     * @return the digital signature reference
+     */
+    public String getDigitalSignatureReference() { return digitalSignatureReference; }
+
+    /**
+     * Set digitalSignatureRefernce
+     *
+     * @param digitalSignatureReference the digital signature reference
+     */
+    public void setDigitalSignatureReference(String digitalSignatureReference) { this.digitalSignatureReference = digitalSignatureReference; }
+
+    /**
      * Gets envelope certificate.
      *
      * @return the envelope certificate
@@ -144,6 +160,24 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     }
 
     /**
+     * Gets the data reference
+     *
+     * @return the data reference
+     */
+    public UUID getDataReference() {
+        return dataReference;
+    }
+
+    /**
+     * Sets the data reference
+     *
+     * @param dataReference the data reference
+     */
+    public void setDataReference(UUID dataReference) {
+        this.dataReference = dataReference;
+    }
+
+    /**
      * This method should be implemented by all envelop objects to allow the
      * generation of the signature CSV attribute array
      *
@@ -158,7 +192,10 @@ public class EnvelopeAckObject extends AbstractEnvelope {
                 transactionIdentifier,
                 ackType,
                 nackType,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                digitalSignatureReference,
+                dataReference
         };
     }
+
 }

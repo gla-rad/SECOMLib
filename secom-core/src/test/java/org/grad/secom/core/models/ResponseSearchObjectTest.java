@@ -60,7 +60,7 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setEndpointType("endpointType");
         this.searchObjectResult.setVersion("version");
         this.searchObjectResult.setKeywords("keywords");
-        this.searchObjectResult.setUnlocode(Collections.singletonList("unlocode"));
+        this.searchObjectResult.setUnlocode("unlocode");
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
         this.searchObjectResult.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.searchObjectResult.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -98,8 +98,6 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
         assertEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
-        assertEquals(1, result.getSearchServiceResult().get(0).getUnlocode().size());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getUnlocode().get(0), result.getSearchServiceResult().get(0).getUnlocode().get(0));
         assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getPublishedAt(), result.getSearchServiceResult().get(0).getPublishedAt());
         assertEquals(this.obj.getSearchServiceResult().get(0).getLastUpdatedAt(), result.getSearchServiceResult().get(0).getLastUpdatedAt());

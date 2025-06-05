@@ -19,7 +19,6 @@ package org.grad.secom.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.net.URI;
 
@@ -52,10 +51,6 @@ public class SearchParameters {
     @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}")
     private String unlocode;
     private URI endpointUri;
-    @Min(value = 0L, message = "The page value must be positive")
-    private Integer page;
-    @Min(value = 0L, message = "The page size value must be positive")
-    private Integer pageSize;
 
     /**
      * Gets name.
@@ -309,39 +304,4 @@ public class SearchParameters {
         this.endpointUri = endpointUri;
     }
 
-    /**
-     * Gets page.
-     *
-     * @return the page
-     */
-    public Integer getPage() {
-        return page;
-    }
-
-    /**
-     * Sets page.
-     *
-     * @param page the page
-     */
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    /**
-     * Gets page size.
-     *
-     * @return the page size
-     */
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    /**
-     * Sets page size.
-     *
-     * @param pageSize the page size
-     */
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
 }

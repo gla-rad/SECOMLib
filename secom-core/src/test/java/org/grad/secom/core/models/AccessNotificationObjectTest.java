@@ -46,7 +46,7 @@ class AccessNotificationObjectTest {
         this.obj = new AccessNotificationObject();
         this.obj.setTransactionIdentifier(UUID.randomUUID());
         this.obj.setDecision(Boolean.TRUE);
-        this.obj.setReason("Test");
+        this.obj.setDecisionReason("Test");
     }
 
     /**
@@ -62,7 +62,7 @@ class AccessNotificationObjectTest {
         assertNotNull(result);
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
         assertEquals(this.obj.getDecision(), result.getDecision());
-        assertEquals(this.obj.getReason(), result.getReason());
+        assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
     }
 
 }

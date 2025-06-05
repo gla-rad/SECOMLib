@@ -17,9 +17,7 @@
 package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 /**

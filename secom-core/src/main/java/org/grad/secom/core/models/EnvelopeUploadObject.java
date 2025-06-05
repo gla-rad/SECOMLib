@@ -50,9 +50,13 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     private SECOM_DataProductType dataProductType;
     @JsonProperty
     @NotNull
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
     private Boolean fromSubscription;
+    private String subscriptionIdentifier;
+    @NotNull
     private AckRequestEnum ackRequest;
+    @NotNull
+    private String callbackEndpoint;
     @NotNull
     private UUID transactionIdentifier;
 
@@ -60,7 +64,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * Instantiates a new Envelope upload object.
      */
     public EnvelopeUploadObject() {
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
     }
 
     /**
@@ -125,7 +129,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @return the exchange metadata
      */
     @Override
-    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
+    public SECOM_ServiceExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -135,7 +139,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @param exchangeMetadata the exchange metadata
      */
     @Override
-    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
+    public void setExchangeMetadata(SECOM_ServiceExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 
@@ -158,6 +162,20 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     }
 
     /**
+     * Get subscription identifier
+     *
+     * @return subscriptionIdentifier
+     */
+    public String getSubscriptionIdentifier() { return subscriptionIdentifier; }
+
+    /**
+     *  Sets subscription identifier
+     *
+     * @param subscriptionIdentifier the subscription identifier
+     */
+    public void setSubscriptionIdentifier(String subscriptionIdentifier) { this.subscriptionIdentifier = subscriptionIdentifier; }
+
+    /**
      * Gets ack request.
      *
      * @return the ack request
@@ -174,6 +192,21 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     public void setAckRequest(AckRequestEnum ackRequest) {
         this.ackRequest = ackRequest;
     }
+
+    /**
+     *  Gets the callback endpoint
+     *
+     * @return the callback endpoint
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Sets the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+
 
     /**
      * Gets transaction identifier.
@@ -207,7 +240,9 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
                 dataProductType,
                 exchangeMetadata,
                 fromSubscription,
+                subscriptionIdentifier,
                 ackRequest,
+                callbackEndpoint,
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,

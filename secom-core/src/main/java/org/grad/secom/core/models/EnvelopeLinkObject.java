@@ -45,11 +45,14 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     private SECOM_DataProductType dataProductType;
     @JsonProperty
     @NotNull
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
     @NotNull
     private Boolean fromSubscription;
+    private String subscriptionIdentifier;
     @NotNull
     private AckRequestEnum ackRequest;
+    @NotNull
+    private String callbackEndpoint;
     @NotNull
     private UUID transactionIdentifier;
     @NotNull
@@ -64,7 +67,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      * Instantiates a new Envelope link object.
      */
     public EnvelopeLinkObject() {
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
     }
 
     /**
@@ -108,7 +111,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @return the exchange metadata
      */
-    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
+    public SECOM_ServiceExchangeMetadataObject getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -117,7 +120,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @param exchangeMetadata the exchange metadata
      */
-    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
+    public void setExchangeMetadata(SECOM_ServiceExchangeMetadataObject exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 
@@ -140,6 +143,21 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     }
 
     /**
+     * Get subscription identifier
+     *
+     * @return subscriptionIdentifier
+     */
+    public String getSubscriptionIdentifier() { return subscriptionIdentifier; }
+
+    /**
+     *  Sets subscription identifier
+     *
+     * @param subscriptionIdentifier the subscription identifier
+     */
+    public void setSubscriptionIdentifier(String subscriptionIdentifier) { this.subscriptionIdentifier = subscriptionIdentifier; }
+
+
+    /**
      * Gets ack request.
      *
      * @return the ack request
@@ -147,6 +165,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     public AckRequestEnum getAckRequest() {
         return ackRequest;
     }
+
 
     /**
      * Sets ack request.
@@ -156,6 +175,22 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     public void setAckRequest(AckRequestEnum ackRequest) {
         this.ackRequest = ackRequest;
     }
+
+
+    /**
+     *  Gets the callback endpoint
+     *
+     * @return the callback endpoint
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Sets the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+
 
     /**
      * Gets transaction identifier.
@@ -224,7 +259,9 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 dataProductType,
                 exchangeMetadata,
                 fromSubscription,
+                subscriptionIdentifier,
                 ackRequest,
+                callbackEndpoint,
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,

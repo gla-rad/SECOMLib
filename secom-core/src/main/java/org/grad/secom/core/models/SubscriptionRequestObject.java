@@ -54,6 +54,8 @@ public class SubscriptionRequestObject {
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant subscriptionPeriodEnd;
+    private String callbackEndpoint;
+    private Boolean pushAll;
 
     /**
      * Gets container type.
@@ -198,4 +200,33 @@ public class SubscriptionRequestObject {
     public void setSubscriptionPeriodEnd(Instant subscriptionPeriodEnd) {
         this.subscriptionPeriodEnd = subscriptionPeriodEnd;
     }
+
+    /**
+     * Gets the callback endpoint
+     *
+     * @return callbackEndPoint the callback endpoint
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Sets the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+
+    /**
+     * Gets push all
+     *
+     * @return push all
+     */
+    public Boolean getPushAll() { return pushAll; }
+
+    /**
+     * Sets push all
+     *
+     * @param pushAll push all
+     */
+    public void setPushAll(Boolean pushAll) { this.pushAll = pushAll; }
+
 }

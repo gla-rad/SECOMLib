@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -57,6 +56,8 @@ class EnvelopeAckObjectTest {
         this.obj.setAckType(AckTypeEnum.OPENED_ACK);
         this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setDigitalSignatureReference("signatureRef");
+        this.obj.setDataReference(UUID.randomUUID());
     }
 
     /**
@@ -71,12 +72,14 @@ class EnvelopeAckObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertEquals(this.obj.getCreatedAt(), result.getCreatedAt());
-        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeCertificate(), result.getEnvelopeCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
         assertEquals(this.obj.getAckType(), result.getAckType());
         assertEquals(this.obj.getNackType(), result.getNackType());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
+        assertEquals(this.obj.getDataReference(), result.getDataReference());
     }
 
     /**
@@ -96,6 +99,8 @@ class EnvelopeAckObjectTest {
         assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
         assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
+        assertEquals(this.obj.getDigitalSignatureReference(), csv[7]);
+        assertEquals(this.obj.getDataReference().toString(), csv[8]);
     }
 
 }

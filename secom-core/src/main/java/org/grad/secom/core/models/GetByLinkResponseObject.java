@@ -13,34 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secom.core.models;
 
+
+import javax.validation.constraints.NotNull;
+
 /**
- * The SECOM Subscription Notification Response Object Class.
+ * Get by link response object to
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public class SubscriptionNotificationResponseObject {
+public class GetByLinkResponseObject {
 
-    // Class Variables
-    private String message;
-
-    /**
-     * Gets response text.
-     *
-     * @return the response message
-     */
-    public String getMessage() {
-        return message;
-    }
+    // Class variables
+    @NotNull
+    private byte[] data;
 
     /**
-     * Sets response text.
+     * Get the data
      *
-     * @param message the response message
+     * @return the data
      */
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    public byte[] getData() { return data; }
+
+    /**
+     * Set the data
+     *
+     * @param data the data
+     */
+    public void setData(byte[] data) { this.data = data; }
+
+
+
 }

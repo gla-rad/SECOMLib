@@ -19,17 +19,15 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import org.grad.secom.core.models.enums.AckRequestEnum;
-import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DigitalSignatureValueTest {
+class DigitalSignatureValueObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue obj;
+    private DigitalSignatureValueObject obj;
     private ObjectMapper mapper;
 
     /**
@@ -42,7 +40,7 @@ class DigitalSignatureValueTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Generate a new object
-        this.obj = new DigitalSignatureValue();
+        this.obj = new DigitalSignatureValueObject();
         this.obj.setPublicRootCertificateThumbprint("thumbprint");
         this.obj.setPublicCertificate("certificate");
         this.obj.setDigitalSignature("signature");
@@ -55,7 +53,7 @@ class DigitalSignatureValueTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        DigitalSignatureValue result = this.mapper.readValue(jsonString, DigitalSignatureValue.class);
+        DigitalSignatureValueObject result = this.mapper.readValue(jsonString, DigitalSignatureValueObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
@@ -70,7 +68,7 @@ class DigitalSignatureValueTest {
     @Test
     void testGetCsvString() {
         // Generate a new object
-        DigitalSignatureValue obj = new DigitalSignatureValue();
+        DigitalSignatureValueObject obj = new DigitalSignatureValueObject();
         obj.setPublicRootCertificateThumbprint("thumbprint");
         obj.setPublicCertificate("certificate");
         obj.setDigitalSignature("signature");

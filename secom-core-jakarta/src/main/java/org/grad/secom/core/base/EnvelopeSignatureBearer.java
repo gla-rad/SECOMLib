@@ -19,7 +19,6 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.models.AbstractEnvelope;
-import org.grad.secom.core.models.DigitalSignatureValue;
 import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;

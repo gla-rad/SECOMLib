@@ -33,8 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class GetResponseObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
     private DataResponseObject dataResponseObject;
     private PaginationObject paginationObject;
     private GetResponseObject obj;
@@ -50,17 +50,17 @@ class GetResponseObjectTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create SECOM exchange metadata
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
         this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
-        this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
         // Create a digital signature value
@@ -78,7 +78,6 @@ class GetResponseObjectTest {
         this.obj = new GetResponseObject();
         this.obj.setDataResponseObject(Collections.singletonList(this.dataResponseObject));
         this.obj.setPagination(this.paginationObject);
-        this.obj.setResponseText("Test");
     }
 
     /**
@@ -108,7 +107,6 @@ class GetResponseObjectTest {
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
     }
 
 }

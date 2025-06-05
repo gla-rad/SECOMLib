@@ -45,6 +45,8 @@ public class EnvelopeKeyNotificationObject {
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant envelopeSignatureTime;
+    private String callbackEndpoint;
+    private String digitalSignatureReference;
 
     /**
      * Gets data reference.
@@ -117,4 +119,32 @@ public class EnvelopeKeyNotificationObject {
     public void setEnvelopeSignatureTime(Instant envelopeSignatureTime) {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
+
+    /**
+     * Gets the callback endpoint
+     *
+     * @return callback endpoint
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Sets the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+
+    /**
+     * Gets the digital signature reference
+     *
+      * @return the digital signature reference
+     */
+    public String getDigitalSignatureReference() { return digitalSignatureReference; }
+
+    /**
+     * Sets the digital signature reference
+     *
+      * @param digitalSignatureReference
+     */
+    public void setDigitalSignatureReference(String digitalSignatureReference) { this.digitalSignatureReference = digitalSignatureReference; }
 }

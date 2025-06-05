@@ -19,8 +19,7 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.models.AbstractEnvelope;
-import org.grad.secom.core.models.DigitalSignatureValue;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
+import org.grad.secom.core.models.SECOM_ServiceExchangeMetadataObject;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
@@ -130,7 +129,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
                 .filter(GenericExchangeMetadataBearer.class::isInstance)
                 .map(GenericExchangeMetadataBearer.class::cast)
                 .map(GenericExchangeMetadataBearer::getExchangeMetadata)
-                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
+                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureReference)
                 .orElse(null);
     }
 

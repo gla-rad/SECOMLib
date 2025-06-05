@@ -25,7 +25,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DigitalSignatureValue implements CsvStringGenerator {
+public class DigitalSignatureValueObject implements CsvStringGenerator {
 
     // Class Variables
     private String publicRootCertificateThumbprint;

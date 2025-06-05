@@ -13,53 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secom.core.models;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Base64;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class EncryptionKeyResponseObjectTest {
+/**
+ * Test the Get By Link Response Object
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
+public class GetByLinkResponseObjectTest {
 
-    // Class Variables
-    private EncryptionKeyResponseObject obj;
-
+    private GetByLinkResponseObject obj;
     private ObjectMapper mapper;
 
     /**
-     * Set up some base data.
+     * Set up the tests
      */
     @BeforeEach
-    void setup() {
-        //Setup an object mapper
+    void setUp() {
+        // Set up an object mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JSR310Module());
 
-        // Generate a new upload object
-        this.obj = new EncryptionKeyResponseObject();
-        this.obj.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
-        this.obj.setMessage("Test");
+        obj = new GetByLinkResponseObject();
+        obj.setData(Base64.getDecoder().decode("data"));
     }
 
     /**
-     * Test that we can translate correctly the object onto JSON and back again.
+     * Test the Public Key Object can be converted to json and back
+     *
+     * @throws JsonProcessingException
      */
     @Test
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        EncryptionKeyResponseObject result = this.mapper.readValue(jsonString, EncryptionKeyResponseObject.class);
+        GetByLinkResponseObject result = this.mapper.readValue(jsonString, GetByLinkResponseObject.class);
 
-        // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getSECOM_ResponseCode(), result.getSECOM_ResponseCode());
-        assertEquals(this.obj.getMessage(), result.getMessage());
+        assertArrayEquals(obj.getData(), result.getData());
+
     }
 
 }

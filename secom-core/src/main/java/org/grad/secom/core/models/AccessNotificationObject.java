@@ -30,7 +30,7 @@ public class AccessNotificationObject {
     @NotNull
     private Boolean decision;
     @NotNull
-    private String reason;
+    private String decisionReason;
     @NotNull
     private UUID transactionIdentifier;
 
@@ -57,17 +57,17 @@ public class AccessNotificationObject {
      *
      * @return the reason
      */
-    public String getReason() {
-        return reason;
+    public String getDecisionReason() {
+        return decisionReason;
     }
 
     /**
      * Sets reason.
      *
-     * @param reason the reason
+     * @param decisionReason the reason
      */
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setDecisionReason(String decisionReason) {
+        this.decisionReason = decisionReason;
     }
 
     /**

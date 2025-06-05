@@ -23,7 +23,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class EnvelopeKeyObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
     private EnvelopeKeyObject obj;
 
     private ObjectMapper mapper;
@@ -48,17 +47,17 @@ class EnvelopeKeyObjectTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Generate a new object
         this.obj = new EnvelopeKeyObject();
         this.obj.setEncryptionKey("encryptionKey");
         this.obj.setIv("iv");
         this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));

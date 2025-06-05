@@ -17,24 +17,20 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
+import org.grad.secom.core.models.EncryptionKeyObject;
 import org.grad.secom.core.models.EncryptionKeyResponseObject;
-import org.grad.secom.core.models.SearchFilterObject;
-import org.grad.secom.core.models.ResponseSearchObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
-import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Search Service Interface Definition.
+ * The SECOM Encryption Key Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -42,29 +38,25 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface SearchServiceSecomInterface extends GenericSecomInterface {
+public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String SEARCH_SERVICE_INTERFACE_PATH = "/v1/searchService";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/v2/encryptionkey";
 
     /**
-     * POST /v1/searchService : The purpose of this interface is to search for
-     * service instances to consume.
+     * POST /v1/encryptionkey : The purpose of the interface is to exchange a
+     * temporary secret key. This operation is used to upload (push) an
+     * encrypted secret key to a consumer.
      *
-     * @param searchFilterObject    The search filter object
-     * @param page the page number to be retrieved
-     * @param pageSize the maximum page size
-     * @return the result list of the search
+     * @return the encryption key response object
      */
-    @Path(SEARCH_SERVICE_INTERFACE_PATH)
+    @Path(ENCRYPTION_KEY_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    ResponseSearchObject searchService(@Valid SearchFilterObject searchFilterObject,
-                                       @QueryParam("page") @Min(0) Integer page,
-                                       @QueryParam("pageSize") @Min(0) Integer pageSize);
+    EncryptionKeyResponseObject encryptionKey(@Valid EncryptionKeyObject encryptionKeyObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -74,9 +66,9 @@ public interface SearchServiceSecomInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleSearchServiceInterfaceExceptions(Exception ex,
-                                                           HttpServletRequest request,
-                                                           HttpServletResponse response) {
+    static Response handleEncryptionInterfaceExceptions(Exception ex,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
 
         // Create the encryption key response
         Response.Status responseStatus;
@@ -89,13 +81,10 @@ public interface SearchServiceSecomInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            encryptionKeyResponseObject.setResponseText("Bad Request");
-        } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-            encryptionKeyResponseObject.setResponseText("Information not found");
+            encryptionKeyResponseObject.setMessage("Bad Request");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
@@ -103,4 +92,5 @@ public interface SearchServiceSecomInterface extends GenericSecomInterface {
                 .entity(encryptionKeyResponseObject)
                 .build();
     }
+
 }

@@ -18,13 +18,13 @@ package org.grad.secom.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secom.core.base.*;
+import org.grad.secom.core.models.*;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
-import org.grad.secom.core.interfaces.AcknowledgementSecomInterface;
-import org.grad.secom.core.interfaces.EncryptionKeySecomInterface;
-import org.grad.secom.core.interfaces.UploadLinkSecomInterface;
-import org.grad.secom.core.interfaces.UploadSecomInterface;
-import org.grad.secom.core.models.*;
+import org.grad.secom.core.interfaces.AcknowledgementServiceInterface;
+import org.grad.secom.core.interfaces.EncryptionKeyServiceInterface;
+import org.grad.secom.core.interfaces.UploadLinkServiceInterface;
+import org.grad.secom.core.interfaces.UploadServiceInterface;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.PkiUtils;
 import org.grad.secom.core.utils.SecomPemUtils;
@@ -108,19 +108,19 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         // Currently, SECOM only needs to validate POST requests
         if(rqstCtx.getRequest().getMethod().equals("POST")) {
             // For the Upload Interface Requests
-            if (rqstCtx.getUriInfo().getPath().endsWith(UploadSecomInterface.UPLOAD_INTERFACE_PATH)){
+            if (rqstCtx.getUriInfo().getPath().endsWith(UploadServiceInterface.UPLOAD_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, UploadObject.class);
             }
             // For the Upload Link Interface Requests
-            else if (rqstCtx.getUriInfo().getPath().endsWith(UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH)) {
+            else if (rqstCtx.getUriInfo().getPath().endsWith(UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, UploadLinkObject.class);
             }
             // For the Acknowledgement Interface Requests
-            else if (rqstCtx.getUriInfo().getPath().endsWith(AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH)) {
+            else if (rqstCtx.getUriInfo().getPath().endsWith(AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, AcknowledgementObject.class);
             }
             // For the Encryption Key Interface Requests
-            else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
+            else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, EncryptionKeyObject.class);
             }
         }
@@ -168,13 +168,13 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                     checkCertificate(
                             Optional.of(dataObj)
                                     .map(DigitalSignatureBearer::getExchangeMetadata)
-                                    .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
-                                    .map(DigitalSignatureValue::getPublicCertificate)
+                                    .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                    .map(DigitalSignatureValueObject::getPublicCertificate)
                                     .orElse(null),
                             Optional.of(dataObj)
                                     .map(DigitalSignatureBearer::getExchangeMetadata)
-                                    .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
-                                    .map(DigitalSignatureValue::getPublicRootCertificateThumbprint)
+                                    .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                    .map(DigitalSignatureValueObject::getPublicRootCertificateThumbprint)
                                     .orElse(null)
                     );
                 }
@@ -183,17 +183,17 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 valid &= this.signatureProvider.validateSignature(
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
-                                .map(DigitalSignatureValue::getPublicCertificate)
+                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValueObject::getPublicCertificate)
                                 .orElse(null),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
+                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureReference)
                                 .orElse(digitalSignatureAlgorithm),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
-                                .map(DigitalSignatureValue::getDigitalSignature)
+                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(DigitalSignatureValueObject::getDigitalSignature)
                                 .map(DatatypeConverter::parseHexBinary)
                                 .orElse(null),
                         Optional.of(dataObj)

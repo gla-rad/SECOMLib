@@ -21,7 +21,6 @@ import org.grad.secom.core.models.enums.SECOM_Enum;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;

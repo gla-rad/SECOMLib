@@ -73,7 +73,6 @@ class GetSummaryResponseObjectTest {
         this.obj = new GetSummaryResponseObject();
         this.obj.setSummaryObject(Collections.singletonList(this.summaryObject));
         this.obj.setPagination(this.paginationObject);
-        this.obj.setResponseText("Test");
     }
 
     /**
@@ -105,7 +104,6 @@ class GetSummaryResponseObjectTest {
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
     }
 
 }

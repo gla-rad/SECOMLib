@@ -42,6 +42,8 @@ public class ImplementedInterfaces {
     private Boolean access;
     @NotNull
     private Boolean encryptionKey;
+    @NotNull
+    private Boolean publicKey;
 
     /**
      * Instantiates a new Secom interfaces.
@@ -55,6 +57,7 @@ public class ImplementedInterfaces {
         this.subscription = Boolean.FALSE;
         this.access = Boolean.FALSE;
         this.encryptionKey = Boolean.FALSE;
+        this.publicKey = Boolean.FALSE;
     }
 
     /**
@@ -200,4 +203,18 @@ public class ImplementedInterfaces {
     public void setEncryptionKey(Boolean encryptionKey) {
         this.encryptionKey = encryptionKey;
     }
+
+    /**
+     * Get public key
+     *
+     * @return public key
+     */
+    public Boolean getPublicKey() { return publicKey; }
+
+    /**
+     * Set public key
+     *
+     * @param publicKey the public key
+     */
+    public void setPublicKey(Boolean publicKey) { this.publicKey = publicKey; }
 }

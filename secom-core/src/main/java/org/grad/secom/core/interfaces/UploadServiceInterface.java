@@ -17,7 +17,6 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSchemaValidationException;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
@@ -43,7 +42,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public interface UploadSecomInterface extends GenericSecomInterface {
+public interface UploadServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -88,23 +87,23 @@ public interface UploadSecomInterface extends GenericSecomInterface {
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
-            uploadResponseObject.setResponseText("Missing required data for the service");
+            uploadResponseObject.setMessage("Missing required data for the service");
         } else if(ex instanceof SecomSignatureVerificationException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
-            uploadResponseObject.setResponseText("Failed signature verification");
+            uploadResponseObject.setMessage("Failed signature verification");
         } else if(ex instanceof SecomInvalidCertificateException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
-            uploadResponseObject.setResponseText("Invalid Certificate");
+            uploadResponseObject.setMessage("Invalid Certificate");
         } else if(ex instanceof SecomSchemaValidationException) {
             responseStatus = Response.Status.BAD_REQUEST;
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
-            uploadResponseObject.setResponseText("Schema validation error");
+            uploadResponseObject.setMessage("Schema validation error");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             uploadResponseObject.setSECOM_ResponseCode(null);
-            uploadResponseObject.setResponseText(responseStatus.getReasonPhrase());
+            uploadResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

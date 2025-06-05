@@ -43,7 +43,7 @@ class SubscriptionNotificationResponseObjectTest {
 
         // Generate a new upload object
         this.obj = new SubscriptionNotificationResponseObject();
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
     }
 
     /**
@@ -57,7 +57,7 @@ class SubscriptionNotificationResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
     }
 
 }

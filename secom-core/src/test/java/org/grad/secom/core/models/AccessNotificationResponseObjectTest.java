@@ -22,8 +22,6 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccessNotificationResponseObjectTest {
@@ -44,7 +42,7 @@ class AccessNotificationResponseObjectTest {
 
         // Generate a new object
         this.obj = new AccessNotificationResponseObject();
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
     }
 
     /**
@@ -58,7 +56,7 @@ class AccessNotificationResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
     }
 
 }

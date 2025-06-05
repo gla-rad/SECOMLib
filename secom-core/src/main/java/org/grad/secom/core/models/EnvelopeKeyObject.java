@@ -34,7 +34,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     @NotNull
     private UUID transactionIdentifier;
     @NotNull
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
 
     /**
      * Gets encryption key.
@@ -95,17 +95,17 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
      *
      * @return the digital signature value
      */
-    public DigitalSignatureValue getDigitalSignatureValue() {
-        return digitalSignatureValue;
+    public DigitalSignatureValueObject getDigitalSignatureValue() {
+        return digitalSignatureValueObject;
     }
 
     /**
      * Sets digital signature value.
      *
-     * @param digitalSignatureValue the digital signature value
+     * @param digitalSignatureValueObject the digital signature value
      */
-    public void setDigitalSignatureValue(DigitalSignatureValue digitalSignatureValue) {
-        this.digitalSignatureValue = digitalSignatureValue;
+    public void setDigitalSignatureValue(DigitalSignatureValueObject digitalSignatureValueObject) {
+        this.digitalSignatureValueObject = digitalSignatureValueObject;
     }
 
     /**
@@ -120,7 +120,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 encryptionKey,
                 iv,
                 transactionIdentifier,
-                digitalSignatureValue,
+                digitalSignatureValueObject,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime

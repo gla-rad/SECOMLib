@@ -17,7 +17,6 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
 import org.grad.secom.core.exceptions.*;
 import org.grad.secom.core.models.AcknowledgementObject;

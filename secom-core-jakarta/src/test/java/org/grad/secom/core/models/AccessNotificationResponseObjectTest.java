@@ -22,8 +22,6 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.UUID;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class AccessNotificationResponseObjectTest {

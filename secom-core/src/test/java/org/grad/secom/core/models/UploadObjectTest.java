@@ -37,8 +37,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UploadObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
     private EnvelopeUploadObject envelopeUploadObject;
     private UploadObject obj;
 
@@ -54,17 +54,17 @@ class UploadObjectTest {
         this.mapper.registerModule(new JSR310Module());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create SECOM exchange metadata
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
         this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
-        this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
         // Create a new envelope upload object
@@ -83,7 +83,7 @@ class UploadObjectTest {
         // Generate a new object
         this.obj = new UploadObject();
         this.obj.setEnvelope(this.envelopeUploadObject);
-        this.obj.setEnvelopeSignature("signature");
+        this.obj.setDigitalSignature("signature");
     }
 
     /**

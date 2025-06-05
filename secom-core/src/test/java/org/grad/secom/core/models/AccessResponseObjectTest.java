@@ -42,7 +42,7 @@ class AccessResponseObjectTest {
 
         // Generate a new object
         this.obj = new AccessResponseObject();
-        this.obj.setResponseText("Test");
+        this.obj.setMessage("Test");
         this.obj.setTransactionIdentifier("Ti");
     }
 
@@ -57,7 +57,7 @@ class AccessResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getResponseText(), result.getResponseText());
+        assertEquals(this.obj.getMessage(), result.getMessage());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
     }
 

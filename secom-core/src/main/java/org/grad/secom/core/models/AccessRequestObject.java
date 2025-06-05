@@ -39,6 +39,7 @@ public class AccessRequestObject {
     private SECOM_DataProductType dataProductType;
     private UUID dataReference;
     private String productVersion;
+    private String callbackEndpoint;
 
     /**
      * Gets reason.
@@ -147,4 +148,18 @@ public class AccessRequestObject {
     public void setProductVersion(String productVersion) {
         this.productVersion = productVersion;
     }
+
+    /**
+     * Get the callback endpoint
+     *
+     * @return the callback url
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Set the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
 }

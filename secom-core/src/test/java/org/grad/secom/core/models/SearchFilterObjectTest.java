@@ -61,14 +61,14 @@ class SearchFilterObjectTest {
         this.searchParameters.setServiceType("serviceType");
         this.searchParameters.setUnlocode("unlocode");
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
-        this.searchParameters.setPage(0);
-        this.searchParameters.setPageSize(100);
 
         // Generate a new object
         this.obj = new SearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
         this.obj.setFreetext("freeText");
+        this.obj.setPage(0);
+        this.obj.setPageSize(100);
     }
 
     /**
@@ -97,8 +97,8 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getServiceType(), result.getQuery().getServiceType());
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
-        assertEquals(this.obj.getQuery().getPage(), result.getQuery().getPage());
-        assertEquals(this.obj.getQuery().getPageSize(), result.getQuery().getPageSize());
+        assertEquals(this.obj.getPage(), result.getPage());
+        assertEquals(this.obj.getPageSize(), result.getPageSize());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
         assertEquals(this.obj.getFreetext(), result.getFreetext());
     }

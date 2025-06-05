@@ -17,7 +17,6 @@
 package org.grad.secom.core.components;
 
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 
 import javax.ws.rs.ext.ParamConverter;
