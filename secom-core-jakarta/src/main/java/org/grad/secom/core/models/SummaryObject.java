@@ -20,12 +20,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
+import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -50,10 +50,10 @@ public class SummaryObject {
     private String info_name;
     private String info_status;
     private String info_description;
-    @Schema(description = "The last modified date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime info_lastModifiedDate;
+    @Schema(description = "The last modified date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
+    private Instant info_lastModifiedDate;
     private String info_productVersion;
     private Long info_size;
 
@@ -224,7 +224,7 @@ public class SummaryObject {
      *
      * @return the info last modified date
      */
-    public LocalDateTime getInfo_lastModifiedDate() {
+    public Instant getInfo_lastModifiedDate() {
         return info_lastModifiedDate;
     }
 
@@ -233,7 +233,7 @@ public class SummaryObject {
      *
      * @param info_lastModifiedDate the info last modified date
      */
-    public void setInfo_lastModifiedDate(LocalDateTime info_lastModifiedDate) {
+    public void setInfo_lastModifiedDate(Instant info_lastModifiedDate) {
         this.info_lastModifiedDate = info_lastModifiedDate;
     }
 

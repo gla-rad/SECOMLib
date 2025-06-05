@@ -21,18 +21,18 @@
     <parent>
         <artifactId>secom-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.50</version>
+        <version>0.0.51-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-springboot3</artifactId>
-    <version>0.0.50</version>
+    <version>0.0.51-SNAPSHOT</version>
 
     <properties>
-        <springframework3.version>6.1.6</springframework3.version>
-        <resteasy-spring-boot.version>6.1.1.Final</resteasy-spring-boot.version>
-        <swagger.version>2.2.21</swagger.version>
+        <springframework3.version>6.2.5</springframework3.version>
+        <resteasy-spring-boot.version>6.3.0.Final</resteasy-spring-boot.version>
+        <swagger.version>2.2.30</swagger.version>
     </properties>
 
     <dependencies>
@@ -73,6 +73,12 @@
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2-jakarta</artifactId>
             <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>compile</scope>
         </dependency>
 
     </dependencies>

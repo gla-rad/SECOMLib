@@ -28,7 +28,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -102,7 +102,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
             try {
                 this.getEnvelope().setEnvelopeSignatureCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
                 this.getEnvelope().setEnvelopeRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
-                this.getEnvelope().setEnvelopeSignatureTime(LocalDateTime.now());
+                this.getEnvelope().setEnvelopeSignatureTime(Instant.now());
             } catch (CertificateEncodingException | NoSuchAlgorithmException exception) {
                 throw new SecomInvalidCertificateException(exception.getMessage());
             }

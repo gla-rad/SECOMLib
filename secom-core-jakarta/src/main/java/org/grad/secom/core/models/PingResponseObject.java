@@ -19,11 +19,10 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
+import org.grad.secom.core.base.InstantSerializer;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * The SECOM Ping Response Object Class
@@ -33,17 +32,17 @@ import java.time.LocalDateTime;
 public class PingResponseObject {
 
     // Class Variables
-    @Schema(description = "The last private interaction date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime lastPrivateInteractionTime;
+    @Schema(description = "The last private interaction date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
+    private Instant lastPrivateInteractionTime;
 
     /**
      * Gets last private interaction time.
      *
      * @return the last private interaction time
      */
-    public LocalDateTime getLastPrivateInteractionTime() {
+    public Instant getLastPrivateInteractionTime() {
         return lastPrivateInteractionTime;
     }
 
@@ -52,7 +51,7 @@ public class PingResponseObject {
      *
      * @param lastPrivateInteractionTime the last private interaction time
      */
-    public void setLastPrivateInteractionTime(LocalDateTime lastPrivateInteractionTime) {
+    public void setLastPrivateInteractionTime(Instant lastPrivateInteractionTime) {
         this.lastPrivateInteractionTime = lastPrivateInteractionTime;
     }
 

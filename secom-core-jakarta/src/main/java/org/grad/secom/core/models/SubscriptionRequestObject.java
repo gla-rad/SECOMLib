@@ -19,13 +19,13 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
+import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.Pattern;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -46,14 +46,14 @@ public class SubscriptionRequestObject {
     @Schema(description = "The subscription area as UNLOCODE", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @Schema(description = "The subscription period start", type = "string", example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime subscriptionPeriodStart;
-    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime subscriptionPeriodEnd;
+    @Schema(description = "The subscription period start", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
+    private Instant subscriptionPeriodStart;
+    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
+    private Instant subscriptionPeriodEnd;
 
     /**
      * Gets container type.
@@ -168,7 +168,7 @@ public class SubscriptionRequestObject {
      *
      * @return the subscription period start
      */
-    public LocalDateTime getSubscriptionPeriodStart() {
+    public Instant getSubscriptionPeriodStart() {
         return subscriptionPeriodStart;
     }
 
@@ -177,7 +177,7 @@ public class SubscriptionRequestObject {
      *
      * @param subscriptionPeriodStart the subscription period start
      */
-    public void setSubscriptionPeriodStart(LocalDateTime subscriptionPeriodStart) {
+    public void setSubscriptionPeriodStart(Instant subscriptionPeriodStart) {
         this.subscriptionPeriodStart = subscriptionPeriodStart;
     }
 
@@ -186,7 +186,7 @@ public class SubscriptionRequestObject {
      *
      * @return the subscription period end
      */
-    public LocalDateTime getSubscriptionPeriodEnd() {
+    public Instant getSubscriptionPeriodEnd() {
         return subscriptionPeriodEnd;
     }
 
@@ -195,7 +195,7 @@ public class SubscriptionRequestObject {
      *
      * @param subscriptionPeriodEnd the subscription period end
      */
-    public void setSubscriptionPeriodEnd(LocalDateTime subscriptionPeriodEnd) {
+    public void setSubscriptionPeriodEnd(Instant subscriptionPeriodEnd) {
         this.subscriptionPeriodEnd = subscriptionPeriodEnd;
     }
 }

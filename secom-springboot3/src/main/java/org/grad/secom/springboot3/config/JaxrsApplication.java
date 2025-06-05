@@ -122,13 +122,13 @@ public class JaxrsApplication extends Application {
     }
 
     /**
-     * Initialise the LocalDateTime Converter Provider bean.
+     * Initialise the Instant Converter Provider bean.
      *
-     * @return the LocalDateTime Converter Provider bean
+     * @return the Instant Converter Provider bean
      */
     @Bean
-    LocalDateTimeConverterProvider localDateTimeConverterProvider() {
-        return new LocalDateTimeConverterProvider();
+    InstantConverterProvider instantConverterProvider() {
+        return new InstantConverterProvider();
     }
 
     /**

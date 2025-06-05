@@ -27,8 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.UUID;
@@ -78,7 +77,7 @@ class EnvelopeUploadObjectTest {
         this.obj.setTransactionIdentifier(UUID.randomUUID());
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -135,7 +134,7 @@ class EnvelopeUploadObjectTest {
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[12]);
         assertEquals(this.obj.getEnvelopeSignatureCertificate(), csv[13]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[14]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC)), csv[15]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[15]);
     }
 
 }

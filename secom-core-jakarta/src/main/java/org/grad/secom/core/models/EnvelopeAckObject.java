@@ -20,13 +20,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.DateTimeDeSerializer;
-import org.grad.secom.core.base.DateTimeSerializer;
+import org.grad.secom.core.base.InstantDeserializer;
+import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.AckTypeEnum;
 import org.grad.secom.core.models.enums.NackTypeEnum;
 
 import jakarta.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -38,10 +38,10 @@ public class EnvelopeAckObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    @Schema(description = "The creation date-time", type = "string",example = "19850412T101530")
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeSerializer.class)
-    private LocalDateTime createdAt;
+    @Schema(description = "The creation date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @JsonSerialize(using = InstantSerializer.class)
+    @JsonDeserialize(using = InstantDeserializer.class)
+    private Instant createdAt;
     @NotNull
     private UUID transactionIdentifier;
     @NotNull
@@ -53,7 +53,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      *
      * @return the created at
      */
-    public LocalDateTime getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
@@ -62,7 +62,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      *
      * @param createdAt the created at
      */
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 

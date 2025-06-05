@@ -17,7 +17,8 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.ws.rs.*;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
@@ -33,7 +34,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -78,8 +79,8 @@ public interface GetSecomInterface extends GenericSecomInterface {
                           @QueryParam("productVersion") String productVersion,
                           @QueryParam("geometry") String geometry,
                           @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                          @QueryParam("validFrom") LocalDateTime validFrom,
-                          @QueryParam("validTo") LocalDateTime validTo,
+                          @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
+                          @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
                           @QueryParam("page") @Min(0) Integer page,
                           @QueryParam("pageSize") @Min(0) Integer pageSize);
 

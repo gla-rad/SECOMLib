@@ -22,7 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
@@ -61,7 +61,7 @@ class EnvelopeKeyObjectTest {
         this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
         this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.obj.setEnvelopeSignatureTime(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -105,7 +105,7 @@ class EnvelopeKeyObjectTest {
         assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
         assertEquals(obj.getEnvelopeSignatureCertificate(), csv[6]);
         assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
-        assertEquals(obj.getEnvelopeSignatureTime().toEpochSecond(ZoneOffset.UTC), Long.parseLong(csv[8]));
+        assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[8]));
     }
 
 }

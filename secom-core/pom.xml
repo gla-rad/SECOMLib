@@ -21,13 +21,13 @@
     <parent>
         <artifactId>secom-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.50</version>
+        <version>0.0.51-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-core</artifactId>
-    <version>0.0.50</version>
+    <version>0.0.51-SNAPSHOT</version>
 
     <properties>
         <version.maven.javax.ws.rs-api>2.1.1</version.maven.javax.ws.rs-api>
@@ -82,7 +82,7 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.1.10</version>
+            <version>2.2.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -103,6 +103,13 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.8.0</version>
             <scope>test</scope>
         </dependency>
 

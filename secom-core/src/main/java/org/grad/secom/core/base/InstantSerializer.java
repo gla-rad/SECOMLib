@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Optional;
 
@@ -37,12 +37,12 @@ import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class DateTimeSerializer extends StdSerializer<LocalDateTime> {
+public class InstantSerializer extends StdSerializer<Instant> {
 
     /**
      * Instantiates a new Byte array serializer.
      */
-    protected DateTimeSerializer() {
+    protected InstantSerializer() {
         this(null);
     }
 
@@ -51,22 +51,22 @@ public class DateTimeSerializer extends StdSerializer<LocalDateTime> {
      *
      * @param t the byte array class
      */
-    protected DateTimeSerializer(Class<LocalDateTime> t) {
+    protected InstantSerializer(Class<Instant> t) {
         super(t);
     }
 
     /**
      * Implements the serialization procedure of the serializer.
      *
-     * @param localDateTime         The input to be serialized
+     * @param instant         The input to be serialized
      * @param jg                    The JSON generator
      * @param serializerProvider    The serialization provider
      * @return the serialized output
      * @throws IOException for any IO exceptions
      */
     @Override
-    public void serialize(LocalDateTime localDateTime, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-        jg.writeString(Optional.ofNullable(localDateTime)
+    public void serialize(Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+        jg.writeString(Optional.ofNullable(instant)
                 .map(dt -> dt.atZone(ZoneId.systemDefault()))
                 .map(SECOM_DATE_TIME_FORMATTER::format)
                 .orElse(""));
