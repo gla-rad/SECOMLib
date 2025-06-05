@@ -65,7 +65,7 @@ public class InstantSerializer extends StdSerializer<Instant> {
      * @throws IOException for any IO exceptions
      */
     @Override
-    public void serialize( Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
         jg.writeString(Optional.ofNullable(instant)
                 .map(dt -> dt.atZone(ZoneId.systemDefault()))
                 .map(SECOM_DATE_TIME_FORMATTER::format)

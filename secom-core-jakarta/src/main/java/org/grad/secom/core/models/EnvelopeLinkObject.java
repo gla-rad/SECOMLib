@@ -207,7 +207,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @param timeToLive the time to live
      */
-    public void setTimeToLive( Instant timeToLive) {
+    public void setTimeToLive(Instant timeToLive) {
         this.timeToLive = timeToLive;
     }
 

@@ -51,7 +51,7 @@ public class PingResponseObject {
      *
      * @param lastPrivateInteractionTime the last private interaction time
      */
-    public void setLastPrivateInteractionTime( Instant lastPrivateInteractionTime) {
+    public void setLastPrivateInteractionTime(Instant lastPrivateInteractionTime) {
         this.lastPrivateInteractionTime = lastPrivateInteractionTime;
     }
 

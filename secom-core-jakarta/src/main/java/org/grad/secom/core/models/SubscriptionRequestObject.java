@@ -177,7 +177,7 @@ public class SubscriptionRequestObject {
      *
      * @param subscriptionPeriodStart the subscription period start
      */
-    public void setSubscriptionPeriodStart( Instant subscriptionPeriodStart) {
+    public void setSubscriptionPeriodStart(Instant subscriptionPeriodStart) {
         this.subscriptionPeriodStart = subscriptionPeriodStart;
     }
 
@@ -195,7 +195,7 @@ public class SubscriptionRequestObject {
      *
      * @param subscriptionPeriodEnd the subscription period end
      */
-    public void setSubscriptionPeriodEnd( Instant subscriptionPeriodEnd) {
+    public void setSubscriptionPeriodEnd(Instant subscriptionPeriodEnd) {
         this.subscriptionPeriodEnd = subscriptionPeriodEnd;
     }
 }

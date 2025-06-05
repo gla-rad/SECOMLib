@@ -62,7 +62,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      *
      * @param createdAt the created at
      */
-    public void setCreatedAt( Instant createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
