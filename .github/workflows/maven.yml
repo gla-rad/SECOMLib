@@ -23,6 +23,6 @@ jobs:
           distribution: 'temurin'
           cache: maven
       - name: Build with Maven
+        env:
+          TZ: "Europe/London"
         run: mvn -B clean package --file pom.xml
-        with:
-          timezoneLinux: "Europe/London"
