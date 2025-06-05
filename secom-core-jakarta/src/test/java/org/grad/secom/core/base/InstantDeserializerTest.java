@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -70,6 +72,10 @@ class InstantDeserializerTest {
      */
     @Test
     void testDeserializeInstantDLS() throws IOException {
+        // Update the time zone to something with a summer flavour
+        final TimeZone defaultTimeZone = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Europe/London")));
+
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20080808T121314").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -82,6 +88,9 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);
+
+        // And back
+        TimeZone.setDefault(defaultTimeZone);
     }
 
     /**
@@ -110,6 +119,10 @@ class InstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDateDLS() throws IOException {
+        // Update the time zone to something with a summer flavour
+        final TimeZone defaultTimeZone = TimeZone.getDefault();
+        TimeZone.setDefault(TimeZone.getTimeZone(ZoneId.of("Europe/London")));
+
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20080808T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -122,6 +135,9 @@ class InstantDeserializerTest {
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00Z"), result);
+
+        // And back
+        TimeZone.setDefault(defaultTimeZone);
     }
 
     /**
