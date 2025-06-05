@@ -22,6 +22,7 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-        timezoneLinux: "Europe/London"
     - name: Build with Maven
+      with:
+        timezone: "Europe/London"
       run: mvn -B clean package --file pom.xml
