@@ -49,7 +49,7 @@ class InstantDeserializerTest {
      * formatted local dates.
      */
     @Test
-    void testDeserializeLocalDate() throws IOException {
+    void testDeserializeInstant() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20010101T121314").when(objectCodecMock).readValue(any(), eq(String.class));
@@ -69,7 +69,7 @@ class InstantDeserializerTest {
      * formatted local daylight-saving dates.
      */
     @Test
-    void testDeserializeLocalDateDLS() throws IOException {
+    void testDeserializeInstantDLS() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
         doReturn("20080808T121314").when(objectCodecMock).readValue(any(), eq(String.class));

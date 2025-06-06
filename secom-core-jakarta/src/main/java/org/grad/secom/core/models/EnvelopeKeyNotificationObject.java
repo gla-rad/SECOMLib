@@ -114,7 +114,7 @@ public class EnvelopeKeyNotificationObject {
      *
      * @param envelopeSignatureTime the envelope signature time
      */
-    public void setEnvelopeSignatureTime( Instant envelopeSignatureTime) {
+    public void setEnvelopeSignatureTime(Instant envelopeSignatureTime) {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
 }

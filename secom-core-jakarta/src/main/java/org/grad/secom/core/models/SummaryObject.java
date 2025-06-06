@@ -233,7 +233,7 @@ public class SummaryObject {
      *
      * @param info_lastModifiedDate the info last modified date
      */
-    public void setInfo_lastModifiedDate( Instant info_lastModifiedDate) {
+    public void setInfo_lastModifiedDate(Instant info_lastModifiedDate) {
         this.info_lastModifiedDate = info_lastModifiedDate;
     }
 

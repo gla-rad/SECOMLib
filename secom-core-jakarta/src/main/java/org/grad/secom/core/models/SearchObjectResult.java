@@ -302,7 +302,7 @@ public class SearchObjectResult {
      *
      * @param publishedAt the published at
      */
-    public void setPublishedAt( Instant publishedAt) {
+    public void setPublishedAt(Instant publishedAt) {
         this.publishedAt = publishedAt;
     }
 
@@ -320,7 +320,7 @@ public class SearchObjectResult {
      *
      * @param lastUpdatedAt the last updated at
      */
-    public void setLastUpdatedAt( Instant lastUpdatedAt) {
+    public void setLastUpdatedAt(Instant lastUpdatedAt) {
         this.lastUpdatedAt = lastUpdatedAt;
     }
 
