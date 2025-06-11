@@ -18,18 +18,22 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
-import org.grad.secom.core.models.enums.*;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secom.core.models.enums.ContainerTypeEnum;
+import org.grad.secom.core.models.enums.ReasonEnum;
+import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AccessRequestObjectTest {
 
     // Class Variables
+    private EnvelopeAccessObject envelopeAccessObject;
     private AccessRequestObject obj;
 
     private ObjectMapper mapper;
@@ -41,16 +45,19 @@ class AccessRequestObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
+        this.envelopeAccessObject = new EnvelopeAccessObject();
+        envelopeAccessObject.setReason("Test");
+        envelopeAccessObject.setReasonEnum(ReasonEnum.REQUESTED_BY_AUTHORITY);
+        envelopeAccessObject.setContainerType(ContainerTypeEnum.S100_DataSet);
+        envelopeAccessObject.setDataProductType(SECOM_DataProductType.S101);
+        envelopeAccessObject.setDataReference(UUID.randomUUID());
+        envelopeAccessObject.setProductVersion("productVersion");
         this.obj = new AccessRequestObject();
-        this.obj.setReason("Test");
-        this.obj.setReasonEnum(ReasonEnum.REQUESTED_BY_AUTHORITY);
-        this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
-        this.obj.setDataProductType(SECOM_DataProductType.S101);
-        this.obj.setDataReference(UUID.randomUUID());
-        this.obj.setProductVersion("productVersion");
+        this.obj.setEnvelope(envelopeAccessObject);
+        this.obj.setEnvelopeSignature("envelopeSignature");
     }
 
     /**
@@ -64,12 +71,13 @@ class AccessRequestObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getReason(), result.getReason());
-        assertEquals(this.obj.getReasonEnum(), result.getReasonEnum());
-        assertEquals(this.obj.getContainerType(), result.getContainerType());
-        assertEquals(this.obj.getDataProductType(), result.getDataProductType());
-        assertEquals(this.obj.getDataReference(), result.getDataReference());
-        assertEquals(this.obj.getProductVersion(), result.getProductVersion());
+        assertEquals(this.obj.getEnvelope().getReason(), result.getEnvelope().getReason());
+        assertEquals(this.obj.getEnvelope().getReasonEnum(), result.getEnvelope().getReasonEnum());
+        assertEquals(this.obj.getEnvelope().getContainerType(), result.getEnvelope().getContainerType());
+        assertEquals(this.obj.getEnvelope().getDataProductType(), result.getEnvelope().getDataProductType());
+        assertEquals(this.obj.getEnvelope().getDataReference(), result.getEnvelope().getDataReference());
+        assertEquals(this.obj.getEnvelope().getProductVersion(), result.getEnvelope().getProductVersion());
+        assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
 
 }

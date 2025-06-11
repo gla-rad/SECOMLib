@@ -19,8 +19,7 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.models.AbstractEnvelope;
-import org.grad.secom.core.models.DigitalSignatureValue;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
+import org.grad.secom.core.models.ExchangeMetadata;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secom.core.utils.SecomPemUtils;
 
@@ -29,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -100,7 +100,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
         // If we have a signature certificate, update the envelope
         if(signatureCertificate != null) {
             try {
-                this.getEnvelope().setEnvelopeSignatureCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
+                this.getEnvelope().setEnvelopeSignatureCertificate(SecomPemUtils.getMinifiedPemFromCerts(signatureCertificate.getCertificate()));
                 this.getEnvelope().setEnvelopeRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
                 this.getEnvelope().setEnvelopeSignatureTime(Instant.now());
             } catch (CertificateEncodingException | NoSuchAlgorithmException exception) {
@@ -130,7 +130,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
                 .filter(GenericExchangeMetadataBearer.class::isInstance)
                 .map(GenericExchangeMetadataBearer.class::cast)
                 .map(GenericExchangeMetadataBearer::getExchangeMetadata)
-                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureReference)
+                .map(ExchangeMetadata::getDigitalSignatureReference)
                 .orElse(null);
     }
 

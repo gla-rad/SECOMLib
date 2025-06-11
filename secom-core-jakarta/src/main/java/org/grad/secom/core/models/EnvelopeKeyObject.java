@@ -16,7 +16,15 @@
 
 package org.grad.secom.core.models;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secom.core.base.ByteArrayDeSerializer;
+import org.grad.secom.core.base.ByteArraySerializer;
+
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.util.UUID;
 
 /**
@@ -28,20 +36,28 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    private String encryptionKey;
+    @Schema(type = "string", format = "byte", description = "The protected symmetric encryption key, Base64 encoded\r\nExample : KQdEi+9iUlq8B9cwWY...U8A2iDPhz7g==")
+    @JsonSerialize(using = ByteArraySerializer.class)
+    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    private byte[] encryptionKey;
     @NotNull
-    private String iv;
+    @Schema(type = "string", format = "byte", description = "Inititalisation vector, Base64 encoded\r\nExample: c9fUXeC5xrFuXGNNnGv9iA==")
+    @JsonSerialize(using = ByteArraySerializer.class)
+    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    private byte[] iv;
     @NotNull
+    @Schema(type = "string", format = "uuid", description = "Identifier to the transaction with the encrypted data", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
     private UUID transactionIdentifier;
     @NotNull
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValue;
 
     /**
      * Gets encryption key.
      *
      * @return the encryption key
      */
-    public String getEncryptionKey() {
+    public byte[] getEncryptionKey() {
         return encryptionKey;
     }
 
@@ -50,7 +66,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
      *
      * @param encryptionKey the encryption key
      */
-    public void setEncryptionKey(String encryptionKey) {
+    public void setEncryptionKey(byte[] encryptionKey) {
         this.encryptionKey = encryptionKey;
     }
 
@@ -59,7 +75,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
      *
      * @return the iv
      */
-    public String getIv() {
+    public byte[] getIv() {
         return iv;
     }
 
@@ -68,7 +84,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
      *
      * @param iv the iv
      */
-    public void setIv(String iv) {
+    public void setIv(byte[] iv) {
         this.iv = iv;
     }
 
@@ -95,17 +111,17 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
      *
      * @return the digital signature value
      */
-    public DigitalSignatureValue getDigitalSignatureValue() {
+    public DigitalSignatureValueObject getDigitalSignatureValue() {
         return digitalSignatureValue;
     }
 
     /**
      * Sets digital signature value.
      *
-     * @param digitalSignatureValue the digital signature value
+     * @param digitalSignatureValueObject the digital signature value
      */
-    public void setDigitalSignatureValue(DigitalSignatureValue digitalSignatureValue) {
-        this.digitalSignatureValue = digitalSignatureValue;
+    public void setDigitalSignatureValue(DigitalSignatureValueObject digitalSignatureValueObject) {
+        this.digitalSignatureValue = digitalSignatureValueObject;
     }
 
     /**
@@ -123,7 +139,8 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 digitalSignatureValue,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                digitalSignatureReference
         };
     }
 }

@@ -16,8 +16,6 @@
 
 package org.grad.secom.core.models.enums;
 
-import java.util.Arrays;
-
 /**
  * The Encryption Algorithm Enum.
  *

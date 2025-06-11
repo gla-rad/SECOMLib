@@ -17,7 +17,6 @@
 package org.grad.secom.core.components;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.grad.secom.core.interfaces.*;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
@@ -25,24 +24,25 @@ import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
+import org.grad.secom.core.interfaces.*;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
 
-import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSecomInterface.GET_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSummarySecomInterface.GET_SUMMARY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.PingSecomInterface.PING_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionNotificationSecomInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AccessNotificationServiceInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
 
 /**
  * The SECOM Exception Manager Class.
@@ -89,43 +89,43 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {
                 case ACCESS_INTERFACE_PATH:
-                    return AccessSecomInterface.handleAccessInterfaceExceptions(ex, this.request, null);
+                    return AccessServiceInterface.handleAccessInterfaceExceptions(ex, this.request, null);
                 case ACCESS_NOTIFICATION_INTERFACE_PATH:
-                    return AccessNotificationSecomInterface.handleAccessNotificationInterfaceExceptions(ex, this.request, null);
+                    return AccessNotificationServiceInterface.handleAccessNotificationInterfaceExceptions(ex, this.request, null);
                 case ACKNOWLEDGMENT_INTERFACE_PATH:
-                    return AcknowledgementSecomInterface.handleAcknowledgementInterfaceExceptions(ex, this.request, null);
+                    return AcknowledgementServiceInterface.handleAcknowledgementInterfaceExceptions(ex, this.request, null);
                 case CAPABILITY_INTERFACE_PATH:
-                    return CapabilitySecomInterface.handleCapabilityInterfaceExceptions(ex, this.request, null);
+                    return CapabilityServiceInterface.handleCapabilityInterfaceExceptions(ex, this.request, null);
                 case SEARCH_SERVICE_INTERFACE_PATH:
-                    return SearchServiceSecomInterface.handleSearchServiceInterfaceExceptions(ex, this.request, null);
+                    return SearchServiceServiceInterface.handleSearchServiceInterfaceExceptions(ex, this.request, null);
                 case ENCRYPTION_KEY_INTERFACE_PATH:
-                    return EncryptionKeySecomInterface.handleEncryptionInterfaceExceptions(ex, this.request, null);
+                    return EncryptionKeyServiceInterface.handleEncryptionInterfaceExceptions(ex, this.request, null);
                 case ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH:
-                    return EncryptionKeyNotifySecomInterface.handleEncryptionKeyNotifyInterfaceExceptions(ex, this.request, null);
+                    return EncryptionKeyNotifyServiceInterface.handleEncryptionKeyNotifyInterfaceExceptions(ex, this.request, null);
                 case GET_BY_LINK_INTERFACE_PATH: // Also for upload
                     if(Objects.equals(this.request.getMethod(), "GET")) {
-                        return GetByLinkSecomInterface.handleGetByLinkInterfaceExceptions(ex, this.request, null);
+                        return GetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, this.request, null);
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return UploadLinkSecomInterface.handleUploadLinkInterfaceExceptions(ex, this.request, null);
+                        return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, this.request, null);
                     }
                 case GET_INTERFACE_PATH: // Also for upload
                     if(Objects.equals(this.request.getMethod(), "GET")) {
-                        return GetSecomInterface.handleGetInterfaceExceptions(ex, this.request, null);
+                        return GetServiceInterface.handleGetInterfaceExceptions(ex, this.request, null);
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return UploadSecomInterface.handleUploadInterfaceExceptions(ex, this.request, null);
+                        return UploadServiceInterface.handleUploadInterfaceExceptions(ex, this.request, null);
                     }
                 case GET_SUMMARY_INTERFACE_PATH:
-                    return GetSummarySecomInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
+                    return GetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
                 case PING_INTERFACE_PATH:
-                    return PingSecomInterface.handlePingInterfaceExceptions(ex, this.request, null);
+                    return PingServiceInterface.handlePingInterfaceExceptions(ex, this.request, null);
                 case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
                     if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return SubscriptionSecomInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                        return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
                     } else if(Objects.equals(this.request.getMethod(), "DELETE")) {
-                        return RemoveSubscriptionSecomInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
+                        return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
                     }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
-                    return SubscriptionNotificationSecomInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
+                    return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 default:
                     //Nothing to do, continue with the generic rules
             }

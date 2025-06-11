@@ -16,6 +16,9 @@
 
 package org.grad.secom.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,8 +30,12 @@ public class PaginationObject {
 
     // Class Variables
     @NotNull
+    @Schema(type = "integer", format = "int32", description = "The total number of items that satisfy the query. This is always returned unless the requested page is set to 0.", example = "0")
+    @Min(0)
     private Integer totalItems;
     @NotNull
+    @Schema(type = "integer", format= "int32", description = "The maximum number of items the service shall return per page.", example = "0")
+    @Min(0)
     private Integer maxItemsPerPage;
 
     /**

@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,13 +42,13 @@ class EncryptionKeyNotificationObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Create a new envelop key notification object
         this.envelopeKeyNotificationObject = new EnvelopeKeyNotificationObject();
         this.envelopeKeyNotificationObject.setDataReference(UUID.randomUUID());
-        this.envelopeKeyNotificationObject.setEnvelopeSignatureCertificate("signatureCertificate");
-        this.envelopeKeyNotificationObject.setPublicCertificate("publicCertificate");
+        this.envelopeKeyNotificationObject.setEnvelopeSignatureCertificate(new String[]{"signatureCertificate"});
+        this.envelopeKeyNotificationObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.envelopeKeyNotificationObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
@@ -70,8 +70,8 @@ class EncryptionKeyNotificationObjectTest {
         assertNotNull(result);
         assertNotNull(result.getEnvelopeSignature());
         assertEquals(this.obj.getEnvelope().getDataReference(), result.getEnvelope().getDataReference());
-        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
-        assertEquals(this.obj.getEnvelope().getPublicCertificate(), result.getEnvelope().getPublicCertificate());
+        assertArrayEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }

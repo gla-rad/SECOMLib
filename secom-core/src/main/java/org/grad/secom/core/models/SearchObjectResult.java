@@ -25,8 +25,9 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.net.URL;
 import java.time.Instant;
-import java.util.List;
+import java.util.UUID;
 
 /**
  * The SECOM Search Object Result Class.
@@ -55,7 +56,7 @@ public class SearchObjectResult {
     @NotNull
     private String endpointType;
     private String keywords;
-    private List<String> unlocode;
+    private String unlocode;
     private String instanceAsXml;
 
     // Non-standard fields (mentioned but not standardised)
@@ -71,6 +72,7 @@ public class SearchObjectResult {
     private String mmsi;
     private String imo;
     private Object geometry;
+    private UUID transactionIdentifier;
 
     /**
      * Gets instance id.
@@ -257,7 +259,7 @@ public class SearchObjectResult {
      *
      * @return the unlocode
      */
-    public List<String> getUnlocode() {
+    public String getUnlocode() {
         return unlocode;
     }
 
@@ -266,7 +268,7 @@ public class SearchObjectResult {
      *
      * @param unlocode the unlocode
      */
-    public void setUnlocode(List<String> unlocode) {
+    public void setUnlocode(String unlocode) {
         this.unlocode = unlocode;
     }
 
@@ -395,4 +397,19 @@ public class SearchObjectResult {
     public void setGeometry(Object geometry) {
         this.geometry = geometry;
     }
+
+    /**
+     * Get the transaction identifier
+     *
+     * @return the transaction identifier
+     */
+    public UUID getTransactionIdentifier() { return transactionIdentifier; }
+
+    /**
+     * Set the transaction identifier
+     *
+     * @param transactionIdentifier the transaction identifier
+     */
+    public void setTransactionIdentifier(UUID transactionIdentifier) { this.transactionIdentifier = transactionIdentifier; }
+
 }

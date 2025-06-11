@@ -31,8 +31,8 @@ import java.security.cert.X509Certificate;
 public class DigitalSignatureCertificate {
 
     // Class Variables
-    private String certificateAlias;
-    private X509Certificate certificate;
+    private String[] certificateAlias;
+    private X509Certificate[] certificate;
     private PublicKey publicKey;
     private X509Certificate rootCertificate;
 
@@ -41,7 +41,7 @@ public class DigitalSignatureCertificate {
      *
      * @return the certificate alias
      */
-    public String getCertificateAlias() {
+    public String[] getCertificateAlias() {
         return certificateAlias;
     }
 
@@ -50,7 +50,7 @@ public class DigitalSignatureCertificate {
      *
      * @param certificateAlias the certificate alias
      */
-    public void setCertificateAlias(String certificateAlias) {
+    public void setCertificateAlias(String[] certificateAlias) {
         this.certificateAlias = certificateAlias;
     }
 
@@ -59,7 +59,7 @@ public class DigitalSignatureCertificate {
      *
      * @return the certificate
      */
-    public X509Certificate getCertificate() {
+    public X509Certificate[] getCertificate() {
         return certificate;
     }
 
@@ -68,7 +68,7 @@ public class DigitalSignatureCertificate {
      *
      * @param certificate the certificate
      */
-    public void setCertificate(X509Certificate certificate) {
+    public void setCertificate(X509Certificate[] certificate) {
         this.certificate = certificate;
     }
 

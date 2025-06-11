@@ -43,7 +43,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
     private byte[] data;
     @JsonProperty
     @NotNull
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private ExchangeMetadata exchangeMetadata;
     @NotNull
     private AckRequestEnum ackRequest;
 
@@ -51,7 +51,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
      * Instantiates a new Data response object.
      */
     public DataResponseObject() {
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new ExchangeMetadata();
         this.ackRequest = AckRequestEnum.NO_ACK_REQUESTED;
     }
 
@@ -81,7 +81,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
      * @return the exchange metadata
      */
     @Override
-    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
+    public ExchangeMetadata getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -91,7 +91,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
      * @param exchangeMetadata the exchange metadata
      */
     @Override
-    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
+    public void setExchangeMetadata(ExchangeMetadata exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 

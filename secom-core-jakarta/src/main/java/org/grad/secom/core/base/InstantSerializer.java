@@ -58,7 +58,7 @@ public class InstantSerializer extends StdSerializer<Instant> {
     /**
      * Implements the serialization procedure of the serializer.
      *
-     * @param instant               The input to be serialized
+     * @param instant         The input to be serialized
      * @param jg                    The JSON generator
      * @param serializerProvider    The serialization provider
      * @return the serialized output

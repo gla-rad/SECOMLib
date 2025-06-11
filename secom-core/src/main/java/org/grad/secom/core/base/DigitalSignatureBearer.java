@@ -18,8 +18,8 @@ package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
-import org.grad.secom.core.models.DigitalSignatureValue;
-import org.grad.secom.core.models.SECOM_ExchangeMetadataObject;
+import org.grad.secom.core.models.DigitalSignatureValueObject;
+import org.grad.secom.core.models.ExchangeMetadata;
 import org.grad.secom.core.utils.SecomPemUtils;
 
 import javax.xml.bind.DatatypeConverter;
@@ -47,7 +47,7 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
     default void setDigitalSignature(String digitalSignature) {
         Optional.of(this)
                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
+                .map(ExchangeMetadata::getDigitalSignatureValue)
                 .ifPresent(digitalSignatureValue -> digitalSignatureValue.setDigitalSignature(digitalSignature));
     }
 
@@ -171,15 +171,15 @@ public interface DigitalSignatureBearer extends GenericSignatureBearer, GenericE
 
         // If we have a signature certificate and metadata, update the metadata
         if(this.getExchangeMetadata() != null) {
-            final SECOM_ExchangeMetadataObject metadata = this.getExchangeMetadata();
+            final ExchangeMetadata metadata = this.getExchangeMetadata();
             metadata.setDigitalSignatureValue(Optional.of(metadata)
-                    .map(SECOM_ExchangeMetadataObject::getDigitalSignatureValue)
-                    .orElseGet(DigitalSignatureValue::new));
+                    .map(ExchangeMetadata::getDigitalSignatureValue)
+                    .orElseGet(DigitalSignatureValueObject::new));
 
             // If we have a certificate set it in the metadata
             if(signatureCertificate != null) {
                 try {
-                    metadata.getDigitalSignatureValue().setPublicCertificate(SecomPemUtils.getMinifiedPemFromCert(signatureCertificate.getCertificate()));
+                    metadata.getDigitalSignatureValue().setPublicCertificate(SecomPemUtils.getMinifiedPemFromCerts(signatureCertificate.getCertificate()));
                     metadata.getDigitalSignatureValue().setPublicRootCertificateThumbprint(SecomPemUtils.getCertThumbprint(signatureCertificate.getRootCertificate(), SecomConstants.CERTIFICATE_THUMBPRINT_HASH));
                 } catch (CertificateEncodingException | NoSuchAlgorithmException ex) {
                     throw new SecomInvalidCertificateException(ex.getMessage());

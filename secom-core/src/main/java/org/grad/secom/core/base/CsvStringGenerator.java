@@ -19,9 +19,9 @@ package org.grad.secom.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secom.core.models.enums.SECOM_Enum;
 
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
@@ -113,6 +113,16 @@ public interface CsvStringGenerator {
             return Optional.of(attribute)
                     .map(Number.class::cast)
                     .map(Number::toString)
+                    .orElse("");
+        } else if(attribute instanceof URL) {
+            return Optional.of(attribute)
+                    .map(URL.class::cast)
+                    .map(URL::toString)
+                    .orElse("");
+        } else if(attribute instanceof String[]) {
+            return Optional.of(attribute)
+                    .map(String[].class::cast)
+                    .map(Arrays::toString)
                     .orElse("");
         } else {
             return attribute.toString();

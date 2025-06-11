@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -45,7 +44,7 @@ class SearchObjectResultTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
         this.obj = new SearchObjectResult();
@@ -59,7 +58,7 @@ class SearchObjectResultTest {
         this.obj.setEndpointType("endpointType");
         this.obj.setVersion("version");
         this.obj.setKeywords("keywords");
-        this.obj.setUnlocode(Collections.singletonList("unlocode"));
+        this.obj.setUnlocode("unlocode");
         this.obj.setInstanceAsXml("instanceAsXml");
         this.obj.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -90,8 +89,6 @@ class SearchObjectResultTest {
         assertEquals(this.obj.getVersion(), result.getVersion());
         assertEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
-        assertEquals(1, result.getUnlocode().size());
-        assertEquals(this.obj.getUnlocode().get(0), result.getUnlocode().get(0));
         assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
         assertEquals(this.obj.getPublishedAt(), result.getPublishedAt());
         assertEquals(this.obj.getLastUpdatedAt(), result.getLastUpdatedAt());

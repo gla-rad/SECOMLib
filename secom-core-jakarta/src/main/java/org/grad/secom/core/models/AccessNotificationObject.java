@@ -16,8 +16,10 @@
 
 package org.grad.secom.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
+import jakarta.validation.constraints.Size;
 
 /**
  * The SECOM Access Notification Object Class.
@@ -28,63 +30,45 @@ public class AccessNotificationObject {
 
     // Class Variables
     @NotNull
-    private Boolean decision;
+    private EnvelopeAccessNotificationObject envelope;
     @NotNull
-    private String reason;
-    @NotNull
-    private UUID transactionIdentifier;
+    @Schema(description = "The signature ot the EnvelopeAccessNotificationObject in HEX format without whitespace or linebreaks")
+    @Size(min = 1)
+    private String envelopeSignature;
 
     /**
-     * Gets decision.
+     * Gets envelope.
      *
-     * @return the decision
+     * @return the envelope
      */
-    public Boolean getDecision() {
-        return decision;
+    public EnvelopeAccessNotificationObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets decision.
+     * Sets envelope.
      *
-     * @param decision the decision
+     * @param envelope the envelope
      */
-    public void setDecision(Boolean decision) {
-        this.decision = decision;
+    public void setEnvelope(EnvelopeAccessNotificationObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets reason.
+     * Gets envelope signature.
      *
-     * @return the reason
+     * @return the envelope signature
      */
-    public String getReason() {
-        return reason;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets reason.
+     * Sets envelope signature.
      *
-     * @param reason the reason
+     * @param envelopeSignature the envelope signature
      */
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
-
-    /**
-     * Gets transaction identifier.
-     *
-     * @return the transaction identifier
-     */
-    public UUID getTransactionIdentifier() {
-        return transactionIdentifier;
-    }
-
-    /**
-     * Sets transaction identifier.
-     *
-     * @param transactionIdentifier the transaction identifier
-     */
-    public void setTransactionIdentifier(UUID transactionIdentifier) {
-        this.transactionIdentifier = transactionIdentifier;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

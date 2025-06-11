@@ -28,6 +28,8 @@ import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -39,7 +41,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
 
     // Class Variables
     @JsonProperty
-    @Schema(type = "string", format = "byte")
+    @Schema(type = "string", format = "byte", description = "The payload XML (e.g. S100_ExchangeSet, S100_DataSet), ZIP or binary The data can be open, protected and/or compressed.")
     @JsonSerialize(using = ByteArraySerializer.class)
     @JsonDeserialize(using = ByteArrayDeSerializer.class)
     @NotNull
@@ -47,20 +49,32 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     @NotNull
     private ContainerTypeEnum containerType;
     @NotNull
+    @Schema(description = "Data product type name requested, e.g. S-124, S-421")
     private SECOM_DataProductType dataProductType;
     @JsonProperty
     @NotNull
-    private SECOM_ExchangeMetadataObject exchangeMetadata;
+    private ExchangeMetadata exchangeMetadata;
+    @Schema(description = "Flag to indicate whether the data has been uploaded within an active subscription or not.")
     private Boolean fromSubscription;
+    @Schema(type= "string", description = "Subscription identifier if the object is uploaded within subscription.", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
+    private UUID subscriptionIdentifier;
+    @NotNull
     private AckRequestEnum ackRequest;
     @NotNull
+    @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
+    @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
+    private URL callbackEndpoint;
+    @NotNull
+    @Schema(type= "string", description = "Transaction identifier to be used in acknowledgement", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
     private UUID transactionIdentifier;
 
     /**
      * Instantiates a new Envelope upload object.
      */
     public EnvelopeUploadObject() {
-        this.exchangeMetadata = new SECOM_ExchangeMetadataObject();
+        this.exchangeMetadata = new ExchangeMetadata();
     }
 
     /**
@@ -125,7 +139,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @return the exchange metadata
      */
     @Override
-    public SECOM_ExchangeMetadataObject getExchangeMetadata() {
+    public ExchangeMetadata getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -135,7 +149,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
      * @param exchangeMetadata the exchange metadata
      */
     @Override
-    public void setExchangeMetadata(SECOM_ExchangeMetadataObject exchangeMetadata) {
+    public void setExchangeMetadata(ExchangeMetadata exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 
@@ -158,6 +172,20 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     }
 
     /**
+     * Get subscription identifier
+     *
+     * @return subscriptionIdentifier
+     */
+    public UUID getSubscriptionIdentifier() { return subscriptionIdentifier; }
+
+    /**
+     *  Sets subscription identifier
+     *
+     * @param subscriptionIdentifier the subscription identifier
+     */
+    public void setSubscriptionIdentifier(UUID subscriptionIdentifier) { this.subscriptionIdentifier = subscriptionIdentifier; }
+
+    /**
      * Gets ack request.
      *
      * @return the ack request
@@ -174,6 +202,21 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     public void setAckRequest(AckRequestEnum ackRequest) {
         this.ackRequest = ackRequest;
     }
+
+    /**
+     *  Gets the callback endpoint
+     *
+     * @return the callback endpoint
+     */
+    public URL getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Sets the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(URL callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+
 
     /**
      * Gets transaction identifier.
@@ -207,7 +250,9 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
                 dataProductType,
                 exchangeMetadata,
                 fromSubscription,
+                subscriptionIdentifier,
                 ackRequest,
+                callbackEndpoint,
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,

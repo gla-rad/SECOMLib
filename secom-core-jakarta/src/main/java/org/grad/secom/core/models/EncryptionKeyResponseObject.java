@@ -24,11 +24,10 @@ import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyResponseObject {
+public class EncryptionKeyResponseObject extends AbstractResponseObject {
 
     // Class Variables
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
-    private String responseText;
 
     /**
      * Gets secom response code.
@@ -47,24 +46,6 @@ public class EncryptionKeyResponseObject {
      */
     public void setSECOM_ResponseCode(SECOM_ResponseCodeEnum SECOM_ResponseCode) {
         this.SECOM_ResponseCode = SECOM_ResponseCode;
-    }
-
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
     }
 
 }

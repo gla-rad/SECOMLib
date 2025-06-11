@@ -16,43 +16,24 @@
 
 package org.grad.secom.core.models;
 
+import java.util.UUID;
+
 /**
  * The SECOM Access Response Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessResponseObject {
+public class AccessResponseObject extends AbstractResponseObject {
 
     // Class Variables
-    private String responseText;
-
-    private String transactionIdentifier;
-
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
-
+    private UUID transactionIdentifier;
 
     /**
      * Gets transaction identifier.
      *
      * @return the transactionIdentifier
      */
-    public String getTransactionIdentifier() {
+    public UUID getTransactionIdentifier() {
         return transactionIdentifier;
     }
 
@@ -61,7 +42,7 @@ public class AccessResponseObject {
      *
      * @param transactionIdentifier the transactionIdentifier to set
      */
-    public void setTransactionIdentifier(String transactionIdentifier) {
+    public void setTransactionIdentifier(UUID transactionIdentifier) {
         this.transactionIdentifier = transactionIdentifier;
     }
 }

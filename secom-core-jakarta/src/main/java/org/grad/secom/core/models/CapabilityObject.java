@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import jakarta.validation.constraints.Size;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
@@ -27,7 +28,7 @@ import java.net.URL;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class CapabilityObject {
+    public class CapabilityObject {
 
     // Class Variables
     @NotNull
@@ -39,6 +40,7 @@ public class CapabilityObject {
     @NotNull
     private ImplementedInterfaces implementedInterfaces;
     @NotNull
+    @Size(min = 1)
     private String serviceVersion;
 
     /**

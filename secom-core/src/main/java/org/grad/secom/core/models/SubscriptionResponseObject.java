@@ -23,11 +23,10 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponseObject {
+public class SubscriptionResponseObject extends AbstractResponseObject {
 
     // Class Variables
     private UUID subscriptionIdentifier;
-    private String message;
 
     /**
      * Gets subscription identifier.
@@ -47,21 +46,4 @@ public class SubscriptionResponseObject {
         this.subscriptionIdentifier = subscriptionIdentifier;
     }
 
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets message.
-     *
-     * @param message the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

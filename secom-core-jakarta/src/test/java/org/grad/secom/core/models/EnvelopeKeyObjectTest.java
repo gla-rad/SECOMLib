@@ -18,22 +18,23 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EnvelopeKeyObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
     private EnvelopeKeyObject obj;
 
     private ObjectMapper mapper;
@@ -45,21 +46,21 @@ class EnvelopeKeyObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Generate a new object
         this.obj = new EnvelopeKeyObject();
-        this.obj.setEncryptionKey("encryptionKey");
-        this.obj.setIv("iv");
+        this.obj.setEncryptionKey("encryptionKey".getBytes());
+        this.obj.setIv("iv".getBytes());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
-        this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
+        this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
@@ -75,14 +76,14 @@ class EnvelopeKeyObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getEncryptionKey(), result.getEncryptionKey());
-        assertEquals(this.obj.getIv(), result.getIv());
+        assertEquals(new String(this.obj.getEncryptionKey(), StandardCharsets.UTF_8), new String(result.getEncryptionKey(), StandardCharsets.UTF_8));
+        assertEquals(new String(this.obj.getIv(), StandardCharsets.UTF_8), new String(result.getIv(), StandardCharsets.UTF_8));
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
         assertNotNull(result.getDigitalSignatureValue());
-        assertEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
+        assertArrayEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), result.getDigitalSignatureValue().getDigitalSignature());
-        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
     }
@@ -97,13 +98,13 @@ class EnvelopeKeyObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(obj.getEncryptionKey(), csv[0]);
-        assertEquals(obj.getIv(), csv[1]);
+        assertEquals(new String(obj.getEncryptionKey(), StandardCharsets.UTF_8), new String(Base64.getDecoder().decode(csv[0])));
+        assertEquals(new String(obj.getIv(), StandardCharsets.UTF_8), new String(Base64.getDecoder().decode(csv[1])));
         assertEquals(obj.getTransactionIdentifier().toString(), csv[2]);
         assertEquals(obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
-        assertEquals(obj.getDigitalSignatureValue().getPublicCertificate(), csv[4]);
+        assertEquals(Arrays.toString(obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
         assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
-        assertEquals(obj.getEnvelopeSignatureCertificate(), csv[6]);
+        assertEquals(Arrays.toString(obj.getEnvelopeSignatureCertificate()), csv[6]);
         assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
         assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[8]));
     }

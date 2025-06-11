@@ -18,23 +18,21 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SECOM_ExchangeMetadataObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
-    private SECOM_ExchangeMetadataObject obj;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private ExchangeMetadata obj;
 
     private ObjectMapper mapper;
 
@@ -45,20 +43,20 @@ class SECOM_ExchangeMetadataObjectTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Generate a new object
-        this.obj = new SECOM_ExchangeMetadataObject();
+        this.obj = new ExchangeMetadata();
         this.obj.setDataProtection(Boolean.TRUE);
         this.obj.setProtectionScheme("SECOM");
         this.obj.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
-        this.obj.setDigitalSignatureValue(this.digitalSignatureValue);
+        this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setCompressionFlag(Boolean.FALSE);
     }
 
@@ -69,7 +67,7 @@ class SECOM_ExchangeMetadataObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SECOM_ExchangeMetadataObject result = this.mapper.readValue(jsonString, SECOM_ExchangeMetadataObject.class);
+        ExchangeMetadata result = this.mapper.readValue(jsonString, ExchangeMetadata.class);
 
         // Make sure it looks OK
         assertNotNull(result);
@@ -78,7 +76,7 @@ class SECOM_ExchangeMetadataObjectTest {
         assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
         assertNotNull(result.getDigitalSignatureValue());
         assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDigitalSignatureValue().getPublicRootCertificateThumbprint());
-        assertEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
+        assertArrayEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), result.getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getCompressionFlag(), result.getCompressionFlag());
     }
@@ -97,7 +95,7 @@ class SECOM_ExchangeMetadataObjectTest {
         assertEquals(this.obj.getProtectionScheme(), csv[1]);
         assertEquals(this.obj.getDigitalSignatureReference().toString().toLowerCase(), csv[2]);
         assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
-        assertEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), csv[4]);
+        assertEquals(Arrays.toString(this.obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
         assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
         assertEquals(this.obj.getCompressionFlag().toString(), csv[6]);
     }

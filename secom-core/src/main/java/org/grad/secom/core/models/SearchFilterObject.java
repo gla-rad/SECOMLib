@@ -18,6 +18,7 @@ package org.grad.secom.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -32,8 +33,12 @@ public class SearchFilterObject {
     @Schema(description = "The search geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "(^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$|^\\s*(\\{.*\\}|\\w+)\\s*$)")
     private String geometry;
-    @Pattern(regexp = "^[a-zA-Z0-9 _:()+\\-,.*?\"]*$")
-    private String freetext;
+    private String callbackEndpoint;
+    private Boolean includeXml;
+    @Min(value = 0L, message = "The page value must be positive")
+    private Integer page;
+    @Min(value = 0L, message = "The page size value must be positive")
+    private Integer pageSize;
 
     /**
      * Gets query.
@@ -72,20 +77,58 @@ public class SearchFilterObject {
     }
 
     /**
-     * Gets freetext.
+     * Get include xml
      *
-     * @return the freetext
+     * @return include xml
      */
-    public String getFreetext() {
-        return freetext;
-    }
+    public Boolean getIncludeXml() { return includeXml; }
 
     /**
-     * Sets freetext.
+     * Set include xml
      *
-     * @param freetext the freetext
+     * @param includeXml, whether xml should be included
      */
-    public void setFreetext(String freetext) {
-        this.freetext = freetext;
-    }
+    public void setIncludeXml(Boolean includeXml) { this.includeXml = includeXml; }
+
+    /**
+     * Get the current page number
+     *
+     * @return the current page number
+     */
+    public Integer getPage() { return page; }
+
+    /**
+     * Set the current page number
+     *
+     * @param page the current page number
+     */
+    public void setPage(Integer page) { this.page = page; }
+
+    /**
+     * Get the page size
+     *
+     * @return the page size
+     */
+    public Integer getPageSize() { return pageSize; }
+
+    /**
+     * Set the page size
+     *
+     * @param pageSize the page size
+     */
+    public void setPageSize(Integer pageSize) { this.pageSize = pageSize; }
+
+    /**
+     * Get the callback endpoint
+     *
+     * @return the callback endpoint
+     */
+    public String getCallbackEndpoint() { return callbackEndpoint; }
+
+    /**
+     * Set the callback endpoint
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
 }

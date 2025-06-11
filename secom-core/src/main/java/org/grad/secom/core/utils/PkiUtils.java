@@ -36,7 +36,7 @@ public class PkiUtils {
      * keystore. If the certificate is invalid a CertPathValidatorException is
      * thrown. Also checks certificate validity and revocation status.
      *
-     * @param certificate   The certificate to verify
+     * @param certificates  The certificates to verify
      * @param ks            The truststore that contains the trust chain
      * @return true if valid.
      * @throws KeyStoreException if keystore loading fails
@@ -45,10 +45,10 @@ public class PkiUtils {
      * @throws InvalidAlgorithmParameterException if keystore loading fails
      * @throws CertPathValidatorException if certificate is invalid.
      */
-    public static boolean verifyCertificateChain(X509Certificate certificate, KeyStore ks)
+    public static boolean verifyCertificateChain(X509Certificate[] certificates, KeyStore ks)
             throws KeyStoreException, NoSuchAlgorithmException, CertificateException, InvalidAlgorithmParameterException, CertPathValidatorException {
         // Create the certificate path to verify - in this case just the given certificate
-        final List<Certificate> certList = Collections.singletonList(certificate);
+        final List<Certificate> certList = Arrays.asList(certificates);
         final CertificateFactory cf = CertificateFactory.getInstance("X.509");
         final CertPath certPath = cf.generateCertPath(certList);
 

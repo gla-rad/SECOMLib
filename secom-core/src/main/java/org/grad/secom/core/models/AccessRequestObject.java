@@ -16,12 +16,10 @@
 
 package org.grad.secom.core.models;
 
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.ReasonEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
-import java.util.UUID;
+import javax.validation.constraints.Size;
 
 /**
  * The SECOM Access Request Object Class.
@@ -30,121 +28,47 @@ import java.util.UUID;
  */
 public class AccessRequestObject {
 
-    // Class Variables
+    // Class variables
     @NotNull
-    private String reason;
+    private EnvelopeAccessObject envelope;
     @NotNull
-    private ReasonEnum reasonEnum;
-    private ContainerTypeEnum containerType;
-    private SECOM_DataProductType dataProductType;
-    private UUID dataReference;
-    private String productVersion;
+    @Schema(description = "The signature ot the EnvelopeAccessObject in HEX format without whitespace or linebreaks")
+    @Size(min = 1)
+    private String envelopeSignature;
 
     /**
-     * Gets reason.
+     * Gets envelope.
      *
-     * @return the reason
+     * @return the envelope
      */
-    public String getReason() {
-        return reason;
+    public EnvelopeAccessObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets reason.
+     * Sets envelope.
      *
-     * @param reason the reason
+     * @param envelope the envelope
      */
-    public void setReason(String reason) {
-        this.reason = reason;
+    public void setEnvelope(EnvelopeAccessObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets reason enum.
+     * Gets envelope signature.
      *
-     * @return the reason enum
+     * @return the envelope signature
      */
-    public ReasonEnum getReasonEnum() {
-        return reasonEnum;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets reason enum.
+     * Sets envelope signature.
      *
-     * @param reasonEnum the reason enum
+     * @param envelopeSignature the envelope signature
      */
-    public void setReasonEnum(ReasonEnum reasonEnum) {
-        this.reasonEnum = reasonEnum;
-    }
-
-    /**
-     * Gets container type.
-     *
-     * @return the container type
-     */
-    public ContainerTypeEnum getContainerType() {
-        return containerType;
-    }
-
-    /**
-     * Sets container type.
-     *
-     * @param containerType the container type
-     */
-    public void setContainerType(ContainerTypeEnum containerType) {
-        this.containerType = containerType;
-    }
-
-    /**
-     * Gets data product type.
-     *
-     * @return the data product type
-     */
-    public SECOM_DataProductType getDataProductType() {
-        return dataProductType;
-    }
-
-    /**
-     * Sets data product type.
-     *
-     * @param dataProductType the data product type
-     */
-    public void setDataProductType(SECOM_DataProductType dataProductType) {
-        this.dataProductType = dataProductType;
-    }
-
-    /**
-     * Gets data reference.
-     *
-     * @return the data reference
-     */
-    public UUID getDataReference() {
-        return dataReference;
-    }
-
-    /**
-     * Sets data reference.
-     *
-     * @param dataReference the data reference
-     */
-    public void setDataReference(UUID dataReference) {
-        this.dataReference = dataReference;
-    }
-
-    /**
-     * Gets product version.
-     *
-     * @return the product version
-     */
-    public String getProductVersion() {
-        return productVersion;
-    }
-
-    /**
-     * Sets product version.
-     *
-     * @param productVersion the product version
-     */
-    public void setProductVersion(String productVersion) {
-        this.productVersion = productVersion;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

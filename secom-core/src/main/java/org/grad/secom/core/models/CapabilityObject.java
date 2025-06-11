@@ -20,6 +20,7 @@ import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.net.URL;
 
 /**
@@ -39,6 +40,7 @@ public class CapabilityObject {
     @NotNull
     private ImplementedInterfaces implementedInterfaces;
     @NotNull
+    @Size(min = 1)
     private String serviceVersion;
 
     /**

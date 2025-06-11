@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SubscriptionRequestObjectTest {
 
     // Class Variables
+    private EnvelopeSubscriptionObject envelopeSubscriptionObject;
     private SubscriptionRequestObject obj;
 
     private ObjectMapper mapper;
@@ -46,18 +47,21 @@ class SubscriptionRequestObjectTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
+        this.envelopeSubscriptionObject = new EnvelopeSubscriptionObject();
+        this.envelopeSubscriptionObject.setContainerType(ContainerTypeEnum.S100_DataSet);
+        this.envelopeSubscriptionObject.setDataProductType(SECOM_DataProductType.S101);
+        this.envelopeSubscriptionObject.setDataReference(UUID.randomUUID());
+        this.envelopeSubscriptionObject.setProductVersion("version");
+        this.envelopeSubscriptionObject.setGeometry("geometry");
+        this.envelopeSubscriptionObject.setUnlocode("unlocode");
+        this.envelopeSubscriptionObject.setSubscriptionPeriodStart(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.envelopeSubscriptionObject.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj = new SubscriptionRequestObject();
-        this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
-        this.obj.setDataProductType(SECOM_DataProductType.S101);
-        this.obj.setDataReference(UUID.randomUUID());
-        this.obj.setProductVersion("version");
-        this.obj.setGeometry("geometry");
-        this.obj.setUnlocode("unlocode");
-        this.obj.setSubscriptionPeriodStart(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelope(this.envelopeSubscriptionObject);
+        this.obj.setEnvelopeSignature("envelopeSignature");
     }
 
     /**
@@ -71,14 +75,16 @@ class SubscriptionRequestObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getContainerType(), result.getContainerType());
-        assertEquals(this.obj.getDataProductType(), result.getDataProductType());
-        assertEquals(this.obj.getDataReference(), result.getDataReference());
-        assertEquals(this.obj.getProductVersion(), result.getProductVersion());
-        assertEquals(this.obj.getGeometry(), result.getGeometry());
-        assertEquals(this.obj.getUnlocode(), result.getUnlocode());
-        assertEquals(this.obj.getSubscriptionPeriodStart(), result.getSubscriptionPeriodStart());
-        assertEquals(this.obj.getSubscriptionPeriodEnd(), result.getSubscriptionPeriodEnd());
+        assertNotNull(result.getEnvelope());
+        assertEquals(this.obj.getEnvelope().getContainerType(), result.getEnvelope().getContainerType());
+        assertEquals(this.obj.getEnvelope().getDataProductType(), result.getEnvelope().getDataProductType());
+        assertEquals(this.obj.getEnvelope().getDataReference(), result.getEnvelope().getDataReference());
+        assertEquals(this.obj.getEnvelope().getProductVersion(), result.getEnvelope().getProductVersion());
+        assertEquals(this.obj.getEnvelope().getGeometry(), result.getEnvelope().getGeometry());
+        assertEquals(this.obj.getEnvelope().getUnlocode(), result.getEnvelope().getUnlocode());
+        assertEquals(this.obj.getEnvelope().getSubscriptionPeriodStart(), result.getEnvelope().getSubscriptionPeriodStart());
+        assertEquals(this.obj.getEnvelope().getSubscriptionPeriodEnd(), result.getEnvelope().getSubscriptionPeriodEnd());
+        assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
 
 }

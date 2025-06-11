@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.models;
 
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -26,7 +27,9 @@ import java.util.List;
 public class ResponseSearchObject {
 
     // Class Variables
-    List<SearchObjectResult> searchServiceResult;
+    private List<SearchObjectResult> searchServiceResult;
+    @NotNull
+    private PaginationObject paginationObject;
 
     /**
      * Gets search service result.

@@ -35,9 +35,14 @@ public class SecomConstants {
     public static final String SECOM_PROTECTION_SCHEME = "SECOM";
 
     /**
+     * The SECOM Version.
+     */
+    public static final String SECOM_VERSION = "v2";
+
+    /**
      * The Algorithm to be used for generating signatures.
      */
-    public static final String CERTIFICATE_THUMBPRINT_HASH = "SHA-1";
+    public static final String CERTIFICATE_THUMBPRINT_HASH = "SHA-256";
 
     /**
      * The SECOM Maximum Payload Size in KiloBytes.
@@ -45,7 +50,7 @@ public class SecomConstants {
     public static final int MAX_PAYLOAD_SIZE_IN_KB = 350;
 
     /**
-     * THe SECOM DATE, TIME and DATE_TIME formats.
+     * The SECOM DATE, TIME and DATE_TIME formats.
      */
     public static final String SECOM_DATE_FORMAT = "yyyyMMdd";
     public static final DateTimeFormatter SECOM_DATE_FORMATTER;

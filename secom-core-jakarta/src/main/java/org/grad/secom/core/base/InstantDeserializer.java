@@ -28,7 +28,7 @@ import static java.util.function.Predicate.not;
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
- * The DateTimeDeserializer Class
+ * The DateTimeDeSerializer Class
  * <p/>
  * In SECOM the date-time format is not the frequently used ISO. According to
  * the standard A DateTime is a combination of a date and a time type.

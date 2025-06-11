@@ -21,26 +21,6 @@ package org.grad.secom.core.models;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessNotificationResponseObject {
+public class AccessNotificationResponseObject extends AbstractResponseObject {
 
-    // Class Variables
-    private String responseText;
-
-    /**
-     * Gets response text.
-     *
-     * @return the response text
-     */
-    public String getResponseText() {
-        return responseText;
-    }
-
-    /**
-     * Sets response text.
-     *
-     * @param responseText the response text
-     */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
-    }
 }

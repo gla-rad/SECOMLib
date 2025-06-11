@@ -19,12 +19,12 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
 import org.grad.secom.core.base.InstantDeserializer;
 import org.grad.secom.core.base.InstantSerializer;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -37,24 +37,34 @@ public class SummaryObject {
 
     // Class Variables
     @NotNull
+    @Schema(description = "Reference to data")
     private UUID dataReference;
     @NotNull
+    @Schema(description = "Flag indicating if data is encrypted or not")
     private Boolean dataProtection;
     @NotNull
+    @Schema(description = "Flag indicating if data is compressed or not")
     private Boolean dataCompression;
-    @NotNull
+    @Schema(description = "")
     private ContainerTypeEnum containerType;
-    @NotNull
+    @Schema(description = "Data product type name requested, e.g. S-124, S-421")
     private SECOM_DataProductType dataProductType;
+    @Schema(description = "Identifier of the information object")
     private String info_identifier;
+    @Schema(description = "Name of the information object")
     private String info_name;
+    @Schema(description = "Status of the information object")
     private String info_status;
+    @NotNull
+    @Schema(description = "Description of the information object\"")
     private String info_description;
-    @Schema(description = "The last modified date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(example = "2025-04-28T14:30:00Z", description = "Date for last modified Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string", pattern = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant info_lastModifiedDate;
+    @Schema(description = "S-100 based Product version e.g. 1.0.0")
     private String info_productVersion;
+    @Schema(implementation = Integer.class, description = "Size of the data")
     private Long info_size;
 
     /**

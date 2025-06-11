@@ -65,10 +65,10 @@ public class UploadObject implements EnvelopeSignatureBearer {
     /**
      * Sets envelope signature.
      *
-     * @param envelopeSignature the envelope signature
+     * @param digitalSignature the envelope signature
      */
     @Override
-    public void setEnvelopeSignature(String envelopeSignature) {
-        this.envelopeSignature = envelopeSignature;
+    public void setEnvelopeSignature(String digitalSignature) {
+        this.envelopeSignature = digitalSignature;
     }
 }
