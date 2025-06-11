@@ -25,7 +25,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeKeyNotificationObject extends AbstractEnvelope{
+public class EnvelopeKeyNotificationObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
