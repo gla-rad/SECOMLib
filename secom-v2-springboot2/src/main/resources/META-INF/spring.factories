@@ -15,7 +15,7 @@
 #
 
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-org.grad.secom.springboot2.config.JaxrsApplication,\
-org.grad.secom.springboot2.config.SecomRequestLoggingFilterConfig,\
-org.grad.secom.springboot2.components.SecomConfigProperties,\
-org.grad.secom.springboot2.components.SecomSpringContext
+config.org.grad.secomv2.springboot2.JaxrsApplication,\
+config.org.grad.secomv2.springboot2.SecomRequestLoggingFilterConfig,\
+components.org.grad.secomv2.springboot2.SecomConfigProperties,\
+components.org.grad.secomv2.springboot2.SecomSpringContext
