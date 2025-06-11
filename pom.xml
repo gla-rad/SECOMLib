@@ -5,15 +5,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.grad.secom</groupId>
-    <artifactId>secom-parent</artifactId>
+    <artifactId>secom-v2-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.51-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <modules>
-        <module>secom-core</module>
-        <module>secom-core-jakarta</module>
-        <module>secom-springboot2</module>
-        <module>secom-springboot3</module>
+        <module>secom-v2-core</module>
+        <module>secom-v2-core-jakarta</module>
+        <module>secom-v2-springboot2</module>
+        <module>secom-v2-springboot3</module>
     </modules>
 
     <properties>
