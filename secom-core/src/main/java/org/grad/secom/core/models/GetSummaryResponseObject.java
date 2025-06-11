@@ -17,6 +17,8 @@
 package org.grad.secom.core.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -28,7 +30,8 @@ import java.util.List;
 public class GetSummaryResponseObject {
 
     // Class Variables
-    private List<SummaryObject> summaryObject;
+    @Schema(description = "Description of the information object")
+    private List<SummaryObject> informationSummaryObject;
     @NotNull
     private PaginationObject pagination;
 
@@ -37,17 +40,17 @@ public class GetSummaryResponseObject {
      *
      * @return the summary object
      */
-    public List<SummaryObject> getSummaryObject() {
-        return summaryObject;
+    public List<SummaryObject> getInformationSummaryObject() {
+        return informationSummaryObject;
     }
 
     /**
      * Sets summary object.
      *
-     * @param summaryObject the summary object
+     * @param informationSummaryObject the summary object
      */
-    public void setSummaryObject(List<SummaryObject> summaryObject) {
-        this.summaryObject = summaryObject;
+    public void setInformationSummaryObject(List<SummaryObject> informationSummaryObject) {
+        this.informationSummaryObject = informationSummaryObject;
     }
 
     /**

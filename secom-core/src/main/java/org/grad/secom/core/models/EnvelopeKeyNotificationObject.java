@@ -16,14 +16,8 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.InstantDeserializer;
-import org.grad.secom.core.base.InstantSerializer;
-
 import javax.validation.constraints.NotNull;
-import java.time.Instant;
+
 import java.util.UUID;
 
 /**
@@ -31,22 +25,12 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeKeyNotificationObject {
+public class EnvelopeKeyNotificationObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
     private UUID dataReference;
-    @NotNull
-    private String publicCertificate;
-    @NotNull
-    private String envelopeSignatureCertificate;
-    @NotNull
-    @Schema(description = "The envelope signature date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
-    private Instant envelopeSignatureTime;
     private String callbackEndpoint;
-    private String digitalSignatureReference;
 
     /**
      * Gets data reference.
@@ -67,84 +51,38 @@ public class EnvelopeKeyNotificationObject {
     }
 
     /**
-     * Gets public certificate.
+     * Gets callback endpoint.
      *
-     * @return the public certificate
+     * @return the callback endpoint
      */
-    public String getPublicCertificate() {
-        return publicCertificate;
+    public String getCallbackEndpoint() {
+        return callbackEndpoint;
     }
 
     /**
-     * Sets public certificate.
-     *
-     * @param publicCertificate the public certificate
-     */
-    public void setPublicCertificate(String publicCertificate) {
-        this.publicCertificate = publicCertificate;
-    }
-
-    /**
-     * Gets envelope signature certificate.
-     *
-     * @return the envelope signature certificate
-     */
-    public String getEnvelopeSignatureCertificate() {
-        return envelopeSignatureCertificate;
-    }
-
-    /**
-     * Sets envelope signature certificate.
-     *
-     * @param envelopeSignatureCertificate the envelope signature certificate
-     */
-    public void setEnvelopeSignatureCertificate(String envelopeSignatureCertificate) {
-        this.envelopeSignatureCertificate = envelopeSignatureCertificate;
-    }
-
-    /**
-     * Gets envelope signature time.
-     *
-     * @return the envelope signature time
-     */
-    public Instant getEnvelopeSignatureTime() {
-        return envelopeSignatureTime;
-    }
-
-    /**
-     * Sets envelope signature time.
-     *
-     * @param envelopeSignatureTime the envelope signature time
-     */
-    public void setEnvelopeSignatureTime(Instant envelopeSignatureTime) {
-        this.envelopeSignatureTime = envelopeSignatureTime;
-    }
-
-    /**
-     * Gets the callback endpoint
-     *
-     * @return callback endpoint
-     */
-    public String getCallbackEndpoint() { return callbackEndpoint; }
-
-    /**
-     * Sets the callback endpoint
+     * Sets callback endpoint.
      *
      * @param callbackEndpoint the callback endpoint
      */
-    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+    public void setCallbackEndpoint(String callbackEndpoint) {
+        this.callbackEndpoint = callbackEndpoint;
+    }
 
     /**
-     * Gets the digital signature reference
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
      *
-      * @return the digital signature reference
+     * @return the generated signature CSV attribute array
      */
-    public String getDigitalSignatureReference() { return digitalSignatureReference; }
-
-    /**
-     * Sets the digital signature reference
-     *
-      * @param digitalSignatureReference
-     */
-    public void setDigitalSignatureReference(String digitalSignatureReference) { this.digitalSignatureReference = digitalSignatureReference; }
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                dataReference,
+                callbackEndpoint,
+                envelopeSignatureCertificate,
+                envelopeRootCertificateThumbprint,
+                envelopeSignatureTime,
+                digitalSignatureReference
+        };
+    }
 }

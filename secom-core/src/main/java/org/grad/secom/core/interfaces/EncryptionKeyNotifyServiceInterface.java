@@ -30,6 +30,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Encryption Key Notify Interface Definition.
  * </p>
@@ -44,7 +46,7 @@ public interface EncryptionKeyNotifyServiceInterface extends GenericSecomInterfa
     /**
      * The Interface Notify Endpoint Path.
      */
-    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/v2/encryptionkey/notify";
+    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/" + SECOM_VERSION + "/encryptionkey/notify";
 
     /**
      * POST /v1/encryptionkey/notify : The purpose of the interface is to

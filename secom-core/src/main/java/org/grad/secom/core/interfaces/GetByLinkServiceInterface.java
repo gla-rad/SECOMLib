@@ -17,11 +17,12 @@
 package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.GetByLinkResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +31,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.UUID;
+
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Get By Link Interface Definition.
@@ -45,7 +48,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_BY_LINK_INTERFACE_PATH = "/v2/object/link";
+    String GET_BY_LINK_INTERFACE_PATH = "/" + SECOM_VERSION + "/object/link";
 
     /**
      * GET /v1/object/link : The Get By Link interface is used for pulling
@@ -60,7 +63,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
     @Path(GET_BY_LINK_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    GetByLinkResponseObject getByLink(@QueryParam("transactionIdentifier") UUID transactionIdentifier);
+    byte[] getByLink(@QueryParam("transactionIdentifier") @Parameter(schema = @Schema(implementation = String.class, description = "Indentifier from the uploaded link")) UUID transactionIdentifier);
 
     /**
      * The exception handler implementation for the interface.

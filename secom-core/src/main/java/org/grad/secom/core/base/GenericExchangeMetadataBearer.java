@@ -17,7 +17,7 @@
 package org.grad.secom.core.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.grad.secom.core.models.SECOM_ServiceExchangeMetadataObject;
+import org.grad.secom.core.models.ExchangeMetadata;
 
 import java.util.Optional;
 
@@ -38,7 +38,7 @@ public interface GenericExchangeMetadataBearer {
      * @return
      */
     @JsonIgnore
-    SECOM_ServiceExchangeMetadataObject getExchangeMetadata();
+    ExchangeMetadata getExchangeMetadata();
 
     /**
      * Allows the exchange metadata bearer object to update the SECOM exchange
@@ -48,7 +48,7 @@ public interface GenericExchangeMetadataBearer {
      * @param exchangeMetadata  the SECOM Exchange metadata
      */
     @JsonIgnore
-    void setExchangeMetadata(SECOM_ServiceExchangeMetadataObject exchangeMetadata);
+    void setExchangeMetadata(ExchangeMetadata exchangeMetadata);
 
     /**
      * This is a helper function to initialise the populate the SECOM exchange
@@ -60,18 +60,18 @@ public interface GenericExchangeMetadataBearer {
      */
     default GenericExchangeMetadataBearer prepareMetadata(SecomSignatureProvider signatureProvider) {
         // Get the current (or new) SECOM exchange metadata
-        final SECOM_ServiceExchangeMetadataObject metadata = Optional.of(this)
+        final ExchangeMetadata metadata = Optional.of(this)
                 .map(GenericExchangeMetadataBearer::getExchangeMetadata)
-                .orElseGet(SECOM_ServiceExchangeMetadataObject::new);
+                .orElseGet(ExchangeMetadata::new);
 
         // Populate the known values
         metadata.setProtectionScheme(signatureProvider != null ? SecomConstants.SECOM_PROTECTION_SCHEME : metadata.getProtectionScheme());
         metadata.setDigitalSignatureReference(signatureProvider != null ? signatureProvider.getSignatureAlgorithm() : metadata.getDigitalSignatureReference());
         metadata.setDataProtection(Optional.of(metadata)
-                .map(SECOM_ServiceExchangeMetadataObject::getDataProtection)
+                .map(ExchangeMetadata::getDataProtection)
                 .orElse(Boolean.FALSE));
         metadata.setCompressionFlag(Optional.of(metadata)
-                .map(SECOM_ServiceExchangeMetadataObject::getCompressionFlag)
+                .map(ExchangeMetadata::getCompressionFlag)
                 .orElse(Boolean.FALSE));
 
         // Set the new updated version

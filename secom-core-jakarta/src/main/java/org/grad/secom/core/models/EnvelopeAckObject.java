@@ -38,7 +38,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    @Schema(description = "The creation date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(description = "The creation date-time", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant createdAt;
@@ -47,6 +47,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     @NotNull
     private AckTypeEnum ackType;
     private NackTypeEnum nackType;
+    private UUID dataReference;
 
     /**
      * Gets created at.
@@ -62,7 +63,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      *
      * @param createdAt the created at
      */
-    public void setCreatedAt( Instant createdAt) {
+    public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -125,7 +126,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      *
      * @return the envelope certificate
      */
-    public String getEnvelopeCertificate() {
+    public String[] getEnvelopeCertificate() {
         return envelopeSignatureCertificate;
     }
 
@@ -139,8 +140,26 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      */
     @JsonProperty("envelopeCertificate")
     @Override
-    public String getEnvelopeSignatureCertificate() {
+    public String[] getEnvelopeSignatureCertificate() {
         return envelopeSignatureCertificate;
+    }
+
+    /**
+     * Gets the data reference
+     *
+     * @return the data reference
+     */
+    public UUID getDataReference() {
+        return dataReference;
+    }
+
+    /**
+     * Sets the data reference
+     *
+     * @param dataReference the data reference
+     */
+    public void setDataReference(UUID dataReference) {
+        this.dataReference = dataReference;
     }
 
     /**
@@ -158,7 +177,10 @@ public class EnvelopeAckObject extends AbstractEnvelope {
                 transactionIdentifier,
                 ackType,
                 nackType,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                digitalSignatureReference,
+                dataReference
         };
     }
+
 }

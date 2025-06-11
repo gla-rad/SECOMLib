@@ -24,7 +24,7 @@ import org.grad.secom.core.models.enums.SECOM_ResponseCodeEnum;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AcknowledgementResponseObject {
+public class AcknowledgementResponseObject extends AbstractResponseObject {
 
     // Class Variables
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
@@ -47,23 +47,5 @@ public class AcknowledgementResponseObject {
      */
     public void setSECOM_ResponseCode(SECOM_ResponseCodeEnum SECOM_ResponseCode) {
         this.SECOM_ResponseCode = SECOM_ResponseCode;
-    }
-
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets message.
-     *
-     * @param message the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
     }
 }

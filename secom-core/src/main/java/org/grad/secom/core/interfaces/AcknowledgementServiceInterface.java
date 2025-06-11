@@ -30,6 +30,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Acknowledgement Interface Definition.
  * </p>
@@ -44,7 +46,7 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACKNOWLEDGMENT_INTERFACE_PATH = "/v2/acknowledgement";
+    String ACKNOWLEDGMENT_INTERFACE_PATH = "/" + SECOM_VERSION + "/acknowledgement";
 
     /**
      * POST /v1/acknowledgement : During upload of information, an

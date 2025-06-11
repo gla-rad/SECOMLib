@@ -19,6 +19,8 @@ package org.grad.secom.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.grad.secom.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
@@ -31,21 +33,30 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
 
     // Class Variables
     @NotNull
-    protected String envelopeSignatureCertificate;
+    @Schema(description = "The public certificate (chain) of the sender, used to verify the EnvelopeKeyObject signature")
+    protected String[] envelopeSignatureCertificate;
     @NotNull
+    @Schema(description = "Claimed Thumbprint for Signed Root Key (X.509 Certificate) Format: SHA-1 or SHA-256 thumbprint.", example = "AB12CD34EF56AB78CD90EF12AB34CD56EF78AB90")
+    @Pattern(regexp = "^[A-Fa-f0-9]{40,64}$")
+    @Size(min = 1)
     protected String envelopeRootCertificateThumbprint;
     @NotNull
-    @Schema(description = "The envelope signature date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(type = "string", description = "Time when encryptionKey envelope is signed Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "19850412T101530")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     protected Instant envelopeSignatureTime;
+    @NotNull
+    @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
+    @Size(min = 1)
+    protected String digitalSignatureReference;
 
     /**
      * Gets envelope signature certificate.
      *
      * @return the envelope signature certificate
      */
-    public String getEnvelopeSignatureCertificate() {
+    public String[] getEnvelopeSignatureCertificate() {
         return envelopeSignatureCertificate;
     }
 
@@ -54,7 +65,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
      *
      * @param envelopeSignatureCertificate the envelope signature certificate
      */
-    public void setEnvelopeSignatureCertificate(String envelopeSignatureCertificate) {
+    public void setEnvelopeSignatureCertificate(String[] envelopeSignatureCertificate) {
         this.envelopeSignatureCertificate = envelopeSignatureCertificate;
     }
 
@@ -90,8 +101,25 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
      *
      * @param envelopeSignatureTime the envelope signature time
      */
-    public void setEnvelopeSignatureTime( Instant envelopeSignatureTime) {
+    public void setEnvelopeSignatureTime(Instant envelopeSignatureTime) {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
 
+    /**
+     * Gets digital signature reference.
+     *
+     * @return the digital signature reference
+     */
+    public String getDigitalSignatureReference() {
+        return digitalSignatureReference;
+    }
+
+    /**
+     * Sets digital signature reference.
+     *
+     * @param digitalSignatureReference the digital signature reference
+     */
+    public void setDigitalSignatureReference(String digitalSignatureReference) {
+        this.digitalSignatureReference = digitalSignatureReference;
+    }
 }

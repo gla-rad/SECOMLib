@@ -121,7 +121,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             }
             // For the Encryption Key Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
-                obj = this.parseRequestBody(rqstCtx, EncryptionKeyObject.class);
+                obj = this.parseRequestBody(rqstCtx, EncryptionKeyRequestObject.class);
             }
         }
 
@@ -168,12 +168,12 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                     checkCertificate(
                             Optional.of(dataObj)
                                     .map(DigitalSignatureBearer::getExchangeMetadata)
-                                    .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                    .map(ExchangeMetadata::getDigitalSignatureValue)
                                     .map(DigitalSignatureValueObject::getPublicCertificate)
                                     .orElse(null),
                             Optional.of(dataObj)
                                     .map(DigitalSignatureBearer::getExchangeMetadata)
-                                    .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                    .map(ExchangeMetadata::getDigitalSignatureValue)
                                     .map(DigitalSignatureValueObject::getPublicRootCertificateThumbprint)
                                     .orElse(null)
                     );
@@ -183,16 +183,16 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 valid &= this.signatureProvider.validateSignature(
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(ExchangeMetadata::getDigitalSignatureValue)
                                 .map(DigitalSignatureValueObject::getPublicCertificate)
                                 .orElse(null),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureReference)
+                                .map(ExchangeMetadata::getDigitalSignatureReference)
                                 .orElse(digitalSignatureAlgorithm),
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(SECOM_ServiceExchangeMetadataObject::getDigitalSignatureValue)
+                                .map(ExchangeMetadata::getDigitalSignatureValue)
                                 .map(DigitalSignatureValueObject::getDigitalSignature)
                                 .map(DatatypeConverter::parseHexBinary)
                                 .orElse(null),
@@ -249,10 +249,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
      *     <li>the server shall verify that the client’s certificate is valid;</li>
      *     <li>the server shall verify that the client’s certificate is issued by SECOM PKI.</li>
      * </ul>
-     * @param certificate                   The received certificate to be verified
+     * @param certificates                   The received certificate to be verified
      * @param rootCertificateThumbprint     The received root certificate thumbprint
      */
-    private void checkCertificate(String certificate, String rootCertificateThumbprint) {
+    private void checkCertificate(String[] certificates, String rootCertificateThumbprint) {
         // Access out trust store
         final KeyStore trustStore = this.trustStoreProvider.getTrustStore();
 
@@ -279,11 +279,13 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         }
 
         // Now parse the provided certificate and check its validity
-        final X509Certificate x509Certificate;
+        final X509Certificate[] x509Certificates;
         try {
-            x509Certificate = SecomPemUtils.getCertFromPem(certificate);
-            if(x509Certificate != null) {
-                x509Certificate.checkValidity();
+            x509Certificates = SecomPemUtils.getCertsFromPem(certificates);
+            if(x509Certificates != null) {
+                for(X509Certificate x509Certificate : x509Certificates) {
+                    x509Certificate.checkValidity();
+                }
             }
         } catch (CertificateException ex) {
             throw new SecomInvalidCertificateException(ex.getMessage());
@@ -291,7 +293,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
 
         // Finally verify the provided certificate and check its validity
         try {
-            if(!PkiUtils.verifyCertificateChain(x509Certificate, trustStore)) {
+            if(!PkiUtils.verifyCertificateChain(x509Certificates, trustStore)) {
                 throw new SecomInvalidCertificateException("Failed to verify the certificate chain...");
             }
         } catch (GeneralSecurityException ex) {

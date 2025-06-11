@@ -18,8 +18,9 @@ package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.EncryptionKeyObject;
+import org.grad.secom.core.models.EncryptionKeyRequestObject;
 import org.grad.secom.core.models.EncryptionKeyResponseObject;
+import org.grad.secom.core.models.EncrytionKeyObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,8 @@ import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Encryption Key Interface Definition.
@@ -43,11 +46,11 @@ public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = "/v2/encryptionkey";
+    String ENCRYPTION_KEY_INTERFACE_PATH = SECOM_VERSION + "/" + SECOM_VERSION + "/encryptionkey";
 
     /**
      * POST /v1/encryptionkey : The purpose of the interface is to exchange a
-     * temporary secret key. This operation is used to upload (push) an
+     * temporary secret key. This operation is used to generate and return an
      * encrypted secret key to a consumer.
      *
      * @return the encryption key response object
@@ -56,7 +59,7 @@ public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    EncryptionKeyResponseObject encryptionKey(@Valid EncryptionKeyObject encryptionKeyObject);
+    EncryptionKeyResponseObject encryptionKey(@Valid EncrytionKeyObject encrytionKeyObject);
 
     /**
      * The exception handler implementation for the interface.

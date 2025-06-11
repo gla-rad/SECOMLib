@@ -28,6 +28,8 @@ import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.net.URL;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -42,23 +44,33 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     private ContainerTypeEnum containerType;
     @NotNull
+    @Schema(description = "Data product type name requested, e.g. S-124, S-421")
     private SECOM_DataProductType dataProductType;
     @JsonProperty
     @NotNull
-    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
+    private ExchangeMetadata exchangeMetadata;
     @NotNull
+    @Schema(description = "Flag to indicate whether the data has been uploaded within an active subscription or not.")
     private Boolean fromSubscription;
-    private String subscriptionIdentifier;
+    @Schema(type = "string", description = "Subscription identifier if the object is uploaded within subscription.", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
+    private UUID subscriptionIdentifier;
     @NotNull
     private AckRequestEnum ackRequest;
     @NotNull
-    private String callbackEndpoint;
+    @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
+    @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
+    private URL callbackEndpoint;
     @NotNull
+    @Schema(type = "string", description = "Transaction identifier to be used in acknowledgement")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
     private UUID transactionIdentifier;
     @NotNull
+    @Schema(description = "Approximated maximum size of the data file in kBytes to be downloaded.")
     private Integer size;
     @NotNull
-    @Schema(description = "The time to live date-time", type = "string", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(type = "string", description = "DateTime when data will be deleted on server. The data need to be fetched before this time. Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
     @JsonSerialize(using = InstantSerializer.class)
     @JsonDeserialize(using = InstantDeserializer.class)
     private Instant timeToLive;
@@ -67,7 +79,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      * Instantiates a new Envelope link object.
      */
     public EnvelopeLinkObject() {
-        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
+        this.exchangeMetadata = new ExchangeMetadata();
     }
 
     /**
@@ -111,7 +123,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @return the exchange metadata
      */
-    public SECOM_ServiceExchangeMetadataObject getExchangeMetadata() {
+    public ExchangeMetadata getExchangeMetadata() {
         return exchangeMetadata;
     }
 
@@ -120,7 +132,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @param exchangeMetadata the exchange metadata
      */
-    public void setExchangeMetadata(SECOM_ServiceExchangeMetadataObject exchangeMetadata) {
+    public void setExchangeMetadata(ExchangeMetadata exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
     }
 
@@ -147,14 +159,14 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @return subscriptionIdentifier
      */
-    public String getSubscriptionIdentifier() { return subscriptionIdentifier; }
+    public UUID getSubscriptionIdentifier() { return subscriptionIdentifier; }
 
     /**
      *  Sets subscription identifier
      *
      * @param subscriptionIdentifier the subscription identifier
      */
-    public void setSubscriptionIdentifier(String subscriptionIdentifier) { this.subscriptionIdentifier = subscriptionIdentifier; }
+    public void setSubscriptionIdentifier(UUID subscriptionIdentifier) { this.subscriptionIdentifier = subscriptionIdentifier; }
 
 
     /**
@@ -182,14 +194,14 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      *
      * @return the callback endpoint
      */
-    public String getCallbackEndpoint() { return callbackEndpoint; }
+    public URL getCallbackEndpoint() { return callbackEndpoint; }
 
     /**
      * Sets the callback endpoint
      *
      * @param callbackEndpoint the callback endpoint
      */
-    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+    public void setCallbackEndpoint(URL callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
 
 
     /**

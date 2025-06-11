@@ -62,7 +62,7 @@ public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
      * @param ctxt  The deserialization context
      * @return the deserialized output
      * @throws IOException for any IO exceptions
-     * @throws JsonProcessingException for any JSON processign exceptions
+     * @throws JsonProcessingException for any JSON processing exceptions
      */
     @Override
     public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {

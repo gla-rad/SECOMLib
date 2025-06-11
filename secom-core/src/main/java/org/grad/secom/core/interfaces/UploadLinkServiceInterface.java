@@ -33,6 +33,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Upload Link Interface Definition.
  * </p>
@@ -47,7 +49,7 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_LINK_INTERFACE_PATH = "/v1/object/link";
+    String UPLOAD_LINK_INTERFACE_PATH = "/" + SECOM_VERSION + "/object/link";
 
     /**
      * POST /v1/object/link : The REST operation POST /object/link. The

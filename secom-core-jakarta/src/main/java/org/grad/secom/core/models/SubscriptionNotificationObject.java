@@ -16,6 +16,8 @@
 
 package org.grad.secom.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Pattern;
 import org.grad.secom.core.models.enums.SubscriptionEventEnum;
 
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +32,8 @@ public class SubscriptionNotificationObject {
 
     // Class Variables
     @NotNull
+    @Schema(type = "string", example = "550e8400-e29b-41d4-a716-446655440000")
+    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
     private UUID subscriptionIdentifier;
     @NotNull
     private SubscriptionEventEnum eventEnum;

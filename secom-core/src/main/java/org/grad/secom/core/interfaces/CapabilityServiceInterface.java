@@ -26,6 +26,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Capability Interface Definition.
  * </p>
@@ -40,7 +42,7 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String CAPABILITY_INTERFACE_PATH = "/v2/capability";
+    String CAPABILITY_INTERFACE_PATH = "/" + SECOM_VERSION + "/capability";
 
     /**
      * GET /v1/capability : The purpose of the interface is to provide a dynamic

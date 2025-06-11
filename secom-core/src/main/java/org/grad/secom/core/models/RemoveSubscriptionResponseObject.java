@@ -21,26 +21,6 @@ package org.grad.secom.core.models;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class RemoveSubscriptionResponseObject {
+public class RemoveSubscriptionResponseObject extends AbstractResponseObject {
 
-    // Class Variables
-    private String message;
-
-    /**
-     * Gets message.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets message.
-     *
-     * @param message the message
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
 }

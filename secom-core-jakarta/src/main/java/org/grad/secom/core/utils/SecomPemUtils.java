@@ -29,8 +29,10 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -46,6 +48,23 @@ import java.util.stream.Stream;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public class SecomPemUtils {
+
+    /**
+     * For multiple X509 certificates, this function will create an array
+     * of minified PEM objects easily.
+     *
+     * @param certs     The array of X509 certificates
+     * @return The array of minified certificates
+     * @throws CertificateEncodingException Exception when the certificate encoding is false
+     */
+    public static String[] getMinifiedPemFromCerts(X509Certificate[] certs) throws CertificateEncodingException {
+        //Initialise the minified PEM list
+        final List<String> minifiedPemArray = new ArrayList<>();
+        for(X509Certificate cert: certs) {
+            minifiedPemArray.add(getMinifiedPemFromCert(cert));
+        }
+        return minifiedPemArray.toArray(new String[]{});
+    }
 
     /**
      * During the build of a payload JSON object and before adding the public
@@ -141,6 +160,23 @@ public class SecomPemUtils {
             .replaceAll("-----BEGIN PUBLIC KEY-----", "")
             // 3. Remove footer -----END PUBLIC KEY-----
             .replaceAll("-----END PUBLIC KEY-----", "");
+    }
+
+    /**
+     * For multiple minified PEM certificates, this function will create an array
+     * of X509 certificate objects easily.
+     *
+     * @param certsMinified     The minified PEM certificates
+     * @return The array of retrieved X509 certiticate objects
+     * @throws CertificateException Exception when the minified PEM certificates are invalid
+     */
+    public static X509Certificate[] getCertsFromPem(String[] certsMinified) throws CertificateException {
+        //Initialise the X509 certificate list
+        final List<X509Certificate> x509CertArray = new ArrayList<>();
+        for(String certMinified: certsMinified) {
+            x509CertArray.add(getCertFromPem(certMinified));
+        }
+        return x509CertArray.toArray(new X509Certificate[]{});
     }
 
     /**

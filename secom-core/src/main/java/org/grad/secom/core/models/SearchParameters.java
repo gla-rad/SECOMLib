@@ -33,7 +33,7 @@ public class SearchParameters {
     private String name;
     private String status;
     private String version;
-    private String keywords;
+    private String[] keywords;
     private String description;
     private SECOM_DataProductType dataProductType;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
@@ -42,6 +42,8 @@ public class SearchParameters {
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
+    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
+    private String organizationId;
     @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
     private String mmsi;
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
@@ -111,7 +113,7 @@ public class SearchParameters {
      *
      * @return the keywords
      */
-    public String getKeywords() {
+    public String[] getKeywords() {
         return keywords;
     }
 
@@ -120,7 +122,7 @@ public class SearchParameters {
      *
      * @param keywords the keywords
      */
-    public void setKeywords(String keywords) {
+    public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
 
@@ -212,6 +214,24 @@ public class SearchParameters {
      */
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
+    }
+
+    /**
+     * Gets organization id.
+     *
+     * @return the organization id
+     */
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    /**
+     * Sets organization id.
+     *
+     * @param organizationId the organization id
+     */
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
     }
 
     /**

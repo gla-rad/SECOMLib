@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,19 +43,20 @@ class SearchFilterObjectTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new search parameters object
         this.searchParameters = new SearchParameters();
         this.searchParameters.setName("name");
         this.searchParameters.setStatus("status");
         this.searchParameters.setVersion("version");
-        this.searchParameters.setKeywords("keywords");
+        this.searchParameters.setKeywords(new String[]{"keywords"});
         this.searchParameters.setDescription("description");
         this.searchParameters.setDataProductType(SECOM_DataProductType.S101);
         this.searchParameters.setSpecificationId("specificationId");
         this.searchParameters.setDesignId("designId");
         this.searchParameters.setInstanceId("instanceId");
+        this.searchParameters.setOrganizationId("organizationId");
         this.searchParameters.setMmsi("mmsi");
         this.searchParameters.setImo("imo");
         this.searchParameters.setServiceType("serviceType");
@@ -66,7 +67,6 @@ class SearchFilterObjectTest {
         this.obj = new SearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
-        this.obj.setFreetext("freeText");
         this.obj.setPage(0);
         this.obj.setPageSize(100);
     }
@@ -86,12 +86,13 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getName(), result.getQuery().getName());
         assertEquals(this.obj.getQuery().getStatus(), result.getQuery().getStatus());
         assertEquals(this.obj.getQuery().getVersion(), result.getQuery().getVersion());
-        assertEquals(this.obj.getQuery().getKeywords(), result.getQuery().getKeywords());
+        assertArrayEquals(this.obj.getQuery().getKeywords(), result.getQuery().getKeywords());
         assertEquals(this.obj.getQuery().getDescription(), result.getQuery().getDescription());
         assertEquals(this.obj.getQuery().getDataProductType(), result.getQuery().getDataProductType());
         assertEquals(this.obj.getQuery().getSpecificationId(), result.getQuery().getSpecificationId());
         assertEquals(this.obj.getQuery().getDesignId(), result.getQuery().getDesignId());
         assertEquals(this.obj.getQuery().getInstanceId(), result.getQuery().getInstanceId());
+        assertEquals(this.obj.getQuery().getOrganizationId(), result.getQuery().getOrganizationId());
         assertEquals(this.obj.getQuery().getMmsi(), result.getQuery().getMmsi());
         assertEquals(this.obj.getQuery().getImo(), result.getQuery().getImo());
         assertEquals(this.obj.getQuery().getServiceType(), result.getQuery().getServiceType());
@@ -100,7 +101,6 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getPage(), result.getPage());
         assertEquals(this.obj.getPageSize(), result.getPageSize());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
-        assertEquals(this.obj.getFreetext(), result.getFreetext());
     }
 
 }

@@ -31,6 +31,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Access Interface Definition.
  * </p>
@@ -45,7 +47,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_INTERFACE_PATH = "/v2/access";
+    String ACCESS_INTERFACE_PATH = "/" + SECOM_VERSION + "/access";
 
     /**
      * POST /v1/access : Access to the service instance information can be

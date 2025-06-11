@@ -33,14 +33,12 @@ public class SearchFilterObject {
     @Schema(description = "The search geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "(^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$|^\\s*(\\{.*\\}|\\w+)\\s*$)")
     private String geometry;
-    @Pattern(regexp = "^[a-zA-Z0-9 _:()+\\-,.*?\"]*$")
-    private String freetext;
     private String callbackEndpoint;
     private Boolean includeXml;
     @Min(value = 0L, message = "The page value must be positive")
-    private int page;
+    private Integer page;
     @Min(value = 0L, message = "The page size value must be positive")
-    private int pageSize;
+    private Integer pageSize;
 
     /**
      * Gets query.
@@ -79,24 +77,6 @@ public class SearchFilterObject {
     }
 
     /**
-     * Gets freetext.
-     *
-     * @return the freetext
-     */
-    public String getFreetext() {
-        return freetext;
-    }
-
-    /**
-     * Sets freetext.
-     *
-     * @param freetext the freetext
-     */
-    public void setFreetext(String freetext) {
-        this.freetext = freetext;
-    }
-
-    /**
      * Get include xml
      *
      * @return include xml
@@ -115,28 +95,28 @@ public class SearchFilterObject {
      *
      * @return the current page number
      */
-    public int getPage() { return page; }
+    public Integer getPage() { return page; }
 
     /**
      * Set the current page number
      *
      * @param page the current page number
      */
-    public void setPage(int page) { this.page = page; }
+    public void setPage(Integer page) { this.page = page; }
 
     /**
      * Get the page size
      *
      * @return the page size
      */
-    public int getPageSize() { return pageSize; }
+    public Integer getPageSize() { return pageSize; }
 
     /**
      * Set the page size
      *
      * @param pageSize the page size
      */
-    public void setPageSize(int pageSize) { this.pageSize = pageSize; }
+    public void setPageSize(Integer pageSize) { this.pageSize = pageSize; }
 
     /**
      * Get the callback endpoint

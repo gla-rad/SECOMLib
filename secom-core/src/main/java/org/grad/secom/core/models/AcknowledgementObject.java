@@ -40,7 +40,6 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
      * @return the envelope
      */
     @Override
-    @JsonProperty("data")
     public EnvelopeAckObject getEnvelope() {
         return envelope;
     }

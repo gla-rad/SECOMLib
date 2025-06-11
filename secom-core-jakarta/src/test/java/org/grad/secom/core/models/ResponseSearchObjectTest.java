@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ class ResponseSearchObjectTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new search object result
         this.searchObjectResult = new SearchObjectResult();
@@ -60,7 +60,7 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setEndpointType("endpointType");
         this.searchObjectResult.setVersion("version");
         this.searchObjectResult.setKeywords("keywords");
-        this.searchObjectResult.setUnlocode(Collections.singletonList("unlocode"));
+        this.searchObjectResult.setUnlocode("unlocode");
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
         this.searchObjectResult.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.searchObjectResult.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -98,8 +98,6 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
         assertEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
-        assertEquals(1, result.getSearchServiceResult().get(0).getUnlocode().size());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getUnlocode().get(0), result.getSearchServiceResult().get(0).getUnlocode().get(0));
         assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getPublishedAt(), result.getSearchServiceResult().get(0).getPublishedAt());
         assertEquals(this.obj.getSearchServiceResult().get(0).getLastUpdatedAt(), result.getSearchServiceResult().get(0).getLastUpdatedAt());

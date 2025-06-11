@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -26,8 +26,11 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +39,7 @@ class EnvelopeLinkObjectTest {
 
     // Class Variables
     private DigitalSignatureValueObject digitalSignatureValueObject;
-    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
+    private ExchangeMetadata exchangeMetadata;
     private EnvelopeLinkObject obj;
 
     private ObjectMapper mapper;
@@ -45,19 +48,19 @@ class EnvelopeLinkObjectTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() {
+    void setup() throws MalformedURLException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Create a digital signature value
         this.digitalSignatureValueObject = new DigitalSignatureValueObject();
         this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
         this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create SECOM exchange metadata
-        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
+        this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
         this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
@@ -70,11 +73,11 @@ class EnvelopeLinkObjectTest {
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setExchangeMetadata(this.exchangeMetadata);
         this.obj.setFromSubscription(Boolean.FALSE);
-        this.obj.setSubscriptionIdentifier("subscriptionId");
+        this.obj.setSubscriptionIdentifier(UUID.randomUUID());
         this.obj.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
-        this.obj.setCallbackEndpoint("callbackEndpoint");
+        this.obj.setCallbackEndpoint(URI.create("http://example").toURL());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setEnvelopeSignatureCertificate("envelopeCertificate");
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setSize(1);
         this.obj.setTimeToLive(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -100,14 +103,14 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference(), result.getExchangeMetadata().getDigitalSignatureReference());
         assertNotNull(result.getExchangeMetadata().getDigitalSignatureValue());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
+        assertArrayEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag(), result.getExchangeMetadata().getCompressionFlag());
         assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
         assertEquals(this.obj.getAckRequest(), result.getAckRequest());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
-        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getSize(), result.getSize());
         assertEquals(this.obj.getTimeToLive(), result.getTimeToLive());
@@ -130,15 +133,15 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), csv[3]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[4]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[5]);
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), csv[6]);
+        assertEquals(Arrays.toString(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[6]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[7]);
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[8]);
         assertEquals(this.obj.getFromSubscription().toString(), csv[9]);
-        assertEquals(this.obj.getSubscriptionIdentifier(), csv[10]);
+        assertEquals(this.obj.getSubscriptionIdentifier().toString(), csv[10]);
         assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[11]);
-        assertEquals(this.obj.getCallbackEndpoint(), csv[12]);
+        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[12]);
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[13]);
-        assertEquals(this.obj.getEnvelopeSignatureCertificate(), csv[14]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[14]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[15]);
         assertEquals(String.valueOf(this.obj.getSize()), csv[16]);
         assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[17]);

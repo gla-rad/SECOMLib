@@ -16,9 +16,12 @@
 
 package org.grad.secom.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.base.CsvStringGenerator;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * The SECOM Digital Signature Value Class.
@@ -28,10 +31,15 @@ import javax.validation.constraints.NotNull;
 public class DigitalSignatureValueObject implements CsvStringGenerator {
 
     // Class Variables
+    @Schema(example = "AB12CD34EF56AB78CD90EF12AB34CD56EF78AB90", description = "Claimed Thumbprint for Signed Root Key (X.509 Certificate) Format: SHA-1 or SHA-256 thumbprint.")
+    @Pattern(regexp = "^[A-Fa-f0-9]{40,64}$")
     private String publicRootCertificateThumbprint;
     @NotNull
-    private String publicCertificate;
+    @Schema(description = "(S100) Public Key (chain) for claimed identity")
+    private String[] publicCertificate;
     @NotNull
+    @Schema(description = "(S100) The digital signature in HEX format as one row, no trailing return/new line")
+    @Size(min = 1)
     private String digitalSignature;
 
     /**
@@ -57,7 +65,7 @@ public class DigitalSignatureValueObject implements CsvStringGenerator {
      *
      * @return the public certificate
      */
-    public String getPublicCertificate() {
+    public String[] getPublicCertificate() {
         return publicCertificate;
     }
 
@@ -66,7 +74,7 @@ public class DigitalSignatureValueObject implements CsvStringGenerator {
      *
      * @param publicCertificate the public certificate
      */
-    public void setPublicCertificate(String publicCertificate) {
+    public void setPublicCertificate(String[] publicCertificate) {
         this.publicCertificate = publicCertificate;
     }
 

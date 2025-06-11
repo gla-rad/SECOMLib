@@ -24,23 +24,23 @@ package org.grad.secom.core.models;
 public class SubscriptionNotificationResponseObject {
 
     // Class Variables
-    private String responseText;
+    private String message;
 
     /**
      * Gets response text.
      *
-     * @return the response text
+     * @return the response message
      */
-    public String getResponseText() {
-        return responseText;
+    public String getMessage() {
+        return message;
     }
 
     /**
      * Sets response text.
      *
-     * @param responseText the response text
+     * @param message the response message
      */
-    public void setResponseText(String responseText) {
-        this.responseText = responseText;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

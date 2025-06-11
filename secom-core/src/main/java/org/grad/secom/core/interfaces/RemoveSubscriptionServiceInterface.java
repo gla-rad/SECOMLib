@@ -29,6 +29,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Remove Subscription Interface Definition.
  * </p>
@@ -43,7 +45,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
     /**
      * The Interface Endpoint Path.
      */
-    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v2/subscription";
+    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/" + SECOM_VERSION + "/subscription";
 
     /**
      * DELETE /v2/subscription : Subscription(s) can be removed either

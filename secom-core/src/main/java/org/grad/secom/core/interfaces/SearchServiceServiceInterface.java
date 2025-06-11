@@ -31,6 +31,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Search Service Interface Definition.
  * </p>
@@ -45,7 +47,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String SEARCH_SERVICE_INTERFACE_PATH = "/v2/searchService";
+    String SEARCH_SERVICE_INTERFACE_PATH = "/" + SECOM_VERSION + "/searchService";
 
     /**
      * POST /v1/searchService : The purpose of this interface is to search for

@@ -33,6 +33,7 @@ import static org.grad.secom.core.interfaces.AccessNotificationServiceInterface.
 import static org.grad.secom.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -125,6 +126,12 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
                     }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
+                case GET_PUBLIC_KEY_INTERFACE_PATH:
+                    if(Objects.equals(this.request.getMethod(), "GET")) {
+                        return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
+                    } else if(Objects.equals(this.request.getMethod(), "POST")) {
+                        return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, this.request, null);
+                    }
                 default:
                     //Nothing to do, continue with the generic rules
             }

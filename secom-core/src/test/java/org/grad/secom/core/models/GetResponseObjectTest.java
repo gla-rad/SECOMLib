@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.AckRequestEnum;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,14 +27,13 @@ import org.junit.jupiter.api.Test;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GetResponseObjectTest {
 
     // Class Variables
     private DigitalSignatureValueObject digitalSignatureValueObject;
-    private SECOM_ServiceExchangeMetadataObject exchangeMetadata;
+    private ExchangeMetadata exchangeMetadata;
     private DataResponseObject dataResponseObject;
     private PaginationObject paginationObject;
     private GetResponseObject obj;
@@ -47,16 +46,16 @@ class GetResponseObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Create a digital signature value
         this.digitalSignatureValueObject = new DigitalSignatureValueObject();
         this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValueObject.setPublicCertificate("certificate");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
         this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create SECOM exchange metadata
-        this.exchangeMetadata = new SECOM_ServiceExchangeMetadataObject();
+        this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
         this.exchangeMetadata.setProtectionScheme("SECOM");
         this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
@@ -100,7 +99,7 @@ class GetResponseObjectTest {
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference());
         assertNotNull(result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue());
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
-        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
+        assertArrayEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getCompressionFlag(), result.getDataResponseObject().get(0).getExchangeMetadata().getCompressionFlag());
         assertEquals(this.obj.getDataResponseObject().get(0).getAckRequest(), result.getDataResponseObject().get(0).getAckRequest());

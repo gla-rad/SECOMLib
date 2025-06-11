@@ -25,6 +25,7 @@ import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.net.URL;
 import java.time.Instant;
 import java.util.UUID;
 

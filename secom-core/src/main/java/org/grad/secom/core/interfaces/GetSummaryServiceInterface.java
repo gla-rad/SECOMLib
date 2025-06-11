@@ -36,6 +36,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Get Summary Interface Definition.
  * </p>
@@ -50,7 +52,7 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_SUMMARY_INTERFACE_PATH = "/v2/object/summary";
+    String GET_SUMMARY_INTERFACE_PATH = "/" + SECOM_VERSION + "/object/summary";
 
     /**
      * GET /v1/object/summary :  A list of information shall be returned from
@@ -72,15 +74,15 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
     @Path(GET_SUMMARY_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    GetSummaryResponseObject getSummary(@QueryParam("containerType") ContainerTypeEnum containerType,
-                                        @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                        @QueryParam("productVersion") String productVersion,
-                                        @QueryParam("geometry") String geometry,
-                                        @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                        @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
-                                        @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
-                                        @QueryParam("page") @Min(0) Integer page,
-                                        @QueryParam("pageSize") @Min(0) Integer pageSize);
+    GetSummaryResponseObject getSummary(@QueryParam("containerType") @Parameter(schema = @Schema(description = "Data Type requested")) ContainerTypeEnum containerType,
+                                        @QueryParam("dataProductType") @Parameter(schema = @Schema(description = "Data product type name See: https://registry.iho.int/productspec/list.do (column 'Product ID')")) SECOM_DataProductType dataProductType,
+                                        @QueryParam("productVersion") @Parameter(schema = @Schema(description = "S-100 based Product specification version")) String productVersion,
+                                        @QueryParam("geometry") @Parameter(schema = @Schema(description = "Geometry condition for geo-located information objects as WKT LineString or Polygon")) String geometry,
+                                        @QueryParam("unlocode") @Parameter(schema = @Schema(description = "See UN web page")) @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") String unlocode,
+                                        @QueryParam("validFrom") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) Instant validFrom,
+                                        @QueryParam("validTo") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) Instant validTo,
+                                        @QueryParam("page") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 0..", defaultValue = "1")) Integer page,
+                                        @QueryParam("pageSize") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize);
 
     /**
      * The exception handler implementation for the interface.

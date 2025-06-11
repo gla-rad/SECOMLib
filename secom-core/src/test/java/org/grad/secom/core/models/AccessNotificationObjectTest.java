@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AccessNotificationObjectTest {
 
     // Class Variables
+    private EnvelopeAccessNotificationObject envelopeAccessNotificationObject;
     private AccessNotificationObject obj;
 
     private ObjectMapper mapper;
@@ -40,13 +41,16 @@ class AccessNotificationObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
+        this.envelopeAccessNotificationObject = new EnvelopeAccessNotificationObject();
+        envelopeAccessNotificationObject.setDecision(Boolean.TRUE);
+        envelopeAccessNotificationObject.setDecisionReason("Test");
+        envelopeAccessNotificationObject.setTransactionIdentifier(UUID.randomUUID());
         this.obj = new AccessNotificationObject();
-        this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setDecision(Boolean.TRUE);
-        this.obj.setDecisionReason("Test");
+        this.obj.setEnvelope(envelopeAccessNotificationObject);
+        this.obj.setEnvelopeSignature("envelopeSignature");
     }
 
     /**
@@ -60,9 +64,11 @@ class AccessNotificationObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
-        assertEquals(this.obj.getDecision(), result.getDecision());
-        assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
+        assertNotNull(result.getEnvelope());
+        assertEquals(this.obj.getEnvelope().getDecision(), result.getEnvelope().getDecision());
+        assertEquals(this.obj.getEnvelope().getDecisionReason(), result.getEnvelope().getDecisionReason());
+        assertEquals(this.obj.getEnvelope().getTransactionIdentifier(), result.getEnvelope().getTransactionIdentifier());
+        assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
 
 }

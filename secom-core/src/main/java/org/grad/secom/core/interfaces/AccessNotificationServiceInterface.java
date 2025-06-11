@@ -30,6 +30,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Access Notification Interface Definition.
  * </p>
@@ -44,7 +46,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/v2/access/notification";
+    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/" + SECOM_VERSION + "/access/notification";
 
     /**
      * POST /v1/access/notification : Result from Access Request performed on a

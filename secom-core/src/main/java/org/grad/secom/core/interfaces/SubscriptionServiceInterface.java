@@ -30,6 +30,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Subscription Interface Definition.
  * </p>
@@ -44,7 +46,7 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_INTERFACE_PATH = "/v2/subscription";
+    String SUBSCRIPTION_INTERFACE_PATH = "/" + SECOM_VERSION + "/subscription";
 
     /**
      * POST /v1/subscription : Request subscription on information, either

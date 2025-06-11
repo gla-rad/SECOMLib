@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,14 +42,14 @@ class SearchParametersTest {
     void setup() throws URISyntaxException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
         this.obj = new SearchParameters();
         this.obj.setName("name");
         this.obj.setStatus("status");
         this.obj.setVersion("version");
-        this.obj.setKeywords("keywords");
+        this.obj.setKeywords(new String[]{"keywords"});
         this.obj.setDescription("description");
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setSpecificationId("specificationId");
@@ -76,7 +76,7 @@ class SearchParametersTest {
         assertEquals(this.obj.getName(), result.getName());
         assertEquals(this.obj.getStatus(), result.getStatus());
         assertEquals(this.obj.getVersion(), result.getVersion());
-        assertEquals(this.obj.getKeywords(), result.getKeywords());
+        assertArrayEquals(this.obj.getKeywords(), result.getKeywords());
         assertEquals(this.obj.getDescription(), result.getDescription());
         assertEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getSpecificationId(), result.getSpecificationId());

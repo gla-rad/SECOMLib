@@ -53,22 +53,22 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
-import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetByLinkSecomInterface.GET_BY_LINK_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSecomInterface.GET_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.GetSummarySecomInterface.GET_SUMMARY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.PingSecomInterface.PING_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionNotificationSecomInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.UploadLinkSecomInterface.UPLOAD_LINK_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.UploadSecomInterface.UPLOAD_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AccessNotificationServiceInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH;
+import static org.grad.secom.core.interfaces.UploadServiceInterface.UPLOAD_INTERFACE_PATH;
 
 /**
  * The SECOM Client Class.

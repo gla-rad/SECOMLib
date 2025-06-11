@@ -47,7 +47,6 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     @NotNull
     private AckTypeEnum ackType;
     private NackTypeEnum nackType;
-    private String digitalSignatureReference;
     private UUID dataReference;
 
     /**
@@ -123,25 +122,11 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     }
 
     /**
-     * Get digital signature reference
-     *
-     * @return the digital signature reference
-     */
-    public String getDigitalSignatureReference() { return digitalSignatureReference; }
-
-    /**
-     * Set digitalSignatureRefernce
-     *
-     * @param digitalSignatureReference the digital signature reference
-     */
-    public void setDigitalSignatureReference(String digitalSignatureReference) { this.digitalSignatureReference = digitalSignatureReference; }
-
-    /**
      * Gets envelope certificate.
      *
      * @return the envelope certificate
      */
-    public String getEnvelopeCertificate() {
+    public String[] getEnvelopeCertificate() {
         return envelopeSignatureCertificate;
     }
 
@@ -155,7 +140,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
      */
     @JsonProperty("envelopeCertificate")
     @Override
-    public String getEnvelopeSignatureCertificate() {
+    public String[] getEnvelopeSignatureCertificate() {
         return envelopeSignatureCertificate;
     }
 

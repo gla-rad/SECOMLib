@@ -336,11 +336,11 @@ public class SecomClient {
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
+    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyRequestObject encryptionKeyRequestObject) {
         // If a signature provider has been assigned, use it to sign the
         // encryption key object envelop data.
         if(this.signatureProvider != null) {
-            encryptionKeyObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+            encryptionKeyRequestObject.signEnvelope(this.certificateProvider, this.signatureProvider);
         }
 
 
@@ -350,7 +350,7 @@ public class SecomClient {
                 .uri(ENCRYPTION_KEY_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(encryptionKeyObject))
+                .body(BodyInserters.fromValue(encryptionKeyRequestObject))
                 .retrieve()
                 .bodyToMono(EncryptionKeyResponseObject.class)
                 .blockOptional();

@@ -16,17 +16,10 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secom.core.base.InstantDeserializer;
-import org.grad.secom.core.base.InstantSerializer;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
-import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
-import javax.validation.constraints.Pattern;
-import java.time.Instant;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * The SECOM Subscription Request Object Class.
@@ -36,197 +29,47 @@ import java.util.UUID;
 public class SubscriptionRequestObject {
 
     // Class Variables
-    private ContainerTypeEnum containerType;
-    private SECOM_DataProductType dataProductType;
-    private UUID dataReference;
-    private String productVersion;
-    @Schema(description = "The subscription geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
-    @Pattern(regexp = "^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$")
-    private String geometry;
-    @Schema(description = "The subscription area as UNLOCODE", type = "string", example = "GBHRW")
-    @Pattern(regexp = "[A-Z]{5}")
-    private String unlocode;
-    @Schema(description = "The subscription period start", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
-    private Instant subscriptionPeriodStart;
-    @Schema(description = "The subscription period end", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
-    private Instant subscriptionPeriodEnd;
-    private String callbackEndpoint;
-    private Boolean pushAll;
+    @NotNull
+    private EnvelopeSubscriptionObject envelope;
+    @NotNull
+    @Schema(description = "The signature ot the EnvelopeObject in HEX format without whitespace or linebreaks")
+    @Size(min = 1)
+    private String envelopeSignature;
 
     /**
-     * Gets container type.
+     * Gets envelope.
      *
-     * @return the container type
+     * @return the envelope
      */
-    public ContainerTypeEnum getContainerType() {
-        return containerType;
+    public EnvelopeSubscriptionObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets container type.
+     * Sets envelope.
      *
-     * @param containerType the container type
+     * @param envelope the envelope
      */
-    public void setContainerType(ContainerTypeEnum containerType) {
-        this.containerType = containerType;
+    public void setEnvelope(EnvelopeSubscriptionObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets data product type.
+     * Gets envelope signature.
      *
-     * @return the data product type
+     * @return the envelope signature
      */
-    public SECOM_DataProductType getDataProductType() {
-        return dataProductType;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets data product type.
+     * Sets envelope signature.
      *
-     * @param dataProductType the data product type
+     * @param envelopeSignature the envelope signature
      */
-    public void setDataProductType(SECOM_DataProductType dataProductType) {
-        this.dataProductType = dataProductType;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
-
-    /**
-     * Gets data reference.
-     *
-     * @return the data reference
-     */
-    public UUID getDataReference() {
-        return dataReference;
-    }
-
-    /**
-     * Sets data reference.
-     *
-     * @param dataReference the data reference
-     */
-    public void setDataReference(UUID dataReference) {
-        this.dataReference = dataReference;
-    }
-
-    /**
-     * Gets product version.
-     *
-     * @return the product version
-     */
-    public String getProductVersion() {
-        return productVersion;
-    }
-
-    /**
-     * Sets product version.
-     *
-     * @param productVersion the product version
-     */
-    public void setProductVersion(String productVersion) {
-        this.productVersion = productVersion;
-    }
-
-    /**
-     * Gets geometry.
-     *
-     * @return the geometry
-     */
-    public String getGeometry() {
-        return geometry;
-    }
-
-    /**
-     * Sets geometry.
-     *
-     * @param geometry the geometry
-     */
-    public void setGeometry(String geometry) {
-        this.geometry = geometry;
-    }
-
-    /**
-     * Gets unlocode.
-     *
-     * @return the unlocode
-     */
-    public String getUnlocode() {
-        return unlocode;
-    }
-
-    /**
-     * Sets unlocode.
-     *
-     * @param unlocode the unlocode
-     */
-    public void setUnlocode(String unlocode) {
-        this.unlocode = unlocode;
-    }
-
-    /**
-     * Gets subscription period start.
-     *
-     * @return the subscription period start
-     */
-    public Instant getSubscriptionPeriodStart() {
-        return subscriptionPeriodStart;
-    }
-
-    /**
-     * Sets subscription period start.
-     *
-     * @param subscriptionPeriodStart the subscription period start
-     */
-    public void setSubscriptionPeriodStart(Instant subscriptionPeriodStart) {
-        this.subscriptionPeriodStart = subscriptionPeriodStart;
-    }
-
-    /**
-     * Gets subscription period end.
-     *
-     * @return the subscription period end
-     */
-    public Instant getSubscriptionPeriodEnd() {
-        return subscriptionPeriodEnd;
-    }
-
-    /**
-     * Sets subscription period end.
-     *
-     * @param subscriptionPeriodEnd the subscription period end
-     */
-    public void setSubscriptionPeriodEnd(Instant subscriptionPeriodEnd) {
-        this.subscriptionPeriodEnd = subscriptionPeriodEnd;
-    }
-
-    /**
-     * Gets the callback endpoint
-     *
-     * @return callbackEndPoint the callback endpoint
-     */
-    public String getCallbackEndpoint() { return callbackEndpoint; }
-
-    /**
-     * Sets the callback endpoint
-     *
-     * @param callbackEndpoint the callback endpoint
-     */
-    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
-
-    /**
-     * Gets push all
-     *
-     * @return push all
-     */
-    public Boolean getPushAll() { return pushAll; }
-
-    /**
-     * Sets push all
-     *
-     * @param pushAll push all
-     */
-    public void setPushAll(Boolean pushAll) { this.pushAll = pushAll; }
 
 }

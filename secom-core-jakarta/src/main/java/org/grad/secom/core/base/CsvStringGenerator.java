@@ -113,6 +113,11 @@ public interface CsvStringGenerator {
                     .map(Number.class::cast)
                     .map(Number::toString)
                     .orElse("");
+        } else if(attribute instanceof String[]) {
+            return Optional.of(attribute)
+                    .map(String[].class::cast)
+                    .map(Arrays::toString)
+                    .orElse("");
         } else {
             return attribute.toString();
         }

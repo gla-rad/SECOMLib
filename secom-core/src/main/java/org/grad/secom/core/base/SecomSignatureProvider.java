@@ -57,12 +57,12 @@ public interface SecomSignatureProvider {
      * of the message content (preferably in a Base64 format, and the signature
      * to validate the content against.
      *
-     * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+     * @param signatureCertificates The digital signature certificates to be used for the signature generation
      * @param algorithm             The algorithm used for the signature generation
      * @param signature             The signature to validate the content against
      * @param content               The content to be validated
      * @return whether the signature validation was successful or not
      */
-    boolean validateSignature(String signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content);
+    boolean validateSignature(String[] signatureCertificates, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content);
 
 }

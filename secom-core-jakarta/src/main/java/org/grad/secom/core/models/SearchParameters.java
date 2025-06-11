@@ -19,7 +19,6 @@ package org.grad.secom.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.models.enums.SECOM_DataProductType;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import java.net.URI;
 
@@ -34,7 +33,7 @@ public class SearchParameters {
     private String name;
     private String status;
     private String version;
-    private String keywords;
+    private String[] keywords;
     private String description;
     private SECOM_DataProductType dataProductType;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
@@ -43,6 +42,8 @@ public class SearchParameters {
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
+    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
+    private String organizationId;
     @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
     private String mmsi;
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
@@ -52,10 +53,6 @@ public class SearchParameters {
     @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}")
     private String unlocode;
     private URI endpointUri;
-    @Min(value = 0L, message = "The page value must be positive")
-    private Integer page;
-    @Min(value = 0L, message = "The page size value must be positive")
-    private Integer pageSize;
 
     /**
      * Gets name.
@@ -116,7 +113,7 @@ public class SearchParameters {
      *
      * @return the keywords
      */
-    public String getKeywords() {
+    public String[] getKeywords() {
         return keywords;
     }
 
@@ -125,7 +122,7 @@ public class SearchParameters {
      *
      * @param keywords the keywords
      */
-    public void setKeywords(String keywords) {
+    public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
 
@@ -220,6 +217,24 @@ public class SearchParameters {
     }
 
     /**
+     * Gets organization id.
+     *
+     * @return the organization id
+     */
+    public String getOrganizationId() {
+        return organizationId;
+    }
+
+    /**
+     * Sets organization id.
+     *
+     * @param organizationId the organization id
+     */
+    public void setOrganizationId(String organizationId) {
+        this.organizationId = organizationId;
+    }
+
+    /**
      * Gets mmsi.
      *
      * @return the mmsi
@@ -309,39 +324,4 @@ public class SearchParameters {
         this.endpointUri = endpointUri;
     }
 
-    /**
-     * Gets page.
-     *
-     * @return the page
-     */
-    public Integer getPage() {
-        return page;
-    }
-
-    /**
-     * Sets page.
-     *
-     * @param page the page
-     */
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    /**
-     * Gets page size.
-     *
-     * @return the page size
-     */
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    /**
-     * Sets page size.
-     *
-     * @param pageSize the page size
-     */
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
 }

@@ -17,17 +17,19 @@
 
 package org.grad.secom.core.interfaces;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secom.core.models.CapabilityResponseObject;
-import org.grad.secom.core.models.PublicKeyObject;
+import org.grad.secom.core.models.PublicKeyResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.validation.constraints.Pattern;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static org.grad.secom.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM GET Public Key Interface Definition.
@@ -43,7 +45,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String PUBLIC_KEY_INTERFACE_PATH = "/v2/publicKey";
+    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SECOM_VERSION + "/publicKey";
 
     /**
      * GET /v2/publicKey : This operation receives a get request for a public key.
@@ -52,11 +54,11 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
      *
      * @return the public key object
      */
-    @Path(PUBLIC_KEY_INTERFACE_PATH)
+    @Path(GET_PUBLIC_KEY_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    PublicKeyObject getPublicKey(@QueryParam("dataProtection") Boolean dataProtection,
-                                 @QueryParam("certificateThumbprint") String certificateThumbprint);
+    PublicKeyResponseObject getPublicKey(@QueryParam("dataProtection") Boolean dataProtection,
+                                         @QueryParam("certificateThumbprint") @Pattern(regexp = "^[A-Fa-f0-9]{40,64}$") @Parameter(schema = @Schema(description = "Claimed Thumbprint for Signed Key (X.509 Certificate)")) String certificateThumbprint);
 
     /**
      * The exception handler implementation for the interface.
@@ -66,9 +68,9 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleCapabilityInterfaceExceptions(Exception ex,
-                                                        HttpServletRequest request,
-                                                        HttpServletResponse response) {
+    static Response handleGetPublicKeyExceptions(Exception ex,
+                                                 HttpServletRequest request,
+                                                 HttpServletResponse response) {
         // Create the capability response
         Response.Status responseStatus;
         CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();

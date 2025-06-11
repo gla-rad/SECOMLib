@@ -18,7 +18,7 @@ package org.grad.secom.core.models;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secom.core.models.enums.AckTypeEnum;
 import org.grad.secom.core.models.enums.NackTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class AcknowledgementObjectTest {
 
     // Class Variables
-    private DigitalSignatureValue digitalSignatureValue;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
     private EnvelopeAckObject envelopeLinkObject;
     private AcknowledgementObject obj;
 
@@ -46,13 +46,13 @@ class AcknowledgementObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper.registerModule(new JavaTimeModule());
 
         // Create a digital signature value
-        this.digitalSignatureValue = new DigitalSignatureValue();
-        this.digitalSignatureValue.setPublicRootCertificateThumbprint("thumbprint");
-        this.digitalSignatureValue.setPublicCertificate("certificate");
-        this.digitalSignatureValue.setDigitalSignature("signature");
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
         // Create a new envelope upload object
         this.envelopeLinkObject = new EnvelopeAckObject();
@@ -60,14 +60,14 @@ class AcknowledgementObjectTest {
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeLinkObject.setAckType(AckTypeEnum.DELIVERED_ACK);
         this.envelopeLinkObject.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
-        this.envelopeLinkObject.setEnvelopeSignatureCertificate("envelopeCertificate");
+        this.envelopeLinkObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.envelopeLinkObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.envelopeLinkObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
         this.obj = new AcknowledgementObject();
         this.obj.setEnvelope(this.envelopeLinkObject);
-        this.obj.setEnvelopeSignature("signature");
+        this.obj.setDigitalSignature("signature");
     }
 
     /**
@@ -86,7 +86,7 @@ class AcknowledgementObjectTest {
         assertEquals(this.obj.getEnvelope().getTransactionIdentifier(), result.getEnvelope().getTransactionIdentifier());
         assertEquals(this.obj.getEnvelope().getAckType(), result.getEnvelope().getAckType());
         assertEquals(this.obj.getEnvelope().getNackType(), result.getEnvelope().getNackType());
-        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
+        assertArrayEquals(this.obj.getEnvelope().getEnvelopeCertificate(), result.getEnvelope().getEnvelopeCertificate());
         assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
