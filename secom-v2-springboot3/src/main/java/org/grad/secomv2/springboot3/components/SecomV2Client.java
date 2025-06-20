@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot2.components;
+package org.grad.secomv2.springboot3.components;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
@@ -37,8 +37,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
 
-import javax.validation.constraints.Min;
-import javax.ws.rs.QueryParam;
+import jakarta.validation.constraints.Min;
+import jakarta.ws.rs.QueryParam;
 import java.io.IOException;
 import java.net.URL;
 import java.security.KeyStoreException;
@@ -79,7 +79,7 @@ import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INT
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomClient {
+public class SecomV2Client {
 
     // Class Variables
     WebClient secomClient;
@@ -104,7 +104,7 @@ public class SecomClient {
      * @throws CertificateException for certificate exceptions
      * @throws UnrecoverableKeyException for certificate key exceptions
      */
-    public SecomClient(URL url, SecomConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+    public SecomV2Client(URL url, SecomV2ConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
         // Initialise the HTTP connection configuration
         HttpClient httpConnector = HttpClient
                 .create()
@@ -141,10 +141,10 @@ public class SecomClient {
         }
 
         // Initialise the provider beans by default if possible
-        this.certificateProvider = SecomSpringContext.getBean(SecomCertificateProvider.class);
-        this.signatureProvider = SecomSpringContext.getBean(SecomSignatureProvider.class);
-        this.encryptionProvider = SecomSpringContext.getBean(SecomEncryptionProvider.class);
-        this.compressionProvider = SecomSpringContext.getBean(SecomCompressionProvider.class);
+        this.certificateProvider = SecomV2SpringContext.getBean(SecomCertificateProvider.class);
+        this.signatureProvider = SecomV2SpringContext.getBean(SecomSignatureProvider.class);
+        this.encryptionProvider = SecomV2SpringContext.getBean(SecomEncryptionProvider.class);
+        this.compressionProvider = SecomV2SpringContext.getBean(SecomCompressionProvider.class);
 
         // And create the SECOM web client
         this.secomClient = WebClient.builder()
@@ -153,7 +153,7 @@ public class SecomClient {
                 .codecs(configurer -> configurer
                         .defaultCodecs()
                         .maxInMemorySize(Optional.ofNullable(config)
-                                .map(SecomConfigProperties::getClientMaxMemorySize)
+                                .map(SecomV2ConfigProperties::getClientMaxMemorySize)
                                 .orElse(-1)))
                 //.filter(setJWT())
                 .build();
@@ -336,11 +336,11 @@ public class SecomClient {
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyRequestObject encryptionKeyRequestObject) {
+    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
         // If a signature provider has been assigned, use it to sign the
         // encryption key object envelop data.
         if(this.signatureProvider != null) {
-            encryptionKeyRequestObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+            encryptionKeyObject.signEnvelope(this.certificateProvider, this.signatureProvider);
         }
 
 
@@ -350,7 +350,7 @@ public class SecomClient {
                 .uri(ENCRYPTION_KEY_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(encryptionKeyRequestObject))
+                .body(BodyInserters.fromValue(encryptionKeyObject))
                 .retrieve()
                 .bodyToMono(EncryptionKeyResponseObject.class)
                 .blockOptional();

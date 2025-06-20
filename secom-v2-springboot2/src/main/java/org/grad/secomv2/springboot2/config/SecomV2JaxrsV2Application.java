@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  */
 @Configuration
 @ApplicationPath("/api/secom/" + SecomConstants.SECOM_VERSION + "/")
-public class JaxrsApplication extends Application {
+public class SecomV2JaxrsV2Application extends Application {
 
     /**
      * Initialise the SECOM object mapping operation with the Springboot object

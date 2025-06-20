@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Component
-public class SecomSpringContext implements ApplicationContextAware {
+public class SecomV2SpringContext implements ApplicationContextAware {
 
     // Class Variables
     private static ApplicationContext context;
@@ -72,7 +72,7 @@ public class SecomSpringContext implements ApplicationContextAware {
      * in a bean instance - see comments of this article for more info).
      */
     private static synchronized void setContext(ApplicationContext context) {
-        SecomSpringContext.context = context;
+        SecomV2SpringContext.context = context;
     }
 
 }

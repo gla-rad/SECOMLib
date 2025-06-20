@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot2.config;
+package org.grad.secomv2.springboot3.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
- * The SECOM Request Logging Filter Configuration Class.
+ * The SECOM Request Logging Configuration Class.
  *
- * This class registered a filter that logs all the incoming requests to the
- * service's SECOM interfaces. This allows traceability for the service
- * operations and will link tha incoming requests with the data provided based
- * on the request timestamps.
+ * This class registers a filter registration bean for the "/api/secom" URL
+ * interfaces of SECOM, so that the incoming requests and responses are logged.
+ * Note that by default, in the INFO level, only the requests will be logged
+ * while on the DEBUG level the responses will also be recorded.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-public class SecomRequestLoggingFilterConfig {
+public class SecomV2RequestLoggingFilterConfig {
 
     /**
      * Registers the secomRequestLogging bean using the built-in functionality
@@ -74,5 +73,5 @@ public class SecomRequestLoggingFilterConfig {
         secomRequestLogging.addUrlPatterns("/api/secom/*");
         return secomRequestLogging;
     }
-    
+
 }
