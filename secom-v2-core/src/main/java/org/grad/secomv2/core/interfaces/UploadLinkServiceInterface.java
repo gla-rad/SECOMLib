@@ -49,7 +49,7 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_LINK_INTERFACE_PATH = "/" + SECOM_VERSION + "/object/link";
+    String UPLOAD_LINK_INTERFACE_PATH = "/object/link";
 
     /**
      * POST /v1/object/link : The REST operation POST /object/link. The

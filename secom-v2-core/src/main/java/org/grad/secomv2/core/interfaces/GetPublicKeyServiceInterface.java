@@ -45,7 +45,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SECOM_VERSION + "/publicKey";
+    String GET_PUBLIC_KEY_INTERFACE_PATH = "/publicKey";
 
     /**
      * GET /v2/publicKey : This operation receives a get request for a public key.

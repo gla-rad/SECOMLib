@@ -52,7 +52,7 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_SUMMARY_INTERFACE_PATH = "/" + SECOM_VERSION + "/object/summary";
+    String GET_SUMMARY_INTERFACE_PATH = "/object/summary";
 
     /**
      * GET /v1/object/summary :  A list of information shall be returned from

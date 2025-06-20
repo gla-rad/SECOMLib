@@ -46,7 +46,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/" + SECOM_VERSION + "/access/notification";
+    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/access/notification";
 
     /**
      * POST /v1/access/notification : Result from Access Request performed on a

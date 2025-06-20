@@ -42,7 +42,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String PUBLIC_KEY_INTERFACE_PATH = "/" + SECOM_VERSION + "/publicKey";
+    String PUBLIC_KEY_INTERFACE_PATH = "/publicKey";
 
     /**
      * GET /v2/publicKey : This operation uploads (pushes) a public key

@@ -45,7 +45,7 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = SECOM_VERSION + "/" + SECOM_VERSION + "/encryptionkey/request";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/encryptionkey/request";
 
     /**
      * POST /v1/encryptionkey/request : This operation requests an encrypted

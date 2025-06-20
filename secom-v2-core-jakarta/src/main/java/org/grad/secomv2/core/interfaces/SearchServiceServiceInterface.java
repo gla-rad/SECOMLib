@@ -47,7 +47,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String SEARCH_SERVICE_INTERFACE_PATH = "/" + SECOM_VERSION + "/searchService";
+    String SEARCH_SERVICE_INTERFACE_PATH = "/searchService";
 
     /**
      * POST /v1/searchService : The purpose of this interface is to search for

@@ -47,7 +47,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_INTERFACE_PATH = "/" + SECOM_VERSION + "/access";
+    String ACCESS_INTERFACE_PATH = "/access";
 
     /**
      * POST /v1/access : Access to the service instance information can be
