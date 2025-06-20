@@ -38,8 +38,8 @@ import java.util.stream.Stream;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-@ApplicationPath("/api/secom/" + SecomConstants.SECOM_VERSION + "/")
-public class SecomV2JaxrsV2Application extends Application {
+@ApplicationPath("/api/secom/")
+public class SecomJaxrsApplication extends Application {
 
     /**
      * Initialise the SECOM object mapping operation with the Springboot object
@@ -48,7 +48,7 @@ public class SecomV2JaxrsV2Application extends Application {
      * @param objectMapper the autowired object mapper
      * @return the object mapper provider
      */
-    @Bean
+    @Bean("secomV2ObjectMapperProvider")
     SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
         return new SecomObjectMapperProvider(objectMapper);
     }
@@ -58,7 +58,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the SECOM exception mapper bean
      */
-    @Bean
+    @Bean("secomV2ExceptionMapper")
     SecomExceptionMapper secomExceptionMapper() {
         return new SecomExceptionMapper();
     }
@@ -68,7 +68,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the SECOM writer interceptor bean
      */
-    @Bean
+    @Bean("secomV2WriterInterceptor")
     SecomWriterInterceptor secomWriterInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                                   @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
                                                   @Autowired(required = false) SecomCertificateProvider certificateProvider,
@@ -81,7 +81,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the SECOM signature filter bean
      */
-    @Bean
+    @Bean("secomV2SignatureFilter")
     SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                               @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
                                               @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
@@ -94,7 +94,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the SECOM reader interceptor bean
      */
-    @Bean
+    @Bean("secomV2ReaderInterceptor")
     SecomReaderInterceptor secomReaderInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                                   @Autowired(required = false) SecomEncryptionProvider encryptionProvider) {
         return new SecomReaderInterceptor(compressionProvider, encryptionProvider);
@@ -105,7 +105,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the ContainerType Converter Provider bean
      */
-    @Bean
+    @Bean("secomV2ContainerTypeConverterProvider")
     ContainerTypeConverterProvider containerTypeConverterProvider() {
         return new ContainerTypeConverterProvider();
     }
@@ -115,7 +115,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
      */
-    @Bean
+    @Bean("secomV2DigitalSignatureAlgorithmConverterProvider")
     DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
         return new DigitalSignatureAlgorithmConverterProvider();
     }
@@ -125,7 +125,7 @@ public class SecomV2JaxrsV2Application extends Application {
      *
      * @return the LocalDateTime Converter Provider bean
      */
-    @Bean
+    @Bean("secomV2InstantConverterProvider")
     InstantConverterProvider instantConverterProvider() {
         return new InstantConverterProvider();
     }

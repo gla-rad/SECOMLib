@@ -19,8 +19,8 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.ByteArrayDeSerializer;
-import org.grad.secomv2.core.base.ByteArraySerializer;
+import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
+import org.grad.secomv2.core.base.SecomByteArraySerializer;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -36,13 +36,13 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     // Class Variables
     @NotNull
     @Schema(type = "string", format = "byte", description = "The protected symmetric encryption key, Base64 encoded\r\nExample : KQdEi+9iUlq8B9cwWY...U8A2iDPhz7g==")
-    @JsonSerialize(using = ByteArraySerializer.class)
-    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    @JsonSerialize(using = SecomByteArraySerializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] encryptionKey;
     @NotNull
     @Schema(type = "string", format = "byte", description = "Inititalisation vector, Base64 encoded\r\nExample: c9fUXeC5xrFuXGNNnGv9iA==")
-    @JsonSerialize(using = ByteArraySerializer.class)
-    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    @JsonSerialize(using = SecomByteArraySerializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] iv;
     @NotNull
     @Schema(type = "string", format = "uuid", description = "Identifier to the transaction with the encrypted data", example = "550e8400-e29b-41d4-a716-446655440000")

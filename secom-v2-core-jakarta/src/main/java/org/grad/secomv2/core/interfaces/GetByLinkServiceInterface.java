@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.ws.rs.*;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
@@ -31,8 +32,6 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.UUID;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Get By Link Interface Definition.
@@ -48,7 +47,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_BY_LINK_INTERFACE_PATH = "/object/link";
+    String GET_BY_LINK_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/link";
 
     /**
      * GET /v1/object/link : The Get By Link interface is used for pulling

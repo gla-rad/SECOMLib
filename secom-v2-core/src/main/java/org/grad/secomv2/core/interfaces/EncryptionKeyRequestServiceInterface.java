@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.EncryptionKeyRequestObject;
 import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
@@ -28,8 +29,6 @@ import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Encryption Key Request Interface Definition.
@@ -45,7 +44,7 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = "/encryptionkey/request";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey/request";
 
     /**
      * POST /v1/encryptionkey/request : This operation requests an encrypted

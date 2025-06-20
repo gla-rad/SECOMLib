@@ -17,6 +17,7 @@
 package org.grad.secomv2.springboot3.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,7 +34,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-public class SecomV2RequestLoggingFilterConfig {
+public class SecomRequestLoggingFilterConfig {
 
     /**
      * Registers the secomRequestLogging bean using the built-in functionality
@@ -42,7 +43,7 @@ public class SecomV2RequestLoggingFilterConfig {
      *
      * @return the secomRequestLogging filter registration bean
      */
-    @Bean(name = "secomRequestLogging")
+    @Bean(name = "secomV2RequestLogging")
     public FilterRegistrationBean<CommonsRequestLoggingFilter> secomRequestLogging() {
         // Setup a commons request logging filter
         final CommonsRequestLoggingFilter secomRequestLoggingFilter = new CommonsRequestLoggingFilter() {
@@ -70,7 +71,7 @@ public class SecomV2RequestLoggingFilterConfig {
         // Now register the bean just for the SECOM interfaces
         final FilterRegistrationBean<CommonsRequestLoggingFilter> secomRequestLogging = new FilterRegistrationBean<>();
         secomRequestLogging.setFilter(secomRequestLoggingFilter);
-        secomRequestLogging.addUrlPatterns("/api/secom/*");
+        secomRequestLogging.addUrlPatterns("/api/secom2/" + SecomConstants.SECOM_VERSION + "/*");
         return secomRequestLogging;
     }
 

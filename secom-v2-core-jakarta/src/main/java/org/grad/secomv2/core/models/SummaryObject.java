@@ -19,8 +19,8 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.InstantDeserializer;
-import org.grad.secomv2.core.base.InstantSerializer;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
@@ -59,8 +59,8 @@ public class SummaryObject {
     @Schema(description = "Description of the information object\"")
     private String info_description;
     @Schema(example = "2025-04-28T14:30:00Z", description = "Date for last modified Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string", pattern = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant info_lastModifiedDate;
     @Schema(description = "S-100 based Product version e.g. 1.0.0")
     private String info_productVersion;

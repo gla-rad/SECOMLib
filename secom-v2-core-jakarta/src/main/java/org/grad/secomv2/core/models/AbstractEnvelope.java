@@ -24,8 +24,8 @@ import jakarta.validation.constraints.Size;
 import org.grad.secomv2.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
-import org.grad.secomv2.core.base.InstantDeserializer;
-import org.grad.secomv2.core.base.InstantSerializer;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
 
 import java.time.Instant;
 
@@ -43,8 +43,8 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @NotNull
     @Schema(type = "string", description = "Time when encryptionKey envelope is signed Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "19850412T101530")
     @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     protected Instant envelopeSignatureTime;
     @NotNull
     @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")

@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.SubscriptionNotificationObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationResponseObject;
@@ -28,8 +29,6 @@ import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Subscription Notification Interface Definition.
@@ -46,7 +45,7 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/subscription/notification";
+    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription/notification";
 
     /**
      * POST /v1/subscription/notification : The interface receives notifications

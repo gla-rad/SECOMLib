@@ -18,8 +18,8 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.InstantDeserializer;
-import org.grad.secomv2.core.base.InstantSerializer;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
@@ -49,12 +49,12 @@ public class EnvelopeSubscriptionObject {
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
     @Schema(type = "string", format = "date-time", description = "Start time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z", pattern = "\"^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z$\"")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant subscriptionPeriodStart;
     @Schema(type = "string", format = "date-time", description = "End time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z", pattern = "\"^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z$\"")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant subscriptionPeriodEnd;
     @Schema(type = "string", format = "uri", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
     @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")

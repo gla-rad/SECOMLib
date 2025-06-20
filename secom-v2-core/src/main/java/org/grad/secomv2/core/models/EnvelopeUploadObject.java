@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.DigitalSignatureBearer;
-import org.grad.secomv2.core.base.ByteArrayDeSerializer;
-import org.grad.secomv2.core.base.ByteArraySerializer;
+import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
+import org.grad.secomv2.core.base.SecomByteArraySerializer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
@@ -42,8 +42,8 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     // Class Variables
     @JsonProperty
     @Schema(type = "string", format = "byte", description = "The payload XML (e.g. S100_ExchangeSet, S100_DataSet), ZIP or binary The data can be open, protected and/or compressed.")
-    @JsonSerialize(using = ByteArraySerializer.class)
-    @JsonDeserialize(using = ByteArrayDeSerializer.class)
+    @JsonSerialize(using = SecomByteArraySerializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     @NotNull
     private byte[] data;
     @NotNull

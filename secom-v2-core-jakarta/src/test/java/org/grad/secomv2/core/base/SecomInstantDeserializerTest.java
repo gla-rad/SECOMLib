@@ -31,17 +31,17 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
-class InstantDeserializerTest {
+class SecomInstantDeserializerTest {
 
     // Test Parameters
-    InstantDeserializer instantDeserializer;
+    SecomInstantDeserializer secomInstantDeserializer;
 
     /**
      * Set up some base data.
      */
     @BeforeEach
     void setup() {
-        this.instantDeserializer = new InstantDeserializer();
+        this.secomInstantDeserializer = new SecomInstantDeserializer();
     }
 
     /**
@@ -52,13 +52,13 @@ class InstantDeserializerTest {
     void testDeserializeInstant() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20010101T121314").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2001-01-01T12:13:14.00Z").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2001-01-01T12:13:14.00Z"), result);
@@ -72,13 +72,13 @@ class InstantDeserializerTest {
     void testDeserializeInstantDLS() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20080808T121314").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2008-08-08T12:13:14.00+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);
@@ -92,13 +92,13 @@ class InstantDeserializerTest {
     void testDeserializeUTCDate() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20010101T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2001-01-01T12:13:14.00Z").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2001-01-01T12:13:14.00Z"), result);
@@ -112,13 +112,13 @@ class InstantDeserializerTest {
     void testDeserializeUTCDateDLS() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20080808T121314Z").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2008-08-08T12:13:14.00Z").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00Z"), result);
@@ -132,13 +132,13 @@ class InstantDeserializerTest {
     void testDeserializeDateWithOffset() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20010101T121314+0100").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2001-01-01T12:13:14.00+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2001-01-01T12:13:14.00+01:00"), result);
@@ -152,13 +152,13 @@ class InstantDeserializerTest {
     void testDeserializeDateWithOffsetDLS() throws IOException {
         // Make some mocks to test easily
         ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("20080808T121314+0100").when(objectCodecMock).readValue(any(), eq(String.class));
+        doReturn("2008-08-08T12:13:14.00+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
         JsonParser jsonParserMock = mock(JsonParser.class);
         doReturn(objectCodecMock).when(jsonParserMock).getCodec();
         DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
 
         // And deserialize
-        Instant result = this.instantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
+        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
 
         // Make sure the result seems correct
         assertEquals(Instant.parse("2008-08-08T12:13:14.00+01:00"), result);

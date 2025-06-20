@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.PingResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +26,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Ping Interface Definition.
@@ -42,7 +41,7 @@ public interface PingServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String PING_INTERFACE_PATH = "/ping";
+    String PING_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/ping";
 
     /**
      * GET /v1/ping : The purpose of the interface is to provide a dynamic

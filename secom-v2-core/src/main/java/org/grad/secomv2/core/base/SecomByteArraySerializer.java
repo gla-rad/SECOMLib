@@ -36,12 +36,12 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class ByteArraySerializer extends StdSerializer<byte[]> {
+public class SecomByteArraySerializer extends StdSerializer<byte[]> {
 
     /**
      * Instantiates a new Byte array serializer.
      */
-    protected ByteArraySerializer() {
+    protected SecomByteArraySerializer() {
         this(null);
     }
 
@@ -50,7 +50,7 @@ public class ByteArraySerializer extends StdSerializer<byte[]> {
      *
      * @param t the byte array class
      */
-    protected ByteArraySerializer(Class<byte[]> t) {
+    protected SecomByteArraySerializer(Class<byte[]> t) {
         super(t);
     }
 

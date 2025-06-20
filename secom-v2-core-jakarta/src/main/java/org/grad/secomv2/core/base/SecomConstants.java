@@ -52,7 +52,7 @@ public class SecomConstants {
     /**
      * The SECOM DATE, TIME and DATE_TIME formats.
      */
-    public static final String SECOM_DATE_FORMAT = "yyyyMMdd";
+    public static final String SECOM_DATE_FORMAT = "yyyy-MM-dd";
     public static final DateTimeFormatter SECOM_DATE_FORMATTER;
     static {
         SECOM_DATE_FORMATTER = new DateTimeFormatterBuilder()
@@ -62,7 +62,7 @@ public class SecomConstants {
                 .toFormatter();
     }
 
-    public static final String SECOM_TIME_FORMAT = "HHmmss";
+    public static final String SECOM_TIME_FORMAT = "HH:mm:ss.SS";
     public static final DateTimeFormatter SECOM_TIME_FORMATTER;
     static {
         SECOM_TIME_FORMATTER = new DateTimeFormatterBuilder()
@@ -70,14 +70,14 @@ public class SecomConstants {
                 .appendPattern(SECOM_TIME_FORMAT)
                 .optionalStart()
                 .parseLenient()
-                .appendOffset("+HHMM", "Z")
+                .appendOffset("+HH:MM", "Z")
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()
                 .withZone(ZoneId.systemDefault());
     }
-    public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
 
+    public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
     public static final DateTimeFormatter SECOM_DATE_TIME_FORMATTER;
     static {
         SECOM_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
@@ -85,7 +85,7 @@ public class SecomConstants {
                 .appendPattern(SECOM_DATE_TIME_FORMAT)
                 .optionalStart()
                 .parseLenient()
-                .appendOffset("+HHMM", "Z")
+                .appendOffset("+HH:MM", "Z")
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()

@@ -19,8 +19,8 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.InstantDeserializer;
-import org.grad.secomv2.core.base.InstantSerializer;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
 
 import java.time.Instant;
 
@@ -33,8 +33,8 @@ public class PingResponseObject {
 
     // Class Variables
     @Schema(type = "string", description = "The last private interaction date-time", example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
-    @JsonSerialize(using = InstantSerializer.class)
-    @JsonDeserialize(using = InstantDeserializer.class)
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant lastPrivateInteractionTime;
 
     /**

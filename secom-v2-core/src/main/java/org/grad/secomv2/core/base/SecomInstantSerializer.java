@@ -37,12 +37,12 @@ import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTE
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class InstantSerializer extends StdSerializer<Instant> {
+public class SecomInstantSerializer extends StdSerializer<Instant> {
 
     /**
      * Instantiates a new Byte array serializer.
      */
-    protected InstantSerializer() {
+    protected SecomInstantSerializer() {
         this(null);
     }
 
@@ -51,7 +51,7 @@ public class InstantSerializer extends StdSerializer<Instant> {
      *
      * @param t the byte array class
      */
-    protected InstantSerializer(Class<Instant> t) {
+    protected SecomInstantSerializer(Class<Instant> t) {
         super(t);
     }
 

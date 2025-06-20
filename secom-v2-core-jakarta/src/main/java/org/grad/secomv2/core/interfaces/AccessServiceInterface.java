@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.ws.rs.*;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
@@ -30,8 +31,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Access Interface Definition.
@@ -47,7 +46,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_INTERFACE_PATH = "/access";
+    String ACCESS_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/access";
 
     /**
      * POST /v1/access : Access to the service instance information can be

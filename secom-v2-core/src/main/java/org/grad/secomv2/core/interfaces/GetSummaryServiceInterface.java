@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
@@ -36,8 +37,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
 
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
-
 /**
  * The SECOM Get Summary Interface Definition.
  * </p>
@@ -52,7 +51,7 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_SUMMARY_INTERFACE_PATH = "/object/summary";
+    String GET_SUMMARY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/summary";
 
     /**
      * GET /v1/object/summary :  A list of information shall be returned from

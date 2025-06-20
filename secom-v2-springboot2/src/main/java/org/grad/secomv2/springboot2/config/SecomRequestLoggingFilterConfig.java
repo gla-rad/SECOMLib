@@ -34,7 +34,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-public class SecomV2RequestLoggingFilterConfig {
+public class SecomRequestLoggingFilterConfig {
 
     /**
      * Registers the secomRequestLogging bean using the built-in functionality
@@ -43,7 +43,7 @@ public class SecomV2RequestLoggingFilterConfig {
      *
      * @return the secomRequestLogging filter registration bean
      */
-    @Bean(name = "secomRequestLogging")
+    @Bean(name = "secomV2RequestLogging")
     public FilterRegistrationBean<CommonsRequestLoggingFilter> secomRequestLogging() {
         // Setup a commons request logging filter
         final CommonsRequestLoggingFilter secomRequestLoggingFilter = new CommonsRequestLoggingFilter() {

@@ -31,11 +31,11 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class InstantSerializerTest {
+class SecomInstantSerializerTest {
 
     // Test Variables
     ObjectMapper objectMapper;
-    InstantSerializer instantSerializer;
+    SecomInstantSerializer secomInstantSerializer;
     StringWriter stringWriter;
     WriterBasedJsonGenerator jsonGenerator;
     SerializerProvider serializerProvider;
@@ -49,7 +49,7 @@ class InstantSerializerTest {
         this.objectMapper = new ObjectMapper();
 
         // Initialise the serializer
-        this.instantSerializer = new InstantSerializer();
+        this.secomInstantSerializer = new SecomInstantSerializer();
 
         // Create a json generator
         this.stringWriter = new StringWriter();
@@ -73,7 +73,7 @@ class InstantSerializerTest {
 
         // Serialize the input
         jsonGenerator.writeFieldName("date");
-        instantSerializer.serialize(instant, this.jsonGenerator, this.serializerProvider);
+        secomInstantSerializer.serialize(instant, this.jsonGenerator, this.serializerProvider);
 
         // Finish the JSON Generation
         this.jsonGenerator.writeEndObject();
@@ -88,7 +88,6 @@ class InstantSerializerTest {
         // Make sure it seems fine
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertTrue(result.get("date").matches("(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})(\\d{2})(Z|\\+(\\d{4}))"));
+        assertTrue(result.get("date").matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
-
 }

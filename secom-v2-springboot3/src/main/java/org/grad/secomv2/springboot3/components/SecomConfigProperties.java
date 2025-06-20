@@ -24,7 +24,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * @author
  */
 @ConfigurationProperties(prefix = "secom.security.ssl")
-public class SecomV2ConfigProperties {
+public class SecomConfigProperties {
 
     // Configuration Variables
     private String keystore;

@@ -20,6 +20,7 @@ package org.grad.secomv2.core.interfaces;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.ws.rs.*;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
 
@@ -28,8 +29,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM GET Public Key Interface Definition.
@@ -45,7 +44,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_PUBLIC_KEY_INTERFACE_PATH = "/publicKey";
+    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
 
     /**
      * GET /v2/publicKey : This operation receives a get request for a public key.

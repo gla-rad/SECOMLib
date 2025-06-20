@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.ws.rs.*;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
@@ -33,8 +34,6 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
-
 /**
  * The SECOM Upload Link Interface Definition.
  * </p>
@@ -49,7 +48,7 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_LINK_INTERFACE_PATH = "/object/link";
+    String UPLOAD_LINK_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/link";
 
     /**
      * POST /v1/object/link : The REST operation POST /object/link. The

@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.CapabilityResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,8 +26,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Capability Interface Definition.
@@ -42,7 +41,7 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String CAPABILITY_INTERFACE_PATH = "/capability";
+    String CAPABILITY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/capability";
 
     /**
      * GET /v1/capability : The purpose of the interface is to provide a dynamic
