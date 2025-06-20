@@ -44,7 +44,7 @@ public interface EncryptionKeyNotifySecomInterface extends GenericSecomInterface
     /**
      * The Interface Notify Endpoint Path.
      */
-    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/v1/encryptionkey/notify";
+    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/encryptionkey/notify";
 
     /**
      * POST /v1/encryptionkey/notify : The purpose of the interface is to

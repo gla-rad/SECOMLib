@@ -45,7 +45,7 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACKNOWLEDGMENT_INTERFACE_PATH = "/v1/acknowledgement";
+    String ACKNOWLEDGMENT_INTERFACE_PATH = "/acknowledgement";
 
     /**
      * POST /v1/acknowledgement : During upload of information, an

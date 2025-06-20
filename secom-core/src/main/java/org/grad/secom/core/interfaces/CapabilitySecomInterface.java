@@ -40,7 +40,7 @@ public interface CapabilitySecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String CAPABILITY_INTERFACE_PATH = "/v1/capability";
+    String CAPABILITY_INTERFACE_PATH = "/capability";
 
     /**
      * GET /v1/capability : The purpose of the interface is to provide a dynamic

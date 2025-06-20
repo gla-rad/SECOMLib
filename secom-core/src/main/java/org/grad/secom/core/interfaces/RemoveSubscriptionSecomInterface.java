@@ -46,7 +46,7 @@ public interface RemoveSubscriptionSecomInterface extends GenericSecomInterface 
     /**
      * The Interface Endpoint Path.
      */
-    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/v1/subscription";
+    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/subscription";
 
     /**
      * DELETE /v1/subscription : Subscription(s) can be removed either

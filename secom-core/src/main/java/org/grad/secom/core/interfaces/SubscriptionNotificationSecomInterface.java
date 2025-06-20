@@ -45,7 +45,7 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/v1/subscription/notification";
+    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/subscription/notification";
 
     /**
      * POST /v1/subscription/notification : The interface receives notifications

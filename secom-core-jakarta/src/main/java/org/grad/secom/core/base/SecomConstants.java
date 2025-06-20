@@ -35,6 +35,11 @@ public class SecomConstants {
     public static final String SECOM_PROTECTION_SCHEME = "SECOM";
 
     /**
+     * The SECOM Version.
+     */
+    public static final String SECOM_VERSION = "v1";
+
+    /**
      * The Algorithm to be used for generating signatures.
      */
     public static final String CERTIFICATE_THUMBPRINT_HASH = "SHA-1";

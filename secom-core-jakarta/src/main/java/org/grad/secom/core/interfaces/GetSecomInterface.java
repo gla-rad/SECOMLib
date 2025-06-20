@@ -51,7 +51,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_INTERFACE_PATH = "/v1/object";
+    String GET_INTERFACE_PATH = "/object";
 
     /**
      * GET /v1/object : The Get interface is used for pulling information from a

@@ -45,7 +45,7 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_BY_LINK_INTERFACE_PATH = "/v1/object/link";
+    String GET_BY_LINK_INTERFACE_PATH = "/object/link";
 
     /**
      * GET /v1/object/link : The Get By Link interface is used for pulling
