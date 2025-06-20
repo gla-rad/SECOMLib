@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.models.CapabilityResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public interface CapabilitySecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String CAPABILITY_INTERFACE_PATH = "/capability";
+    String CAPABILITY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/capability";
 
     /**
      * GET /v1/capability : The purpose of the interface is to provide a dynamic

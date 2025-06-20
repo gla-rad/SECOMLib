@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.models.EncryptionKeyResponseObject;
 import org.grad.secom.core.models.EncryptionKeyNotificationObject;
@@ -44,7 +45,7 @@ public interface EncryptionKeyNotifySecomInterface extends GenericSecomInterface
     /**
      * The Interface Notify Endpoint Path.
      */
-    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/encryptionkey/notify";
+    String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey/notify";
 
     /**
      * POST /v1/encryptionkey/notify : The purpose of the interface is to

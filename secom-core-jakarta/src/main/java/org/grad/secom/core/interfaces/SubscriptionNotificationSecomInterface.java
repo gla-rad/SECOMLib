@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.SubscriptionNotificationObject;
 import org.grad.secom.core.models.SubscriptionNotificationResponseObject;
@@ -45,7 +46,7 @@ public interface SubscriptionNotificationSecomInterface extends GenericSecomInte
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/subscription/notification";
+    String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription/notification";
 
     /**
      * POST /v1/subscription/notification : The interface receives notifications

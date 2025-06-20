@@ -16,6 +16,7 @@
 
 package org.grad.secom.core.interfaces;
 
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.models.PingResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,7 @@ public interface PingSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String PING_INTERFACE_PATH = "/ping";
+    String PING_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/ping";
 
     /**
      * GET /v1/ping : The purpose of the interface is to provide a dynamic

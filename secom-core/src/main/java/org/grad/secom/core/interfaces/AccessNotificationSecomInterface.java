@@ -18,6 +18,7 @@ package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.AccessNotificationObject;
@@ -45,7 +46,7 @@ public interface AccessNotificationSecomInterface extends GenericSecomInterface 
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/access/notification";
+    String ACCESS_NOTIFICATION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/access/notification";
 
     /**
      * POST /v1/access/notification : Result from Access Request performed on a

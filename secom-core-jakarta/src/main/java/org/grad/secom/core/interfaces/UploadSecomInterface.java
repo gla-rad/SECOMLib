@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSchemaValidationException;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;
@@ -48,7 +49,7 @@ public interface UploadSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_INTERFACE_PATH = "/object";
+    String UPLOAD_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object";
 
     /**
      * POST /v1/object : The interface shall be used for uploading (pushing)

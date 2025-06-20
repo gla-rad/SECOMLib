@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.EncryptionKeyObject;
 import org.grad.secom.core.models.EncryptionKeyResponseObject;
@@ -44,7 +45,7 @@ public interface EncryptionKeySecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = "/encryptionkey";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey";
 
     /**
      * POST /v1/encryptionkey : The purpose of the interface is to exchange a

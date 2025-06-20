@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
@@ -46,7 +47,7 @@ public interface AccessSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACCESS_INTERFACE_PATH = "/access";
+    String ACCESS_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/access";
 
     /**
      * POST /v1/access : Access to the service instance information can be

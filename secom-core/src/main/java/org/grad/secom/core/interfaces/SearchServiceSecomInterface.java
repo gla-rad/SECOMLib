@@ -18,6 +18,7 @@ package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.EncryptionKeyResponseObject;
@@ -47,7 +48,7 @@ public interface SearchServiceSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String SEARCH_SERVICE_INTERFACE_PATH = "/searchService";
+    String SEARCH_SERVICE_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/searchService";
 
     /**
      * POST /v1/searchService : The purpose of this interface is to search for

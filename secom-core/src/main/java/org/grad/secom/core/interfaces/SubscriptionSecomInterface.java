@@ -18,6 +18,7 @@ package org.grad.secom.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomValidationException;
 import org.grad.secom.core.models.SubscriptionResponseObject;
@@ -45,7 +46,7 @@ public interface SubscriptionSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String SUBSCRIPTION_INTERFACE_PATH = "/subscription";
+    String SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription";
 
     /**
      * POST /v1/subscription : Request subscription on information, either

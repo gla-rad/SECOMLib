@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
@@ -45,7 +46,7 @@ public interface GetByLinkSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_BY_LINK_INTERFACE_PATH = "/object/link";
+    String GET_BY_LINK_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/link";
 
     /**
      * GET /v1/object/link : The Get By Link interface is used for pulling

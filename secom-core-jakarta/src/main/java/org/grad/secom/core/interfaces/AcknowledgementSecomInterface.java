@@ -19,6 +19,7 @@ package org.grad.secom.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.ws.rs.*;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.*;
 import org.grad.secom.core.models.AcknowledgementObject;
 import org.grad.secom.core.models.AcknowledgementResponseObject;
@@ -45,7 +46,7 @@ public interface AcknowledgementSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ACKNOWLEDGMENT_INTERFACE_PATH = "/acknowledgement";
+    String ACKNOWLEDGMENT_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/acknowledgement";
 
     /**
      * POST /v1/acknowledgement : During upload of information, an

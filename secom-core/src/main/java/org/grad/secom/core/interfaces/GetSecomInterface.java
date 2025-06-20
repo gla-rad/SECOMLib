@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
@@ -52,7 +53,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_INTERFACE_PATH = "/object";
+    String GET_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object";
 
     /**
      * GET /v1/object : The Get interface is used for pulling information from a
