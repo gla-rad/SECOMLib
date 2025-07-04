@@ -38,7 +38,7 @@ import java.util.stream.Stream;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-@ApplicationPath("/api/secom/")
+@ApplicationPath("/api/secom2/")
 public class SecomJaxrsApplication extends Application {
 
     /**
