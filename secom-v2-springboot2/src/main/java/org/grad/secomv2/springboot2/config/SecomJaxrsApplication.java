@@ -91,36 +91,6 @@ public class SecomJaxrsApplication extends Application {
     }
 
     /**
-     * Initialise the ContainerType Converter Provider bean.
-     *
-     * @return the ContainerType Converter Provider bean
-     */
-    @Bean("secomV2ContainerTypeConverterProvider")
-    ContainerTypeConverterProvider containerTypeConverterProvider() {
-        return new ContainerTypeConverterProvider();
-    }
-
-    /**
-     * Initialise the DigitalSignatureAlgorithmEnum Converter Provider bean.
-     *
-     * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
-     */
-    @Bean("secomV2DigitalSignatureAlgorithmConverterProvider")
-    DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
-        return new DigitalSignatureAlgorithmConverterProvider();
-    }
-
-    /**
-     * Initialise the Instant Converter Provider bean.
-     *
-     * @return the LocalDateTime Converter Provider bean
-     */
-    @Bean("secomV2InstantConverterProvider")
-    InstantConverterProvider instantConverterProvider() {
-        return new InstantConverterProvider();
-    }
-
-    /**
      * Register the required classes to the RESTEasy server.
      *
      * @return the set of classes to be registered.
@@ -130,7 +100,10 @@ public class SecomJaxrsApplication extends Application {
         return Set.of(
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class
+                SecomExceptionMapper.class,
+                InstantConverterProvider.class,
+                DigitalSignatureAlgorithmConverterProvider.class,
+                ContainerTypeConverterProvider.class
         );
     }
 
