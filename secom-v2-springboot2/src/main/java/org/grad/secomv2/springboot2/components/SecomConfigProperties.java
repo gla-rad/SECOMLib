@@ -21,7 +21,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * The SECOM Configuration properties.
  *
- * @author
+ * @author - Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @ConfigurationProperties(prefix = "secom.security.ssl")
 public class SecomConfigProperties {
