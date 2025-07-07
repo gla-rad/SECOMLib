@@ -27,7 +27,7 @@ import io.swagger.v3.oas.models.servers.Server;
 import java.util.Arrays;
 
 /**
- * The SECOM V2 OpenAPI information Provider Interface
+ * The SECOM OpenAPI information Provider Interface
  * <p/>
  * A helper interface to provide the basic information required to the
  * generation of the OpenAPI documentation in the implementing service.
@@ -51,12 +51,12 @@ public interface SecomV2OpenApiInfoProvider {
      * @return the default OpenAPI definition.
      */
     static OpenAPI defaultOpenAPIInfo() {
-        return new OpenAPI().schema("secom-v2", new Schema<>().$schema("openapi-v2.json"))
+        return new OpenAPI().schema("secom-v2", new Schema<>().$schema("openapi.json"))
                 .info(new Info().title("SECOM v2.0 Interfaces")
-                        .description("The SECOM Interfaces of the Service")
+                        .description("The SECOM v2.0 Interfaces of the Service")
                         .termsOfService("")
                         .version("v0.0.1")
-                        .contact(new Contact().email("nam@test.org"))
+                        .contact(new Contact().email("name@test.org"))
                         .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
                 .servers(Arrays.asList(new Server[]{
                         new Server().url("http://localhost:8080/api/secom2")
