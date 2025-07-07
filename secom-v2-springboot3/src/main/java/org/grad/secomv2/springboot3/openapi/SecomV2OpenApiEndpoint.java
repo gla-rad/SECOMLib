@@ -71,8 +71,7 @@ public class SecomV2OpenApiEndpoint {
      * @return the OpenAPIJson
      * @throws JsonProcessingException when the JSON processing fails
      */
-    @Tag(name = "SECOM")
-    @Path("/" + SecomConstants.SECOM_VERSION + "/openapi")
+    @Path("/" + SecomConstants.SECOM_VERSION + "/openapi.json")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getOpenApiV1() throws JsonProcessingException {
