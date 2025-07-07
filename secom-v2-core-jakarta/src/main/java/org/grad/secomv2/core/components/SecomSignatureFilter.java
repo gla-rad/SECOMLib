@@ -96,6 +96,11 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
      */
     @Override
     public void filter(ContainerRequestContext rqstCtx) throws IOException {
+        // Sanity Check
+        if(!rqstCtx.getUriInfo().getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            return;
+        }
+
         // No need to do anything without a signature validator
         if(this.signatureProvider == null) {
             return;

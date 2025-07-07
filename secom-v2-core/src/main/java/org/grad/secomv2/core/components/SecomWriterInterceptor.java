@@ -18,7 +18,9 @@ package org.grad.secomv2.core.components;
 
 import org.grad.secomv2.core.base.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.WriterInterceptor;
 import javax.ws.rs.ext.WriterInterceptorContext;
@@ -52,6 +54,12 @@ import java.util.Base64;
 @Provider
 public class SecomWriterInterceptor implements WriterInterceptor {
 
+    /**
+     * The Request Context.
+     */
+    @Context
+    private HttpServletRequest request;
+
     // Class Variables
     private SecomCompressionProvider compressionProvider;
     private SecomEncryptionProvider encryptionProvider;
@@ -84,6 +92,12 @@ public class SecomWriterInterceptor implements WriterInterceptor {
      * @throws WebApplicationException For web-application failures
      */
     public void aroundWriteTo(WriterInterceptorContext ctx) throws IOException, WebApplicationException {
+        // Sanity Check
+        if(!this.request.getContextPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            ctx.proceed();
+        }
+
+
         // First pick up the interceptor context
         final Object entity = ctx.getEntity();
 

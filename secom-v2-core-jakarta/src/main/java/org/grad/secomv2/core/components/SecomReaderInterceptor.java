@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.AbstractEnvelope;
@@ -66,6 +67,12 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
     @Context
     Providers providers;
 
+    /**
+     * The Request Context.
+     */
+    @Context
+    private HttpServletRequest request;
+
     // Class Variables
     private SecomCompressionProvider compressionProvider;
     private SecomEncryptionProvider encryptionProvider;
@@ -92,6 +99,11 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
      */
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext ctx) throws IOException, WebApplicationException {
+        // Sanity Check
+        if(!this.request.getPathInfo().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            return ctx.proceed();
+        }
+
         // Start with an empty object
         InputStream is = ctx.getInputStream();
         Object obj = null;

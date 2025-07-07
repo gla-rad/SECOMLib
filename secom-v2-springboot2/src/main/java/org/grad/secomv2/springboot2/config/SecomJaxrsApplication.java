@@ -54,16 +54,6 @@ public class SecomJaxrsApplication extends Application {
     }
 
     /**
-     * Initialise the SECOM exception mapper.
-     *
-     * @return the SECOM exception mapper bean
-     */
-    @Bean("secomV2ExceptionMapper")
-    SecomExceptionMapper secomExceptionMapper() {
-        return new SecomExceptionMapper();
-    }
-
-    /**
      * Initialise the SECOM writer interceptor.
      *
      * @return the SECOM writer interceptor bean
@@ -137,7 +127,11 @@ public class SecomJaxrsApplication extends Application {
      */
     @Override
     public Set<Class<?>> getClasses() {
-        return Stream.of(OpenApiResource.class, AcceptHeaderOpenApiResource.class).collect(Collectors.toSet());
+        return Set.of(
+                OpenApiResource.class,
+                AcceptHeaderOpenApiResource.class,
+                SecomExceptionMapper.class
+        );
     }
 
     /**
