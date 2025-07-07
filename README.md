@@ -1,8 +1,8 @@
 # SECOMLib
 
 A Java library facilitating the development of SECOM-compliant web interfaces.
-The implementation is based on the final IEC 63173-2 ED1 SECOM draft with
-circulation date 2022-03-11.
+The implementation found here is based on the draft of the second version of 
+the IEC 63173-2 SECOM standard, currently under development.
 
 ## Development Setup
 
@@ -21,11 +21,16 @@ update the *.gitignore* file appropriately.
 
 A SECOM-compliant service endpoints is quite standardised so a simple library
 with the required data structures and endpoint definitions should be very handy
-while developing these types of services. The first two digits of the version
-of the library should follow the implemented version of the SECOM standard to
-keep things tidy. For example, if the SECOM standard in at version 1.0 then the
-library version should be at 1.0.X. The use of snapshots during the development
-is also strongly encouraged.
+while developing these types of services.
+
+In order to allow multiple versions of the library being used simultanously, 
+each SECOMLib implementation of a SECOM standard version will be packaged as
+a separate artifact, which will include the version in the artifact name.
+For example:
+
+* SECOM v1.0 --> Packages: secom-core, secom-springboot...
+* SECOM v2.0 --> Packages: secom-v2-core, secom-v2-springboot...
+* SECOM v3.0 --> Packages: secom-v3-core, secom-v3-springboot... etc.
 
 ## Structure
 
@@ -34,13 +39,21 @@ to make importing easier. For the time being the following modules have been
 defined:
 
 * secom-core
-* secom-springboot
+* secom-core-jakarta
+* secom-springboot2
+* secom-springboot3
+
+As you can see there is native support for both Javax and Jakarta namespaces,
+as well as support for both versions 2.0 and 3.0 of Springboot, at least for
+the time being. It is strongly suggested to always use the latest version, as
+support for Javax and the earlier Sprinboot versions might be dropped at any
+point.
 
 ### The Core Module
 
 The core functionality of the SECOM library is found under the **secom-core**
-module. To keep the library as generic as possible and compatible with the widest
-range of implementation frameworks, the
+(and the **secom-core-jakarta**) module. To keep the library as generic as  and compatible with the widest
+possible range of implementation frameworks, the
 [JAX-RS](https://www.baeldung.com/jax-rs-spec-and-implementations) API is being
 followed. This allows the additional definition of a set of JAX-RS provider
 components that hook up on runtime and perform the SECOM message data payload
@@ -149,7 +162,7 @@ interface that implements the **CapabilitySecomInterface** class.
 @Path("/") // <-- This should be the root path of the SECOM interfaces
 @Validated
 @Slf4j
-public class CapabilitySecomController implements CapabilitySecomInterface {
+public class CapabilityController implements CapabilityServiceInterface {
 
     /**
      * GET /v2/capability : Returns the service instance capabilities.
@@ -160,20 +173,22 @@ public class CapabilitySecomController implements CapabilitySecomInterface {
     public CapabilityResponseObject capability() {
         // Populate the implemented SECOM interfaces
         ImplementedInterfaces implementedInterfaces = new ImplementedInterfaces();
+        implementedInterfaces.setGet(true);
         implementedInterfaces.setGetSummary(true);
-
+        implementedInterfaces.setSubscription(true);
+        
         // Start building the capability entry
         CapabilityObject capabilityObject = new CapabilityObject();
         capabilityObject.setContainerType(ContainerTypeEnum.S100_DataSet);
         capabilityObject.setDataProductType(SECOM_DataProductType.S125);
+        capabilityObject.setProductSchemaUrl(productSchemaUrl);
         capabilityObject.setImplementedInterfaces(implementedInterfaces);
-
+        
         // Start building the capability response
         CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
-
         capabilityResponseObject.setCapability(Collections.singletonList(capabilityObject));
-        capabilityObject.setServiceVersion(this.appVersion);
-
+        capabilityObject.setServiceVersion(this.serviceInformationConfig.version());
+        
         // And return the Capability Response Object
         return capabilityResponseObject;
     }
@@ -380,6 +395,44 @@ This allows the client to access a keystore (pkcs12 and jks formats supported)
 in order to provide a certificate to the called service, validate the received
 service certificate via a truststore (pkcs12 and jks formats supported), or
 allow for an insecure policy where all certificates are accepted.
+
+### OpenAPI Specification
+
+Now The library also supports the generation of an OpenAPI JSON file out of
+the box, using the swagger library. To achieve this a special endpoint is
+loaded onto Springboot service udner the path ***/v2/openapi.json***.
+
+The implementing services can append the OpenAPI information using another
+supplied provider, namely the **SecomV2OpenApiInfoProvider**. Here is an example
+of the operarion:
+
+```java
+@Component
+public class SecomV2OpenApiInfoProviderImpl implements SecomV2OpenApiInfoProvider {
+
+    /**
+     * Returns the OpenAPI documentation details.
+     *
+     * @return The OpenAPI documentation details
+     */
+    @Override
+    public OpenAPI getOpenApiInfo() {
+        return new OpenAPI().schema("secom-v2", new Schema<>().$schema("openapi.json"))
+                .info(new Info().title("My Service - SECOM v2.0 Interfaces")
+                        .description("The SECOM V2 interfaces of the My Service")
+                        .termsOfService("https://test.org/")
+                        .version("v0.0.1")
+                        .contact(new Contact().email("name@test.org"))
+                        .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
+                .servers(Arrays.asList(new Server[]{
+                        new Server().url("http://localhost:8766/api/secom2")
+                }))
+                .externalDocs(new ExternalDocumentation()
+                        .description("SpringShop Wiki Documentation")
+                        .url("https://springshop.wiki.github.org/docs"));
+    }
+}
+```
 
 ## Contributing
 
