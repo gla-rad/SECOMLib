@@ -55,7 +55,7 @@ public interface GetServiceInterface extends GenericSecomInterface {
     String GET_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object";
 
     /**
-     * GET /v1/object : The Get interface is used for pulling information from a
+     * GET /v2/object : The Get interface is used for pulling information from a
      * service provider. The owner of the information (provider) is responsible
      * for the authorization procedure before returning information.
      *

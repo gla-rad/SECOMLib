@@ -48,7 +48,7 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
     String ACKNOWLEDGMENT_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/acknowledgement";
 
     /**
-     * POST /v1/acknowledgement : During upload of information, an
+     * POST /v2/acknowledgement : During upload of information, an
      * acknowledgement can be requested which is expected to be received when
      * the uploaded message has been delivered to the end system (technical
      * acknowledgement), and an acknowledgement when the message has been opened

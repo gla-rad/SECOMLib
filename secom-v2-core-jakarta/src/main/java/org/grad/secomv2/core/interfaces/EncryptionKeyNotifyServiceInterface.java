@@ -48,7 +48,7 @@ public interface EncryptionKeyNotifyServiceInterface extends GenericSecomInterfa
     String ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey/notify";
 
     /**
-     * POST /v1/encryptionkey/notify : The purpose of the interface is to
+     * POST /v2/encryptionkey/notify : The purpose of the interface is to
      * exchange a temporary secret key. This operation enables a consumer to
      * request an encrypted secret key from a producer by providing a reference
      * to the encrypted data and a public certificate for symmetric key

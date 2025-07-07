@@ -152,7 +152,7 @@ interface that implements the **CapabilitySecomInterface** class.
 public class CapabilitySecomController implements CapabilitySecomInterface {
 
     /**
-     * GET /v1/capability : Returns the service instance capabilities.
+     * GET /v2/capability : Returns the service instance capabilities.
      *
      * @return the SECOM-compliant service capabilities
      */

@@ -48,7 +48,7 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
     String SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription/notification";
 
     /**
-     * POST /v1/subscription/notification : The interface receives notifications
+     * POST /v2/subscription/notification : The interface receives notifications
      * when a subscription is created or removed by the information provider.
      *
      * @param subscriptionNotificationObject the subscription notification request object

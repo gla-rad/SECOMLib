@@ -49,7 +49,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
     String SEARCH_SERVICE_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/searchService";
 
     /**
-     * POST /v1/searchService : The purpose of this interface is to search for
+     * POST /v2/searchService : The purpose of this interface is to search for
      * service instances to consume.
      *
      * @param searchFilterObject    The search filter object

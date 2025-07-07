@@ -51,7 +51,7 @@ public interface UploadServiceInterface extends GenericSecomInterface {
     String UPLOAD_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object";
 
     /**
-     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * POST /v2/object : The interface shall be used for uploading (pushing)
      * data to a consumer. The operation expects one single data object and
      * its metadata.
      *

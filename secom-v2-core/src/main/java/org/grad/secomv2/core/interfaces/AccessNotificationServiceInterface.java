@@ -48,7 +48,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
     String ACCESS_NOTIFICATION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/access/notification";
 
     /**
-     * POST /v1/access/notification : Result from Access Request performed on a
+     * POST /v2/access/notification : Result from Access Request performed on a
      * service instance shall be sent asynchronous through this client
      * interface.
      *

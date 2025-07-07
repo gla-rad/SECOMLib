@@ -50,7 +50,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
     String GET_BY_LINK_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/link";
 
     /**
-     * GET /v1/object/link : The Get By Link interface is used for pulling
+     * GET /v2/object/link : The Get By Link interface is used for pulling
      * information from a data storage handled by the information owner. The
      * link to the data storage can be exchanged with Upload Link interface.
      * The owner of the information (provider) is responsible for relevant

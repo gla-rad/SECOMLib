@@ -44,7 +44,7 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
     String CAPABILITY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/capability";
 
     /**
-     * GET /v1/capability : The purpose of the interface is to provide a dynamic
+     * GET /v2/capability : The purpose of the interface is to provide a dynamic
      * method to ask a service instance at runtime what interfaces are
      * accessible, and what payload formats and version are valid.
      *

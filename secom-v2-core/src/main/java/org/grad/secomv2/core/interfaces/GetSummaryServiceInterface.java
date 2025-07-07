@@ -54,7 +54,7 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
     String GET_SUMMARY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/summary";
 
     /**
-     * GET /v1/object/summary :  A list of information shall be returned from
+     * GET /v2/object/summary :  A list of information shall be returned from
      * this interface. The summary contains identity, status and short
      * description of each information object. The actual information object
      * shall be retrieved using the Get interface.

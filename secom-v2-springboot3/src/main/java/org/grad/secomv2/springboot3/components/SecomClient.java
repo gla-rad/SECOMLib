@@ -196,7 +196,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/access/notification : Result from Access Request performed on a
+     * POST /v2/access/notification : Result from Access Request performed on a
      * service instance shall be sent asynchronous through this client
      * interface.
      *
@@ -216,7 +216,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/access : Access to the service instance information can be
+     * POST /v2/access : Access to the service instance information can be
      * requested through the Request Access interface.
      *
      * @param accessRequestObject the request access object
@@ -235,7 +235,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/acknowledgement : During upload of information, an
+     * POST /v2/acknowledgement : During upload of information, an
      * acknowledgement can be requested which is expected to be received when
      * the uploaded message has been delivered to the end system (technical
      * acknowledgement), and an acknowledgement when the message has been opened
@@ -265,7 +265,7 @@ public class SecomClient {
     }
 
     /**
-     * GET /v1/capability : The purpose of the interface is to provide a dynamic
+     * GET /v2/capability : The purpose of the interface is to provide a dynamic
      * method to ask a service instance at runtime what interfaces are
      * accessible, and what payload formats and version are valid.
      *
@@ -282,7 +282,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/searchService : The purpose of this interface is to search for
+     * POST /v2/searchService : The purpose of this interface is to search for
      * service instances to consume.
      *
      * @param searchFilterObject    The search filter object
@@ -309,7 +309,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/encryptionkey/notify : The purpose of the interface is to
+     * POST /v2/encryptionkey/notify : The purpose of the interface is to
      * exchange a temporary secret key. This operation enables a consumer to
      * request an encrypted secret key from a producer by providing a reference
      * to the encrypted data and a public certificate for symmetric key
@@ -330,7 +330,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/encryptionkey : The purpose of the interface is to exchange a
+     * POST /v2/encryptionkey : The purpose of the interface is to exchange a
      * temporary secret key. This operation is used to upload (push) an
      * encrypted secret key to a consumer.
      *
@@ -357,7 +357,7 @@ public class SecomClient {
     }
 
     /**
-     * GET /v1/object/link : The Get By Link interface is used for pulling
+     * GET /v2/object/link : The Get By Link interface is used for pulling
      * information from a data storage handled by the information owner. The
      * link to the data storage can be exchanged with Upload Link interface.
      * The owner of the information (provider) is responsible for relevant
@@ -380,7 +380,7 @@ public class SecomClient {
     }
 
     /**
-     * GET /v1/object : The Get interface is used for pulling information from a
+     * GET /v2/object : The Get interface is used for pulling information from a
      * service provider. The owner of the information (provider) is responsible
      * for the authorization procedure before returning information.
      *
@@ -433,7 +433,7 @@ public class SecomClient {
     }
 
     /**
-     * GET /v1/object/summary :  A list of information shall be returned from
+     * GET /v2/object/summary :  A list of information shall be returned from
      * this interface. The summary contains identity, status and short
      * description of each information object. The actual information object
      * shall be retrieved using the Get interface.
@@ -480,7 +480,7 @@ public class SecomClient {
     }
 
     /**
-     * GET /v1/ping : The purpose of the interface is to provide a dynamic
+     * GET /v2/ping : The purpose of the interface is to provide a dynamic
      * method to ask for the technical status of the specific service instance.
      *
      * @return the status response object
@@ -496,7 +496,7 @@ public class SecomClient {
     }
 
     /**
-     * DELETE /v1/subscription : Subscription(s) can be removed either
+     * DELETE /v2/subscription : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
      * subscription.
@@ -517,7 +517,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/subscription/notification : The interface receives notifications
+     * POST /v2/subscription/notification : The interface receives notifications
      * when a subscription is created or removed by the information provider.
      *
      * @param subscriptionNotificationObject the subscription notification request object
@@ -536,7 +536,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/subscription : Request subscription on information, either
+     * POST /v2/subscription : Request subscription on information, either
      * specific information according to parameters, or the information
      * accessible upon decision by the information provider.
      *
@@ -556,7 +556,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/object : The interface shall be used for uploading (pushing)
+     * POST /v2/object : The interface shall be used for uploading (pushing)
      * data to a consumer. The operation expects one single data object and
      * its metadata.
      *
@@ -593,7 +593,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v1/object/link : The REST operation POST /object/link. The
+     * POST /v2/object/link : The REST operation POST /object/link. The
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
      *

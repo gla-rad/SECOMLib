@@ -44,7 +44,7 @@ public interface PingServiceInterface extends GenericSecomInterface {
     String PING_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/ping";
 
     /**
-     * GET /v1/ping : The purpose of the interface is to provide a dynamic
+     * GET /v2/ping : The purpose of the interface is to provide a dynamic
      * method to ask for the technical status of the specific service instance.
      *
      * @return the status response object

@@ -48,7 +48,7 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
     String SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription";
 
     /**
-     * POST /v1/subscription : Request subscription on information, either
+     * POST /v2/subscription : Request subscription on information, either
      * specific information according to parameters, or the information
      * accessible upon decision by the information provider.
      *

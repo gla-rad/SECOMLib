@@ -49,7 +49,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
     String ACCESS_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/access";
 
     /**
-     * POST /v1/access : Access to the service instance information can be
+     * POST /v2/access : Access to the service instance information can be
      * requested through the Request Access interface.
      *
      * @param accessRequestObject the request access object

@@ -51,7 +51,7 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
     String UPLOAD_LINK_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/link";
 
     /**
-     * POST /v1/object/link : The REST operation POST /object/link. The
+     * POST /v2/object/link : The REST operation POST /object/link. The
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
      *
