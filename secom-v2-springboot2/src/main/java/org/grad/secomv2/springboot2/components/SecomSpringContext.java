@@ -64,7 +64,7 @@ public class SecomSpringContext implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
         // store ApplicationContext reference to access required beans later on
-        this.setContext(context);
+        setContext(context);
     }
 
     /**
