@@ -34,7 +34,15 @@ to make importing easier. For the time being the following modules have been
 defined:
 
 * secom-core
-* secom-springboot
+* secom-core-jakarta
+* secom-springboot2
+* secom-springboot3
+
+As you can see there is native support for both Javax and Jakarta namespaces,
+as well as support for both versions 2.0 and 3.0 of Springboot, at least for
+the time being. It is strongly suggested to always use the latest version, as
+support for Javax and the earlier Sprinboot versions might be dropped at any
+point.
 
 ### The Core Module
 
@@ -380,6 +388,44 @@ This allows the client to access a keystore (pkcs12 and jks formats supported)
 in order to provide a certificate to the called service, validate the received
 service certificate via a truststore (pkcs12 and jks formats supported), or
 allow for an insecure policy where all certificates are accepted.
+
+### OpenAPI Specification
+
+Now The library also supports the generation of an OpenAPI JSON file out of
+the box, using the swagger library. To achieve this a special endpoint is
+loaded onto Springboot service udner the path ***/v2/openapi.json***.
+
+The implementing services can append the OpenAPI information using another
+supplied provider, namely the **SecomV2OpenApiInfoProvider**. Here is an example
+of the operarion:
+
+```java
+@Component
+public class SecomV2OpenApiInfoProviderImpl implements SecomV2OpenApiInfoProvider {
+
+    /**
+     * Returns the OpenAPI documentation details.
+     *
+     * @return The OpenAPI documentation details
+     */
+    @Override
+    public OpenAPI getOpenApiInfo() {
+        return new OpenAPI().schema("secom-v1", new Schema<>().$schema("openapi.json"))
+                .info(new Info().title("My Service - SECOM v1.0 Interfaces")
+                        .description("The SECOM interfaces of the My Service")
+                        .termsOfService("https://test.org/")
+                        .version("v0.0.1")
+                        .contact(new Contact().email("name@test.org"))
+                        .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")))
+                .servers(Arrays.asList(new Server[]{
+                        new Server().url("http://localhost:8766/api/secom2")
+                }))
+                .externalDocs(new ExternalDocumentation()
+                        .description("SpringShop Wiki Documentation")
+                        .url("https://springshop.wiki.github.org/docs"));
+    }
+}
+```
 
 ## Contributing
 
