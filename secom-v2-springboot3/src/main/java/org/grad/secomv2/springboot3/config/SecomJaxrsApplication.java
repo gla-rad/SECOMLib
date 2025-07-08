@@ -21,6 +21,7 @@ import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
+import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,48 +40,56 @@ import java.util.Set;
 @ApplicationPath("/api/secom2/")
 public class SecomJaxrsApplication extends Application {
 
-    /**
-     * Initialise the SECOM object mapping operation with the Springboot object
-     * mapper.
-     *
-     * @param objectMapper the autowired object mapper
-     * @return the object mapper provider
-     */
-    @Bean("secomV2ObjectMapperProvider")
-    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new SecomObjectMapperProvider(objectMapper);
-    }
+    @Autowired
+    ObjectMapper objectMapper;
 
-    /**
-     * Initialise the ContainerType Converter Provider bean.
-     *
-     * @return the ContainerType Converter Provider bean
-     */
-    @Bean("secomV2ContainerTypeConverterProvider")
-    ContainerTypeConverterProvider containerTypeConverterProvider() {
-        return new ContainerTypeConverterProvider();
-    }
+    @Autowired(required = false)
+    SecomTrustStoreProvider trustStoreProvider;
 
-    /**
-     * Initialise the DigitalSignatureAlgorithmEnum Converter Provider bean.
-     *
-     * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
-     */
-    @Bean("secomV2DigitalSignatureAlgorithmConverterProvider")
-    DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
-        return new DigitalSignatureAlgorithmConverterProvider();
-    }
+    @Autowired(required = false)
+    SecomCompressionProvider compressionProvider;
+
+    @Autowired(required = false)
+    SecomEncryptionProvider encryptionProvider;
+
+    @Autowired(required = false)
+    SecomCertificateProvider certificateProvider;
+
+    @Autowired(required = false)
+    SecomSignatureProvider signatureProvider;
 
 //    /**
-//     * Initialise the Instant Converter Provider bean.
+//     * Initialise the SECOM object mapping operation with the Springboot object
+//     * mapper.
 //     *
-//     * @return the Instant Converter Provider bean
+//     * @param objectMapper the autowired object mapper
+//     * @return the object mapper provider
 //     */
-//    @Bean("secomV2InstantConverterProvider")
-//    InstantConverterProvider instantConverterProvider() {
-//        return new InstantConverterProvider();
+//    @Bean("secomV2ObjectMapperProvider")
+//    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
+//        return new SecomObjectMapperProvider(objectMapper);
 //    }
 //
+//    /**
+//     * Initialise the ContainerType Converter Provider bean.
+//     *
+//     * @return the ContainerType Converter Provider bean
+//     */
+//    @Bean("secomV2ContainerTypeConverterProvider")
+//    ContainerTypeConverterProvider containerTypeConverterProvider() {
+//        return new ContainerTypeConverterProvider();
+//    }
+//
+//    /**
+//     * Initialise the DigitalSignatureAlgorithmEnum Converter Provider bean.
+//     *
+//     * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
+//     */
+//    @Bean("secomV2DigitalSignatureAlgorithmConverterProvider")
+//    DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
+//        return new DigitalSignatureAlgorithmConverterProvider();
+//    }
+
 //    /**
 //     * Initialise the SECOM writer interceptor.
 //     *
@@ -129,7 +138,9 @@ public class SecomJaxrsApplication extends Application {
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
                 SecomExceptionMapper.class,
-                InstantToISOConverterProvider.class
+                InstantToISOConverterProvider.class,
+                ContainerTypeConverterProvider.class,
+                DigitalSignatureAlgorithmConverterProvider.class
         );
     }
 
@@ -144,7 +155,14 @@ public class SecomJaxrsApplication extends Application {
         corsFilter.getAllowedOrigins().add("*");
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
         corsFilter.setAllowCredentials(false);
-        return Collections.singleton(corsFilter);
+        return Set.of(
+                corsFilter,
+                new SecomObjectMapperProvider(objectMapper),
+                new SecomObjectMapperProvider(objectMapper),
+                new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider),
+                new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider),
+                new SecomReaderInterceptor(compressionProvider, encryptionProvider)
+        );
     }
 
 }

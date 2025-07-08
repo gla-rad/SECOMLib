@@ -30,7 +30,6 @@ import java.lang.reflect.Type;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class ContainerTypeConverterProvider implements ParamConverterProvider {
 
     // Class Variables
