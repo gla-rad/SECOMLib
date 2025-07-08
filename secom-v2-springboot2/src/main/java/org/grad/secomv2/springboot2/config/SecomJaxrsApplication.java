@@ -29,8 +29,6 @@ import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * JAX-RS application
@@ -73,15 +71,15 @@ public class SecomJaxrsApplication extends Application {
         return new DigitalSignatureAlgorithmConverterProvider();
     }
 
-    /**
-     * Initialise the Instant Converter Provider bean.
-     *
-     * @return the Instant Converter Provider bean
-     */
-    @Bean("secomV2InstantConverterProvider")
-    InstantConverterProvider instantConverterProvider() {
-        return new InstantConverterProvider();
-    }
+//    /**
+//     * Initialise the Instant Converter Provider bean.
+//     *
+//     * @return the Instant Converter Provider bean
+//     */
+//    @Bean("secomV2InstantConverterProvider")
+//    InstantConverterProvider instantConverterProvider() {
+//        return new InstantConverterProvider();
+//    }
 
     /**
      * Initialise the SECOM writer interceptor.
@@ -130,7 +128,8 @@ public class SecomJaxrsApplication extends Application {
         return Set.of(
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class
+                SecomExceptionMapper.class,
+                InstantToISOConverterProvider.class
         );
     }
 

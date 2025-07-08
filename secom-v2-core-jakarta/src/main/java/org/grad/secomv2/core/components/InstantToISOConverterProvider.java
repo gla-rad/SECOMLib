@@ -16,11 +16,10 @@
 
 package org.grad.secomv2.core.components;
 
+import jakarta.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.ParamConverterProvider;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 
-import javax.ws.rs.ext.ParamConverter;
-import javax.ws.rs.ext.ParamConverterProvider;
-import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.*;
@@ -32,8 +31,7 @@ import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTE
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
-public class InstantConverterProvider implements ParamConverterProvider {
+public class InstantToISOConverterProvider implements ParamConverterProvider {
 
     // Class Variables
     private final InstantConverter converter = new InstantConverter();
