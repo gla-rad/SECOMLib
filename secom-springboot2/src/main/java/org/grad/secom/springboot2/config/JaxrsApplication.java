@@ -74,16 +74,6 @@ public class JaxrsApplication extends Application {
     }
 
     /**
-     * Initialise the Instant Converter Provider bean.
-     *
-     * @return the Instant Converter Provider bean
-     */
-    @Bean()
-    InstantConverterProvider instantConverterProvider() {
-        return new InstantConverterProvider();
-    }
-
-    /**
      * Initialise the SECOM writer interceptor.
      *
      * @return the SECOM writer interceptor bean
@@ -130,7 +120,8 @@ public class JaxrsApplication extends Application {
         return Set.of(
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class
+                SecomExceptionMapper.class,
+                InstantConverterProvider.class
         );
     }
 

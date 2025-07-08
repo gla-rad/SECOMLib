@@ -32,7 +32,6 @@ import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class InstantConverterProvider implements ParamConverterProvider {
 
     // Class Variables

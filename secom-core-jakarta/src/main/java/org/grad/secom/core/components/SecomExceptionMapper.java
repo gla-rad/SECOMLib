@@ -49,7 +49,6 @@ import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIP
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class SecomExceptionMapper implements ExceptionMapper<Exception> {
 
     /**
