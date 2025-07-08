@@ -26,6 +26,7 @@ import jakarta.ws.rs.ext.Provider;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 public class SecomObjectMapperProvider implements ContextResolver<ObjectMapper> {
 
     // Class Variables

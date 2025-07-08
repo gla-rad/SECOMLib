@@ -58,17 +58,17 @@ public class SecomJaxrsApplication extends Application {
     @Autowired(required = false)
     SecomSignatureProvider signatureProvider;
 
-//    /**
-//     * Initialise the SECOM object mapping operation with the Springboot object
-//     * mapper.
-//     *
-//     * @param objectMapper the autowired object mapper
-//     * @return the object mapper provider
-//     */
-//    @Bean("secomV2ObjectMapperProvider")
-//    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
-//        return new SecomObjectMapperProvider(objectMapper);
-//    }
+    /**
+     * Initialise the SECOM object mapping operation with the Springboot object
+     * mapper.
+     *
+     * @param objectMapper the autowired object mapper
+     * @return the object mapper provider
+     */
+    @Bean("secomV2ObjectMapperProvider")
+    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
+        return new SecomObjectMapperProvider(objectMapper);
+    }
 //
 //    /**
 //     * Initialise the ContainerType Converter Provider bean.
@@ -90,42 +90,42 @@ public class SecomJaxrsApplication extends Application {
 //        return new DigitalSignatureAlgorithmConverterProvider();
 //    }
 
-//    /**
-//     * Initialise the SECOM writer interceptor.
-//     *
-//     * @return the SECOM writer interceptor bean
-//     */
-//    @Bean("secomv2WriterInterceptor")
-//    SecomWriterInterceptor secomWriterInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
-//                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
-//                                                  @Autowired(required = false) SecomCertificateProvider certificateProvider,
-//                                                  @Autowired(required = false) SecomSignatureProvider signatureProvider) {
-//        return new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider);
-//    }
-//
-//    /**
-//     * Initialise the SECOM signature filter.
-//     *
-//     * @return the SECOM signature filter bean
-//     */
-//    @Bean("secomV2SignatureFilter")
-//    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCompressionProvider compressionProvider,
-//                                              @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
-//                                              @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
-//                                              @Autowired(required = false) SecomSignatureProvider signatureProvider) {
-//        return new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider);
-//    }
-//
-//    /**
-//     * Initialise the SECOM reader interceptor.
-//     *
-//     * @return the SECOM reader interceptor bean
-//     */
-//    @Bean("secomV2ReaderInterceptor")
-//    SecomReaderInterceptor secomReaderInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
-//                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider) {
-//        return new SecomReaderInterceptor(compressionProvider, encryptionProvider);
-//    }
+    /**
+     * Initialise the SECOM writer interceptor.
+     *
+     * @return the SECOM writer interceptor bean
+     */
+    @Bean("secomv2WriterInterceptor")
+    SecomWriterInterceptor secomWriterInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
+                                                  @Autowired(required = false) SecomCertificateProvider certificateProvider,
+                                                  @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider);
+    }
+
+    /**
+     * Initialise the SECOM signature filter.
+     *
+     * @return the SECOM signature filter bean
+     */
+    @Bean("secomV2SignatureFilter")
+    SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                              @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
+                                              @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
+                                              @Autowired(required = false) SecomSignatureProvider signatureProvider) {
+        return new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider);
+    }
+
+    /**
+     * Initialise the SECOM reader interceptor.
+     *
+     * @return the SECOM reader interceptor bean
+     */
+    @Bean("secomV2ReaderInterceptor")
+    SecomReaderInterceptor secomReaderInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
+                                                  @Autowired(required = false) SecomEncryptionProvider encryptionProvider) {
+        return new SecomReaderInterceptor(compressionProvider, encryptionProvider);
+    }
 
     /**
      * Register the required classes to the RESTEasy server.
@@ -156,11 +156,11 @@ public class SecomJaxrsApplication extends Application {
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
         corsFilter.setAllowCredentials(false);
         return Set.of(
-                corsFilter,
-                new SecomObjectMapperProvider(objectMapper),
-                new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider),
-                new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider),
-                new SecomReaderInterceptor(compressionProvider, encryptionProvider)
+                corsFilter
+//                new SecomObjectMapperProvider(objectMapper),
+//                new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider),
+//                new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider),
+//                new SecomReaderInterceptor(compressionProvider, encryptionProvider)
         );
     }
 
