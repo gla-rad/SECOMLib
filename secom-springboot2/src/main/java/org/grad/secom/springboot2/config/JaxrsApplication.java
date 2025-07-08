@@ -27,10 +27,7 @@ import org.springframework.context.annotation.*;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
-import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * JAX-RS application
@@ -51,26 +48,6 @@ public class JaxrsApplication extends Application {
     @Bean
     SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
         return new SecomObjectMapperProvider(objectMapper);
-    }
-
-    /**
-     * Initialise the ContainerType Converter Provider bean.
-     *
-     * @return the ContainerType Converter Provider bean
-     */
-    @Bean()
-    ContainerTypeConverterProvider containerTypeConverterProvider() {
-        return new ContainerTypeConverterProvider();
-    }
-
-    /**
-     * Initialise the DigitalSignatureAlgorithmEnum Converter Provider bean.
-     *
-     * @return the DigitalSignatureAlgorithmEnum Converter Provider bean
-     */
-    @Bean()
-    DigitalSignatureAlgorithmConverterProvider digitalSignatureAlgorithmConverterProvider() {
-        return new DigitalSignatureAlgorithmConverterProvider();
     }
 
     /**
@@ -121,7 +98,9 @@ public class JaxrsApplication extends Application {
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
                 SecomExceptionMapper.class,
-                InstantConverterProvider.class
+                InstantToS100ConverterProvider.class,
+                ContainerTypeConverterProvider.class,
+                DigitalSignatureAlgorithmConverterProvider.class
         );
     }
 
@@ -136,7 +115,9 @@ public class JaxrsApplication extends Application {
         corsFilter.getAllowedOrigins().add("*");
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
         corsFilter.setAllowCredentials(false);
-        return Collections.singleton(corsFilter);
+        return Set.of(
+                corsFilter
+        );
     }
 
 }

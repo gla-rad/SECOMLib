@@ -16,11 +16,11 @@
 
 package org.grad.secom.core.components;
 
-import jakarta.ws.rs.ext.ParamConverter;
-import jakarta.ws.rs.ext.ParamConverterProvider;
-import jakarta.ws.rs.ext.Provider;
 import org.grad.secom.core.exceptions.SecomValidationException;
 
+import javax.ws.rs.ext.ParamConverter;
+import javax.ws.rs.ext.ParamConverterProvider;
+import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.*;
@@ -28,11 +28,12 @@ import java.time.*;
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
 /**
- * The Instant Converter Provider.
+ * The Instant Format Converter Provider.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class InstantConverterProvider implements ParamConverterProvider {
+@Provider
+public class InstantToS100ConverterProvider implements ParamConverterProvider {
 
     // Class Variables
     private final InstantConverter converter = new InstantConverter();
