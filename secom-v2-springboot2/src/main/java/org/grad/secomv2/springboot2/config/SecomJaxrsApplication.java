@@ -157,7 +157,6 @@ public class SecomJaxrsApplication extends Application {
         return Set.of(
                 corsFilter,
                 new SecomObjectMapperProvider(objectMapper),
-                new SecomObjectMapperProvider(objectMapper),
                 new SecomWriterInterceptor(compressionProvider, encryptionProvider, certificateProvider, signatureProvider),
                 new SecomSignatureFilter(compressionProvider, encryptionProvider, trustStoreProvider, signatureProvider),
                 new SecomReaderInterceptor(compressionProvider, encryptionProvider)

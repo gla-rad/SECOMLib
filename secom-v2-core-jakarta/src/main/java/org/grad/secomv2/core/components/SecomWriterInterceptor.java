@@ -94,6 +94,7 @@ public class SecomWriterInterceptor implements WriterInterceptor {
         // Sanity Check
         if(!this.request.getPathInfo().startsWith("/" + SecomConstants.SECOM_VERSION)) {
             ctx.proceed();
+            return;
         }
 
         // First pick up the interceptor context
