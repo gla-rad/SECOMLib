@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.ws.rs.*;
 import org.grad.secom.core.base.SecomConstants;
+import org.grad.secom.core.base.SecomV1Param;
 import org.grad.secom.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secom.core.exceptions.SecomNotFoundException;
 import org.grad.secom.core.exceptions.SecomValidationException;
@@ -74,13 +75,13 @@ public interface GetSummarySecomInterface extends GenericSecomInterface {
     @Path(GET_SUMMARY_INTERFACE_PATH)
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    GetSummaryResponseObject getSummary(@QueryParam("containerType") ContainerTypeEnum containerType,
-                                        @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
+    GetSummaryResponseObject getSummary(@QueryParam("containerType") @SecomV1Param ContainerTypeEnum containerType,
+                                        @QueryParam("dataProductType") @SecomV1Param SECOM_DataProductType dataProductType,
                                         @QueryParam("productVersion") String productVersion,
                                         @QueryParam("geometry") String geometry,
                                         @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
-                                        @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validFrom,
-                                        @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) Instant validTo,
+                                        @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) @SecomV1Param Instant validFrom,
+                                        @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) @SecomV1Param Instant validTo,
                                         @QueryParam("page") @Min(0) Integer page,
                                         @QueryParam("pageSize") @Min(0) Integer pageSize);
 

@@ -19,11 +19,16 @@ package org.grad.secom.core.components;
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
 import jakarta.ws.rs.ext.Provider;
+import org.grad.secom.core.base.SecomV1Param;
 import org.grad.secom.core.exceptions.SecomValidationException;
+import org.grad.secom.core.models.enums.ContainerTypeEnum;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.*;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.grad.secom.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
@@ -48,7 +53,8 @@ public class InstantToS100ConverterProvider implements ParamConverterProvider {
      */
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
-        if (!aClass.equals(Instant.class)) return null;
+        final Set<Class<?>> annotationClasses = Stream.of(annotations).map(Annotation::annotationType).collect(Collectors.toSet());
+        if (!aClass.equals(Instant.class) || !annotationClasses.contains(SecomV1Param.class)) return null;
         return (ParamConverter<T>) converter;
     }
 
