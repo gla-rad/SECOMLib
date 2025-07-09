@@ -49,7 +49,6 @@ import java.util.Base64;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class SecomWriterInterceptor implements WriterInterceptor {
 
     // Class Variables
