@@ -34,7 +34,7 @@ import org.springframework.web.filter.CommonsRequestLoggingFilter;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-public class SecomRequestLoggingFilterConfig {
+public class SecomV2RequestLoggingFilterConfig {
 
     /**
      * Registers the secomRequestLogging bean using the built-in functionality
