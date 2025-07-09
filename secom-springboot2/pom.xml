@@ -28,7 +28,7 @@
     <version>0.0.53-SNAPSHOT</version>
 
     <properties>
-        <springframework.version>5.3.29</springframework.version>
+        <springframework.version>5.3.39</springframework.version>
         <resteasy-spring-boot.version>5.1.0.Final</resteasy-spring-boot.version>
         <swagger.version>2.2.30</swagger.version>
     </properties>
