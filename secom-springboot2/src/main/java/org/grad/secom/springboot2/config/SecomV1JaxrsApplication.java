@@ -39,18 +39,6 @@ import java.util.Set;
 @ApplicationPath("/api/secom/")
 public class SecomV1JaxrsApplication extends Application {
 
-    @Autowired ObjectMapper objectMapper;
-
-    @Autowired(required = false) SecomCompressionProvider compressionProvider;
-
-    @Autowired(required = false) SecomEncryptionProvider encryptionProvider;
-
-    @Autowired(required = false) SecomCertificateProvider certificateProvider;
-
-    @Autowired(required = false) SecomSignatureProvider signatureProvider;
-
-    @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider;
-
     /**
      * Initialise the SECOM object mapping operation with the Springboot object
      * mapper.
