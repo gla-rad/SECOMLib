@@ -35,7 +35,7 @@ import java.util.Set;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-@ApplicationPath("/api2/secom/")
+@ApplicationPath("/api/secom2/")
 public class SecomV2JaxrsApplication extends Application {
 
     @Autowired

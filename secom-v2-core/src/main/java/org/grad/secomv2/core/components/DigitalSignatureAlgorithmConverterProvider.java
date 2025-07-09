@@ -52,7 +52,7 @@ public class DigitalSignatureAlgorithmConverterProvider implements ParamConverte
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
         final Set<Class<?>> annotationClasses = Stream.of(annotations).map(Annotation::annotationType).collect(Collectors.toSet());
-        if (!aClass.equals(ContainerTypeEnum.class) || !annotationClasses.contains(SecomV2Param.class)) return null;
+        if (!aClass.equals(DigitalSignatureAlgorithmEnum.class) || !annotationClasses.contains(SecomV2Param.class)) return null;
         return (ParamConverter<T>) converter;
     }
 
