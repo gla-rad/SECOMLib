@@ -39,17 +39,19 @@ import java.util.Set;
 @ApplicationPath("/api/secom/")
 public class JaxrsApplication extends Application {
 
-    /**
-     * Initialise the SECOM object mapping operation with the Springboot object
-     * mapper.
-     *
-     * @param objectMapper the autowired object mapper
-     * @return the object mapper provider
-     */
-    @Bean()
-    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new SecomObjectMapperProvider(objectMapper);
-    }
+    @Autowired ObjectMapper objectMapper;
+
+//    /**
+//     * Initialise the SECOM object mapping operation with the Springboot object
+//     * mapper.
+//     *
+//     * @param objectMapper the autowired object mapper
+//     * @return the object mapper provider
+//     */
+//    @Bean()
+//    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
+//        return new SecomObjectMapperProvider(objectMapper);
+//    }
 
     /**
      * Initialise the SECOM writer interceptor.
@@ -97,11 +99,7 @@ public class JaxrsApplication extends Application {
     public Set<Class<?>> getClasses() {
         return Set.of(
                 OpenApiResource.class,
-                AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class,
-                InstantToS100ConverterProvider.class,
-                ContainerTypeConverterProvider.class,
-                DigitalSignatureAlgorithmConverterProvider.class
+                AcceptHeaderOpenApiResource.class
         );
     }
 
@@ -117,7 +115,12 @@ public class JaxrsApplication extends Application {
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
         corsFilter.setAllowCredentials(false);
         return Set.of(
-                corsFilter
+                corsFilter,
+                new SecomObjectMapperProvider(objectMapper),
+                new SecomExceptionMapper(),
+                new InstantToS100ConverterProvider(),
+                new ContainerTypeConverterProvider(),
+                new DigitalSignatureAlgorithmConverterProvider()
         );
     }
 

@@ -31,7 +31,6 @@ import java.lang.reflect.Type;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class DigitalSignatureAlgorithmConverterProvider implements ParamConverterProvider {
 
     // Class Variables
