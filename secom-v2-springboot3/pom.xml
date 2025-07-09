@@ -15,7 +15,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <properties>
-        <springframework3.version>6.2.5</springframework3.version>
+        <springframework3.version>6.2.8</springframework3.version>
         <resteasy-spring-boot.version>6.3.0.Final</resteasy-spring-boot.version>
         <swagger.version>2.2.30</swagger.version>
     </properties>

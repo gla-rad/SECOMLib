@@ -57,6 +57,7 @@ import java.nio.charset.StandardCharsets;
  * </p>
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 public class SecomReaderInterceptor implements ReaderInterceptor {
 
     /**
@@ -101,7 +102,6 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
         if(!this.request.getContextPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
             return ctx.proceed();
         }
-
 
         // Start with an empty object
         InputStream is = ctx.getInputStream();

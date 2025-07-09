@@ -51,6 +51,7 @@ import java.util.Base64;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 public class SecomWriterInterceptor implements WriterInterceptor {
 
     /**
@@ -96,7 +97,6 @@ public class SecomWriterInterceptor implements WriterInterceptor {
             ctx.proceed();
             return;
         }
-
 
         // First pick up the interceptor context
         final Object entity = ctx.getEntity();
