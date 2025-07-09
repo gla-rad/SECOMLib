@@ -39,17 +39,7 @@ import java.util.Set;
 @ApplicationPath("/api/secom2/")
 public class SecomV2JaxrsApplication extends Application {
 
-    /**
-     * Initialise the SECOM object mapping operation with the Springboot object
-     * mapper.
-     *
-     * @param objectMapper the autowired object mapper
-     * @return the object mapper provider
-     */
-    @Bean("secomV2ObjectMapperProvider")
-    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new SecomObjectMapperProvider(objectMapper);
-    }
+    @Autowired ObjectMapper objectMapper;
 
     /**
      * Initialise the SECOM writer interceptor.
@@ -114,6 +104,7 @@ public class SecomV2JaxrsApplication extends Application {
         corsFilter.setAllowCredentials(false);
         return Set.of(
                 corsFilter,
+                new SecomObjectMapperProvider(objectMapper),
                 /*
                  * Add the JaxRS Application Exception Handler.
                  */
