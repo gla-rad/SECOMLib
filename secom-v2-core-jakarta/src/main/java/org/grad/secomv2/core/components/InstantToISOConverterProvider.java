@@ -18,11 +18,16 @@ package org.grad.secomv2.core.components;
 
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
+import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.time.*;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
 
@@ -47,7 +52,8 @@ public class InstantToISOConverterProvider implements ParamConverterProvider {
      */
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
-        if (!aClass.equals(Instant.class)) return null;
+        final Set<Class<?>> annotationClasses = Stream.of(annotations).map(Annotation::annotationType).collect(Collectors.toSet());
+        if (!aClass.equals(ContainerTypeEnum.class) || !annotationClasses.contains(SecomV2Param.class)) return null;
         return (ParamConverter<T>) converter;
     }
 

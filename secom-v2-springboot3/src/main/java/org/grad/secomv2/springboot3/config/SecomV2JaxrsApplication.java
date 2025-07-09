@@ -25,7 +25,7 @@ import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.Set;
 
@@ -34,8 +34,8 @@ import java.util.Set;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Component
-@ApplicationPath("/api/secom2/")
+@Configuration
+@ApplicationPath("/api2/secom/")
 public class SecomV2JaxrsApplication extends Application {
 
     @Autowired

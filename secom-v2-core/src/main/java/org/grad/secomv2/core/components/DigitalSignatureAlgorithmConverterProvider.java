@@ -16,7 +16,9 @@
 
 package org.grad.secomv2.core.components;
 
+import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 
 import javax.ws.rs.ext.ParamConverter;
@@ -24,6 +26,9 @@ import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * The DigitalSignatureAlgorithm Converter Provider.
@@ -46,7 +51,8 @@ public class DigitalSignatureAlgorithmConverterProvider implements ParamConverte
      */
     @Override
     public <T> ParamConverter<T> getConverter(Class<T> aClass, Type type, Annotation[] annotations) {
-        if (!aClass.equals(DigitalSignatureAlgorithmEnum.class)) return null;
+        final Set<Class<?>> annotationClasses = Stream.of(annotations).map(Annotation::annotationType).collect(Collectors.toSet());
+        if (!aClass.equals(ContainerTypeEnum.class) || !annotationClasses.contains(SecomV2Param.class)) return null;
         return (ParamConverter<T>) converter;
     }
 
