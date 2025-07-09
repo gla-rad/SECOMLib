@@ -57,6 +57,7 @@ import java.nio.charset.StandardCharsets;
  * </p>
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 public class SecomReaderInterceptor implements ReaderInterceptor {
 
     /**

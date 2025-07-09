@@ -56,6 +56,7 @@ import java.util.Optional;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 @PreMatching
 public class SecomSignatureFilter implements ContainerRequestFilter {
 

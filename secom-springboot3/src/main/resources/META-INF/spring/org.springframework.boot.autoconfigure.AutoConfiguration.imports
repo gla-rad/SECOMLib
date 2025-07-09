@@ -1,4 +1,4 @@
-org.grad.secom.springboot3.config.JaxrsApplication
+org.grad.secom.springboot3.config.SecomV1JaxrsApplication
 org.grad.secom.springboot3.config.SecomRequestLoggingFilterConfig
 org.grad.secom.springboot3.components.SecomConfigProperties
 org.grad.secom.springboot3.components.SecomSpringContext
