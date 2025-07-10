@@ -21,16 +21,21 @@ import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;
+import jakarta.ws.rs.ext.ExceptionMapper;
 import org.grad.secom.core.base.*;
 import org.grad.secom.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * JAX-RS application
@@ -39,13 +44,12 @@ import java.util.Set;
  */
 @Configuration
 @ApplicationPath("/api/secom/")
-public class SecomV1JaxrsApplication extends Application {
+public class SecomV1JaxrsApplication extends Application implements ApplicationContextAware {
 
     /**
      * The Springboot Application Context.
      */
-    @Autowired
-    ApplicationContext context;
+    private ApplicationContext applicationContext;
 
     /**
      * Autowiring the Springboot Object Mapper
@@ -53,15 +57,15 @@ public class SecomV1JaxrsApplication extends Application {
     @Autowired
     ObjectMapper objectMapper;
 
-//    /**
-//     * Initialise the SECOM exception mapper.
-//     *
-//     * @return the SECOM exception mapper bean
-//     */
-//    @Bean
-//    SecomExceptionMapper secomExceptionMapper() {
-//        return new SecomExceptionMapper(this);
-//    }
+    /**
+     * Initialise the SECOM exception mapper.
+     *
+     * @return the SECOM exception mapper bean
+     */
+    @Bean("secomV1ExceptionMapper")
+    SecomExceptionMapper secomExceptionMapper() {
+        return new SecomExceptionMapper(this);
+    }
 
     /**
      * Initialise the SECOM writer interceptor.
@@ -110,7 +114,12 @@ public class SecomV1JaxrsApplication extends Application {
         return Set.of(
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class
+                /*
+                 * Add the JaxRS Application Providers.
+                 */
+                InstantToS100ConverterProvider.class,
+                ContainerTypeConverterProvider.class,
+                DigitalSignatureAlgorithmConverterProvider.class
         );
     }
 
@@ -127,19 +136,49 @@ public class SecomV1JaxrsApplication extends Application {
         corsFilter.setAllowCredentials(false);
         return Set.of(
                 corsFilter,
-                new SecomObjectMapperProvider(objectMapper),
                 /*
-                 * Add the JaxRS Application Providers.
+                 * Add the JaxRS Application Object Mapper.
                  */
-                new InstantToS100ConverterProvider(),
-                new ContainerTypeConverterProvider(),
-                new DigitalSignatureAlgorithmConverterProvider()
+                new SecomObjectMapperProvider(Optional.ofNullable(objectMapper)
+                        .orElse(new ObjectMapper()))
         );
     }
 
+    /**
+     * Returns the properties of the JaxRS application. This is actually
+     * also used internally to provide access to all registered RestEasy
+     * Exception mappers.
+     *
+     * @return the set of properties to be registered
+     */
     @Override
     public Map<String, Object> getProperties() {
-        return Map.of(SecomConstants.SECOM_VERSION, new SecomExceptionMapper());
+        return applicationContext.getBeansOfType(ExceptionMapper.class)
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    /**
+     * Allows the retrieval of the Springboot application context.
+     *
+     * @return the Springboot application context
+     */
+    public ApplicationContext setApplicationContext() {
+        return this.applicationContext;
+    }
+
+    /**
+     * Implements the setApplicationContext() function of the Springboot
+     * ApplicationContextAware interface so that the JaxRS application can
+     * have access to the application context.
+     *
+     * @param applicationContext the Springboot application context
+     * @throws BeansException if an exception on the bean generation is thrown
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
 }

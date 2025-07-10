@@ -49,10 +49,11 @@ import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIP
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Provider
 public class SecomExceptionMapper implements ExceptionMapper<Exception> {
 
     // Class Variables
-//    private Application application;
+    private Application application;
 
     /**
      * The Request Context.
@@ -72,14 +73,14 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     @Context
     UriInfo uriInfo;
 
-//    /**
-//     * A constructor to return a reference to the application being served.
-//     *
-//     * @param application the application being served.
-//     */
-//    public SecomExceptionMapper(Application application) {
-//        this.application = application;
-//    }
+    /**
+     * A constructor to return a reference to the application being served.
+     *
+     * @param application the application being served.
+     */
+    public SecomExceptionMapper(Application application) {
+        this.application = application;
+    }
 
     /**
      * Generate the response based on the exceptions thrown by the respective
