@@ -60,19 +60,13 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception>, Context
      * The JAX-RS Providers Context.
      */
     @Context
-    Providers providers;
+    private Providers providers;
 
     /**
      * The Request Context.
      */
     @Context
     private HttpServletRequest request;
-
-    /**
-     * The Request Header.
-     */
-    @Context
-    private HttpHeaders headers;
 
     /**
      * The Request URI Information.
