@@ -25,9 +25,11 @@ import org.grad.secom.core.base.*;
 import org.grad.secom.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,23 +42,33 @@ import java.util.Set;
 public class SecomV1JaxrsApplication extends Application {
 
     /**
-     * Initialise the SECOM object mapping operation with the Springboot object
-     * mapper.
-     *
-     * @param objectMapper the autowired object mapper
-     * @return the object mapper provider
+     * The Springboot Application Context.
      */
-    @Bean()
-    SecomObjectMapperProvider secomObjectMapperProvider(@Autowired ObjectMapper objectMapper) {
-        return new SecomObjectMapperProvider(objectMapper);
-    }
+    @Autowired
+    ApplicationContext context;
+
+    /**
+     * Autowiring the Springboot Object Mapper
+     */
+    @Autowired
+    ObjectMapper objectMapper;
+
+//    /**
+//     * Initialise the SECOM exception mapper.
+//     *
+//     * @return the SECOM exception mapper bean
+//     */
+//    @Bean
+//    SecomExceptionMapper secomExceptionMapper() {
+//        return new SecomExceptionMapper(this);
+//    }
 
     /**
      * Initialise the SECOM writer interceptor.
      *
      * @return the SECOM writer interceptor bean
      */
-    @Bean
+    @Bean("secomV1WriterInterceptor")
     SecomWriterInterceptor secomWriterInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                                   @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
                                                   @Autowired(required = false) SecomCertificateProvider certificateProvider,
@@ -69,7 +81,7 @@ public class SecomV1JaxrsApplication extends Application {
      *
      * @return the SECOM signature filter bean
      */
-    @Bean
+    @Bean("secomV1SignatureFilter")
     SecomSignatureFilter secomSignatureFilter(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                               @Autowired(required = false) SecomEncryptionProvider encryptionProvider,
                                               @Autowired(required = false) SecomTrustStoreProvider trustStoreProvider,
@@ -82,7 +94,7 @@ public class SecomV1JaxrsApplication extends Application {
      *
      * @return the SECOM reader interceptor bean
      */
-    @Bean
+    @Bean("secomV1ReaderInterceptor")
     SecomReaderInterceptor secomReaderInterceptor(@Autowired(required = false) SecomCompressionProvider compressionProvider,
                                                   @Autowired(required = false) SecomEncryptionProvider encryptionProvider) {
         return new SecomReaderInterceptor(compressionProvider, encryptionProvider);
@@ -97,7 +109,8 @@ public class SecomV1JaxrsApplication extends Application {
     public Set<Class<?>> getClasses() {
         return Set.of(
                 OpenApiResource.class,
-                AcceptHeaderOpenApiResource.class
+                AcceptHeaderOpenApiResource.class,
+                SecomExceptionMapper.class
         );
     }
 
@@ -114,10 +127,7 @@ public class SecomV1JaxrsApplication extends Application {
         corsFilter.setAllowCredentials(false);
         return Set.of(
                 corsFilter,
-                /*
-                 * Add the JaxRS Application Exception Handler.
-                 */
-                new SecomExceptionMapper(),
+                new SecomObjectMapperProvider(objectMapper),
                 /*
                  * Add the JaxRS Application Providers.
                  */
@@ -125,6 +135,11 @@ public class SecomV1JaxrsApplication extends Application {
                 new ContainerTypeConverterProvider(),
                 new DigitalSignatureAlgorithmConverterProvider()
         );
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return Map.of(SecomConstants.SECOM_VERSION, new SecomExceptionMapper());
     }
 
 }

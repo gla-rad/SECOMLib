@@ -16,15 +16,16 @@
 
 package org.grad.secom.core.components;
 
+import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.ext.Provider;
+import jakarta.ws.rs.ext.Providers;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.grad.secom.core.exceptions.SecomGenericException;
 import org.grad.secom.core.interfaces.*;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.core.Context;
-import jakarta.ws.rs.core.HttpHeaders;
-import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -33,7 +34,6 @@ import static org.grad.secom.core.interfaces.AccessNotificationSecomInterface.AC
 import static org.grad.secom.core.interfaces.AccessSecomInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.AcknowledgementSecomInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.CapabilitySecomInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secom.core.interfaces.RemoveSubscriptionSecomInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.SearchServiceSecomInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeyNotifySecomInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secom.core.interfaces.EncryptionKeySecomInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -49,8 +49,10 @@ import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIP
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class SecomExceptionMapper implements ExceptionMapper<Exception> {
+
+    // Class Variables
+//    private Application application;
 
     /**
      * The Request Context.
@@ -65,14 +67,40 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     private HttpHeaders headers;
 
     /**
+     * The Request URI Information.
+     */
+    @Context
+    UriInfo uriInfo;
+
+//    /**
+//     * A constructor to return a reference to the application being served.
+//     *
+//     * @param application the application being served.
+//     */
+//    public SecomExceptionMapper(Application application) {
+//        this.application = application;
+//    }
+
+    /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
      *
-     * @param ex the exception that was thrownn
+     * @param ex the exception that was thrown
      * @return the response to be returned
      */
     @Override
     public Response toResponse(Exception ex) {
+        return this.genericResponse(ex);
+    }
+
+    /**
+     * Generate the response based on the exceptions thrown by the respective
+     * SECOM endpoint called. This can be extracted by the request context.
+     *
+     * @param ex the exception that was thrown
+     * @return the response to be returned
+     */
+    public Response genericResponse(Exception ex) {
         //First log the message
         final Logger secomLogger = Logger.getLogger(Optional.of(ex)
                         .map(Exception::getCause)

@@ -20,9 +20,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.grad.secom.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Objects;
@@ -48,8 +46,10 @@ import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIP
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Provider
 public class SecomExceptionMapper implements ExceptionMapper<Exception> {
+
+    // Class Variables
+//    private Application application;
 
     /**
      * The Request Context.
@@ -64,10 +64,25 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     private HttpHeaders headers;
 
     /**
+     * The Request URI Information.
+     */
+    @Context
+    UriInfo uriInfo;
+
+//    /**
+//     * A constructor to return a reference to the application being served.
+//     *
+//     * @param application the application being served.
+//     */
+//    public SecomExceptionMapper(Application application) {
+//        this.application = application;
+//    }
+
+    /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
      *
-     * @param ex the exception that was thrownn
+     * @param ex the exception that was thrown
      * @return the response to be returned
      */
     @Override

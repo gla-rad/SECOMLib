@@ -43,7 +43,7 @@ public class SecomV1RequestLoggingFilterConfig {
      *
      * @return the secomRequestLogging filter registration bean
      */
-    @Bean(name = "secomRequestLogging")
+    @Bean(name = "secomV1RequestLogging")
     public FilterRegistrationBean<CommonsRequestLoggingFilter> secomRequestLogging() {
         // Setup a commons request logging filter
         final CommonsRequestLoggingFilter secomRequestLoggingFilter = new CommonsRequestLoggingFilter() {
