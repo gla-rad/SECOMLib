@@ -58,6 +58,16 @@ public class SecomV2JaxrsApplication extends Application implements ApplicationC
     ObjectMapper objectMapper;
 
     /**
+     * Initialise the SECOM exception mapper.
+     *
+     * @return the SECOM exception mapper bean
+     */
+    @Bean("secomV2ExceptionMapper")
+    SecomExceptionMapper secomExceptionMapper() {
+        return new SecomExceptionMapper(this);
+    }
+
+    /**
      * Initialise the SECOM writer interceptor.
      *
      * @return the SECOM writer interceptor bean
@@ -104,7 +114,12 @@ public class SecomV2JaxrsApplication extends Application implements ApplicationC
         return Set.of(
                 OpenApiResource.class,
                 AcceptHeaderOpenApiResource.class,
-                SecomExceptionMapper.class
+                /*
+                 * Add the JaxRS Application Providers.
+                 */
+                InstantToISOConverterProvider.class,
+                ContainerTypeConverterProvider.class,
+                DigitalSignatureAlgorithmConverterProvider.class
         );
     }
 
