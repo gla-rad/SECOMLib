@@ -22,8 +22,10 @@ import org.grad.secom.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.*;
+import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import javax.ws.rs.ext.Providers;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -48,22 +50,22 @@ import static org.grad.secom.core.interfaces.SubscriptionSecomInterface.SUBSCRIP
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Provider
-public class SecomExceptionMapper implements ExceptionMapper<Exception> {
+public class SecomExceptionMapper implements ExceptionMapper<Exception>, ContextResolver<ExceptionMapper<Exception>> {
 
     // Class Variables
     private Application application;
+
+    /**
+     * The JAX-RS Providers Context.
+     */
+    @Context
+    private Providers providers;
 
     /**
      * The Request Context.
      */
     @Context
     private HttpServletRequest request;
-
-    /**
-     * The Request Header.
-     */
-    @Context
-    private HttpHeaders headers;
 
     /**
      * The Request URI Information.
@@ -164,6 +166,20 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(Response.Status.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .build();
+    }
+
+    /**
+     * Return the established exception mapper when required.
+     *
+     * @param type the type of the class to return the object mapper for
+     * @return the appropriate object mapper
+     */
+    @Override
+    public ExceptionMapper<Exception> getContext(Class<?> type) {
+        if (type.isInstance(ExceptionMapper.class)) {
+            return this;
+        }
+        return null;
     }
 
 }
