@@ -19,7 +19,6 @@ package org.grad.secomv2.springboot2.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;
 import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource;
-import org.checkerframework.checker.units.qual.A;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
@@ -44,19 +43,19 @@ import java.util.stream.Collectors;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Configuration
-@ApplicationPath("/api/secom2/")
+@ApplicationPath("/api/secom/")
 public class SecomV2JaxrsApplication extends Application implements ApplicationContextAware {
 
     /**
      * The Springboot Application Context.
      */
-    ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     /**
      * Autowiring the Springboot Object Mapper
      */
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     /**
      * Initialise the SECOM exception mapper.
@@ -155,7 +154,7 @@ public class SecomV2JaxrsApplication extends Application implements ApplicationC
      */
     @Override
     public Map<String, Object> getProperties() {
-        return applicationContext.getBeansOfType(ExceptionMapper.class)
+        return this.applicationContext.getBeansOfType(ExceptionMapper.class)
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -166,7 +165,7 @@ public class SecomV2JaxrsApplication extends Application implements ApplicationC
      *
      * @return the Springboot application context
      */
-    public ApplicationContext setApplicationContext() {
+    public ApplicationContext getApplicationContext() {
         return this.applicationContext;
     }
 

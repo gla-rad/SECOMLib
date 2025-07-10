@@ -17,6 +17,8 @@
 package org.grad.secomv2.core.components;
 
 import jakarta.ws.rs.core.*;
+import jakarta.ws.rs.ext.ContextResolver;
+import jakarta.ws.rs.ext.Providers;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,10 +51,16 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Provider
-public class SecomExceptionMapper implements ExceptionMapper<Exception> {
+public class SecomExceptionMapper implements ExceptionMapper<Exception>, ContextResolver<ExceptionMapper<Exception>> {
 
     // Class Variables
     private Application application;
+
+    /**
+     * The JAX-RS Providers Context.
+     */
+    @Context
+    Providers providers;
 
     /**
      * The Request Context.
@@ -167,4 +175,17 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
                 .build();
     }
 
+    /**
+     * Return the established exception mapper when required.
+     *
+     * @param type the type of the class to return the object mapper for
+     * @return the appropriate object mapper
+     */
+    @Override
+    public ExceptionMapper<Exception> getContext(Class<?> type) {
+        if (type.isInstance(ExceptionMapper.class)) {
+            return this;
+        }
+        return null;
+    }
 }
