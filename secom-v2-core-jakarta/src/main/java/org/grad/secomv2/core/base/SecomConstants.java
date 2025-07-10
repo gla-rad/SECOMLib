@@ -62,7 +62,7 @@ public class SecomConstants {
                 .toFormatter();
     }
 
-    public static final String SECOM_TIME_FORMAT = "HH:mm:ss.SS";
+    public static final String SECOM_TIME_FORMAT = "HH:mm:ss";
     public static final DateTimeFormatter SECOM_TIME_FORMATTER;
     static {
         SECOM_TIME_FORMATTER = new DateTimeFormatterBuilder()

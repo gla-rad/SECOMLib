@@ -88,7 +88,7 @@ class SecomInstantSerializerTest {
         // Make sure it seems fine
         assertNotNull(result);
         assertEquals(1, result.size());
-        assertTrue(result.get("date").matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2}).(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
+        assertTrue(result.get("date").matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
 
 }
