@@ -17,13 +17,11 @@
 package org.grad.secomv2.core.components;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.util.Objects;
@@ -52,6 +50,9 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
  */
 public class SecomExceptionMapper implements ExceptionMapper<Exception> {
 
+    // Class Variables
+    private Application application;
+
     /**
      * The Request Context.
      */
@@ -71,6 +72,15 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     UriInfo uriInfo;
 
     /**
+     * A constructor to return a reference to the application being served.
+     *
+     * @param application the application being served.
+     */
+    public SecomExceptionMapper(Application application) {
+        this.application = application;
+    }
+
+    /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
      *
@@ -80,7 +90,7 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception ex) {
         // This is not our error, propagate
-        if(!Objects.equals(uriInfo.getBaseUri().getPath(), "/api/secom2/")) {
+        if(!uriInfo.getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
             throw new RuntimeException(ex);
         }
 

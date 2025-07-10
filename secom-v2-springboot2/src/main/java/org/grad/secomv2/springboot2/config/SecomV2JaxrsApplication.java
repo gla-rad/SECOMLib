@@ -23,13 +23,20 @@ import org.checkerframework.checker.units.qual.A;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.components.*;
 import org.jboss.resteasy.plugins.interceptors.CorsFilter;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * JAX-RS application
@@ -38,9 +45,18 @@ import java.util.Set;
  */
 @Configuration
 @ApplicationPath("/api/secom2/")
-public class SecomV2JaxrsApplication extends Application {
+public class SecomV2JaxrsApplication extends Application implements ApplicationContextAware {
 
-    @Autowired ObjectMapper objectMapper;
+    /**
+     * The Springboot Application Context.
+     */
+    ApplicationContext applicationContext;
+
+    /**
+     * Autowiring the Springboot Object Mapper
+     */
+    @Autowired
+    ObjectMapper objectMapper;
 
     /**
      * Initialise the SECOM writer interceptor.
@@ -106,14 +122,50 @@ public class SecomV2JaxrsApplication extends Application {
         corsFilter.setAllowCredentials(false);
         return Set.of(
                 corsFilter,
-                new SecomObjectMapperProvider(objectMapper),
                 /*
-                 * Add the JaxRS Application Providers.
+                 * Add the JaxRS Application Object Mapper.
                  */
-                new InstantToISOConverterProvider(),
-                new ContainerTypeConverterProvider(),
-                new DigitalSignatureAlgorithmConverterProvider()
+                new SecomObjectMapperProvider(Optional.ofNullable(this.objectMapper)
+                        .orElse(new ObjectMapper()))
         );
+    }
+
+
+    /**
+     * Returns the properties of the JaxRS application. This is actually
+     * also used internally to provide access to all registered RestEasy
+     * Exception mappers.
+     *
+     * @return the set of properties to be registered
+     */
+    @Override
+    public Map<String, Object> getProperties() {
+        return applicationContext.getBeansOfType(ExceptionMapper.class)
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    /**
+     * Allows the retrieval of the Springboot application context.
+     *
+     * @return the Springboot application context
+     */
+    public ApplicationContext setApplicationContext() {
+        return this.applicationContext;
+    }
+
+    /**
+     * Implements the setApplicationContext() function of the Springboot
+     * ApplicationContextAware interface so that the JaxRS application can
+     * have access to the application context.
+     *
+     * @param applicationContext the Springboot application context
+     * @throws BeansException if an exception on the bean generation is thrown
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
 }
