@@ -49,13 +49,13 @@ public class SecomV1JaxrsApplication extends Application implements ApplicationC
     /**
      * The Springboot Application Context.
      */
-    ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     /**
      * Autowiring the Springboot Object Mapper
      */
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     /**
      * Initialise the SECOM exception mapper.
@@ -139,12 +139,8 @@ public class SecomV1JaxrsApplication extends Application implements ApplicationC
                 /*
                  * Add the JaxRS Application Object Mapper.
                  */
-                new SecomObjectMapperProvider(Optional.ofNullable(objectMapper)
+                new SecomObjectMapperProvider(Optional.ofNullable(this.objectMapper)
                         .orElse(new ObjectMapper()))
-//                /*
-//                 * Add the JaxRS Application Exception Mapper.
-//                 */
-//                new SecomExceptionMapper(this)
         );
     }
 
@@ -157,7 +153,7 @@ public class SecomV1JaxrsApplication extends Application implements ApplicationC
      */
     @Override
     public Map<String, Object> getProperties() {
-        return applicationContext.getBeansOfType(ExceptionMapper.class)
+        return this.applicationContext.getBeansOfType(ExceptionMapper.class)
                 .entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
@@ -168,7 +164,7 @@ public class SecomV1JaxrsApplication extends Application implements ApplicationC
      *
      * @return the Springboot application context
      */
-    public ApplicationContext setApplicationContext() {
+    public ApplicationContext getApplicationContext() {
         return this.applicationContext;
     }
 

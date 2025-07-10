@@ -69,7 +69,7 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      * The Request URI Information.
      */
     @Context
-    UriInfo uriInfo;
+    private UriInfo uriInfo;
 
     /**
      * A constructor to return a reference to the application being served.
@@ -90,8 +90,16 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     @Override
     public Response toResponse(Exception ex) {
         // This is not our error, propagate
-        if(!uriInfo.getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
-            throw new RuntimeException(ex);
+        if(!this.uriInfo.getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            final PathSegment secomVersion = uriInfo.getPathSegments().getFirst();
+            final ExceptionMapper<Exception> secomExceptionMapper = Optional.ofNullable(secomVersion)
+                    .map(PathSegment::toString)
+                    .map(String::toUpperCase)
+                    .map(v -> String.format("secom%sExceptionMapper", v))
+                    .map(this.application.getProperties()::get)
+                    .map(obj -> (ExceptionMapper<Exception>)obj)
+                    .orElseThrow(() -> new RuntimeException(ex));
+            return secomExceptionMapper.toResponse(ex);
         }
 
         //First log the message
