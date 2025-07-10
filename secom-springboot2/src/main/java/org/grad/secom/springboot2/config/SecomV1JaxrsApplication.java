@@ -63,8 +63,8 @@ public class SecomV1JaxrsApplication extends Application implements ApplicationC
      * @return the SECOM exception mapper bean
      */
     @Bean("secomV1ExceptionMapper")
-    SecomExceptionMapper secomExceptionMapper() {
-        return new SecomExceptionMapper(this);
+    SecomV1ExceptionMapper secomExceptionMapper() {
+        return new SecomV1ExceptionMapper(this);
     }
 
     /**
