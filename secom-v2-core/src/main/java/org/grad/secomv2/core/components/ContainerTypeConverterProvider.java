@@ -22,7 +22,6 @@ import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
-import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Set;

@@ -18,7 +18,6 @@ package org.grad.secomv2.core.components;
 
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;

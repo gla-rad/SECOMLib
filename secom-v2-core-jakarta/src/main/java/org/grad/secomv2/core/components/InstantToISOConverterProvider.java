@@ -20,7 +20,6 @@ import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
