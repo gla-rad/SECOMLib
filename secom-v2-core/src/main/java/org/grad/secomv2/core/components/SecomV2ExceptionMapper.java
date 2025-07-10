@@ -51,7 +51,7 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 @Provider
-public class SecomExceptionMapper implements ExceptionMapper<Exception>, ContextResolver<ExceptionMapper<Exception>> {
+public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, ContextResolver<ExceptionMapper<Exception>> {
 
     // Class Variables
     private Application application;
@@ -79,7 +79,7 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception>, Context
      *
      * @param application the application being served.
      */
-    public SecomExceptionMapper(Application application) {
+    public SecomV2ExceptionMapper(Application application) {
         this.application = application;
     }
 
