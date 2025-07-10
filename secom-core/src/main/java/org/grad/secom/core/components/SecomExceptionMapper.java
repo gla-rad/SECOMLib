@@ -17,6 +17,7 @@
 package org.grad.secom.core.components;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.grad.secom.core.base.SecomConstants;
 import org.grad.secom.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,6 +89,11 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
+        // This is not our error, propagate
+        if(!uriInfo.getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            throw new RuntimeException(ex);
+        }
+
         //First log the message
         final Logger secomLogger = Logger.getLogger(Optional.of(ex)
                 .map(Exception::getCause)
