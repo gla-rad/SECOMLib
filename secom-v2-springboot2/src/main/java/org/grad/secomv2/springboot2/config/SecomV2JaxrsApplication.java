@@ -88,7 +88,8 @@ public class SecomV2JaxrsApplication extends Application {
     public Set<Class<?>> getClasses() {
         return Set.of(
                 OpenApiResource.class,
-                AcceptHeaderOpenApiResource.class
+                AcceptHeaderOpenApiResource.class,
+                SecomExceptionMapper.class
         );
     }
 
@@ -106,10 +107,6 @@ public class SecomV2JaxrsApplication extends Application {
         return Set.of(
                 corsFilter,
                 new SecomObjectMapperProvider(objectMapper),
-                /*
-                 * Add the JaxRS Application Exception Handler.
-                 */
-                new SecomExceptionMapper(),
                 /*
                  * Add the JaxRS Application Providers.
                  */

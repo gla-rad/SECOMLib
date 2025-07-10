@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.components;
 
+import jakarta.ws.rs.core.UriInfo;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -64,6 +65,12 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
     private HttpHeaders headers;
 
     /**
+     * The Request URI Information.
+     */
+    @Context
+    UriInfo uriInfo;
+
+    /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
      *
@@ -72,6 +79,11 @@ public class SecomExceptionMapper implements ExceptionMapper<Exception> {
      */
     @Override
     public Response toResponse(Exception ex) {
+        // This is not our error, propagate
+        if(!Objects.equals(uriInfo.getBaseUri().getPath(), "/api/secom2/")) {
+            throw new RuntimeException(ex);
+        }
+
         //First log the message
         final Logger secomLogger = Logger.getLogger(Optional.of(ex)
                         .map(Exception::getCause)
