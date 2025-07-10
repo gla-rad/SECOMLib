@@ -18,10 +18,8 @@ package org.grad.secom.core.components;
 
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
-import jakarta.ws.rs.ext.Provider;
 import org.grad.secom.core.base.SecomV1Param;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;

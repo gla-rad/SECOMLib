@@ -22,7 +22,7 @@ import org.grad.secom.core.models.enums.ContainerTypeEnum;
 
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
-import jakarta.ws.rs.ext.Provider;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Set;

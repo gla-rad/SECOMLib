@@ -18,12 +18,10 @@ package org.grad.secom.core.components;
 
 import org.grad.secom.core.base.SecomV1Param;
 import org.grad.secom.core.exceptions.SecomValidationException;
-import org.grad.secom.core.models.enums.ContainerTypeEnum;
 import org.grad.secom.core.models.enums.DigitalSignatureAlgorithmEnum;
 
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
-import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Set;
