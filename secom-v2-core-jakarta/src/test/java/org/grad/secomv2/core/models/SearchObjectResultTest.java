@@ -27,8 +27,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SearchObjectResultTest {
 
@@ -52,12 +51,12 @@ class SearchObjectResultTest {
         this.obj.setName("name");
         this.obj.setStatus("status");
         this.obj.setDescription("description");
-        this.obj.setDataProductType(SECOM_DataProductType.S101);
+        this.obj.setDataProductType(new SECOM_DataProductType[]{SECOM_DataProductType.S101});
         this.obj.setOrganizationId("organizationId");
         this.obj.setEndpointUri("http://localhost");
         this.obj.setEndpointType("endpointType");
         this.obj.setVersion("version");
-        this.obj.setKeywords("keywords");
+        this.obj.setKeywords(new String[]{"keywords"});
         this.obj.setUnlocode("unlocode");
         this.obj.setInstanceAsXml("instanceAsXml");
         this.obj.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -82,12 +81,12 @@ class SearchObjectResultTest {
         assertEquals(this.obj.getName(), result.getName());
         assertEquals(this.obj.getStatus(), result.getStatus());
         assertEquals(this.obj.getDescription(), result.getDescription());
-        assertEquals(this.obj.getDataProductType(), result.getDataProductType());
+        assertArrayEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getOrganizationId(), result.getOrganizationId());
         assertEquals(this.obj.getEndpointUri(), result.getEndpointUri());
         assertEquals(this.obj.getEndpointType(), result.getEndpointType());
         assertEquals(this.obj.getVersion(), result.getVersion());
-        assertEquals(this.obj.getKeywords(), result.getKeywords());
+        assertArrayEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
         assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
         assertEquals(this.obj.getPublishedAt(), result.getPublishedAt());

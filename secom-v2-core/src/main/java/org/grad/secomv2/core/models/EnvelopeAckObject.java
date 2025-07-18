@@ -38,7 +38,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    @Schema(description = "The creation date-time", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(description = "The creation date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant createdAt;

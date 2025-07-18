@@ -69,8 +69,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @Schema(description = "Approximated maximum size of the data file in kBytes to be downloaded.")
     private Integer size;
     @NotNull
-    @Schema(type = "string", description = "DateTime when data will be deleted on server. The data need to be fetched before this time. Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
+    @Schema(description = "DateTime when data will be deleted on server. The data need to be fetched before this time. Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant timeToLive;

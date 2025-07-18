@@ -48,11 +48,11 @@ public class EnvelopeSubscriptionObject {
     @Schema(description = "Code of defined object", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @Schema(type = "string", format = "date-time", description = "Start time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z", pattern = "\"^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z$\"")
+    @Schema(format = "date-time", description = "Start time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant subscriptionPeriodStart;
-    @Schema(type = "string", format = "date-time", description = "End time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "2025-04-28T14:30:00Z", pattern = "\"^\\\\d{4}-\\\\d{2}-\\\\d{2}T\\\\d{2}:\\\\d{2}:\\\\d{2}Z$\"")
+    @Schema(format = "date-time", description = "End time of subscription Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant subscriptionPeriodEnd;

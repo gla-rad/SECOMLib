@@ -28,8 +28,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ResponseSearchObjectTest {
 
@@ -54,12 +53,12 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setName("name");
         this.searchObjectResult.setStatus("status");
         this.searchObjectResult.setDescription("description");
-        this.searchObjectResult.setDataProductType(SECOM_DataProductType.S101);
+        this.searchObjectResult.setDataProductType(new SECOM_DataProductType[]{SECOM_DataProductType.S101});
         this.searchObjectResult.setOrganizationId("organizationId");
         this.searchObjectResult.setEndpointUri("http://localhost");
         this.searchObjectResult.setEndpointType("endpointType");
         this.searchObjectResult.setVersion("version");
-        this.searchObjectResult.setKeywords("keywords");
+        this.searchObjectResult.setKeywords(new String[]{"keywords"});
         this.searchObjectResult.setUnlocode("unlocode");
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
         this.searchObjectResult.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
@@ -91,12 +90,12 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getName(), result.getSearchServiceResult().get(0).getName());
         assertEquals(this.obj.getSearchServiceResult().get(0).getStatus(), result.getSearchServiceResult().get(0).getStatus());
         assertEquals(this.obj.getSearchServiceResult().get(0).getDescription(), result.getSearchServiceResult().get(0).getDescription());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getDataProductType(), result.getSearchServiceResult().get(0).getDataProductType());
+        assertArrayEquals(this.obj.getSearchServiceResult().get(0).getDataProductType(), result.getSearchServiceResult().get(0).getDataProductType());
         assertEquals(this.obj.getSearchServiceResult().get(0).getOrganizationId(), result.getSearchServiceResult().get(0).getOrganizationId());
         assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointUri(), result.getSearchServiceResult().get(0).getEndpointUri());
         assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointType(), result.getSearchServiceResult().get(0).getEndpointType());
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
+        assertArrayEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
         assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getPublishedAt(), result.getSearchServiceResult().get(0).getPublishedAt());

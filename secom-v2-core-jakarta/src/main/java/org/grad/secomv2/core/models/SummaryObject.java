@@ -58,7 +58,7 @@ public class SummaryObject {
     @NotNull
     @Schema(description = "Description of the information object\"")
     private String info_description;
-    @Schema(example = "2025-04-28T14:30:00Z", description = "Date for last modified Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string", pattern = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
+    @Schema(description = "Date for last modified Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string", example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant info_lastModifiedDate;

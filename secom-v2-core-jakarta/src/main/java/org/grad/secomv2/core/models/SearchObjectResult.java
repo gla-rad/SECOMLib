@@ -47,23 +47,23 @@ public class SearchObjectResult {
     private String status;
     @NotNull
     private String description;
-    private SECOM_DataProductType dataProductType;
+    private SECOM_DataProductType[] dataProductType;
     @NotNull
     private String organizationId;
     @NotNull
     private String endpointUri;
     @NotNull
     private String endpointType;
-    private String keywords;
+    private String[] keywords;
     private String unlocode;
     private String instanceAsXml;
 
     // Non-standard fields (mentioned but not standardised)
-    @Schema(description = "The publication date-time", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(description = "The publication date-time", type = "string", example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant publishedAt;
-    @Schema(description = "The last updated date-time", type = "string",example = "19850412T101530", pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")
+    @Schema(description = "The last updated date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant lastUpdatedAt;
@@ -168,7 +168,7 @@ public class SearchObjectResult {
      *
      * @return the data product type
      */
-    public SECOM_DataProductType getDataProductType() {
+    public SECOM_DataProductType[] getDataProductType() {
         return dataProductType;
     }
 
@@ -177,7 +177,7 @@ public class SearchObjectResult {
      *
      * @param dataProductType the data product type
      */
-    public void setDataProductType(SECOM_DataProductType dataProductType) {
+    public void setDataProductType(SECOM_DataProductType[] dataProductType) {
         this.dataProductType = dataProductType;
     }
 
@@ -240,7 +240,7 @@ public class SearchObjectResult {
      *
      * @return the keywords
      */
-    public String getKeywords() {
+    public String[] getKeywords() {
         return keywords;
     }
 
@@ -249,7 +249,7 @@ public class SearchObjectResult {
      *
      * @param keywords the keywords
      */
-    public void setKeywords(String keywords) {
+    public void setKeywords(String[] keywords) {
         this.keywords = keywords;
     }
 

@@ -17,7 +17,7 @@
     <properties>
         <springframework3.version>6.2.8</springframework3.version>
         <resteasy-spring-boot.version>6.3.0.Final</resteasy-spring-boot.version>
-        <swagger.version>2.2.30</swagger.version>
+        <swagger.version>2.2.34</swagger.version>
     </properties>
 
     <dependencies>

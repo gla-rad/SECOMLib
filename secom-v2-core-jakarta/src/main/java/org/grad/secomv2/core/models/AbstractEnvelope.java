@@ -41,8 +41,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @Size(min = 1)
     protected String envelopeRootCertificateThumbprint;
     @NotNull
-    @Schema(type = "string", description = "Time when encryptionKey envelope is signed Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", example = "19850412T101530")
-    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
+    @Schema(description = "Time when encryptionKey envelope is signed Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     protected Instant envelopeSignatureTime;
