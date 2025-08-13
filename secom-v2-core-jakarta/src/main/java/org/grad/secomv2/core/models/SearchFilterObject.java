@@ -35,6 +35,7 @@ public class SearchFilterObject {
     private String geometry;
     private String callbackEndpoint;
     private Boolean includeXml;
+    private Boolean localOnly;
     @Min(value = 0L, message = "The page value must be positive")
     private Integer page;
     @Min(value = 0L, message = "The page size value must be positive")
@@ -89,6 +90,24 @@ public class SearchFilterObject {
      * @param includeXml, whether xml should be included
      */
     public void setIncludeXml(Boolean includeXml) { this.includeXml = includeXml; }
+
+    /**
+     * Gets local only.
+     *
+     * @return the local only
+     */
+    public Boolean getLocalOnly() {
+        return localOnly;
+    }
+
+    /**
+     * Sets local only.
+     *
+     * @param localOnly the local only
+     */
+    public void setLocalOnly(Boolean localOnly) {
+        this.localOnly = localOnly;
+    }
 
     /**
      * Get the current page number
