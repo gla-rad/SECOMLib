@@ -33,7 +33,6 @@ public class SearchFilterObject {
     @Schema(description = "The search geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "(^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$|^\\s*(\\{.*\\}|\\w+)\\s*$)")
     private String geometry;
-    private String callbackEndpoint;
     private Boolean includeXml;
     private Boolean localOnly;
     @Min(value = 0L, message = "The page value must be positive")
@@ -137,17 +136,4 @@ public class SearchFilterObject {
      */
     public void setPageSize(Integer pageSize) { this.pageSize = pageSize; }
 
-    /**
-     * Get the callback endpoint
-     *
-     * @return the callback endpoint
-     */
-    public String getCallbackEndpoint() { return callbackEndpoint; }
-
-    /**
-     * Set the callback endpoint
-     *
-     * @param callbackEndpoint the callback endpoint
-     */
-    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
 }
