@@ -30,6 +30,8 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import java.util.UUID;
+
 /**
  * The SECOM Remove Subscription Interface Definition.
  * </p>
@@ -59,7 +61,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
     @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    RemoveSubscriptionResponseObject removeSubscription(@QueryParam(value="subscriptionIdentifier") String subscriptionIdentifier);
+    RemoveSubscriptionResponseObject removeSubscription(@QueryParam(value="subscriptionIdentifier") UUID subscriptionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
