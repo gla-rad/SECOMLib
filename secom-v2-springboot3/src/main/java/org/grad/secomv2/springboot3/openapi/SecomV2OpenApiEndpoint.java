@@ -19,6 +19,7 @@ package org.grad.secomv2.springboot3.openapi;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.swagger.v3.jaxrs2.Reader;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -58,6 +59,12 @@ public class SecomV2OpenApiEndpoint {
     private ApplicationContext applicationContext;
 
     /**
+     * The Default ObjectMapper/
+     */
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    /**
      * The SECOM OpenAPI Info Provider Component.
      */
     @Autowired(required = false)
@@ -73,7 +80,7 @@ public class SecomV2OpenApiEndpoint {
     @Path("/" + SecomConstants.SECOM_VERSION + "/openapi.json")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getOpenApiV1() throws JsonProcessingException {
+    public Response getOpenApiV2() throws JsonProcessingException {
         // Get the basic OpenAPI information and create a Reader for scanning
         final Reader reader = new Reader(Optional.ofNullable(secomV2OpenApiInfoProvider)
                 .map(SecomV2OpenApiInfoProvider::getOpenApiInfo)
@@ -86,9 +93,9 @@ public class SecomV2OpenApiEndpoint {
                 .collect(Collectors.toSet());
 
         // Now parse through the SECOM interfaces and generate the OpenAPI JSON
-        final ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return Response.ok(objectMapper.writeValueAsString(reader.read(v2Classes))).build();
+        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.objectMapper.registerModule(new JavaTimeModule());
+        return Response.ok(this.objectMapper.writeValueAsString(reader.read(v2Classes))).build();
     }
 
 }
