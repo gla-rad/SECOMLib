@@ -24,6 +24,8 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -42,7 +44,7 @@ class EnvelopeSubscriptionObjectTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() throws URISyntaxException {
+    void setup() throws URISyntaxException, MalformedURLException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
@@ -57,6 +59,8 @@ class EnvelopeSubscriptionObjectTest {
         this.obj.setUnlocode("unlocode");
         this.obj.setSubscriptionPeriodStart(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setCallbackEndpoint(URI.create("http://localhost").toURL());
+        this.obj.setPushAll(Boolean.FALSE);
     }
 
     /**
@@ -78,6 +82,8 @@ class EnvelopeSubscriptionObjectTest {
         assertEquals(this.obj.getUnlocode(), result.getUnlocode());
         assertEquals(this.obj.getSubscriptionPeriodStart(), result.getSubscriptionPeriodStart());
         assertEquals(this.obj.getSubscriptionPeriodEnd(), result.getSubscriptionPeriodEnd());
+        assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
+        assertEquals(this.obj.getPushAll(), result.getPushAll());
     }
 
 }

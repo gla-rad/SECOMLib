@@ -24,6 +24,7 @@ import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.Pattern;
+import java.net.URL;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -58,7 +59,7 @@ public class EnvelopeSubscriptionObject {
     private Instant subscriptionPeriodEnd;
     @Schema(type = "string", format = "uri", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
     @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
-    private String callbackEndpoint;
+    private URL callbackEndpoint;
     @Schema(description = "Flag for sending an initial set of data within requested subscription and then start the subscription.\r\nIf false, only data updates from the start of the subscription will be sent.")
     private Boolean pushAll;
 
@@ -211,14 +212,14 @@ public class EnvelopeSubscriptionObject {
      *
      * @return callbackEndPoint the callback endpoint
      */
-    public String getCallbackEndpoint() { return callbackEndpoint; }
+    public URL getCallbackEndpoint() { return callbackEndpoint; }
 
     /**
      * Sets the callback endpoint
      *
      * @param callbackEndpoint the callback endpoint
      */
-    public void setCallbackEndpoint(String callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
+    public void setCallbackEndpoint(URL callbackEndpoint) { this.callbackEndpoint = callbackEndpoint; }
 
     /**
      * Gets push all
