@@ -28,6 +28,9 @@ import java.util.List;
 public class SearchResult {
 
     // Class Variables
+    @NotNull
+    private PaginationObject paginationObject;
+
     @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED)
     @NotNull
     private String transactionId;
