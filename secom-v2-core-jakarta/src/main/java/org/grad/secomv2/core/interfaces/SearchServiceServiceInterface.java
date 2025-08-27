@@ -31,6 +31,7 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.SearchResult;
 
 /**
  * The SECOM Search Service Interface Definition.
@@ -59,7 +60,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    ResponseSearchObject searchService(@Valid SearchFilterObject searchFilterObject);
+    SearchResult searchService(@Valid SearchFilterObject searchFilterObject);
 
     /**
      * The exception handler implementation for the interface.
