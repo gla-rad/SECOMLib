@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomNotImplementedException;
 
 import jakarta.ws.rs.NotAllowedException;
@@ -45,6 +46,8 @@ public interface GenericSecomInterface {
             return Response.Status.METHOD_NOT_ALLOWED;
         } else if(ex instanceof SecomNotImplementedException) {
             return Response.Status.NOT_IMPLEMENTED;
+        } else if (ex instanceof SecomNotFoundException) {
+            return Response.Status.NOT_FOUND;
         } else {
             return Response.Status.INTERNAL_SERVER_ERROR;
         }

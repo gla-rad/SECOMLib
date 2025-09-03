@@ -23,6 +23,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
 import org.grad.secomv2.core.models.SearchFilterObject;
 import org.grad.secomv2.core.models.ResponseSearchObject;
+import org.grad.secomv2.core.models.SearchResult;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -59,7 +60,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    ResponseSearchObject searchService(@Valid SearchFilterObject searchFilterObject);
+    SearchResult searchService(@Valid SearchFilterObject searchFilterObject);
 
     /**
      * The exception handler implementation for the interface.
