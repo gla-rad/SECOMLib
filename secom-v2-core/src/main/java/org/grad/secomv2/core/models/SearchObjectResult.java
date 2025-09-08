@@ -18,16 +18,13 @@ package org.grad.secomv2.core.models;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.SecomInstantDeserializer;
 import org.grad.secomv2.core.base.SecomInstantSerializer;
-import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.ws.rs.QueryParam;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -73,6 +70,7 @@ public class SearchObjectResult {
     private String comment;
     private String mmsi;
     private String imo;
+    private String sourceMSR;
     private Object geometry;
     private UUID transactionIdentifier;
 
@@ -382,11 +380,31 @@ public class SearchObjectResult {
         this.imo = imo;
     }
 
+
+    /**
+     * Gets source msr.
+     *
+     * @return the source msr
+     */
+    public String getSourceMSR() {
+        return sourceMSR;
+    }
+
+    /**
+     * Sets source msr.
+     *
+     * @param sourceMSR the source msr
+     */
+    public void setSourceMSR(String sourceMSR) {
+        this.sourceMSR = sourceMSR;
+    }
+
     /**
      * Gets geometry.
      *
      * @return the geometry
      */
+
     public Object getGeometry() {
         return geometry;
     }
