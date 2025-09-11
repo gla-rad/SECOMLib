@@ -22,6 +22,7 @@ import org.grad.secom.core.models.AbstractEnvelope;
 import org.grad.secom.core.models.GetResponseObject;
 import org.grad.secom.core.models.UploadObject;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -65,6 +66,12 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
     @Context
     Providers providers;
 
+    /**
+     * The Request Context.
+     */
+    @Context
+    private HttpServletRequest request;
+
     // Class Variables
     private SecomCompressionProvider compressionProvider;
     private SecomEncryptionProvider encryptionProvider;
@@ -91,6 +98,11 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
      */
     @Override
     public Object aroundReadFrom(ReaderInterceptorContext ctx) throws IOException, WebApplicationException {
+        // Sanity Check
+        if(!this.request.getPathInfo().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            return ctx.proceed();
+        }
+
         // Start with an empty object
         InputStream is = ctx.getInputStream();
         Object obj = null;
