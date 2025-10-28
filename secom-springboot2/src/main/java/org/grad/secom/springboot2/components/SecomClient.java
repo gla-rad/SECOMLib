@@ -48,6 +48,7 @@ import java.security.cert.CertificateException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -593,6 +594,49 @@ public class SecomClient {
     }
 
     /**
+     * POST /v1/object : This overloaded interface allows uploading (pushing)
+     * data to a consumer with additional HTTP headers. This can be useful
+     * for scenarios where authentication tokens or custom metadata headers
+     * need to be included.
+     *
+     * @param uploadObject the upload object
+     * @param additionalHeaders a map of HTTP headers to be added to the request
+     * @return the upload response object
+     */
+    public Optional<UploadResponseObject> upload(UploadObject uploadObject, Map<String, String> additionalHeaders) {
+        //Prepare the upload envelope if valid
+        final EnvelopeUploadObject envelope = uploadObject.getEnvelope();
+        if (envelope != null) {
+            envelope.prepareMetadata(this.signatureProvider)
+                    .signData(this.certificateProvider, this.signatureProvider)
+                    .encryptData(this.encryptionProvider)
+                    .compressData(this.compressionProvider)
+                    .encodeData();
+        }
+
+        // If a signature provider has been assigned, use it to sign the
+        // upload object envelop data.
+        if (this.signatureProvider != null) {
+            uploadObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        }
+
+        return this.secomClient
+                .post()
+                .uri(UPLOAD_INTERFACE_PATH)
+                .headers(headers -> {
+                    if (additionalHeaders != null) {
+                        additionalHeaders.forEach(headers::add);
+                    }
+                })
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(uploadObject))
+                .retrieve()
+                .bodyToMono(UploadResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
      * POST /v1/object/link : The REST operation POST /object/link. The
      * interface shall be used for uploading (pushing) a link to data to a
      * consumer.
@@ -617,6 +661,44 @@ public class SecomClient {
         return this.secomClient
                 .post()
                 .uri(UPLOAD_LINK_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(uploadLinkObject))
+                .retrieve()
+                .bodyToMono(UploadLinkResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v1/object/link : This overloaded interface allows uploading a
+     * link to data with additional HTTP headers. Useful for scenarios
+     * such as custom authentication or metadata headers.
+     *
+     * @param uploadLinkObject the upload link object
+     * @param additionalHeaders a map of HTTP headers to be added to the request
+     * @return the upload link response object
+     */
+    public Optional<UploadLinkResponseObject> uploadLink(UploadLinkObject uploadLinkObject, Map<String, String> additionalHeaders) {
+        //Prepare the upload link envelope if valid
+        final EnvelopeLinkObject envelope = uploadLinkObject.getEnvelope();
+        if (envelope != null) {
+            envelope.prepareMetadata(this.signatureProvider);
+        }
+
+        // If a signature provider has been assigned, use it to sign the
+        // upload object envelop data.
+        if (this.signatureProvider != null) {
+            uploadLinkObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        }
+
+        return this.secomClient
+                .post()
+                .uri(UPLOAD_LINK_INTERFACE_PATH)
+                .headers(headers -> {
+                    if (additionalHeaders != null) {
+                        additionalHeaders.forEach(headers::add);
+                    }
+                })
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(uploadLinkObject))
