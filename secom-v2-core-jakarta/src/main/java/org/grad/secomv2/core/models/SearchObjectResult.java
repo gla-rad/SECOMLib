@@ -70,6 +70,7 @@ public class SearchObjectResult {
     private String comment;
     private String mmsi;
     private String imo;
+    private String sourceMSR;
     private Object geometry;
     private UUID transactionIdentifier;
 
@@ -377,6 +378,24 @@ public class SearchObjectResult {
      */
     public void setImo(String imo) {
         this.imo = imo;
+    }
+
+    /**
+     * Gets source msr.
+     *
+     * @return the source msr
+     */
+    public String getSourceMSR() {
+        return sourceMSR;
+    }
+
+    /**
+     * Sets source msr.
+     *
+     * @param sourceMSR the source msr
+     */
+    public void setSourceMSR(String sourceMSR) {
+        this.sourceMSR = sourceMSR;
     }
 
     /**
