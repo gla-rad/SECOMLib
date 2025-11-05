@@ -60,6 +60,7 @@ public class SearchObjectResult {
     private String apiDoc;
     private String[] coverageArea;
     private String instanceAsXml;
+    private String[] unsupportedParams;
 
     // Non-standard fields (mentioned but not standardised)
     @Schema(description = "The publication date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
@@ -327,6 +328,24 @@ public class SearchObjectResult {
      */
     public void setCoverageArea(String[] coverageArea) {
         this.coverageArea = coverageArea;
+    }
+
+    /**
+     * Gets unsupportedParams.
+     *
+     * @return the coverageArea array
+     */
+    public String[] getunsupportedParams() {
+        return unsupportedParams;
+    }
+
+    /**
+     * Sets unsupportedParams
+     *
+     * @param unsupportedParams the list of unsupportedParams
+     */
+    public void setUnsupportedParams(String[] unsupportedParams) {
+        this.unsupportedParams = unsupportedParams;
     }
 
     /**
