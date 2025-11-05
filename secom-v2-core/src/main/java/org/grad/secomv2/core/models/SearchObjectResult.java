@@ -56,6 +56,9 @@ public class SearchObjectResult {
     private String endpointType;
     private String[] keywords;
     private String unlocode;
+    private String implementsDesign;
+    private String apiDoc;
+    private String[] coverageArea;
     private String instanceAsXml;
 
     // Non-standard fields (mentioned but not standardised)
@@ -270,6 +273,60 @@ public class SearchObjectResult {
      */
     public void setUnlocode(String unlocode) {
         this.unlocode = unlocode;
+    }
+
+    /**
+     * Gets implementsDesign.
+     *
+     * @return the implement design property
+     */
+    public String getImplementsDesign() {
+        return implementsDesign;
+    }
+
+    /**
+     * Sets implementsDesign.
+     *
+     * @param implementsDesign the design implemented
+     */
+    public void setImplementsDesign(String implementsDesign) {
+        this.implementsDesign = implementsDesign;
+    }
+
+    /**
+     * Gets apiDoc.
+     *
+     * @return the apiDoc
+     */
+    public String getApiDoc() {
+        return apiDoc;
+    }
+
+    /**
+     * Sets apiDoc.
+     *
+     * @param apiDoc the API Doc URL
+     */
+    public void setApiDoc(String apiDoc) {
+        this.apiDoc = apiDoc;
+    }
+
+    /**
+     * Gets coverageArea.
+     *
+     * @return the coverageArea array
+     */
+    public String[] getCoverageArea() {
+        return coverageArea;
+    }
+
+    /**
+     * Sets coverageArea.
+     *
+     * @param coverageArea the coverage area array
+     */
+    public void setCoverageArea(String[] coverageArea) {
+        this.coverageArea = coverageArea;
     }
 
     /**
