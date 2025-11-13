@@ -335,7 +335,7 @@ public class SearchObjectResult {
      *
      * @return the coverageArea array
      */
-    public String[] getUnsupportedParams() {
+    public String[] getunsupportedParams() {
         return unsupportedParams;
     }
 
