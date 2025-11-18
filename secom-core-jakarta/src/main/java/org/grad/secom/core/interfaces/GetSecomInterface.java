@@ -83,7 +83,7 @@ public interface GetSecomInterface extends GenericSecomInterface {
                           @QueryParam("unlocode") @Pattern(regexp = "[A-Z]{5}") String unlocode,
                           @QueryParam("validFrom") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) @SecomV1Param Instant validFrom,
                           @QueryParam("validTo") @Parameter(example = "20200101T123000", schema = @Schema(implementation = String.class, pattern = "(\\d{8})T(\\d{6})(Z|\\+\\d{4})?")) @SecomV1Param Instant validTo,
-                          @QueryParam("page") @Min(0) Integer page,
+                          @QueryParam("page") @Min(1) Integer page,
                           @QueryParam("pageSize") @Min(0) Integer pageSize);
 
     /**
