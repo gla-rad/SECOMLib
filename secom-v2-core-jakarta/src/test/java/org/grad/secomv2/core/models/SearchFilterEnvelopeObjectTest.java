@@ -32,7 +32,7 @@ class SearchFilterEnvelopeObjectTest {
 
     // Class Variables
     private SearchParameters searchParameters;
-    private SearchFilterEnvelopeObject obj;
+    private EnvelopeSearchFilterObject obj;
 
     private ObjectMapper mapper;
 
@@ -64,7 +64,7 @@ class SearchFilterEnvelopeObjectTest {
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
 
         // Generate a new object
-        this.obj = new SearchFilterEnvelopeObject();
+        this.obj = new EnvelopeSearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
         this.obj.setPage(0);
@@ -78,7 +78,7 @@ class SearchFilterEnvelopeObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SearchFilterEnvelopeObject result = this.mapper.readValue(jsonString, SearchFilterEnvelopeObject.class);
+        EnvelopeSearchFilterObject result = this.mapper.readValue(jsonString, EnvelopeSearchFilterObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);

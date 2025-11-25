@@ -24,7 +24,7 @@ package org.grad.secomv2.core.models;
 public class SearchFilterObject {
 
     // The search filter object
-    private SearchFilterEnvelopeObject envelope;
+    private EnvelopeSearchFilterObject envelope;
 
     // The envelope signature
     private String envelopeSignature;
@@ -34,14 +34,14 @@ public class SearchFilterObject {
      *
      * @return the envelope
      */
-    public SearchFilterEnvelopeObject getEnvelope() { return envelope; }
+    public EnvelopeSearchFilterObject getEnvelope() { return envelope; }
 
     /**
      * Sets envelope.
      *
      * @param envelope the envelope filter object
      */
-    public void setEnvelope(SearchFilterEnvelopeObject envelope) { this.envelope = envelope; }
+    public void setEnvelope(EnvelopeSearchFilterObject envelope) { this.envelope = envelope; }
 
     /**
      * Gets envelope signature.
