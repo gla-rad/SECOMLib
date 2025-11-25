@@ -28,11 +28,11 @@ import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchFilterObjectTest {
+class SearchFilterEnvelopeObjectTest {
 
     // Class Variables
     private SearchParameters searchParameters;
-    private SearchFilterObject obj;
+    private SearchFilterEnvelopeObject obj;
 
     private ObjectMapper mapper;
 
@@ -64,7 +64,7 @@ class SearchFilterObjectTest {
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
 
         // Generate a new object
-        this.obj = new SearchFilterObject();
+        this.obj = new SearchFilterEnvelopeObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
         this.obj.setPage(0);
@@ -78,7 +78,7 @@ class SearchFilterObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SearchFilterObject result = this.mapper.readValue(jsonString, SearchFilterObject.class);
+        SearchFilterEnvelopeObject result = this.mapper.readValue(jsonString, SearchFilterEnvelopeObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);

@@ -36,15 +36,14 @@ public class SearchParameters {
     private String[] keywords;
     private String description;
     private SECOM_DataProductType dataProductType;
-    private boolean localOnly;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String specificationId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
-    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
-    private String organizationId;
+//    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
+//    private String organizationId;
     @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
     private String mmsi;
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
@@ -155,24 +154,6 @@ public class SearchParameters {
     }
 
     /**
-     * Gets localOnly
-     *
-     * @return boolean indicating if search is restricted to local MSR only
-     */
-    public boolean getLocalOnly() {
-        return localOnly;
-    }
-
-    /**
-     * Sets localOnly
-     *
-     * @param localOnly boolean indicating if search is restricted to local MSR only
-     */
-    public void setLocalOnly(boolean localOnly) {
-        this.localOnly = localOnly;
-    }
-
-    /**
      * Sets data product type.
      *
      * @param dataProductType the data product type
@@ -233,24 +214,6 @@ public class SearchParameters {
      */
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
-    }
-
-    /**
-     * Gets organization id.
-     *
-     * @return the organization id
-     */
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * Sets organization id.
-     *
-     * @param organizationId the organization id
-     */
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
     }
 
     /**
