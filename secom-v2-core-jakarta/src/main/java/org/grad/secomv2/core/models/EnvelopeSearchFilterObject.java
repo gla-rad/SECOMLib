@@ -26,7 +26,7 @@ import jakarta.validation.constraints.Pattern;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SearchFilterEnvelopeObject extends AbstractEnvelope {
+public class EnvelopeSearchFilterObject extends AbstractEnvelope {
 
     // Class Variables
     private SearchParameters query;
