@@ -34,7 +34,7 @@ class ResponseSearchObjectTest {
 
     // Class Variables
     private ResponseSearchObject obj;
-    private SearchObjectResult searchObjectResult;
+    private ServiceInstanceObject searchObjectResult;
 
     private ObjectMapper mapper;
 
@@ -48,7 +48,7 @@ class ResponseSearchObjectTest {
         this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new search object result
-        this.searchObjectResult = new SearchObjectResult();
+        this.searchObjectResult = new ServiceInstanceObject();
         this.searchObjectResult.setInstanceId("instanceId");
         this.searchObjectResult.setName("name");
         this.searchObjectResult.setStatus("status");
@@ -56,16 +56,14 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setDataProductType(new SECOM_DataProductType[]{SECOM_DataProductType.S101});
         this.searchObjectResult.setOrganizationId("organizationId");
         this.searchObjectResult.setEndpointUri("http://localhost");
-        this.searchObjectResult.setEndpointType("endpointType");
+        this.searchObjectResult.setEndpointType(new String[]{"endpointType"});
         this.searchObjectResult.setVersion("version");
         this.searchObjectResult.setKeywords(new String[]{"keywords"});
         this.searchObjectResult.setUnlocode("unlocode");
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
-        this.searchObjectResult.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.searchObjectResult.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.searchObjectResult.setMmsi("mmsi");
         this.searchObjectResult.setImo("imo");
-        this.searchObjectResult.setGeometry("geometry");
+        this.searchObjectResult.setSourceMSRs(new String[]{"sourceMSR"});
 
         // Generate a new object
         this.obj = new ResponseSearchObject();
@@ -93,16 +91,15 @@ class ResponseSearchObjectTest {
         assertArrayEquals(this.obj.getSearchServiceResult().get(0).getDataProductType(), result.getSearchServiceResult().get(0).getDataProductType());
         assertEquals(this.obj.getSearchServiceResult().get(0).getOrganizationId(), result.getSearchServiceResult().get(0).getOrganizationId());
         assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointUri(), result.getSearchServiceResult().get(0).getEndpointUri());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getEndpointType(), result.getSearchServiceResult().get(0).getEndpointType());
+        assertArrayEquals(this.obj.getSearchServiceResult().get(0).getEndpointType(), result.getSearchServiceResult().get(0).getEndpointType());
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
         assertArrayEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
         assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getPublishedAt(), result.getSearchServiceResult().get(0).getPublishedAt());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getLastUpdatedAt(), result.getSearchServiceResult().get(0).getLastUpdatedAt());
         assertEquals(this.obj.getSearchServiceResult().get(0).getMmsi(), result.getSearchServiceResult().get(0).getMmsi());
         assertEquals(this.obj.getSearchServiceResult().get(0).getImo(), result.getSearchServiceResult().get(0).getImo());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getGeometry(), result.getSearchServiceResult().get(0).getGeometry());
+        assertArrayEquals(this.obj.getSearchServiceResult().get(0).getSourceMSRs(), result.getSearchServiceResult().get(0).getSourceMSRs());
+
     }
 
 }

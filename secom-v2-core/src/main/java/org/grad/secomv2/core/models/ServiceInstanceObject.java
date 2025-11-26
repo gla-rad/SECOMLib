@@ -16,16 +16,11 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.SecomInstantDeserializer;
-import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -33,9 +28,14 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SearchObjectResult {
+public class ServiceInstanceObject {
 
     // SECOM-standard Fields
+    @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED,
+            pattern = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$",
+            example = "550e8400-e29b-41d4-a716-446655440000")
+    @NotNull
+    private UUID transactionId;
     @NotNull
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
@@ -53,26 +53,36 @@ public class SearchObjectResult {
     @NotNull
     private String endpointUri;
     @NotNull
-    private String endpointType;
+    private String[] endpointType;
     private String[] keywords;
     private String unlocode;
+    private String implementsDesign;
+    @NotNull
+    @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
+    private String apiDoc;
+    @NotNull
+    private String[] coverageArea;
     private String instanceAsXml;
-
-    // Non-standard fields (mentioned but not standardised)
-    @Schema(description = "The publication date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
-    private Instant publishedAt;
-    @Schema(description = "The last updated date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
-    private Instant lastUpdatedAt;
-    private String comment;
-    private String mmsi;
     private String imo;
-    private String sourceMSR;
-    private Object geometry;
-    private UUID transactionIdentifier;
+    private String mmsi;
+    private String[] certificates;
+    private String[] sourceMSRs;
+    private String[] unsupportedParams;
+
+
+    /**
+     * Get the transaction id
+     *
+     * @return the transaction id
+     */
+    public UUID getTransactionId() { return transactionId; }
+
+    /**
+     * Set the transaction id
+     *
+     * @param transactionId the transaction id
+     */
+    public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
 
     /**
      * Gets instance id.
@@ -223,7 +233,7 @@ public class SearchObjectResult {
      *
      * @return the endpoint type
      */
-    public String getEndpointType() {
+    public String[] getEndpointType() {
         return endpointType;
     }
 
@@ -232,7 +242,7 @@ public class SearchObjectResult {
      *
      * @param endpointType the endpoint type
      */
-    public void setEndpointType(String endpointType) {
+    public void setEndpointType(String[] endpointType) {
         this.endpointType = endpointType;
     }
 
@@ -273,6 +283,24 @@ public class SearchObjectResult {
     }
 
     /**
+     * Get implements design
+     *
+     * @return implementsDesign
+     */
+    public String getImplementsDesign() {
+        return implementsDesign;
+    }
+
+    /**
+     * Sets implements design
+     *
+     * @param implementsDesign the design
+     */
+    public void setImplementsDesign(String implementsDesign) {
+        this.implementsDesign = implementsDesign;
+    }
+
+    /**
      * Gets instance as xml.
      *
      * @return the instance as xml
@@ -291,57 +319,58 @@ public class SearchObjectResult {
     }
 
     /**
-     * Gets published at.
+     * Get api doc
      *
-     * @return the published at
+     * @return apiDoc
      */
-    public Instant getPublishedAt() {
-        return publishedAt;
+    public String getApiDoc() {
+        return apiDoc;
     }
 
     /**
-     * Sets published at.
+     * Sets api doc
      *
-     * @param publishedAt the published at
+     * @param apiDoc the api doc
      */
-    public void setPublishedAt(Instant publishedAt) {
-        this.publishedAt = publishedAt;
+    public void setApiDoc(String apiDoc) {
+        this.apiDoc = apiDoc;
     }
 
     /**
-     * Gets last updated at.
+     * Gets coverage area
      *
-     * @return the last updated at
+     * @return coverageArea
      */
-    public Instant getLastUpdatedAt() {
-        return lastUpdatedAt;
+    public String[] getCoverageArea() {
+        return coverageArea;
     }
 
     /**
-     * Sets last updated at.
+     * Sets coverage area
      *
-     * @param lastUpdatedAt the last updated at
+     * @param coverageArea the coverage area
      */
-    public void setLastUpdatedAt(Instant lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
+    public void setCoverageArea(String[] coverageArea) {
+        this.coverageArea = coverageArea;
+    }
+
+
+    /**
+     * Gets imo.
+     *
+     * @return the imo
+     */
+    public String getImo() {
+        return imo;
     }
 
     /**
-     * Gets comment.
+     * Sets imo.
      *
-     * @return the comment
+     * @param imo the imo
      */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * Sets comment.
-     *
-     * @param comment the comment
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setImo(String imo) {
+        this.imo = imo;
     }
 
     /**
@@ -363,73 +392,58 @@ public class SearchObjectResult {
     }
 
     /**
-     * Gets imo.
+     * Gets certificates
      *
-     * @return the imo
+     * @return certificates
      */
-    public String getImo() {
-        return imo;
+    public String[] getCertificates() {
+        return certificates;
     }
 
     /**
-     * Sets imo.
+     * Sets the certificates
      *
-     * @param imo the imo
+     * @param certificates the certificates
      */
-    public void setImo(String imo) {
-        this.imo = imo;
+    public void setCertificates(String[] certificates) {
+        this.certificates = certificates;
     }
 
-
     /**
-     * Gets source msr.
+     * Gets source MSRs.
      *
      * @return the source msr
      */
-    public String getSourceMSR() {
-        return sourceMSR;
+    public String[] getSourceMSRs() {
+        return sourceMSRs;
     }
 
     /**
-     * Sets source msr.
+     * Sets source MSRs.
      *
-     * @param sourceMSR the source msr
+     * @param sourceMSRs the source msr
      */
-    public void setSourceMSR(String sourceMSR) {
-        this.sourceMSR = sourceMSR;
+    public void setSourceMSRs(String[] sourceMSRs) {
+        this.sourceMSRs = sourceMSRs;
     }
 
     /**
-     * Gets geometry.
+     * Gets unsupported params
      *
-     * @return the geometry
+     * @return unsupportedParams
      */
-
-    public Object getGeometry() {
-        return geometry;
+    public String[] getUnsupportedParams() {
+        return unsupportedParams;
     }
 
     /**
-     * Sets geometry.
+     * Set unsupportedParams
      *
-     * @param geometry the geometry
+     * @param unsupportedParams the unsupported params array
      */
-    public void setGeometry(Object geometry) {
-        this.geometry = geometry;
+    public void setUnsupportedParams(String[] unsupportedParams) {
+        this.unsupportedParams = unsupportedParams;
     }
 
-    /**
-     * Get the transaction identifier
-     *
-     * @return the transaction identifier
-     */
-    public UUID getTransactionIdentifier() { return transactionIdentifier; }
-
-    /**
-     * Set the transaction identifier
-     *
-     * @param transactionIdentifier the transaction identifier
-     */
-    public void setTransactionIdentifier(UUID transactionIdentifier) { this.transactionIdentifier = transactionIdentifier; }
 
 }

@@ -29,10 +29,10 @@ import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchObjectResultTest {
+class ServiceInstanceObjectTest {
 
     // Class Variables
-    private SearchObjectResult obj;
+    private ServiceInstanceObject obj;
 
     private ObjectMapper mapper;
 
@@ -46,7 +46,7 @@ class SearchObjectResultTest {
         this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
-        this.obj = new SearchObjectResult();
+        this.obj = new ServiceInstanceObject();
         this.obj.setInstanceId("instanceId");
         this.obj.setName("name");
         this.obj.setStatus("status");
@@ -54,16 +54,14 @@ class SearchObjectResultTest {
         this.obj.setDataProductType(new SECOM_DataProductType[]{SECOM_DataProductType.S101});
         this.obj.setOrganizationId("organizationId");
         this.obj.setEndpointUri("http://localhost");
-        this.obj.setEndpointType("endpointType");
+        this.obj.setEndpointType(new String[] {"endpointType"});
         this.obj.setVersion("version");
         this.obj.setKeywords(new String[]{"keywords"});
         this.obj.setUnlocode("unlocode");
         this.obj.setInstanceAsXml("instanceAsXml");
-        this.obj.setPublishedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setLastUpdatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+
         this.obj.setMmsi("mmsi");
         this.obj.setImo("imo");
-        this.obj.setGeometry("geometry");
     }
 
     /**
@@ -73,7 +71,7 @@ class SearchObjectResultTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SearchObjectResult result = this.mapper.readValue(jsonString, SearchObjectResult.class);
+        ServiceInstanceObject result = this.mapper.readValue(jsonString, ServiceInstanceObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
@@ -84,16 +82,13 @@ class SearchObjectResultTest {
         assertArrayEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getOrganizationId(), result.getOrganizationId());
         assertEquals(this.obj.getEndpointUri(), result.getEndpointUri());
-        assertEquals(this.obj.getEndpointType(), result.getEndpointType());
+        assertArrayEquals(this.obj.getEndpointType(), result.getEndpointType());
         assertEquals(this.obj.getVersion(), result.getVersion());
         assertArrayEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
         assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
-        assertEquals(this.obj.getPublishedAt(), result.getPublishedAt());
-        assertEquals(this.obj.getLastUpdatedAt(), result.getLastUpdatedAt());
         assertEquals(this.obj.getMmsi(), result.getMmsi());
         assertEquals(this.obj.getImo(), result.getImo());
-        assertEquals(this.obj.getGeometry(), result.getGeometry());
     }
 
 }

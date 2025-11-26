@@ -13,109 +13,56 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secomv2.core.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.NotNull;
 
 /**
- * The SECOM Search Filter Object Class.
+ * {Description}
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
 public class SearchFilterObject {
 
-    // Class Variables
-    private SearchParameters query;
-    @Schema(description = "The search geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
-    @Pattern(regexp = "(^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$|^\\s*(\\{.*\\}|\\w+)\\s*$)")
-    private String geometry;
-    private Boolean includeXml;
-    @Min(value = 0L, message = "The page value must be positive")
-    private Integer page;
-    @Min(value = 0L, message = "The page size value must be positive")
-    private Integer pageSize;
+    @NotNull
+    private EnvelopeSearchFilterObject envelope;
+    @NotNull
+    private String envelopeSignature;
 
     /**
-     * Gets query.
-     *
-     * @return the query
+     * Get the envelope
+     * @return envelope
      */
-    public SearchParameters getQuery() {
-        return query;
+    public EnvelopeSearchFilterObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets query.
+     * Sets the envelope
      *
-     * @param query the query
+     * @param envelope the envelope search filter object
      */
-    public void setQuery(SearchParameters query) {
-        this.query = query;
+    public void setEnvelope(EnvelopeSearchFilterObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets geometry.
+     * Gets the envelope signature
      *
-     * @return the geometry
+     * @return envelopeSignature
      */
-    public String getGeometry() {
-        return geometry;
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets geometry.
+     * Sets the envelope signature
      *
-     * @param geometry the geometry
+     * @param envelopeSignature the envelope signature array
      */
-    public void setGeometry(String geometry) {
-        this.geometry = geometry;
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
-
-    /**
-     * Get include xml
-     *
-     * @return include xml
-     */
-    public Boolean getIncludeXml() { return includeXml; }
-
-    /**
-     * Set include xml
-     *
-     * @param includeXml, whether xml should be included
-     */
-    public void setIncludeXml(Boolean includeXml) { this.includeXml = includeXml; }
-
-
-    /**
-     * Get the current page number
-     *
-     * @return the current page number
-     */
-    public Integer getPage() { return page; }
-
-    /**
-     * Set the current page number
-     *
-     * @param page the current page number
-     */
-    public void setPage(Integer page) { this.page = page; }
-
-    /**
-     * Get the page size
-     *
-     * @return the page size
-     */
-    public Integer getPageSize() { return pageSize; }
-
-    /**
-     * Set the page size
-     *
-     * @param pageSize the page size
-     */
-    public void setPageSize(Integer pageSize) { this.pageSize = pageSize; }
 
 }

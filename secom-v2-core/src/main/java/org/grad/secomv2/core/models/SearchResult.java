@@ -16,60 +16,33 @@
 
 package org.grad.secomv2.core.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * The SECOM Search SearhResult Class.
+ * The SECOM Search Result Class.
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
 public class SearchResult {
 
     // Class Variables
-    @NotNull
-    private PaginationObject paginationObject;
+    private List<ServiceInstanceObject> serviceInstance;
 
-    @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED)
-    @NotNull
-    private String transactionId;
-
-    private List<SearchObjectResult> services;
-
-    /**
-     * Gets search transaction ID.
-     *
-     * @return the search transaction ID
-     */
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    /**
-     * Sets search transaction ID.
-     *
-     * @param transactionId the search transaction ID
-     */
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    /**
+     /**
      * Gets search service result.
      *
      * @return the search service result
      */
-    public List<SearchObjectResult> getServices() {
-        return services;
+    public List<ServiceInstanceObject> getServiceInstance() {
+        return serviceInstance;
     }
 
     /**
      * Sets search service result.
      *
-     * @param services the search service result
+     * @param serviceInstance the search service result
      */
-    public void setServices(List<SearchObjectResult> services) {
-        this.services = services;
+    public void setServiceInstance(List<ServiceInstanceObject> serviceInstance) {
+        this.serviceInstance = serviceInstance;
     }
 }

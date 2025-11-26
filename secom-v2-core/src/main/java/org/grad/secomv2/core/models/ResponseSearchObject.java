@@ -27,7 +27,7 @@ import java.util.List;
 public class ResponseSearchObject {
 
     // Class Variables
-    private List<SearchObjectResult> searchServiceResult;
+    private List<ServiceInstanceObject> searchServiceResult;
     @NotNull
     private PaginationObject paginationObject;
 
@@ -36,7 +36,7 @@ public class ResponseSearchObject {
      *
      * @return the search service result
      */
-    public List<SearchObjectResult> getSearchServiceResult() {
+    public List<ServiceInstanceObject> getSearchServiceResult() {
         return searchServiceResult;
     }
 
@@ -45,7 +45,7 @@ public class ResponseSearchObject {
      *
      * @param searchServiceResult the search service result
      */
-    public void setSearchServiceResult(List<SearchObjectResult> searchServiceResult) {
+    public void setSearchServiceResult(List<ServiceInstanceObject> searchServiceResult) {
         this.searchServiceResult = searchServiceResult;
     }
 

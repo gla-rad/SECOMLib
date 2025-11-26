@@ -18,8 +18,8 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -84,22 +84,21 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      *
      * @param includeXml, whether xml should be included
      */
-
     public void setIncludeXml(Boolean includeXml) { this.includeXml = includeXml; }
 
     /**
-     * Set local only search
+     * Get localOnly
      *
-     * @param localOnly, whether search should be restricted to the local MSR
-     */
-    public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
-
-    /**
-     * Get local only
-     *
-     * @return local only
+     * @return localOnly
      */
     public Boolean getLocalOnly() { return localOnly; }
+
+    /**
+     * Set localOnly
+     *
+     * @param localOnly, whether xml should be included
+     */
+    public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
     @Override
     public Object[] getAttributeArray() {

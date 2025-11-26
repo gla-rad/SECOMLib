@@ -56,7 +56,6 @@ class SearchFilterEnvelopeObjectTest {
         this.searchParameters.setSpecificationId("specificationId");
         this.searchParameters.setDesignId("designId");
         this.searchParameters.setInstanceId("instanceId");
-        this.searchParameters.setOrganizationId("organizationId");
         this.searchParameters.setMmsi("mmsi");
         this.searchParameters.setImo("imo");
         this.searchParameters.setServiceType("serviceType");
@@ -67,8 +66,6 @@ class SearchFilterEnvelopeObjectTest {
         this.obj = new EnvelopeSearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
-        this.obj.setPage(0);
-        this.obj.setPageSize(100);
     }
 
     /**
@@ -92,14 +89,11 @@ class SearchFilterEnvelopeObjectTest {
         assertEquals(this.obj.getQuery().getSpecificationId(), result.getQuery().getSpecificationId());
         assertEquals(this.obj.getQuery().getDesignId(), result.getQuery().getDesignId());
         assertEquals(this.obj.getQuery().getInstanceId(), result.getQuery().getInstanceId());
-        assertEquals(this.obj.getQuery().getOrganizationId(), result.getQuery().getOrganizationId());
         assertEquals(this.obj.getQuery().getMmsi(), result.getQuery().getMmsi());
         assertEquals(this.obj.getQuery().getImo(), result.getQuery().getImo());
         assertEquals(this.obj.getQuery().getServiceType(), result.getQuery().getServiceType());
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
-        assertEquals(this.obj.getPage(), result.getPage());
-        assertEquals(this.obj.getPageSize(), result.getPageSize());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
     }
 

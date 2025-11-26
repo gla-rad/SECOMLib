@@ -16,6 +16,8 @@
 package org.grad.secomv2.core.models;
 
 
+import jakarta.validation.constraints.NotNull;
+
 /**
  * The SECOM SearchFilterObject
  *
@@ -24,9 +26,11 @@ package org.grad.secomv2.core.models;
 public class SearchFilterObject {
 
     // The search filter object
+    @NotNull
     private EnvelopeSearchFilterObject envelope;
 
     // The envelope signature
+    @NotNull
     private String envelopeSignature;
 
     /**

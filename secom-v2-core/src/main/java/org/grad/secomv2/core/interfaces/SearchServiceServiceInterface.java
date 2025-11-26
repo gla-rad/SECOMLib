@@ -21,8 +21,7 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
-import org.grad.secomv2.core.models.SearchFilterObject;
-import org.grad.secomv2.core.models.ResponseSearchObject;
+import org.grad.secomv2.core.models.EnvelopeSearchFilterObject;
 import org.grad.secomv2.core.models.SearchResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,14 +52,14 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
      * POST /v2/searchService : The purpose of this interface is to search for
      * service instances to consume.
      *
-     * @param searchFilterObject    The search filter object
+     * @param envelopeSearchFilterObject    The search filter object
      * @return the result list of the search
      */
     @Path(SEARCH_SERVICE_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    SearchResult searchService(@Valid SearchFilterObject searchFilterObject);
+    SearchResult searchService(@Valid EnvelopeSearchFilterObject envelopeSearchFilterObject);
 
     /**
      * The exception handler implementation for the interface.

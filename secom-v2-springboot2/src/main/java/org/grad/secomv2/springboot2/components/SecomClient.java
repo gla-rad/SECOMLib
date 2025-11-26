@@ -285,12 +285,12 @@ public class SecomClient {
      * POST /v2/searchService : The purpose of this interface is to search for
      * service instances to consume.
      *
-     * @param searchFilterObject    The search filter object
+     * @param envelopeSearchFilterObject    The search filter object
      * @param page the page number to be retrieved
      * @param pageSize the maximum page size
      * @return the result list of the search
      */
-    public Optional<ResponseSearchObject> searchService(SearchFilterObject searchFilterObject,
+    public Optional<ResponseSearchObject> searchService(EnvelopeSearchFilterObject envelopeSearchFilterObject,
                                                         Integer page,
                                                         Integer pageSize) {
         return this.secomClient
@@ -302,7 +302,7 @@ public class SecomClient {
                         .build())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(searchFilterObject))
+                .body(BodyInserters.fromValue(envelopeSearchFilterObject))
                 .retrieve()
                 .bodyToMono(ResponseSearchObject.class)
                 .blockOptional();

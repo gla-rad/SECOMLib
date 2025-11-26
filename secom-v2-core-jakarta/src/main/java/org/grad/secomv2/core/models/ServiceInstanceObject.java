@@ -16,26 +16,26 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.SecomInstantDeserializer;
-import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import java.time.Instant;
 import java.util.UUID;
 
 /**
- * The SECOM Search Object Result Class.
+ * The SECOM Service Instance Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SearchObjectResult {
+public class ServiceInstanceObject {
 
     // SECOM-standard Fields
+    @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED,
+            pattern = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$",
+            example = "550e8400-e29b-41d4-a716-446655440000")
+    @NotNull
+    private UUID transactionId;
     @NotNull
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
@@ -51,28 +51,37 @@ public class SearchObjectResult {
     @NotNull
     private String organizationId;
     @NotNull
+    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9+.\\-]*:(//[^/\\s?#]*)?([^\\s?#]*)(\\?[^#\\s]*)?(#\\S*)?$")
     private String endpointUri;
-    @NotNull
-    private String endpointType;
+    private String[] endpointType;
     private String[] keywords;
     private String unlocode;
+    private String implementsDesign;
+    @NotNull
+    @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
+    private String apiDoc;
+    @NotNull
+    private String[] coverageArea;
     private String instanceAsXml;
-
-    // Non-standard fields (mentioned but not standardised)
-    @Schema(description = "The publication date-time", type = "string", example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
-    private Instant publishedAt;
-    @Schema(description = "The last updated date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
-    private Instant lastUpdatedAt;
-    private String comment;
-    private String mmsi;
     private String imo;
-    private String sourceMSR;
-    private Object geometry;
-    private UUID transactionIdentifier;
+    private String mmsi;
+    private String[] certificates;
+    private String[] sourceMSRs;
+    private String[] unsupportedParams;
+
+    /**
+     * Get the transaction id
+     *
+     * @return the transaction id
+     */
+    public UUID getTransactionId() { return transactionId; }
+
+    /**
+     * Set the transaction identifier
+     *
+     * @param transactionId the transaction identifier
+     */
+    public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
 
     /**
      * Gets instance id.
@@ -223,7 +232,7 @@ public class SearchObjectResult {
      *
      * @return the endpoint type
      */
-    public String getEndpointType() {
+    public String[] getEndpointType() {
         return endpointType;
     }
 
@@ -232,7 +241,7 @@ public class SearchObjectResult {
      *
      * @param endpointType the endpoint type
      */
-    public void setEndpointType(String endpointType) {
+    public void setEndpointType(String[] endpointType) {
         this.endpointType = endpointType;
     }
 
@@ -273,6 +282,60 @@ public class SearchObjectResult {
     }
 
     /**
+     * Get implements design
+     *
+     * @return implementsDesign
+     */
+    public String getImplementsDesign() {
+        return implementsDesign;
+    }
+
+    /**
+     * Sets implements design
+     *
+     * @param implementsDesign the design
+     */
+    public void setImplementsDesign(String implementsDesign) {
+        this.implementsDesign = implementsDesign;
+    }
+
+    /**
+     * Get api doc
+     *
+     * @return apiDoc
+     */
+    public String getApiDoc() {
+        return apiDoc;
+    }
+
+    /**
+     * Sets api doc
+     *
+     * @param apiDoc the api doc
+     */
+    public void setApiDoc(String apiDoc) {
+        this.apiDoc = apiDoc;
+    }
+
+    /**
+     * Gets coverage area
+     *
+     * @return coverageArea
+     */
+    public String[] getCoverageArea() {
+        return coverageArea;
+    }
+
+    /**
+     * Sets coverage area
+     *
+     * @param coverageArea the coverage area
+     */
+    public void setCoverageArea(String[] coverageArea) {
+        this.coverageArea = coverageArea;
+    }
+
+    /**
      * Gets instance as xml.
      *
      * @return the instance as xml
@@ -288,78 +351,6 @@ public class SearchObjectResult {
      */
     public void setInstanceAsXml(String instanceAsXml) {
         this.instanceAsXml = instanceAsXml;
-    }
-
-    /**
-     * Gets published at.
-     *
-     * @return the published at
-     */
-    public Instant getPublishedAt() {
-        return publishedAt;
-    }
-
-    /**
-     * Sets published at.
-     *
-     * @param publishedAt the published at
-     */
-    public void setPublishedAt(Instant publishedAt) {
-        this.publishedAt = publishedAt;
-    }
-
-    /**
-     * Gets last updated at.
-     *
-     * @return the last updated at
-     */
-    public Instant getLastUpdatedAt() {
-        return lastUpdatedAt;
-    }
-
-    /**
-     * Sets last updated at.
-     *
-     * @param lastUpdatedAt the last updated at
-     */
-    public void setLastUpdatedAt(Instant lastUpdatedAt) {
-        this.lastUpdatedAt = lastUpdatedAt;
-    }
-
-    /**
-     * Gets comment.
-     *
-     * @return the comment
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * Sets comment.
-     *
-     * @param comment the comment
-     */
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    /**
-     * Gets mmsi.
-     *
-     * @return the mmsi
-     */
-    public String getMmsi() {
-        return mmsi;
-    }
-
-    /**
-     * Sets mmsi.
-     *
-     * @param mmsi the mmsi
-     */
-    public void setMmsi(String mmsi) {
-        this.mmsi = mmsi;
     }
 
     /**
@@ -381,53 +372,75 @@ public class SearchObjectResult {
     }
 
     /**
-     * Gets source msr.
+     * Gets mmsi.
      *
-     * @return the source msr
+     * @return the mmsi
      */
-    public String getSourceMSR() {
-        return sourceMSR;
+    public String getMmsi() {
+        return mmsi;
     }
 
     /**
-     * Sets source msr.
+     * Sets mmsi.
      *
-     * @param sourceMSR the source msr
+     * @param mmsi the mmsi
      */
-    public void setSourceMSR(String sourceMSR) {
-        this.sourceMSR = sourceMSR;
+    public void setMmsi(String mmsi) {
+        this.mmsi = mmsi;
     }
 
     /**
-     * Gets geometry.
+     * Gets certificates
      *
-     * @return the geometry
+     * @return certificates
      */
-    public Object getGeometry() {
-        return geometry;
+    public String[] getCertificates() {
+        return certificates;
     }
 
     /**
-     * Sets geometry.
+     * Sets the certificates
      *
-     * @param geometry the geometry
+     * @param certificates the certificates
      */
-    public void setGeometry(Object geometry) {
-        this.geometry = geometry;
+    public void setCertificates(String[] certificates) {
+        this.certificates = certificates;
     }
 
     /**
-     * Get the transaction identifier
+     * Gets source MSRs.
      *
-     * @return the transaction identifier
+     * @return the source MSRs
      */
-    public UUID getTransactionIdentifier() { return transactionIdentifier; }
+    public String[] getSourceMSRs() {
+        return sourceMSRs;
+    }
 
     /**
-     * Set the transaction identifier
+     * Sets source MSRs.
      *
-     * @param transactionIdentifier the transaction identifier
+     * @param sourceMSRs the source msr
      */
-    public void setTransactionIdentifier(UUID transactionIdentifier) { this.transactionIdentifier = transactionIdentifier; }
+    public void setSourceMSRs(String[] sourceMSRs) {
+        this.sourceMSRs = sourceMSRs;
+    }
+
+    /**
+     * Gets unsupported params
+     *
+     * @return unsupportedParams
+     */
+    public String[] getUnsupportedParams() {
+        return unsupportedParams;
+    }
+
+    /**
+     * Set unsupportedParams
+     *
+     * @param unsupportedParams the unsupported params array
+     */
+    public void setUnsupportedParams(String[] unsupportedParams) {
+        this.unsupportedParams = unsupportedParams;
+    }
 
 }

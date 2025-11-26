@@ -28,11 +28,11 @@ import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SearchFilterObjectTest {
+class EnvelopeSearchFilterObjectTest {
 
     // Class Variables
     private SearchParameters searchParameters;
-    private SearchFilterObject obj;
+    private EnvelopeSearchFilterObject obj;
 
     private ObjectMapper mapper;
 
@@ -63,12 +63,11 @@ class SearchFilterObjectTest {
         this.searchParameters.setUnlocode("unlocode");
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
 
+
         // Generate a new object
-        this.obj = new SearchFilterObject();
+        this.obj = new EnvelopeSearchFilterObject();
         this.obj.setQuery(this.searchParameters);
         this.obj.setGeometry("geometry");
-        this.obj.setPage(0);
-        this.obj.setPageSize(100);
     }
 
     /**
@@ -78,7 +77,7 @@ class SearchFilterObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        SearchFilterObject result = this.mapper.readValue(jsonString, SearchFilterObject.class);
+        EnvelopeSearchFilterObject result = this.mapper.readValue(jsonString, EnvelopeSearchFilterObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
@@ -98,8 +97,6 @@ class SearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getServiceType(), result.getQuery().getServiceType());
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
-        assertEquals(this.obj.getPage(), result.getPage());
-        assertEquals(this.obj.getPageSize(), result.getPageSize());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
     }
 
