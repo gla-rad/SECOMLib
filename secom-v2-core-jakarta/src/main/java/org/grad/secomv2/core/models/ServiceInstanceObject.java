@@ -21,6 +21,8 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -65,7 +67,7 @@ public class ServiceInstanceObject {
     private String instanceAsXml;
     private String imo;
     private String mmsi;
-    private String[] certificates;
+    private List<String> certificates;
     private String[] sourceMSRs;
     private String[] unsupportedParams;
 
@@ -394,7 +396,7 @@ public class ServiceInstanceObject {
      *
      * @return certificates
      */
-    public String[] getCertificates() {
+    public List<String> getCertificates() {
         return certificates;
     }
 
@@ -403,7 +405,7 @@ public class ServiceInstanceObject {
      *
      * @param certificates the certificates
      */
-    public void setCertificates(String[] certificates) {
+    public void setCertificates(List<String> certificates) {
         this.certificates = certificates;
     }
 

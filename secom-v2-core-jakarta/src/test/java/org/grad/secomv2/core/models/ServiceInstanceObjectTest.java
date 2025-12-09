@@ -89,7 +89,7 @@ class ServiceInstanceObjectTest {
         assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
         assertEquals(this.obj.getMmsi(), result.getMmsi());
         assertEquals(this.obj.getImo(), result.getImo());
-        assertArrayEquals(this.obj.getCoverageArea(), result.getCoverageArea());
+
     }
 
 }

@@ -16,9 +16,9 @@
 
 package org.grad.secomv2.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 
 /**
@@ -93,6 +93,28 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      * @param localOnly, whether search should be restricted to the local MSR
      */
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
+
+    /**
+     * Override the Abstract Envelope implementation to change the Json property name
+     * Gets the digital signature reference
+     *
+     * @return the digital signature reference
+     */
+    @Override
+    @JsonProperty("envelopeSignatureReference")
+    public String getDigitalSignatureReference() { return digitalSignatureReference; }
+
+    /**
+     * Overrides the Abstract Envelope implementation to change the Json property name
+     * Sets the digital signature reference
+     *
+     * @param digitalSignatureReference the digital signature reference
+     */
+    @Override
+    @JsonProperty("envelopeSignatureReference")
+    public void setDigitalSignatureReference(String digitalSignatureReference) {
+        this.digitalSignatureReference = digitalSignatureReference;
+    }
 
     /**
      * Get local only
