@@ -58,7 +58,7 @@ public class ServiceInstanceObject {
     private String[] endpointType;
     private String[] keywords;
     private String unlocode;
-    private String implementsDesign;
+    private String implementsDesigns;
     @NotNull
     @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
     private String apiDoc;
@@ -288,17 +288,17 @@ public class ServiceInstanceObject {
      *
      * @return implementsDesign
      */
-    public String getImplementsDesign() {
-        return implementsDesign;
+    public String getImplementsDesigns() {
+        return implementsDesigns;
     }
 
     /**
      * Sets implements design
      *
-     * @param implementsDesign the design
+     * @param implementsDesigns the design
      */
-    public void setImplementsDesign(String implementsDesign) {
-        this.implementsDesign = implementsDesign;
+    public void setImplementsDesigns(String implementsDesigns) {
+        this.implementsDesigns = implementsDesigns;
     }
 
     /**
