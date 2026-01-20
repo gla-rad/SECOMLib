@@ -63,7 +63,7 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setInstanceAsXml("instanceAsXml");
         this.searchObjectResult.setMmsi("mmsi");
         this.searchObjectResult.setImo("imo");
-        this.searchObjectResult.setSourceMSRs(new String[]{"sourceMSR"});
+        this.searchObjectResult.setSourceMSR("sourceMSR");
 
         // Generate a new object
         this.obj = new ResponseSearchObject();
@@ -98,7 +98,7 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getMmsi(), result.getSearchServiceResult().get(0).getMmsi());
         assertEquals(this.obj.getSearchServiceResult().get(0).getImo(), result.getSearchServiceResult().get(0).getImo());
-        assertArrayEquals(this.obj.getSearchServiceResult().get(0).getSourceMSRs(), result.getSearchServiceResult().get(0).getSourceMSRs());
+        assertEquals(this.obj.getSearchServiceResult().get(0).getSourceMSR(), result.getSearchServiceResult().get(0).getSourceMSR());
 
     }
 

@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.CsvStringGenerator;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.Pattern;
@@ -27,7 +28,7 @@ import java.net.URI;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SearchParameters {
+public class SearchParameters implements CsvStringGenerator {
 
     // Class Variables
     private String name;
@@ -306,4 +307,23 @@ public class SearchParameters {
         this.endpointUri = endpointUri;
     }
 
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                name,
+                status,
+                version,
+                keywords,
+                description,
+                dataProductType,
+                specificationId,
+                designId,
+                instanceId,
+                mmsi,
+                imo,
+                serviceType,
+                unlocode,
+                endpointUri
+        };
+    }
 }

@@ -20,6 +20,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.CsvStringGenerator;
+import org.grad.secomv2.core.base.DigitalSignatureBearer;
+import org.grad.secomv2.core.base.GenericDataBearer;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -136,4 +139,5 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
                 digitalSignatureReference
         };
     }
+
 }

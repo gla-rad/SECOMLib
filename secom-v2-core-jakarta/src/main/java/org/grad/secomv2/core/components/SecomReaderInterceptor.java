@@ -20,9 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.AbstractEnvelope;
-import org.grad.secomv2.core.models.GetResponseObject;
-import org.grad.secomv2.core.models.UploadObject;
+import org.grad.secomv2.core.models.*;
 
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Context;
@@ -116,6 +114,10 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
         else if (ctx.getType().isAssignableFrom(UploadObject.class)) {
             obj = this.parseRequestBody(is, ctx.getMediaType(), UploadObject.class);
         }
+        // For the Search Filter Object
+        else if (ctx.getType().isAssignableFrom(SearchFilterObject.class)) {
+            obj = this.parseRequestBody(is, ctx.getMediaType(), SearchFilterObject.class);
+        }
         // For Get By Link Byte Array Messages
         else if(ctx.getType().isAssignableFrom(byte[].class)) {
             obj = this.parseRequestBody(is, ctx.getMediaType(), byte[].class);
@@ -146,6 +148,7 @@ public class SecomReaderInterceptor implements ReaderInterceptor {
         /*
          * Use this interceptor for envelope signature bearer objects such as:
          *  1. UploadObject
+         *  2. SearchFilterObject
          */
         else if(obj instanceof final EnvelopeSignatureBearer envelopeSignatureBearer) {
             AbstractEnvelope abstractEnvelope = envelopeSignatureBearer.getEnvelope();

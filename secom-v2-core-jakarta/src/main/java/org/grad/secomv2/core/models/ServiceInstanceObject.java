@@ -37,7 +37,7 @@ public class ServiceInstanceObject {
             pattern = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$",
             example = "550e8400-e29b-41d4-a716-446655440000")
     @NotNull
-    private UUID transactionId;
+    private String transactionId;
     @NotNull
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
@@ -68,7 +68,7 @@ public class ServiceInstanceObject {
     private String imo;
     private String mmsi;
     private List<String> certificates;
-    private String[] sourceMSRs;
+    private String sourceMSR;
     private String[] unsupportedParams;
 
     /**
@@ -76,14 +76,14 @@ public class ServiceInstanceObject {
      *
      * @return the transaction id
      */
-    public UUID getTransactionId() { return transactionId; }
+    public String getTransactionId() { return transactionId; }
 
     /**
      * Set the transaction identifier
      *
      * @param transactionId the transaction identifier
      */
-    public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
+    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
 
     /**
      * Gets instance id.
@@ -414,8 +414,8 @@ public class ServiceInstanceObject {
      *
      * @return the source MSRs
      */
-    public String[] getSourceMSRs() {
-        return sourceMSRs;
+    public String getSourceMSR() {
+        return sourceMSR;
     }
 
     /**
@@ -423,8 +423,8 @@ public class ServiceInstanceObject {
      *
      * @param sourceMSRs the source msr
      */
-    public void setSourceMSRs(String[] sourceMSRs) {
-        this.sourceMSRs = sourceMSRs;
+    public void setSourceMSR(String sourceMSRs) {
+        this.sourceMSR = sourceMSRs;
     }
 
     /**

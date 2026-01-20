@@ -17,13 +17,15 @@ package org.grad.secomv2.core.models;
 
 
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
+import org.grad.secomv2.core.base.CsvStringGenerator;
 
 /**
  * The SECOM SearchFilterObject
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public class SearchFilterObject {
+public class SearchFilterObject implements EnvelopeSignatureBearer {
 
     // The search filter object
     @NotNull
