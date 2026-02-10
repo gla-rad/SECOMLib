@@ -16,9 +16,10 @@
 
 package org.grad.secom.core.base;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -43,7 +44,7 @@ public class InstantSerializer extends StdSerializer<Instant> {
      * Instantiates a new Byte array serializer.
      */
     protected InstantSerializer() {
-        this(null);
+        this(Instant.class);
     }
 
     /**
@@ -60,12 +61,12 @@ public class InstantSerializer extends StdSerializer<Instant> {
      *
      * @param instant               The input to be serialized
      * @param jg                    The JSON generator
-     * @param serializerProvider    The serialization provider
+     * @param SerializationContext  The serialization context
      * @return the serialized output
      * @throws IOException for any IO exceptions
      */
     @Override
-    public void serialize(Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(Instant instant, JsonGenerator jg, SerializationContext serializationContext) throws JacksonException {
         jg.writeString(Optional.ofNullable(instant)
                 .map(dt -> dt.atZone(ZoneId.systemDefault()))
                 .map(SECOM_DATE_TIME_FORMATTER::format)

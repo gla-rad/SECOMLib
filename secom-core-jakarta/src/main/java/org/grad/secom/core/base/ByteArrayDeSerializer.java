@@ -16,10 +16,10 @@
 
 package org.grad.secom.core.base;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JacksonException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,7 +43,7 @@ public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
      * Instantiates a new Byte array de serializer.
      */
     protected ByteArrayDeSerializer() {
-        this(null);
+        this(byte[].class);
     }
 
     /**
@@ -61,12 +61,11 @@ public class ByteArrayDeSerializer extends StdDeserializer<byte[]> {
      * @param jp    The JSON Parser
      * @param ctxt  The deserialization context
      * @return the deserialized output
-     * @throws IOException for any IO exceptions
-     * @throws JsonProcessingException for any JSON processing exceptions
+     * @throws JacksonException for any JSON processing exceptions
      */
     @Override
-    public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        final String value = jp.getCodec().readValue(jp, String.class);
+    public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws JacksonException {
+        final String value = jp.readValueAs(String.class);
         if(value == null) {
             return null;
         }

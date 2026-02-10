@@ -16,11 +16,11 @@
 
 package org.grad.secom.core.base;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.deser.std.StdDeserializer;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -43,7 +43,7 @@ public class InstantDeserializer extends StdDeserializer<Instant> {
      * Instantiates a new Byte array de serializer.
      */
     protected InstantDeserializer() {
-        this(null);
+        this(Instant.class);
     }
 
     /**
@@ -61,11 +61,11 @@ public class InstantDeserializer extends StdDeserializer<Instant> {
      * @param jp        The JSON Parser
      * @param context   The deserialization context
      * @return the deserialized output
-     * @throws IOException for any IO exceptions
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public Instant deserialize(JsonParser jp, DeserializationContext context) throws IOException {
-        final String value = jp.getCodec().readValue(jp, String.class);
+    public Instant deserialize(JsonParser jp, DeserializationContext context) throws JacksonException {
+        final String value = jp.readValueAs(String.class);
         return Optional.ofNullable(value)
                 .filter(not(String::isBlank))
                 .map(SECOM_DATE_TIME_FORMATTER::parse)

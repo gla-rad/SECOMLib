@@ -16,7 +16,7 @@
 
 package org.grad.secom.core.components;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.secom.core.base.*;
 import org.grad.secom.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secom.core.exceptions.SecomSignatureVerificationException;

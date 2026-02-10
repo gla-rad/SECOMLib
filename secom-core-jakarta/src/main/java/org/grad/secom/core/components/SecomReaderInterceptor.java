@@ -16,7 +16,7 @@
 
 package org.grad.secom.core.components;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import org.grad.secom.core.base.*;
 import org.grad.secom.core.exceptions.SecomValidationException;

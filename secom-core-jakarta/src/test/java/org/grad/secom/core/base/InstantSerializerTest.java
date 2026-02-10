@@ -16,13 +16,13 @@
 
 package org.grad.secom.core.base;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.json.WriterBasedJsonGenerator;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import tools.jackson.core.json.JsonFactory;
+import tools.jackson.core.json.WriterBasedJsonGenerator;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.SerializationContext;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -38,7 +38,7 @@ class InstantSerializerTest {
     InstantSerializer instantSerializer;
     StringWriter stringWriter;
     WriterBasedJsonGenerator jsonGenerator;
-    SerializerProvider serializerProvider;
+    SerializationContext serializationContext;
 
     /**
      * Set up some base data.
@@ -56,7 +56,7 @@ class InstantSerializerTest {
         this.jsonGenerator = (WriterBasedJsonGenerator) new JsonFactory().createGenerator(this.stringWriter);
 
         // And add a serialisation provider
-        this.serializerProvider = new ObjectMapper().getSerializerProvider();
+        this.serializationContext = new ObjectMapper()._serializationContext();
     }
 
     /**
@@ -72,8 +72,8 @@ class InstantSerializerTest {
         this.jsonGenerator.writeStartObject();
 
         // Serialize the input
-        jsonGenerator.writeFieldName("date");
-        instantSerializer.serialize(instant, this.jsonGenerator, this.serializerProvider);
+        jsonGenerator.writeName("date");
+        instantSerializer.serialize(instant, this.jsonGenerator, serializationContext);
 
         // Finish the JSON Generation
         this.jsonGenerator.writeEndObject();

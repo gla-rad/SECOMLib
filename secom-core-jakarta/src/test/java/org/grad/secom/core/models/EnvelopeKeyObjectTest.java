@@ -16,14 +16,15 @@
 
 package org.grad.secom.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
@@ -44,8 +45,9 @@ class EnvelopeKeyObjectTest {
     @BeforeEach
     void setup() {
         //Setup an object mapper
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JSR310Module());
+        this.mapper = JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .build();
 
         // Create a digital signature value
         this.digitalSignatureValue = new DigitalSignatureValue();
@@ -68,7 +70,7 @@ class EnvelopeKeyObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         EnvelopeKeyObject result = this.mapper.readValue(jsonString, EnvelopeKeyObject.class);
