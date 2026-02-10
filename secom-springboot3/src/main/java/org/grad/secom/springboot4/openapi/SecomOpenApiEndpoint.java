@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.springboot3.openapi;
+package org.grad.secom.springboot4.openapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;

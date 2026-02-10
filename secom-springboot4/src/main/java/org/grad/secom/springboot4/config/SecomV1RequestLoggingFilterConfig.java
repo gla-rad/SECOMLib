@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secom.springboot3.config;
+package org.grad.secom.springboot4.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
