@@ -1,5 +1,5 @@
-org.grad.secomv2.springboot3.config.SecomV2JaxrsApplication
-org.grad.secomv2.springboot3.config.SecomV2RequestLoggingFilterConfig
-org.grad.secomv2.springboot3.components.SecomConfigProperties
-org.grad.secomv2.springboot3.components.SecomSpringContext
-org.grad.secomv2.springboot3.openapi.SecomV2OpenApiEndpoint
+org.grad.secomv2.springboot4.config.SecomV2JaxrsApplication
+org.grad.secomv2.springboot4.config.SecomV2RequestLoggingFilterConfig
+org.grad.secomv2.springboot4.components.SecomConfigProperties
+org.grad.secomv2.springboot4.components.SecomSpringContext
+org.grad.secomv2.springboot4.openapi.SecomV2OpenApiEndpoint
