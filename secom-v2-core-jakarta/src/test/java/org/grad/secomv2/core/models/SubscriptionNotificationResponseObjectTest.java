@@ -16,11 +16,13 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,8 +40,9 @@ class SubscriptionNotificationResponseObjectTest {
     @BeforeEach
     void setup() {
         //Setup an object mapper
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
+        this.mapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .build();
 
         // Generate a new upload object
         this.obj = new SubscriptionNotificationResponseObject();
@@ -50,7 +53,7 @@ class SubscriptionNotificationResponseObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         SubscriptionNotificationResponseObject result = this.mapper.readValue(jsonString, SubscriptionNotificationResponseObject.class);

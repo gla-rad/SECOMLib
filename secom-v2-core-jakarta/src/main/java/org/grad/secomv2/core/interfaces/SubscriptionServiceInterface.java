@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.core.JacksonException;;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
@@ -80,7 +80,7 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+                || ex instanceof JacksonException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
             subscriptionResponseObject.setMessage("Bad Request");

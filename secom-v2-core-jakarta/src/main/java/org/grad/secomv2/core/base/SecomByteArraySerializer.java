@@ -16,9 +16,10 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -42,7 +43,7 @@ public class SecomByteArraySerializer extends StdSerializer<byte[]> {
      * Instantiates a new Byte array serializer.
      */
     protected SecomByteArraySerializer() {
-        this(null);
+        this(byte[].class);
     }
 
     /**
@@ -59,12 +60,12 @@ public class SecomByteArraySerializer extends StdSerializer<byte[]> {
      *
      * @param bytes                 The input to be serialized
      * @param jg                    The JSON generator
-     * @param serializerProvider    The serialization provider
+     * @param serializationContext  The serialization context
      * @return the serialized output
-     * @throws IOException for any IO exceptions
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public void serialize(byte[] bytes, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(byte[] bytes, JsonGenerator jg, SerializationContext serializationContext) throws JacksonException {
         final String input = new String(bytes, StandardCharsets.UTF_8);
         jg.writeString(input);
     }

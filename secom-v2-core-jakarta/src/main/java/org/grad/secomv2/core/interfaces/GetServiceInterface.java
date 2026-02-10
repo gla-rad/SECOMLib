@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.ws.rs.*;
@@ -105,7 +105,7 @@ public interface GetServiceInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+                || ex instanceof JacksonException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {

@@ -135,12 +135,13 @@ public class SecomV2JaxrsApplication extends Application implements ApplicationC
         corsFilter.setAllowedMethods("OPTIONS, GET, POST, DELETE, PUT, PATCH");
         corsFilter.setAllowCredentials(false);
         return Set.of(
-                corsFilter,
+                corsFilter
                 /*
                  * Add the JaxRS Application Object Mapper.
                  */
-                new SecomObjectMapperProvider(Optional.ofNullable(this.objectMapper)
-                        .orElse(new ObjectMapper()))
+                // The old Jackson v2.0 is no longer supported
+                //new SecomObjectMapperProvider(Optional.ofNullable(this.objectMapper)
+                //        .orElse(new ObjectMapper()))
         );
     }
 

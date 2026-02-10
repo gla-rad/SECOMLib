@@ -16,11 +16,11 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Optional;
@@ -43,7 +43,7 @@ public class SecomInstantSerializer extends StdSerializer<Instant> {
      * Instantiates a new Byte array serializer.
      */
     protected SecomInstantSerializer() {
-        this(null);
+        this(Instant.class);
     }
 
     /**
@@ -58,14 +58,14 @@ public class SecomInstantSerializer extends StdSerializer<Instant> {
     /**
      * Implements the serialization procedure of the serializer.
      *
-     * @param instant         The input to be serialized
+     * @param instant               The input to be serialized
      * @param jg                    The JSON generator
-     * @param serializerProvider    The serialization provider
+     * @param serializationContext  The serialization context
      * @return the serialized output
-     * @throws IOException for any IO exceptions
+     * @throws JacksonException for any Jackson exceptions
      */
     @Override
-    public void serialize(Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(Instant instant, JsonGenerator jg, SerializationContext serializationContext) throws JacksonException {
         jg.writeString(Optional.ofNullable(instant)
                 .map(dt -> dt.atZone(ZoneId.systemDefault()))
                 .map(SECOM_DATE_TIME_FORMATTER::format)

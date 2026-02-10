@@ -16,11 +16,12 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -41,8 +42,9 @@ class EncryptionKeyNotificationObjectTest {
     @BeforeEach
     void setup() {
         //Setup an object mapper
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
+        this.mapper = JsonMapper.builder()
+                .addModule(new JavaTimeModule())
+                .build();
 
         // Create a new envelop key notification object
         this.envelopeKeyNotificationObject = new EnvelopeKeyNotificationObject();
@@ -61,7 +63,7 @@ class EncryptionKeyNotificationObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         EncryptionKeyNotificationObject result = this.mapper.readValue(jsonString, EncryptionKeyNotificationObject.class);

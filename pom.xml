@@ -5,7 +5,7 @@
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-v2-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
 
     <modules>
         <module>secom-v2-core</module>
@@ -25,7 +25,7 @@
         <maven-deploy-plugin.version>3.1.1</maven-deploy-plugin.version>
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
-        <jackson.version>2.13.2</jackson.version>
+        <jackson.version>3.0.4</jackson.version>
         <netty.version>1.0.24</netty.version>
         <junit.jupiter.version>5.9.1</junit.jupiter.version>
         <junit.platform.version>1.9.1</junit.platform.version>

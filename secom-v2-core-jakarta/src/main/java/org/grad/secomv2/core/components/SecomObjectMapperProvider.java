@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.components;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 import jakarta.ws.rs.ext.ContextResolver;
 

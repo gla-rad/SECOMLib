@@ -4,13 +4,13 @@
     <parent>
         <artifactId>secom-v2-parent</artifactId>
         <groupId>org.grad.secom</groupId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.4-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-v2-springboot4</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
 
     <properties>
         <springframework4.version>7.0.3</springframework4.version>
@@ -57,6 +57,13 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-servlet-spring-boot-starter</artifactId>
             <version>${resteasy-spring-boot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>tools.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

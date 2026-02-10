@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
@@ -83,7 +83,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+                || ex instanceof JacksonException
                 || ex instanceof NotFoundException
                 || ex instanceof SecomSignatureVerificationException) {
             responseStatus = Response.Status.BAD_REQUEST;

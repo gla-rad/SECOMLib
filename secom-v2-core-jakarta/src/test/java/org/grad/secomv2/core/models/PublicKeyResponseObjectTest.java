@@ -16,11 +16,13 @@
 package org.grad.secomv2.core.models;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -43,8 +45,9 @@ public class PublicKeyResponseObjectTest {
     @BeforeEach
     void setUp() {
         //Setup an object mapper
-        this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
+        this.mapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule())
+            .build();
 
         // Create an envelope public key reponse object
         final EnvelopePublicKeyResponseObject envelopePublicKeyResponseObject = new EnvelopePublicKeyResponseObject();
@@ -62,10 +65,10 @@ public class PublicKeyResponseObjectTest {
     /**
      * Test the Public Key Object can be converted to json and back
      *
-     * @throws JsonProcessingException
+     * @throws JacksonException
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         PublicKeyResponseObject result = this.mapper.readValue(jsonString, PublicKeyResponseObject.class);
