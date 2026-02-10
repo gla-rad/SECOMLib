@@ -1,3 +1,4 @@
+org.grad.secomv2.springboot4.config.ResteasyAutoConfiguration
 org.grad.secomv2.springboot4.config.SecomV2JaxrsApplication
 org.grad.secomv2.springboot4.config.SecomV2RequestLoggingFilterConfig
 org.grad.secomv2.springboot4.components.SecomConfigProperties
