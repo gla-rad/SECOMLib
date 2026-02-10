@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot3.components;
+package org.grad.secomv2.springboot4.components;
 
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;

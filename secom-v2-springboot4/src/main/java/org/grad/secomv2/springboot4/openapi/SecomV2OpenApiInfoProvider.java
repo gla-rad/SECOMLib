@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot3.openapi;
+package org.grad.secomv2.springboot4.openapi;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;

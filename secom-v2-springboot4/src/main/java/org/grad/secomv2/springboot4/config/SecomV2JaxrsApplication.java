@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot3.config;
+package org.grad.secomv2.springboot4.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.jaxrs2.integration.resources.AcceptHeaderOpenApiResource;

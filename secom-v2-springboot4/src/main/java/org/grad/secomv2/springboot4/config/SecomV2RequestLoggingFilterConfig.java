@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.grad.secomv2.springboot3.config;
+package org.grad.secomv2.springboot4.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.grad.secomv2.core.base.SecomConstants;
