@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 import java.util.Arrays;
@@ -88,6 +89,20 @@ public enum SECOM_DataProductType implements SECOM_Enum {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * Find the enum entry that corresponds to the provided value.
+     *
+     * @param value the enum value
+     * @return The respective enum entry
+     */
+    @JsonCreator
+    public static SECOM_DataProductType fromString(String value) {
+        return Arrays.stream(SECOM_DataProductType.values())
+                .filter(t -> Objects.equals(t.getValue(), value))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
