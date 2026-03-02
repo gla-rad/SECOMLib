@@ -18,6 +18,8 @@ package org.grad.secomv2.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.core.JacksonException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -102,7 +104,7 @@ public enum SECOM_DataProductType implements SECOM_Enum {
         return Arrays.stream(SECOM_DataProductType.values())
                 .filter(t -> Objects.equals(t.getValue(), value))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new SecomValidationException("Invalid SECOM_DataProductType value: " + value));
     }
 
     /**
