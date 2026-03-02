@@ -128,7 +128,7 @@ class EnvelopeLinkObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(String.valueOf(this.obj.getContainerType().getValue()), csv[0]);
-        assertEquals(this.obj.getDataProductType().name(), csv[1]);
+        assertEquals(this.obj.getDataProductType().getValue(), csv[1]);
         assertEquals(this.obj.getExchangeMetadata().getDataProtection().toString(), csv[2]);
         assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), csv[3]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[4]);

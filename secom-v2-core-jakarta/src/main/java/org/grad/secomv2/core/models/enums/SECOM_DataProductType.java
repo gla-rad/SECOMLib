@@ -57,28 +57,28 @@ public enum SECOM_DataProductType implements SECOM_Enum {
     EPC("EPC", "Electronic Port Clearance");
 
     // Enum Variables
-    private final String name;
+    private final String value;
     private final String description;
 
     /**
      * Enum Constructor
      *
-     * @param name the enum name
+     * @param value the enum value
      * @param description the enum description
      */
-    SECOM_DataProductType(final String name, final String description) {
-        this.name = name;
+    SECOM_DataProductType(final String value, final String description) {
+        this.value = value;
         this.description = description;
     }
 
     /**
-     * Gets name.
+     * Gets value.
      *
-     * @return the name
+     * @return the value
      */
     @JsonValue
-    public String getName() {
-        return name;
+    public String getValue() {
+        return value;
     }
 
     /**
@@ -110,6 +110,6 @@ public enum SECOM_DataProductType implements SECOM_Enum {
      */
     @Override
     public String asString() {
-        return this.name();
+        return this.getValue();
     }
 }

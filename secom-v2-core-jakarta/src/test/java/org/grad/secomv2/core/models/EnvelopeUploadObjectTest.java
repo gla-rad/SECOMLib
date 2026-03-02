@@ -127,7 +127,7 @@ class EnvelopeUploadObjectTest {
         String[] csv = signatureCSV.split("\\.");
         assertEquals(new String(this.obj.getData()), new String(Base64.getDecoder().decode(csv[0])));
         assertEquals(String.valueOf(this.obj.getContainerType().getValue()), csv[1]);
-        assertEquals(this.obj.getDataProductType().name(), csv[2]);
+        assertEquals(this.obj.getDataProductType().getValue(), csv[2]);
         assertEquals(this.obj.getExchangeMetadata().getDataProtection().toString(), csv[3]);
         assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), csv[4]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[5]);
