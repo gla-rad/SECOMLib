@@ -16,6 +16,8 @@
 
 package org.grad.secomv2.core.models.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -25,45 +27,58 @@ import java.util.Objects;
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
 public enum SECOM_DataProductType implements SECOM_Enum {
-    OTHER("Other data types not covered in this table"),
-    S57("S-57 Electronic Navigational Chart (ENC)"),
-    S101("S-101 Electronic Navigational Chart (ENC)"),
-    S102("S-102 Bathymetric Surface"),
-    S104("S-104 Water Level Information for Surface Navigation"),
-    S111("S-111 Surface Currents"),
-    S122("S-122 Marine Protected Areas (MPAs)"),
-    S123("S-123 Marine Radio Services"),
-    S124("S-124 Navigational Warnings"),
-    S125("S-125 Marine Navigational Services"),
-    S126("S-126 Marine Physical Environment"),
-    S127("S-127 Marine Traffic Management"),
-    S128("S-128 Catalogue of Nautical Products"),
-    S129("S-129 Under Keel Clearance Management (UKCM)"),
-    S131("S-131 Marine Harbour Infrastructure"),
-    S201("S-201 Aids to Navigation (AtoN) Information"),
-    S210("S-210 Inter-VTS Exchange Format"),
-    S211("S-211 Port Call Message Format"),
-    S212("S-212 VTS Digital Information Service"),
-    S401("S-401 Inland ENC"),
-    S402("S-402 Bathymetric Contour Overlay for Inland ENC"),
-    S411("S-411 Sea Ice Information"),
-    S412("S-412 Weather Overlay"),
-    S413("S-413 Marine Weather Conditions"),
-    S414("S-414 Marine Weather Observations"),
-    S421("S-421 Route Plan"),
-    RTZ("Route Plan"),
-    EPC("Electronic Port Clearance");
+    OTHER("OTHER", "Other data types not covered in this table"),
+    S57("S-57", "S-57 Electronic Navigational Chart (ENC)"),
+    S101("S-101", "S-101 Electronic Navigational Chart (ENC)"),
+    S102("S-102", "S-102 Bathymetric Surface"),
+    S104("S-104", "S-104 Water Level Information for Surface Navigation"),
+    S111("S-111", "S-111 Surface Currents"),
+    S122("S-122", "S-122 Marine Protected Areas (MPAs)"),
+    S123("S-123", "S-123 Marine Radio Services"),
+    S124("S-124", "S-124 Navigational Warnings"),
+    S125("S-125", "S-125 Marine Navigational Services"),
+    S126("S-126", "S-126 Marine Physical Environment"),
+    S127("S-127", "S-127 Marine Traffic Management"),
+    S128("S-128", "S-128 Catalogue of Nautical Products"),
+    S129("S-129", "S-129 Under Keel Clearance Management (UKCM)"),
+    S131("S-131", "S-131 Marine Harbour Infrastructure"),
+    S201("S-201", "S-201 Aids to Navigation (AtoN) Information"),
+    S210("S-210", "S-210 Inter-VTS Exchange Format"),
+    S211("S-211", "S-211 Port Call Message Format"),
+    S212("S-212", "S-212 VTS Digital Information Service"),
+    S401("S-401", "S-401 Inland ENC"),
+    S402("S-402", "S-402 Bathymetric Contour Overlay for Inland ENC"),
+    S411("S-411", "S-411 Sea Ice Information"),
+    S412("S-412", "S-412 Weather Overlay"),
+    S413("S-413", "S-413 Marine Weather Conditions"),
+    S414("S-414", "S-414 Marine Weather Observations"),
+    S421("S-421", "S-421 Route Plan"),
+    RTZ("RTZ", "Route Plan"),
+    EPC("EPC", "Electronic Port Clearance");
 
     // Enum Variables
+    private final String name;
     private final String description;
 
     /**
      * Enum Constructor
      *
+     * @param name the enum name
      * @param description the enum description
      */
-    SECOM_DataProductType(final String description) {
+    SECOM_DataProductType(final String name, final String description) {
+        this.name = name;
         this.description = description;
+    }
+
+    /**
+     * Gets name.
+     *
+     * @return the name
+     */
+    @JsonValue
+    public String getName() {
+        return name;
     }
 
     /**
