@@ -16,7 +16,11 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * The SECOM Search Result Class.
@@ -24,6 +28,12 @@ import java.util.List;
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
 public class SearchResult {
+
+    @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED,
+            pattern = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$",
+            example = "550e8400-e29b-41d4-a716-446655440000")
+    @NotNull
+    private UUID transactionId;
 
     // Class Variables
     private List<ServiceInstanceObject> serviceInstance;
@@ -45,4 +55,20 @@ public class SearchResult {
     public void setServiceInstance(List<ServiceInstanceObject> serviceInstance) {
         this.serviceInstance = serviceInstance;
     }
+
+    /**
+     * Get the transaction id
+     *
+     * @return the transaction id
+     */
+    public UUID getTransactionId() { return transactionId; }
+
+    /**
+     * Set the transaction id
+     *
+     * @param transactionId the transaction id
+     */
+    public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
+
+
 }

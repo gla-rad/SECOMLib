@@ -33,11 +33,7 @@ import java.util.UUID;
 public class ServiceInstanceObject {
 
     // SECOM-standard Fields
-    @Schema(description = "The unique transaction ID of the search", requiredMode = Schema.RequiredMode.REQUIRED,
-            pattern = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$",
-            example = "550e8400-e29b-41d4-a716-446655440000")
-    @NotNull
-    private String transactionId;
+
     @NotNull
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
@@ -71,19 +67,7 @@ public class ServiceInstanceObject {
     private String sourceMSR;
     private String[] unsupportedParams;
 
-    /**
-     * Get the transaction id
-     *
-     * @return the transaction id
-     */
-    public String getTransactionId() { return transactionId; }
 
-    /**
-     * Set the transaction identifier
-     *
-     * @param transactionId the transaction identifier
-     */
-    public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
 
     /**
      * Gets instance id.
