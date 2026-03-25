@@ -23,6 +23,7 @@ import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface;
 import org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface;
+import org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface;
 import org.grad.secomv2.core.interfaces.UploadLinkServiceInterface;
 import org.grad.secomv2.core.interfaces.UploadServiceInterface;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -127,6 +128,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             // For the Encryption Key Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, EncryptionKeyRequestObject.class);
+            }
+            // For the POST Get Summary Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, GetSummaryFilterObject.class);
             }
         }
 
