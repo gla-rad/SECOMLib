@@ -18,13 +18,10 @@ package org.grad.secomv2.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.*;
+import org.grad.secomv2.core.interfaces.*;
 import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
-import org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface;
-import org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface;
-import org.grad.secomv2.core.interfaces.UploadLinkServiceInterface;
-import org.grad.secomv2.core.interfaces.UploadServiceInterface;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secomv2.core.utils.PkiUtils;
 import org.grad.secomv2.core.utils.SecomPemUtils;
@@ -127,6 +124,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             // For the Encryption Key Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, EncryptionKeyRequestObject.class);
+            }
+            // For the POST Get Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetServiceInterface.POST_GET_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, GetFilterObject.class);
             }
         }
 
