@@ -129,6 +129,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             else if (rqstCtx.getUriInfo().getPath().endsWith(SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, SearchFilterObject.class);
             }
+            // For the POST Get By Link Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, GetByLinkObject.class);
+            }
         }
 
         // If we have an object, validate the signatures

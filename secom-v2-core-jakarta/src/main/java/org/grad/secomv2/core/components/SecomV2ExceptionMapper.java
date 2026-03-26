@@ -35,6 +35,7 @@ import static org.grad.secomv2.core.interfaces.AccessNotificationServiceInterfac
 import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -140,6 +141,8 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, this.request, null);
                     }
+                case POST_GET_BY_LINK_INTERFACE_PATH:
+                    return PostGetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, this.request, null);
                 case GET_INTERFACE_PATH: // Also for upload
                     if(Objects.equals(this.request.getMethod(), "GET")) {
                         return GetServiceInterface.handleGetInterfaceExceptions(ex, this.request, null);
