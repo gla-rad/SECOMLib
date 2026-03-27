@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2026 AIVeNautics
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.interfaces;
+
+import com.fasterxml.jackson.databind.JsonMappingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.GetSummaryFilterObject;
+import org.grad.secomv2.core.models.GetSummaryResponseObject;
+
+/**
+ * The SECOM POST Get Summary Interface Definition.
+ * </p>
+ * This interface definition can be used by the SECOM-compliant services in
+ * order to direct the implementation of the relevant endpoint according to
+ * the specified SECOM standard version.
+ *
+ * @author Changyun Lee (email: changyun.lee@aivenautics.com)
+ */
+public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
+
+    /**
+     * The Interface Endpoint Path.
+     */
+    String POST_GET_SUMMARY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/object/search/summary";
+
+    /**
+     * POST /v2/object/search/summary :  A list of information shall be returned from
+     * this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
+     *
+     * @param getSummaryFilterObject the get summary filter object
+     * @return the summary response object
+     */
+    @Path(POST_GET_SUMMARY_INTERFACE_PATH)
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    GetSummaryResponseObject getSummary(@Valid GetSummaryFilterObject getSummaryFilterObject);
+
+
+    /**
+     * The exception handler implementation for the interface.
+     *
+     * @param ex the exception that was raised
+     * @param request the request that cause the exception
+     * @param response the response for the request
+     * @return the handler response according to the SECOM standard
+     */
+    static Response handleGetSummaryInterfaceExceptions(Exception ex,
+                                                        HttpServletRequest request,
+                                                        HttpServletResponse response) {
+        // Create the get summary response
+        Response.Status responseStatus;
+        GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
+
+        // Handle according to the exception type
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof JsonMappingException
+                || ex instanceof NotFoundException) {
+            responseStatus = Response.Status.BAD_REQUEST;
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.FORBIDDEN;
+        } else if(ex instanceof SecomNotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+        } else if(ex instanceof SecomSchemaValidationException) {
+            responseStatus = Response.Status.fromStatusCode(422);
+        } else {
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+        }
+
+        // And send the error response back
+        return Response.status(responseStatus)
+                .entity(getSummaryResponseObject)
+                .build();
+    }
+
+}
