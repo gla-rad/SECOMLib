@@ -47,6 +47,7 @@ class EnvelopeAccessNotificationObjectTest {
         this.obj = new EnvelopeAccessNotificationObject();
         this.obj.setDecision(Boolean.TRUE);
         this.obj.setDecisionReason("Test");
+        this.obj.setDataReference(UUID.randomUUID());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
     }
 
@@ -63,6 +64,7 @@ class EnvelopeAccessNotificationObjectTest {
         assertNotNull(result);
         assertEquals(this.obj.getDecision(), result.getDecision());
         assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
+        assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
     }
 }

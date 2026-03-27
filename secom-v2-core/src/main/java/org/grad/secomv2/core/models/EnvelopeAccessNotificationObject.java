@@ -32,6 +32,8 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
     @NotNull
     private String decisionReason;
     @NotNull
+    private UUID dataReference;
+    @NotNull
     private UUID transactionIdentifier;
 
     /**
@@ -71,6 +73,24 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
     }
 
     /**
+     * Gets data reference.
+     *
+     * @return the data reference
+     */
+    public UUID getDataReference() {
+        return dataReference;
+    }
+
+    /**
+     * Sets data reference.
+     *
+     * @param dataReference the data reference
+     */
+    public void setDataReference(UUID dataReference) {
+        this.dataReference = dataReference;
+    }
+
+    /**
      * Gets transaction identifier.
      *
      * @return the transaction identifier
@@ -99,6 +119,7 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
         return new Object[] {
                 decision,
                 decisionReason,
+                dataReference,
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
