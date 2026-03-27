@@ -16,6 +16,8 @@
 package org.grad.secomv2.core.models;
 
 
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -23,7 +25,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public class SearchFilterObject {
+public class SearchFilterObject implements EnvelopeSignatureBearer {
 
     @NotNull
     private EnvelopeSearchFilterObject envelope;
