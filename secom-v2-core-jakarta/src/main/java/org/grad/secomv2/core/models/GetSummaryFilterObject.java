@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 AIVeNautics
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,58 +13,61 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.grad.secomv2.core.models;
 
-
+import jakarta.validation.constraints.NotNull;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
-import javax.validation.constraints.NotNull;
-
 /**
- * {Description}
+ * The SECOM Get Summary Filter Object Class
  *
- * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ * @author Changyun Lee (email: changyun.lee@aivenautics.com)
  */
-public class SearchFilterObject implements EnvelopeSignatureBearer {
+public class GetSummaryFilterObject implements EnvelopeSignatureBearer {
 
+    // Class Variables
     @NotNull
-    private EnvelopeSearchFilterObject envelope;
+    private EnvelopeGetSummaryFilterObject envelope;
     @NotNull
     private String envelopeSignature;
 
     /**
-     * Get the envelope
-     * @return envelope
+     * Gets envelope.
+     *
+     * @return the envelope
      */
-    public EnvelopeSearchFilterObject getEnvelope() {
+    @Override
+    public EnvelopeGetSummaryFilterObject getEnvelope() {
         return envelope;
     }
 
     /**
-     * Sets the envelope
+     * Sets envelope.
      *
-     * @param envelope the envelope search filter object
+     * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeSearchFilterObject envelope) {
+    public void setEnvelope(EnvelopeGetSummaryFilterObject envelope) {
         this.envelope = envelope;
     }
 
     /**
-     * Gets the envelope signature
+     * Gets envelope signature.
      *
-     * @return envelopeSignature
+     * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }
 
     /**
-     * Sets the envelope signature
+     * Sets envelope signature.
      *
-     * @param envelopeSignature the envelope signature array
+     * @param digitalSignature the envelope signature
      */
-    public void setEnvelopeSignature(String envelopeSignature) {
-        this.envelopeSignature = envelopeSignature;
+    @Override
+    public void setEnvelopeSignature(String digitalSignature) {
+        this.envelopeSignature = digitalSignature;
     }
-
 }

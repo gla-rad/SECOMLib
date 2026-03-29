@@ -62,6 +62,7 @@ import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENC
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
@@ -497,6 +498,27 @@ public class SecomClient {
                     return builder.build();
                 })
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(GetSummaryResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/search/summary : A list of information shall be returned
+     * from this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
+     *
+     * @param getSummaryFilterObject the get summary filter object
+     * @return the summary response object
+     */
+    public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
+        return this.secomClient
+                .post()
+                .uri(POST_GET_SUMMARY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getSummaryFilterObject))
                 .retrieve()
                 .bodyToMono(GetSummaryResponseObject.class)
                 .blockOptional();
