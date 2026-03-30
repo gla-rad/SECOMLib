@@ -59,7 +59,7 @@ class EnvelopeKeyObjectTest {
         this.obj.setEncryptionKey("encryptionKey".getBytes());
         this.obj.setIv("iv".getBytes());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setExpirationTime(Instant.now().plus(1, ChronoUnit.DAYS));
+        this.obj.setExpirationTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
@@ -99,22 +99,16 @@ class EnvelopeKeyObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        for(String s : csv) {
-            System.out.println(s);
-        }
-        System.out.println("---");
         assertEquals(new String(obj.getEncryptionKey(), StandardCharsets.UTF_8), new String(Base64.getDecoder().decode(csv[0])));
         assertEquals(new String(obj.getIv(), StandardCharsets.UTF_8), new String(Base64.getDecoder().decode(csv[1])));
         assertEquals(obj.getTransactionIdentifier().toString(), csv[2]);
-        assertEquals(obj.getExpirationTime().getEpochSecond(), Long.parseLong(csv[3]));
-        assertEquals(obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[4]);
-        assertEquals(Arrays.toString(obj.getDigitalSignatureValue().getPublicCertificate()), csv[5]);
-        assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[6]);
-        assertEquals(Arrays.toString(obj.getEnvelopeSignatureCertificate()), csv[7]);
-        assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[8]);
+        assertEquals(obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
+        assertEquals(Arrays.toString(obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
+        assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
+        assertEquals(Arrays.toString(obj.getEnvelopeSignatureCertificate()), csv[6]);
+        assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
+        assertEquals(obj.getExpirationTime().getEpochSecond(), Long.parseLong(csv[8]));
         assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
-
-
     }
 
 }

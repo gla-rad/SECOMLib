@@ -159,7 +159,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
                 ackType,
                 nackType,
                 envelopeSignatureTime,
-                digitalSignatureReference,
+                digitalSignatureReference
         };
     }
 

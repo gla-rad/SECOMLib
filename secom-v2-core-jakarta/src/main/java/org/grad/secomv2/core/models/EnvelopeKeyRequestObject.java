@@ -38,7 +38,6 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
     @NotNull
     @Schema(description = "Public certificate of data consumer for deriving shared symmetric key")
     private String publicCertificate;
-    @NotNull
     @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
     @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
     private URL callbackEndpoint;
@@ -107,10 +106,12 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[] {
                 dataReference,
+                publicCertificate,
                 envelopeSignatureCertificate,
-                envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                callbackEndpoint
+                envelopeRootCertificateThumbprint,
+                callbackEndpoint,
+                digitalSignatureReference
         };
     }
 }

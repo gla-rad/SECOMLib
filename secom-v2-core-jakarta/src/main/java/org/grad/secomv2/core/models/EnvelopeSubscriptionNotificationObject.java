@@ -24,7 +24,7 @@ import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
 import java.util.UUID;
 
 /**
- * The SECOM Envelope Get By Link Object Class.
+ * The SECOM Envelope Subscription Notification Object Class.
  *
  * @author Junyeon Won (email: junyeon.won@aivenautics.com)
  */

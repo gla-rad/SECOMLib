@@ -157,12 +157,11 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 encryptionKey,
                 iv,
                 transactionIdentifier,
-                expirationTime,
                 digitalSignatureValue,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference,
+                expirationTime
         };
     }
 }
