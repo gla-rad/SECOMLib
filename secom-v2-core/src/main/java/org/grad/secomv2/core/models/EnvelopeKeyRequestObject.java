@@ -19,6 +19,9 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
+import java.net.URL;
 import java.util.UUID;
 
 /**
@@ -35,6 +38,9 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
     @NotNull
     @Schema(description = "Public certificate of data consumer for deriving shared symmetric key")
     private String publicCertificate;
+    @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
+    @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
+    private URL callbackEndpoint;
 
     /**
      * Gets data reference.
@@ -73,6 +79,24 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
     }
 
     /**
+     * Gets callback endpoint.
+     *
+     * @return the callback endpoint
+     */
+    public URL getCallbackEndpoint() {
+        return callbackEndpoint;
+    }
+
+    /**
+     * Sets callback endpoint.
+     *
+     * @param callbackEndpoint the callback endpoint
+     */
+    public void setCallbackEndpoint(URL callbackEndpoint) {
+        this.callbackEndpoint = callbackEndpoint;
+    }
+
+    /**
      * This method should be implemented by all envelop objects to allow the
      * generation of the signature CSV attribute array
      *
@@ -82,9 +106,12 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[] {
                 dataReference,
+                publicCertificate,
                 envelopeSignatureCertificate,
+                envelopeSignatureTime,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                callbackEndpoint,
+                digitalSignatureReference
         };
     }
 }

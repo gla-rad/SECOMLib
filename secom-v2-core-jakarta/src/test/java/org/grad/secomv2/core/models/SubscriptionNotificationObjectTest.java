@@ -23,6 +23,8 @@ import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SubscriptionNotificationObjectTest {
 
     // Class Variables
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private EnvelopeSubscriptionNotificationObject envelopeSubscriptionNotificationObject;
     private SubscriptionNotificationObject obj;
     private ObjectMapper mapper;
 
@@ -43,10 +47,25 @@ class SubscriptionNotificationObjectTest {
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
 
+        // Create a digital signature value
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
+
+        // Create a new envelope subscription notification object
+        this.envelopeSubscriptionNotificationObject = new EnvelopeSubscriptionNotificationObject();
+        this.envelopeSubscriptionNotificationObject.setSubscriptionIdentifier(UUID.randomUUID());
+        this.envelopeSubscriptionNotificationObject.setEventEnum(SubscriptionEventEnum.SUBSCRIPTION_CREATED);
+        this.envelopeSubscriptionNotificationObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
+        this.envelopeSubscriptionNotificationObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
+        this.envelopeSubscriptionNotificationObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+
         // Generate a new object
         this.obj = new SubscriptionNotificationObject();
-        this.obj.setSubscriptionIdentifier(UUID.randomUUID());
-        this.obj.setEventEnum(SubscriptionEventEnum.SUBSCRIPTION_CREATED);
+        this.obj.setEnvelope(envelopeSubscriptionNotificationObject);
+        this.obj.setEnvelopeSignature("signature");
+
     }
 
     /**
@@ -60,8 +79,12 @@ class SubscriptionNotificationObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
-        assertEquals(this.obj.getEventEnum(), result.getEventEnum());
+        assertNotNull(result.getEnvelope());
+        assertEquals(this.obj.getEnvelope().getSubscriptionIdentifier(), result.getEnvelope().getSubscriptionIdentifier());
+        assertEquals(this.obj.getEnvelope().getEventEnum(), result.getEnvelope().getEventEnum());
+        assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
 
 }
