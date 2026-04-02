@@ -40,8 +40,10 @@ import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
@@ -149,8 +151,12 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return UploadServiceInterface.handleUploadInterfaceExceptions(ex, this.request, null);
                     }
+                case POST_GET_INTERFACE_PATH:
+                    return PostGetServiceInterface.handleGerInterfaceException(ex, this.request, null);
                 case GET_SUMMARY_INTERFACE_PATH:
                     return GetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
+                case POST_GET_SUMMARY_INTERFACE_PATH:
+                    return PostGetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
                 case PING_INTERFACE_PATH:
                     return PingServiceInterface.handlePingInterfaceExceptions(ex, this.request, null);
                 case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription

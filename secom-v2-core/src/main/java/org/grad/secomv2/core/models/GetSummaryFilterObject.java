@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 AIVeNautics
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,20 +16,19 @@
 
 package org.grad.secomv2.core.models;
 
+import javax.validation.constraints.NotNull;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
-import jakarta.validation.constraints.NotNull;
-
 /**
- * The SECOM Subscription Notification Object Class.
+ * The SECOM Get Summary Filter Object Class
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Changyun Lee (email: changyun.lee@aivenautics.com)
  */
-public class SubscriptionNotificationObject implements EnvelopeSignatureBearer {
+public class GetSummaryFilterObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
-    private EnvelopeSubscriptionNotificationObject envelope;
+    private EnvelopeGetSummaryFilterObject envelope;
     @NotNull
     private String envelopeSignature;
 
@@ -39,7 +38,7 @@ public class SubscriptionNotificationObject implements EnvelopeSignatureBearer {
      * @return the envelope
      */
     @Override
-    public EnvelopeSubscriptionNotificationObject getEnvelope() {
+    public EnvelopeGetSummaryFilterObject getEnvelope() {
         return envelope;
     }
 
@@ -48,7 +47,7 @@ public class SubscriptionNotificationObject implements EnvelopeSignatureBearer {
      *
      * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeSubscriptionNotificationObject envelope) {
+    public void setEnvelope(EnvelopeGetSummaryFilterObject envelope) {
         this.envelope = envelope;
     }
 

@@ -59,6 +59,7 @@ class EnvelopeKeyObjectTest {
         this.obj.setEncryptionKey("encryptionKey".getBytes());
         this.obj.setIv("iv".getBytes());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
+        this.obj.setExpirationTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
@@ -106,7 +107,8 @@ class EnvelopeKeyObjectTest {
         assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
         assertEquals(Arrays.toString(obj.getEnvelopeSignatureCertificate()), csv[6]);
         assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
-        assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[8]));
+        assertEquals(obj.getExpirationTime().getEpochSecond(), Long.parseLong(csv[8]));
+        assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
     }
 
 }

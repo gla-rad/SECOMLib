@@ -16,61 +16,59 @@
 
 package org.grad.secomv2.core.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.UUID;
 
 /**
  * The SECOM Subscription Notification Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionNotificationObject {
+public class SubscriptionNotificationObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
-    @Schema(type = "string", example = "550e8400-e29b-41d4-a716-446655440000")
-    @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
-    private UUID subscriptionIdentifier;
+    private EnvelopeSubscriptionNotificationObject envelope;
     @NotNull
-    private SubscriptionEventEnum eventEnum;
+    private String envelopeSignature;
 
     /**
-     * Gets subscription identifier.
+     * Gets envelope.
      *
-     * @return the subscription identifier
+     * @return the envelope
      */
-    public UUID getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    @Override
+    public EnvelopeSubscriptionNotificationObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets envelope.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param envelope the envelope
      */
-    public void setSubscriptionIdentifier(UUID subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setEnvelope(EnvelopeSubscriptionNotificationObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
-     * Gets event enum.
+     * Gets envelope signature.
      *
-     * @return the event enum
+     * @return the envelope signature
      */
-    public SubscriptionEventEnum getEventEnum() {
-        return eventEnum;
+    @Override
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
     }
 
     /**
-     * Sets event enum.
+     * Sets envelope signature.
      *
-     * @param eventEnum the event enum
+     * @param digitalSignature the envelope signature
      */
-    public void setEventEnum(SubscriptionEventEnum eventEnum) {
-        this.eventEnum = eventEnum;
+    @Override
+    public void setEnvelopeSignature(String digitalSignature) {
+        this.envelopeSignature = digitalSignature;
     }
 }

@@ -24,6 +24,8 @@ import org.grad.secomv2.core.base.SecomByteArraySerializer;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -50,6 +52,8 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     private UUID transactionIdentifier;
     @NotNull
     private DigitalSignatureValueObject digitalSignatureValue;
+    @Schema(description = "expiry time in UTC for the temporaty key")
+    private Instant expirationTime;
 
     /**
      * Gets encryption key.
@@ -124,6 +128,24 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     }
 
     /**
+     * Gets expiration time.
+     *
+     * @return the expiration time
+     */
+    public Instant getExpirationTime() {
+        return expirationTime;
+    }
+
+    /**
+     * Sets expiration time.
+     *
+     * @param expirationTime the expiration time
+     */
+    public void setExpirationTime(Instant expirationTime) {
+        this.expirationTime = expirationTime;
+    }
+
+    /**
      * This method should be implemented by all envelop objects to allow the
      * generation of the signature CSV attribute array
      *
@@ -139,7 +161,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                expirationTime
         };
     }
 }

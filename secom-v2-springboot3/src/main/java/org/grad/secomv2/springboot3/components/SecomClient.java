@@ -25,7 +25,6 @@ import org.grad.secomv2.core.base.SecomCertificateProvider;
 import org.grad.secomv2.core.base.SecomCompressionProvider;
 import org.grad.secomv2.core.base.SecomEncryptionProvider;
 import org.grad.secomv2.core.base.SecomSignatureProvider;
-import org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface;
 import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
@@ -63,8 +62,10 @@ import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENC
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
@@ -457,6 +458,28 @@ public class SecomClient {
     }
 
     /**
+     * POST /v2/object/search : The Post Get interface is used for pulling information from a
+     * service provider using a POST request. The owner of the information (provider) is responsible
+     * for the authorization procedure before returning information.
+     *
+     * @param getFilterObject  the get filter object
+     * @return the get response object
+     */
+    public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
+        //Prepare the upload envelope if valid
+        final EnvelopeGetFilterObject envelope = getFilterObject.getEnvelope();
+        return this.secomClient
+                .post()
+                .uri(POST_GET_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getFilterObject))
+                .retrieve()
+                .bodyToMono(GetResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
      * GET /v2/object/summary :  A list of information shall be returned from
      * this interface. The summary contains identity, status and short
      * description of each information object. The actual information object
@@ -498,6 +521,27 @@ public class SecomClient {
                     return builder.build();
                 })
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(GetSummaryResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/search/summary : A list of information shall be returned
+     * from this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
+     *
+     * @param getSummaryFilterObject the get summary filter object
+     * @return the summary response object
+     */
+    public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
+        return this.secomClient
+                .post()
+                .uri(POST_GET_SUMMARY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getSummaryFilterObject))
                 .retrieve()
                 .bodyToMono(GetSummaryResponseObject.class)
                 .blockOptional();

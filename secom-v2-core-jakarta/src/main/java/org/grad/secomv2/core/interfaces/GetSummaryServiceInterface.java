@@ -24,6 +24,7 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetSummaryResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -110,6 +111,8 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
             responseStatus = Response.Status.FORBIDDEN;
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
+        } else if(ex instanceof SecomSchemaValidationException) {
+            responseStatus = Response.Status.fromStatusCode(422);
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
