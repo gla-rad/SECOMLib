@@ -64,6 +64,7 @@ import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE
 import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
@@ -378,6 +379,28 @@ public class SecomClient {
                 .accept(MediaType.APPLICATION_OCTET_STREAM)
                 .retrieve()
                 .bodyToMono(byte[].class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/search/link : The Get By Link interface is used for pulling
+     * information using POST method from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
+     *
+     * @param getByLinkObject the get by link object
+     * @return the get by link response object
+     */
+    public Optional<GetByLinkResponseObject> postGetByLink(GetByLinkObject getByLinkObject) {
+        return this.secomClient
+                .post()
+                .uri(POST_GET_BY_LINK_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getByLinkObject))
+                .retrieve()
+                .bodyToMono(GetByLinkResponseObject.class)
                 .blockOptional();
     }
 
