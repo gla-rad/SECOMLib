@@ -58,7 +58,6 @@ class ServiceInstanceObjectTest {
         this.obj.setVersion("version");
         this.obj.setKeywords(new String[]{"keywords"});
         this.obj.setUnlocode("unlocode");
-        this.obj.setInstanceAsXml("instanceAsXml");
         this.obj.setMmsi("mmsi");
         this.obj.setImo("imo");
         this.obj.setCoverageArea(new String[] {"geometry"});
@@ -86,7 +85,6 @@ class ServiceInstanceObjectTest {
         assertEquals(this.obj.getVersion(), result.getVersion());
         assertArrayEquals(this.obj.getKeywords(), result.getKeywords());
         assertNotNull(result.getUnlocode());
-        assertEquals(this.obj.getInstanceAsXml(), result.getInstanceAsXml());
         assertEquals(this.obj.getMmsi(), result.getMmsi());
         assertEquals(this.obj.getImo(), result.getImo());
 

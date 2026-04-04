@@ -58,7 +58,6 @@ public class ServiceInstanceObject {
     private String apiDoc;
     @NotNull
     private String[] coverageArea;
-    private String instanceAsXml;
     private String imo;
     private String mmsi;
     private String[] certificates;
@@ -283,23 +282,6 @@ public class ServiceInstanceObject {
         this.implementsDesign = implementsDesign;
     }
 
-    /**
-     * Gets instance as xml.
-     *
-     * @return the instance as xml
-     */
-    public String getInstanceAsXml() {
-        return instanceAsXml;
-    }
-
-    /**
-     * Sets instance as xml.
-     *
-     * @param instanceAsXml the instance as xml
-     */
-    public void setInstanceAsXml(String instanceAsXml) {
-        this.instanceAsXml = instanceAsXml;
-    }
 
     /**
      * Get api doc
