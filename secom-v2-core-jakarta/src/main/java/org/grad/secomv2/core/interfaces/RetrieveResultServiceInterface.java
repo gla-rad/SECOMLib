@@ -22,20 +22,21 @@ import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.ValidationException;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.SearchResult;
 
 /**
  The SECOM Retrieve Result Interface Definition.
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
-public interface RetrieveResultsServiceInterface extends GenericSecomInterface {
+public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -66,11 +67,11 @@ public interface RetrieveResultsServiceInterface extends GenericSecomInterface {
      * @return the handler response according to the SECOM standard
      */
     static Response handleRetrieveResultInterfaceExceptions(Exception ex,
-                                                           HttpServletRequest request,
-                                                           HttpServletResponse response) {
+                                                            HttpServletRequest request,
+                                                            HttpServletResponse response) {
 
         // Create the encryption key response
-        Response.Status responseStatus;
+        jakarta.ws.rs.core.Response.Status responseStatus;
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type

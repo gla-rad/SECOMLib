@@ -37,6 +37,7 @@ import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.A
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -167,6 +168,8 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
+                case RETRIEVE_RESULT_INTERFACE_PATH:
+                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
                 default:
                     //Nothing to do, continue with the generic rules
             }
