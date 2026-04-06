@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response;
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
-public interface RetrieveResultsInterface extends GenericSecomInterface {
+public interface RetrieveResultsServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
