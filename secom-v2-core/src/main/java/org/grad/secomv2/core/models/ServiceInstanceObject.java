@@ -51,7 +51,7 @@ public class ServiceInstanceObject {
     @NotNull
     private String[] endpointType;
     private String[] keywords;
-    private String unlocode;
+    private String[] unlocode;
     private String implementsDesign;
     @NotNull
     @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
@@ -251,7 +251,7 @@ public class ServiceInstanceObject {
      *
      * @return the unlocode
      */
-    public String getUnlocode() {
+    public String[] getUnlocode() {
         return unlocode;
     }
 
@@ -260,7 +260,7 @@ public class ServiceInstanceObject {
      *
      * @param unlocode the unlocode
      */
-    public void setUnlocode(String unlocode) {
+    public void setUnlocode(String[] unlocode) {
         this.unlocode = unlocode;
     }
 

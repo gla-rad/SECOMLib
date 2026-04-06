@@ -57,7 +57,7 @@ class ServiceInstanceObjectTest {
         this.obj.setEndpointType(new String[] {"endpointType"});
         this.obj.setVersion("version");
         this.obj.setKeywords(new String[]{"keywords"});
-        this.obj.setUnlocode("unlocode");
+        this.obj.setUnlocode(new String[]{"unlocode"});
 
         this.obj.setMmsi("mmsi");
         this.obj.setImo("imo");

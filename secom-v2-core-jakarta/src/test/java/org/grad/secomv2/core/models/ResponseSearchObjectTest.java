@@ -60,7 +60,7 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setEndpointType(new String[]{"endpointType"});
         this.searchObjectResult.setVersion("version");
         this.searchObjectResult.setKeywords(new String[]{"keywords"});
-        this.searchObjectResult.setUnlocode("unlocode");
+        this.searchObjectResult.setUnlocode(new String[]{"unlocode"});
         this.searchObjectResult.setMmsi("mmsi");
         this.searchObjectResult.setImo("imo");
         this.searchObjectResult.setSourceMSRs(new String[]{"sourceMSR"});
