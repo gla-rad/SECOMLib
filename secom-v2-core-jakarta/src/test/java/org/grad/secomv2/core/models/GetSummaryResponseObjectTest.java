@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GetSummaryResponseObjectTest {
 
@@ -104,6 +104,14 @@ class GetSummaryResponseObjectTest {
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());
+    }
+
+    /**
+     * Test that obj extends EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjExtendsEnvelopeSignatureBearer() {
+        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
     }
 
 }

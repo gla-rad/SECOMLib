@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,6 +62,13 @@ class EnvelopeSubscriptionObjectTest {
         this.obj.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setCallbackEndpoint(URI.create("http://localhost").toURL());
         this.obj.setPushAll(Boolean.FALSE);
+
+        // Set signature settings
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setDigitalSignatureReference("digitalSignatureReference");
+
     }
 
     /**
@@ -84,6 +92,19 @@ class EnvelopeSubscriptionObjectTest {
         assertEquals(this.obj.getSubscriptionPeriodEnd(), result.getSubscriptionPeriodEnd());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
         assertEquals(this.obj.getPushAll(), result.getPushAll());
+
+        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
+    }
+
+    /**
+     * Test that EnvelopeSubscriptionObject extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
     }
 
 }

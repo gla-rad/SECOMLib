@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +30,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SubscriptionRequestObjectTest {
 
@@ -85,6 +85,14 @@ class SubscriptionRequestObjectTest {
         assertEquals(this.obj.getEnvelope().getSubscriptionPeriodStart(), result.getEnvelope().getSubscriptionPeriodStart());
         assertEquals(this.obj.getEnvelope().getSubscriptionPeriodEnd(), result.getEnvelope().getSubscriptionPeriodEnd());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
+    }
+
+    /**
+     * Test that obj extends EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjExtendsEnvelopeSignatureBearer() {
+        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
     }
 
 }

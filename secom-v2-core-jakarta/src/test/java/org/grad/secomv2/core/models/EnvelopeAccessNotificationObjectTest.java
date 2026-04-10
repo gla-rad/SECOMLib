@@ -22,10 +22,11 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EnvelopeAccessNotificationObjectTest {
 
@@ -49,6 +50,13 @@ class EnvelopeAccessNotificationObjectTest {
         this.obj.setDecisionReason("Test");
         this.obj.setDataReference(UUID.randomUUID());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
+
+        // Set signature settings
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setDigitalSignatureReference("digitalSignatureReference");
+
     }
 
     /**
@@ -66,5 +74,18 @@ class EnvelopeAccessNotificationObjectTest {
         assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
+        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
     }
+
+    /**
+     * Test that EnvelopeSubscriptionObject extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
+
 }

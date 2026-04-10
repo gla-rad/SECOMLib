@@ -111,4 +111,11 @@ class EnvelopeKeyObjectTest {
         assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
     }
 
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
 }

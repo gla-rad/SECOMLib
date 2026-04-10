@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -106,6 +107,15 @@ class GetResponseObjectTest {
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());
+    }
+
+
+    /**
+     * Test that obj extends EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjExtendsEnvelopeSignatureBearer() {
+        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
     }
 
 }

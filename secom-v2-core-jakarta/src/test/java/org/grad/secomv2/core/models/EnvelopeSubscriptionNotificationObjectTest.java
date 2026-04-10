@@ -79,4 +79,12 @@ class EnvelopeSubscriptionNotificationObjectTest {
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[4]);
     }
 
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
+
 }

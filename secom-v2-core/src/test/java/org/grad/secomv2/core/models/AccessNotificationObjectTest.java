@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -69,6 +70,14 @@ class AccessNotificationObjectTest {
         assertEquals(this.obj.getEnvelope().getDecisionReason(), result.getEnvelope().getDecisionReason());
         assertEquals(this.obj.getEnvelope().getTransactionIdentifier(), result.getEnvelope().getTransactionIdentifier());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
+    }
+
+    /**
+     * Test that obj extends EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
     }
 
 }

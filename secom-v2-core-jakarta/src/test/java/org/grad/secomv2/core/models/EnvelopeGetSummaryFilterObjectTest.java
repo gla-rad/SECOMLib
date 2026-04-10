@@ -111,4 +111,12 @@ class EnvelopeGetSummaryFilterObjectTest {
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[11]);
     }
 
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
+
 }

@@ -5,7 +5,7 @@
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-v2-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.5-SNAPSHOT</version>
+    <version>0.0.6-SNAPSHOT</version>
 
     <modules>
         <module>secom-v2-core</module>

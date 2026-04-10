@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.ReasonEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
@@ -27,13 +28,12 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AccessRequestObjectTest {
 
     // Class Variables
-    private EnvelopeAccessObject envelopeAccessObject;
+    private EnvelopeAccessRequestObject envelopeAccessRequestObject;
     private AccessRequestObject obj;
 
     private ObjectMapper mapper;
@@ -48,15 +48,15 @@ class AccessRequestObjectTest {
         this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
-        this.envelopeAccessObject = new EnvelopeAccessObject();
-        envelopeAccessObject.setReason("Test");
-        envelopeAccessObject.setReasonEnum(ReasonEnum.REQUESTED_BY_AUTHORITY);
-        envelopeAccessObject.setContainerType(ContainerTypeEnum.S100_DataSet);
-        envelopeAccessObject.setDataProductType(SECOM_DataProductType.S101);
-        envelopeAccessObject.setDataReference(UUID.randomUUID());
-        envelopeAccessObject.setProductVersion("productVersion");
+        this.envelopeAccessRequestObject = new EnvelopeAccessRequestObject();
+        envelopeAccessRequestObject.setReason("Test");
+        envelopeAccessRequestObject.setReasonEnum(ReasonEnum.REQUIRED_BY_AUTHORITY);
+        envelopeAccessRequestObject.setContainerType(ContainerTypeEnum.S100_DataSet);
+        envelopeAccessRequestObject.setDataProductType(SECOM_DataProductType.S101);
+        envelopeAccessRequestObject.setDataReference(UUID.randomUUID());
+        envelopeAccessRequestObject.setProductVersion("productVersion");
         this.obj = new AccessRequestObject();
-        this.obj.setEnvelope(envelopeAccessObject);
+        this.obj.setEnvelope(envelopeAccessRequestObject);
         this.obj.setEnvelopeSignature("envelopeSignature");
     }
 
@@ -79,5 +79,15 @@ class AccessRequestObjectTest {
         assertEquals(this.obj.getEnvelope().getProductVersion(), result.getEnvelope().getProductVersion());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
+
+
+    /**
+     * Test that obj extends EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
+    }
+
 
 }

@@ -100,4 +100,12 @@ class EnvelopeAckObjectTest {
         assertEquals(this.obj.getDigitalSignatureReference(), csv[7]);
     }
 
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
+
 }

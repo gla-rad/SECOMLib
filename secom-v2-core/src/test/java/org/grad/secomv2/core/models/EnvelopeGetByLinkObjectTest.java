@@ -75,4 +75,12 @@ class EnvelopeGetByLinkObjectTest {
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[3]);
     }
+
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    }
 }

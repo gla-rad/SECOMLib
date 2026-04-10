@@ -74,7 +74,6 @@ class EnvelopeUploadObjectTest {
         this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setExchangeMetadata(this.exchangeMetadata);
-        this.obj.setFromSubscription(Boolean.FALSE);
         this.obj.setSubscriptionIdentifier(UUID.randomUUID());
         this.obj.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
         this.obj.setCallbackEndpoint(URI.create("http://example").toURL());
@@ -105,7 +104,6 @@ class EnvelopeUploadObjectTest {
         assertArrayEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag(), result.getExchangeMetadata().getCompressionFlag());
-        assertEquals(this.obj.getFromSubscription(), result.getFromSubscription());
         assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
         assertEquals(this.obj.getAckRequest(), result.getAckRequest());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
@@ -135,14 +133,21 @@ class EnvelopeUploadObjectTest {
         assertEquals(Arrays.toString(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[7]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[8]);
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[9]);
-        assertEquals(this.obj.getFromSubscription().toString(), csv[10]);
-        // subscription id 11
-        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[12]);
-        // callback 13
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[14]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[15]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[16]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[17]);
+        // subscription id 10
+        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[11]);
+        // callback 12
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[13]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[14]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[15]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[16]);
+    }
+
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testSubscriptionRequestExtendsCorrectObject() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
     }
 
 }
