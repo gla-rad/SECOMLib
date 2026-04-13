@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 Digital Maritime Consultancy - A member of Team Aivenautics
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,33 +31,31 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- * The SECOM Search Service Interface Definition.
- * </p>
- * This interface definition can be used by the SECOM-compliant services in
- * order to direct the implementation of the relevant endpoint according to
- * the specified SECOM standard version.
+ The SECOM Retrieve Result Interface Definition.
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
-public interface SearchServiceServiceInterface extends GenericSecomInterface {
+public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String SEARCH_SERVICE_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/searchService";
+    String RETRIEVE_RESULT_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/retrieveResult";
 
     /**
-     * POST /v2/searchService : The purpose of this interface is to search for
-     * service instances to consume.
+     * POST /v2/retrieveResult : The purpose of this interface is pull results of a
+     * search transaction for which more results may arrive asynchronously. The search
+     * transaction is identified by the transactionId field in the response to the iniitial
+     * searchService request.
      *
-     * @param searchFilterObject    The search filter object
-     * @return the result list of the search
+     * @param retrieveResultObject    The search filter object
+     * @return the result object
      */
-    @Path(SEARCH_SERVICE_INTERFACE_PATH)
+    @Path(RETRIEVE_RESULT_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    SearchResult searchService(@Valid SearchFilterObject searchFilterObject);
+    SearchResult retrieveResult(@Valid RetrieveResultObject retrieveResultObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -67,7 +65,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleSearchServiceInterfaceExceptions(Exception ex,
+    static Response handleRetrieveResultInterfaceExceptions(Exception ex,
                                                            HttpServletRequest request,
                                                            HttpServletResponse response) {
 
