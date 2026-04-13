@@ -70,7 +70,6 @@ class UploadLinkObjectTest {
         this.envelopeLinkObject.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.envelopeLinkObject.setDataProductType(SECOM_DataProductType.S101);
         this.envelopeLinkObject.setExchangeMetadata(this.exchangeMetadata);
-        this.envelopeLinkObject.setFromSubscription(Boolean.FALSE);
         this.envelopeLinkObject.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
         this.envelopeLinkObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeLinkObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
@@ -106,7 +105,6 @@ class UploadLinkObjectTest {
         assertArrayEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getCompressionFlag(), result.getEnvelope().getExchangeMetadata().getCompressionFlag());
-        assertEquals(this.obj.getEnvelope().getFromSubscription(), result.getEnvelope().getFromSubscription());
         assertEquals(this.obj.getEnvelope().getAckRequest(), result.getEnvelope().getAckRequest());
         assertEquals(this.obj.getEnvelope().getTransactionIdentifier(), result.getEnvelope().getTransactionIdentifier());
         assertArrayEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());

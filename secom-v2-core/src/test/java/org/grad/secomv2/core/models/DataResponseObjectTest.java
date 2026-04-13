@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.DigitalSignatureBearer;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -90,11 +91,11 @@ class DataResponseObjectTest {
     }
 
     /**
-     * Test that obj extends EnvelopeSignatureBearer
+     * Test that obj implements DigitalSignatureBearer
      */
     @Test
-    void testObjExtendsAbstractEnvelope() {
-        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
+    void testObjImplementsDigitalSignatureBearer() {
+        assertTrue(DigitalSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
     }
 
 

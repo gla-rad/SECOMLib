@@ -74,7 +74,7 @@ class EnvelopeAccessNotificationObjectTest {
         assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
-        assertEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
         assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());

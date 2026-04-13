@@ -76,11 +76,11 @@ class EnvelopeAccessRequestObjectTest {
     }
 
     /**
-     * Test that obj extends EnvelopeSignatureBearer
+     * Test that obj extends AbstractEnvelope
      */
     @Test
-    void testObjExtendsEnvelopeSignatureBearer() {
-        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
+    void testObjExtendsAbstractEnvelope() {
+        assertInstanceOf(AbstractEnvelope.class, this.obj);
     }
 
 

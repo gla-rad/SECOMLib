@@ -106,12 +106,5 @@ class GetSummaryResponseObjectTest {
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());
     }
 
-    /**
-     * Test that obj extends EnvelopeSignatureBearer
-     */
-    @Test
-    void testObjExtendsEnvelopeSignatureBearer() {
-        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
-    }
 
 }

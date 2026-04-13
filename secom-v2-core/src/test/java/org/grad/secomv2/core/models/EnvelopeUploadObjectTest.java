@@ -74,7 +74,6 @@ class EnvelopeUploadObjectTest {
         this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setExchangeMetadata(this.exchangeMetadata);
-        this.obj.setFromSubscription(Boolean.FALSE);
         this.obj.setSubscriptionIdentifier(UUID.randomUUID());
         this.obj.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
         this.obj.setCallbackEndpoint(URI.create("http://example").toURL());
@@ -105,7 +104,6 @@ class EnvelopeUploadObjectTest {
         assertArrayEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag(), result.getExchangeMetadata().getCompressionFlag());
-        assertEquals(this.obj.getFromSubscription(), result.getFromSubscription());
         assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
         assertEquals(this.obj.getAckRequest(), result.getAckRequest());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
