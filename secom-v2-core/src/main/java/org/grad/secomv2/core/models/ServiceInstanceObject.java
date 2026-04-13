@@ -51,14 +51,13 @@ public class ServiceInstanceObject {
     @NotNull
     private String[] endpointType;
     private String[] keywords;
-    private String unlocode;
-    private String implementsDesign;
+    private String[] unlocode;
+    private String[] implementsDesigns;
     @NotNull
     @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
     private String apiDoc;
     @NotNull
     private String[] coverageArea;
-    private String instanceAsXml;
     private String imo;
     private String mmsi;
     private String[] certificates;
@@ -252,7 +251,7 @@ public class ServiceInstanceObject {
      *
      * @return the unlocode
      */
-    public String getUnlocode() {
+    public String[] getUnlocode() {
         return unlocode;
     }
 
@@ -261,7 +260,7 @@ public class ServiceInstanceObject {
      *
      * @param unlocode the unlocode
      */
-    public void setUnlocode(String unlocode) {
+    public void setUnlocode(String[] unlocode) {
         this.unlocode = unlocode;
     }
 
@@ -270,36 +269,19 @@ public class ServiceInstanceObject {
      *
      * @return implementsDesign
      */
-    public String getImplementsDesign() {
-        return implementsDesign;
+    public String[] getImplementsDesigns() {
+        return implementsDesigns;
     }
 
     /**
      * Sets implements design
      *
-     * @param implementsDesign the design
+     * @param implementsDesigns the design
      */
-    public void setImplementsDesign(String implementsDesign) {
-        this.implementsDesign = implementsDesign;
+    public void setImplementsDesigns(String[] implementsDesigns) {
+        this.implementsDesigns = implementsDesigns;
     }
 
-    /**
-     * Gets instance as xml.
-     *
-     * @return the instance as xml
-     */
-    public String getInstanceAsXml() {
-        return instanceAsXml;
-    }
-
-    /**
-     * Sets instance as xml.
-     *
-     * @param instanceAsXml the instance as xml
-     */
-    public void setInstanceAsXml(String instanceAsXml) {
-        this.instanceAsXml = instanceAsXml;
-    }
 
     /**
      * Get api doc

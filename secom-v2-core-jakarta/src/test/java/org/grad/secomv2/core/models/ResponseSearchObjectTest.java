@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,11 +60,10 @@ class ResponseSearchObjectTest {
         this.searchObjectResult.setEndpointType(new String[]{"endpointType"});
         this.searchObjectResult.setVersion("version");
         this.searchObjectResult.setKeywords(new String[]{"keywords"});
-        this.searchObjectResult.setUnlocode("unlocode");
-        this.searchObjectResult.setInstanceAsXml("instanceAsXml");
+        this.searchObjectResult.setUnlocode(new String[]{"unlocode"});
         this.searchObjectResult.setMmsi("mmsi");
         this.searchObjectResult.setImo("imo");
-        this.searchObjectResult.setSourceMSR("sourceMSR");
+        this.searchObjectResult.setSourceMSRs(new String[]{"sourceMSR"});
 
         // Generate a new object
         this.obj = new ResponseSearchObject();
@@ -95,11 +95,12 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
         assertArrayEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getMmsi(), result.getSearchServiceResult().get(0).getMmsi());
         assertEquals(this.obj.getSearchServiceResult().get(0).getImo(), result.getSearchServiceResult().get(0).getImo());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getSourceMSR(), result.getSearchServiceResult().get(0).getSourceMSR());
-
+        assertArrayEquals(
+                this.obj.getSearchServiceResult().get(0).getSourceMSRs(),
+                result.getSearchServiceResult().get(0).getSourceMSRs()
+        );
     }
 
 }

@@ -59,8 +59,7 @@ class ResponseSearchObjectTest {
         this.serviceInstanceObject.setEndpointType(new String[] {"endpointType"});
         this.serviceInstanceObject.setVersion("version");
         this.serviceInstanceObject.setKeywords(new String[]{"keywords"});
-        this.serviceInstanceObject.setUnlocode("unlocode");
-        this.serviceInstanceObject.setInstanceAsXml("instanceAsXml");
+        this.serviceInstanceObject.setUnlocode(new String[]{"unlocode"});
         this.serviceInstanceObject.setMmsi("mmsi");
         this.serviceInstanceObject.setImo("imo");
         this.serviceInstanceObject.setSourceMSRs(new String[]{"sourceMSR"});
@@ -95,7 +94,6 @@ class ResponseSearchObjectTest {
         assertEquals(this.obj.getSearchServiceResult().get(0).getVersion(), result.getSearchServiceResult().get(0).getVersion());
         assertArrayEquals(this.obj.getSearchServiceResult().get(0).getKeywords(), result.getSearchServiceResult().get(0).getKeywords());
         assertNotNull(result.getSearchServiceResult().get(0).getUnlocode());
-        assertEquals(this.obj.getSearchServiceResult().get(0).getInstanceAsXml(), result.getSearchServiceResult().get(0).getInstanceAsXml());
         assertEquals(this.obj.getSearchServiceResult().get(0).getMmsi(), result.getSearchServiceResult().get(0).getMmsi());
         assertEquals(this.obj.getSearchServiceResult().get(0).getImo(), result.getSearchServiceResult().get(0).getImo());
         assertArrayEquals(this.obj.getSearchServiceResult().get(0).getSourceMSRs(), result.getSearchServiceResult().get(0).getSourceMSRs());
