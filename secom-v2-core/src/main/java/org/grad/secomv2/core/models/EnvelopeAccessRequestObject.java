@@ -28,7 +28,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeAccessObject extends AbstractEnvelope {
+public class EnvelopeAccessRequestObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull

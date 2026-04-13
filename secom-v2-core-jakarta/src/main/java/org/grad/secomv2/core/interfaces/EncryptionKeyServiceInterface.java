@@ -20,8 +20,8 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.EncryptionKeyObject;
 import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
-import org.grad.secomv2.core.models.EncrytionKeyObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -57,7 +57,7 @@ public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    EncryptionKeyResponseObject encryptionKey(@Valid EncrytionKeyObject encrytionKeyObject);
+    EncryptionKeyResponseObject encryptionKey(@Valid EncryptionKeyObject encryptionKeyObject);
 
     /**
      * The exception handler implementation for the interface.

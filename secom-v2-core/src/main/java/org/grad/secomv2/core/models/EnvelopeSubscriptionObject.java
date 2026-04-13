@@ -33,7 +33,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeSubscriptionObject {
+public class EnvelopeSubscriptionObject extends AbstractEnvelope {
 
     // Class Variables
     private ContainerTypeEnum containerType;
@@ -235,4 +235,22 @@ public class EnvelopeSubscriptionObject {
      */
     public void setPushAll(Boolean pushAll) { this.pushAll = pushAll; }
 
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                containerType,
+                dataProductType,
+                dataReference,
+                productVersion,
+                geometry,
+                unlocode,
+                subscriptionPeriodStart,
+                subscriptionPeriodEnd,
+                callbackEndpoint,
+                pushAll,
+                envelopeSignatureCertificate,
+                envelopeRootCertificateThumbprint,
+                envelopeSignatureTime
+        };
+    }
 }

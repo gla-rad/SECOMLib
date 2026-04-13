@@ -17,13 +17,14 @@
 package org.grad.secomv2.core.models;
 
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Encryption Key Notification Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyNotificationObject {
+public class EncryptionKeyNotificationObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull

@@ -20,13 +20,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Subscription Request Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionRequestObject {
+public class SubscriptionRequestObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull

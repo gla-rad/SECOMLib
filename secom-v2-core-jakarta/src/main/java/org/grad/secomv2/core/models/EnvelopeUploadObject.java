@@ -55,8 +55,6 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     @JsonProperty
     @NotNull
     private ExchangeMetadata exchangeMetadata;
-    @Schema(description = "Flag to indicate whether the data has been uploaded within an active subscription or not.")
-    private Boolean fromSubscription;
     @Schema(type= "string", description = "Subscription identifier if the object is uploaded within subscription.", example = "550e8400-e29b-41d4-a716-446655440000")
     @Pattern(regexp = "^[{(]?[0-9a-fA-F]{8}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{4}[-]?[0-9a-fA-F]{12}[)}]?$")
     private UUID subscriptionIdentifier;
@@ -154,23 +152,6 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
         this.exchangeMetadata = exchangeMetadata;
     }
 
-    /**
-     * Gets from subscription.
-     *
-     * @return the from subscription
-     */
-    public Boolean getFromSubscription() {
-        return fromSubscription;
-    }
-
-    /**
-     * Sets from subscription.
-     *
-     * @param fromSubscription the from subscription
-     */
-    public void setFromSubscription(Boolean fromSubscription) {
-        this.fromSubscription = fromSubscription;
-    }
 
     /**
      * Get subscription identifier
@@ -250,7 +231,6 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
                 containerType,
                 dataProductType,
                 exchangeMetadata,
-                fromSubscription,
                 subscriptionIdentifier,
                 ackRequest,
                 callbackEndpoint,

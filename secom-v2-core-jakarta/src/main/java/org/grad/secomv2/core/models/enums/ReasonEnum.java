@@ -28,8 +28,8 @@ import java.util.Arrays;
  */
 @Schema(implementation = Integer.class)
 public enum ReasonEnum implements SECOM_Enum {
-    REQUESTED_BY_AUTHORITY(0),
-    REQUESTED_BY_SERVICE_PROVIDER(1);
+    REQUIRED_BY_AUTHORITY(0),
+    REQUIRED_BY_SERVICE_PROVIDER(1);
 
     // Enum Variables
     private final int value;
