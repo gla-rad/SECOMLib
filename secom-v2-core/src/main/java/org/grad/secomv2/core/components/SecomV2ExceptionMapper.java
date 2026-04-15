@@ -44,6 +44,7 @@ import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.PO
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
@@ -173,6 +174,8 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, this.request, null);
                     }
+                case RETRIEVE_RESULT_INTERFACE_PATH:
+                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
                 default:
                     //Nothing to do, continue with the generic rules
             }

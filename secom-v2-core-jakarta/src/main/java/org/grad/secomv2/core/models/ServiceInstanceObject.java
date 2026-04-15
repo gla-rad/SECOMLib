@@ -19,14 +19,12 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-
-import java.util.List;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.UUID;
 
 /**
- * The SECOM Service Instance Object Class.
+ * The SECOM Search Object Result Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
@@ -49,22 +47,21 @@ public class ServiceInstanceObject {
     @NotNull
     private String organizationId;
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9+.\\-]*:(//[^/\\s?#]*)?([^\\s?#]*)(\\?[^#\\s]*)?(#\\S*)?$")
     private String endpointUri;
+    @NotNull
     private String[] endpointType;
     private String[] keywords;
-    private String unlocode;
-    private String implementsDesigns;
+    private String[] unlocode;
+    private String[] implementsDesigns;
     @NotNull
     @Pattern(regexp = "^(https?|ftp)://([a-zA-Z0-9\\-._~%!$&'()*+,;=]+@)?([a-zA-Z0-9\\-._~]+)(:\\d+)?(/[^\\s]*)?$")
     private String apiDoc;
     @NotNull
     private String[] coverageArea;
-    private String instanceAsXml;
     private String imo;
     private String mmsi;
-    private List<String> certificates;
-    private String sourceMSR;
+    private String[] certificates;
+    private String[] sourceMSRs;
     private String[] unsupportedParams;
 
 
@@ -254,7 +251,7 @@ public class ServiceInstanceObject {
      *
      * @return the unlocode
      */
-    public String getUnlocode() {
+    public String[] getUnlocode() {
         return unlocode;
     }
 
@@ -263,7 +260,7 @@ public class ServiceInstanceObject {
      *
      * @param unlocode the unlocode
      */
-    public void setUnlocode(String unlocode) {
+    public void setUnlocode(String[] unlocode) {
         this.unlocode = unlocode;
     }
 
@@ -272,7 +269,7 @@ public class ServiceInstanceObject {
      *
      * @return implementsDesign
      */
-    public String getImplementsDesigns() {
+    public String[] getImplementsDesigns() {
         return implementsDesigns;
     }
 
@@ -281,9 +278,11 @@ public class ServiceInstanceObject {
      *
      * @param implementsDesigns the design
      */
-    public void setImplementsDesigns(String implementsDesigns) {
+    public void setImplementsDesigns(String[] implementsDesigns) {
         this.implementsDesigns = implementsDesigns;
     }
+
+
 
     /**
      * Get api doc
@@ -321,23 +320,6 @@ public class ServiceInstanceObject {
         this.coverageArea = coverageArea;
     }
 
-    /**
-     * Gets instance as xml.
-     *
-     * @return the instance as xml
-     */
-    public String getInstanceAsXml() {
-        return instanceAsXml;
-    }
-
-    /**
-     * Sets instance as xml.
-     *
-     * @param instanceAsXml the instance as xml
-     */
-    public void setInstanceAsXml(String instanceAsXml) {
-        this.instanceAsXml = instanceAsXml;
-    }
 
     /**
      * Gets imo.
@@ -380,7 +362,7 @@ public class ServiceInstanceObject {
      *
      * @return certificates
      */
-    public List<String> getCertificates() {
+    public String[] getCertificates() {
         return certificates;
     }
 
@@ -389,17 +371,17 @@ public class ServiceInstanceObject {
      *
      * @param certificates the certificates
      */
-    public void setCertificates(List<String> certificates) {
+    public void setCertificates(String[] certificates) {
         this.certificates = certificates;
     }
 
     /**
      * Gets source MSRs.
      *
-     * @return the source MSRs
+     * @return the source msr
      */
-    public String getSourceMSR() {
-        return sourceMSR;
+    public String[] getSourceMSRs() {
+        return sourceMSRs;
     }
 
     /**
@@ -407,8 +389,8 @@ public class ServiceInstanceObject {
      *
      * @param sourceMSRs the source msr
      */
-    public void setSourceMSR(String sourceMSRs) {
-        this.sourceMSR = sourceMSRs;
+    public void setSourceMSRs(String[] sourceMSRs) {
+        this.sourceMSRs = sourceMSRs;
     }
 
     /**
@@ -428,5 +410,6 @@ public class ServiceInstanceObject {
     public void setUnsupportedParams(String[] unsupportedParams) {
         this.unsupportedParams = unsupportedParams;
     }
+
 
 }

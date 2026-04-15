@@ -36,7 +36,6 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
     @Schema(description = "The search geometry", type = "WKT", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "(^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$|^\\s*(\\{.*\\}|\\w+)\\s*$)")
     private String geometry;
-    private Boolean includeXml;
     private Boolean localOnly;
 
     /**
@@ -75,20 +74,6 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         this.geometry = geometry;
     }
 
-    /**
-     * Get include xml
-     *
-     * @return include xml
-     */
-    public Boolean getIncludeXml() { return includeXml; }
-
-    /**
-     * Set include xml
-     *
-     * @param includeXml, whether xml should be included
-     */
-
-    public void setIncludeXml(Boolean includeXml) { this.includeXml = includeXml; }
 
     /**
      * Set local only search
