@@ -34,7 +34,7 @@ import static org.grad.secomv2.core.interfaces.AccessNotificationServiceInterfac
 import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
@@ -136,8 +136,8 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     return SearchServiceServiceInterface.handleSearchServiceInterfaceExceptions(ex, this.request, null);
                 case ENCRYPTION_KEY_INTERFACE_PATH:
                     return EncryptionKeyServiceInterface.handleEncryptionInterfaceExceptions(ex, this.request, null);
-                case ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH:
-                    return EncryptionKeyNotifyServiceInterface.handleEncryptionKeyNotifyInterfaceExceptions(ex, this.request, null);
+                case ENCRYPTION_KEY_REQUEST_INTERFACE_PATH:
+                    return EncryptionKeyRequestServiceInterface.handleEncryptionKeyRequestInterfaceExceptions(ex, this.request, null);
                 case GET_BY_LINK_INTERFACE_PATH: // Also for upload
                     if(Objects.equals(this.request.getMethod(), "GET")) {
                         return GetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, this.request, null);

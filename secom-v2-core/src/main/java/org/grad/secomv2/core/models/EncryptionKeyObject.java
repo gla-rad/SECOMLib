@@ -16,6 +16,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -25,32 +26,33 @@ import javax.validation.constraints.Size;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyObject {
+public class EncryptionKeyObject implements EnvelopeSignatureBearer  {
 
     // Class Variables
     @NotNull
-    private EnvelopeKeyObject envelopeKeyObject;
+    private EnvelopeKeyObject envelope;
     @NotNull
     @Schema(description = "The signature of the EnvelopeKeyObject in HEX format without whitespace or linebreaks")
     @Size(min = 1)
     private String envelopeSignature;
 
     /**
-     * Gets envelope key object.
+     * Gets envelope.
      *
-     * @return the envelope key object
+     * @return the envelope
      */
-    public EnvelopeKeyObject getEnvelopeKeyObject() {
-        return envelopeKeyObject;
+    @Override
+    public EnvelopeKeyObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets envelope key object.
+     * Sets envelope.
      *
-     * @param envelopeKeyObject the envelope key object
+     * @param envelope the envelope
      */
-    public void setEnvelopeKeyObject(EnvelopeKeyObject envelopeKeyObject) {
-        this.envelopeKeyObject = envelopeKeyObject;
+    public void setEnvelope(EnvelopeKeyObject envelope) {
+        this.envelope = envelope;
     }
 
     /**
@@ -58,6 +60,7 @@ public class EncryptionKeyObject {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }
@@ -67,6 +70,7 @@ public class EncryptionKeyObject {
      *
      * @param envelopeSignature the envelope signature
      */
+    @Override
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }

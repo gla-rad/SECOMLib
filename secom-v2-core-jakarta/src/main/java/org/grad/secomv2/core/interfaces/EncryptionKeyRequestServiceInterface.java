@@ -44,14 +44,14 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey/request";
+    String ENCRYPTION_KEY_REQUEST_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey/request";
 
     /**
      * POST /v2/encryptionkey/request : This operation requests an encrypted
      * secret key from a producer. The response is sent asynchronously through
      * the consumer’s POST key operation.
      */
-    @Path(ENCRYPTION_KEY_INTERFACE_PATH)
+    @Path(ENCRYPTION_KEY_REQUEST_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,9 +65,9 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleEncryptionInterfaceExceptions(Exception ex,
-                                                        HttpServletRequest request,
-                                                        HttpServletResponse response) {
+    static Response handleEncryptionKeyRequestInterfaceExceptions(Exception ex,
+                                                                  HttpServletRequest request,
+                                                                  HttpServletResponse response) {
 
         // Create the encryption key response
         Response.Status responseStatus;
