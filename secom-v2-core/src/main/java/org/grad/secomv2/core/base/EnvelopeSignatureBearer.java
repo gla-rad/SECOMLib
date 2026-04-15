@@ -42,7 +42,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
 
     /**
      * Allows the envelope signature bearer object to access the envelope to be
-     * used to product the signature.
+     * used to produce the signature.
      *
      * @return the signature information of the data signature bearer
      */

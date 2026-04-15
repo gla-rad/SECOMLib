@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -71,11 +72,11 @@ class UploadObjectTest {
         this.envelopeUploadObject.setData("data".getBytes(StandardCharsets.UTF_8));
         this.envelopeUploadObject.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.envelopeUploadObject.setDataProductType(SECOM_DataProductType.S101);
+        this.envelopeUploadObject.setExchangeMetadata(this.exchangeMetadata);
         this.envelopeUploadObject.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
         this.envelopeUploadObject.setTransactionIdentifier(UUID.randomUUID());
         this.envelopeUploadObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.envelopeUploadObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.envelopeUploadObject.setExchangeMetadata(this.exchangeMetadata);
         this.envelopeUploadObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 
         // Generate a new object
@@ -114,6 +115,14 @@ class UploadObjectTest {
         assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
+    }
+
+    /**
+     * Test that obj implements EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjImplementsEnvelopeSignatureBearer() {
+        assertTrue(EnvelopeSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

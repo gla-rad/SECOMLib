@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -100,17 +102,17 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
+
     @Override
     public Object[] getAttributeArray() {
-        return new Object[]{
-                query,
-                geometry,
-                includeXml,
-                localOnly,
-                envelopeSignatureCertificate,
-                envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
-        };
+        ArrayList<Object> attributes = new ArrayList<>(List.of(this.query.getAttributeArray()));
+        attributes.add(this.geometry);
+        attributes.add(this.localOnly);
+        attributes.add(envelopeSignatureCertificate);
+        attributes.add(envelopeRootCertificateThumbprint);
+        attributes.add(envelopeSignatureTime);
+        attributes.add(digitalSignatureReference);
+
+        return attributes.toArray();
     }
 }

@@ -116,6 +116,6 @@ class EnvelopeGetSummaryFilterObjectTest {
      */
     @Test
     void testObjExtendsAbstractEnvelope() {
-        assertInstanceOf(AbstractEnvelope.class, this.obj);
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
 }

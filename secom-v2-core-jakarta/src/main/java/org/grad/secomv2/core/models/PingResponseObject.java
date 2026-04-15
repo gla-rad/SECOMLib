@@ -38,18 +38,18 @@ public class PingResponseObject {
     private Instant timestamp;
 
     /**
-     * Gets last private interaction time.
+     * Gets the timestamp.
      *
-     * @return the last private interaction time
+     * @return the timestamp
      */
     public Instant getTimestamp() {
         return timestamp;
     }
 
     /**
-     * Sets last private interaction time.
+     * Sets the timestamp.
      *
-     * @param timestamp the last private interaction time
+     * @param timestamp the timestamp
      */
     public void setTimestamp(Instant timestamp) {
         this.timestamp = timestamp;

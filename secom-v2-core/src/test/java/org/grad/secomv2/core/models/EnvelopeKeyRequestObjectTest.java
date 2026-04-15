@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secomv2.core.models;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,17 +22,29 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EnvelopeAccessNotificationObjectTest {
+/**
+ * {Description}
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
+public class EnvelopeKeyRequestObjectTest {
 
     // Class Variables
-    private EnvelopeAccessNotificationObject obj;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private EnvelopeKeyRequestObject obj;
 
     private ObjectMapper mapper;
 
@@ -40,24 +52,27 @@ class EnvelopeAccessNotificationObjectTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() {
+    void setup() throws URISyntaxException, MalformedURLException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
 
-        // Generate a new object
-        this.obj = new EnvelopeAccessNotificationObject();
-        this.obj.setDecision(Boolean.TRUE);
-        this.obj.setDecisionReason("Test");
-        this.obj.setDataReference(UUID.randomUUID());
-        this.obj.setTransactionIdentifier(UUID.randomUUID());
+        // Create a digital signature value
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
 
-        // Set signature settings
-        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
-        this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
+        // Generate a new object
+        this.obj = new EnvelopeKeyRequestObject();
+        this.obj.setDataReference(UUID.randomUUID());
+        this.obj.setPublicCertificate("certificate");
+        this.obj.setCallbackEndpoint(new URI("https://callbackendpoint").toURL());
+
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setDigitalSignatureReference("digitalSignatureReference");
-
     }
 
     /**
@@ -67,18 +82,16 @@ class EnvelopeAccessNotificationObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        EnvelopeAccessNotificationObject result = this.mapper.readValue(jsonString, EnvelopeAccessNotificationObject.class);
+        EnvelopeKeyRequestObject result = this.mapper.readValue(jsonString, EnvelopeKeyRequestObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getDecision(), result.getDecision());
-        assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
         assertEquals(this.obj.getDataReference(), result.getDataReference());
-        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
+        assertEquals(this.obj.getPublicCertificate(), result.getPublicCertificate());
+        assertEquals(this.obj.getCallbackEndpoint().toString(), result.getCallbackEndpoint().toString());
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
     }
 
     /**
@@ -91,14 +104,13 @@ class EnvelopeAccessNotificationObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(this.obj.getDecision(), Boolean.parseBoolean(csv[0]));
-        assertEquals(this.obj.getDecisionReason(), csv[1]);
-        assertEquals(this.obj.getDataReference().toString(), csv[2]);
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[4]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[5]);
-        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[6]));
-        assertEquals(this.obj.getDigitalSignatureReference(), csv[7]);
+        assertEquals(this.obj.getDataReference().toString(), csv[0]);
+        assertEquals(this.obj.getPublicCertificate(), csv[1]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[2]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[3]));
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[4]);
+        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[5]);
+        assertEquals(this.obj.getDigitalSignatureReference(), csv[6]);
     }
 
     /**
@@ -108,4 +120,5 @@ class EnvelopeAccessNotificationObjectTest {
     void testObjExtendsAbstractEnvelope() {
         assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
+
 }

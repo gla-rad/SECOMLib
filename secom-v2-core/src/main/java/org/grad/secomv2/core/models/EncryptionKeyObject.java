@@ -25,7 +25,7 @@ import javax.validation.constraints.Size;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncrytionKeyObject {
+public class EncryptionKeyObject {
 
     // Class Variables
     @NotNull

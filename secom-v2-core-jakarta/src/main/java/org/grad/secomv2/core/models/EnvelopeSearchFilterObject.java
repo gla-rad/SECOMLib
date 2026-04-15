@@ -20,9 +20,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.Pattern;
-import org.grad.secomv2.core.base.CsvStringGenerator;
-import org.grad.secomv2.core.base.DigitalSignatureBearer;
-import org.grad.secomv2.core.base.GenericDataBearer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -126,18 +126,20 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     public Boolean getLocalOnly() { return localOnly; }
 
+    /**
+     *
+     **/
     @Override
     public Object[] getAttributeArray() {
-        return new Object[]{
-                query,
-                geometry,
-                includeXml,
-                localOnly,
-                envelopeSignatureCertificate,
-                envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
-        };
+        ArrayList<Object> attributes = new ArrayList<>(List.of(this.query.getAttributeArray()));
+        attributes.add(this.geometry);
+        attributes.add(this.localOnly);
+        attributes.add(envelopeSignatureCertificate);
+        attributes.add(envelopeRootCertificateThumbprint);
+        attributes.add(envelopeSignatureTime);
+        attributes.add(digitalSignatureReference);
+
+        return attributes.toArray();
     }
 
 }

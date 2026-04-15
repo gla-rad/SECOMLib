@@ -21,9 +21,11 @@ import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Encryption Key Notification Object Class.
+ * Deprecated; use EncryptionKeyRequestObject instead.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Deprecated(since = "v2 CD3", forRemoval = true)
 public class EncryptionKeyNotificationObject implements EnvelopeSignatureBearer {
 
     // Class Variables
@@ -37,6 +39,7 @@ public class EncryptionKeyNotificationObject implements EnvelopeSignatureBearer 
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeKeyNotificationObject getEnvelope() {
         return envelope;
     }
@@ -55,6 +58,7 @@ public class EncryptionKeyNotificationObject implements EnvelopeSignatureBearer 
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

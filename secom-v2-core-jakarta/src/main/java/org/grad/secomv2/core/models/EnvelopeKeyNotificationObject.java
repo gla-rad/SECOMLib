@@ -22,9 +22,11 @@ import java.util.UUID;
 
 /**
  * The SECOM Envelope Key Notification Object.
+ * Deprecated; use EnvelopeKeyRequestObject instead.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Deprecated(since = "v2 CD3", forRemoval = true)
 public class EnvelopeKeyNotificationObject extends AbstractEnvelope {
 
     // Class Variables

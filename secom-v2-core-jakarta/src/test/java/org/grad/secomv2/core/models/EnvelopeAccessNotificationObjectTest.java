@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -81,11 +82,31 @@ class EnvelopeAccessNotificationObjectTest {
     }
 
     /**
-     * Test that EnvelopeSubscriptionObject extends AbstractEnvelope
+     * Test that we can correctly generate the SECOM signature CSV.
+     */
+    @Test
+    void testGetCsvString() {
+        // Generate the signature CSV
+        String signatureCSV = this.obj.getCsvString();
+
+        // Match the individual entries of the string
+        String[] csv = signatureCSV.split("\\.");
+        assertEquals(this.obj.getDecision(), Boolean.parseBoolean(csv[0]));
+        assertEquals(this.obj.getDecisionReason(), csv[1]);
+        assertEquals(this.obj.getDataReference().toString(), csv[2]);
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[4]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[5]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[6]));
+        assertEquals(this.obj.getDigitalSignatureReference(), csv[7]);
+    }
+
+    /**
+     * Test that obj extends AbstractEnvelope
      */
     @Test
     void testObjExtendsAbstractEnvelope() {
-        assertInstanceOf(AbstractEnvelope.class, this.obj);
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

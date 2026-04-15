@@ -235,6 +235,12 @@ public class EnvelopeSubscriptionObject extends AbstractEnvelope {
      */
     public void setPushAll(Boolean pushAll) { this.pushAll = pushAll; }
 
+    /**
+     * This method should be implemented by all envelope objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
         return new Object[] {
@@ -250,7 +256,8 @@ public class EnvelopeSubscriptionObject extends AbstractEnvelope {
                 pushAll,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                digitalSignatureReference
         };
     }
 }

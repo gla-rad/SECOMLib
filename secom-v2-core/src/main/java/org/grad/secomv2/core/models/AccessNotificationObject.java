@@ -42,6 +42,7 @@ public class AccessNotificationObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeAccessNotificationObject getEnvelope() {
         return envelope;
     }
@@ -51,7 +52,7 @@ public class AccessNotificationObject implements EnvelopeSignatureBearer {
      *
      * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeAccessNotificationObject envelope) {
+      public void setEnvelope(EnvelopeAccessNotificationObject envelope) {
         this.envelope = envelope;
     }
 
@@ -60,6 +61,7 @@ public class AccessNotificationObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

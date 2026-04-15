@@ -96,11 +96,11 @@ class GetSummaryFilterObjectTest {
     }
 
     /**
-     * Test that obj extends EnvelopeSignatureBearer
+     * Test that obj implements EnvelopeSignatureBearer
      */
     @Test
-    void testObjExtendsEnvelopeSignatureBearer() {
-        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
+    void testObjImplementsEnvelopeSignatureBearer() {
+        assertTrue(EnvelopeSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

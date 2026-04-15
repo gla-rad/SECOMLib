@@ -146,8 +146,8 @@ class EnvelopeUploadObjectTest {
      * Test that obj extends AbstractEnvelope
      */
     @Test
-    void testSubscriptionRequestExtendsCorrectObject() {
-        assertInstanceOf(AbstractEnvelope.class, this.obj);
+    void testObjExtendsAbstractEnvelope() {
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

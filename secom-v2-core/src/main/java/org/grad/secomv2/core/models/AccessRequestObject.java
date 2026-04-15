@@ -42,6 +42,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeAccessRequestObject getEnvelope() {
         return envelope;
     }
@@ -60,6 +61,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

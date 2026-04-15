@@ -73,11 +73,11 @@ class AccessNotificationObjectTest {
     }
 
     /**
-     * Test that obj extends EnvelopeSignatureBearer
+     * Test that obj implements EnvelopeSignatureBearer
      */
     @Test
-    void testObjExtendsAbstractEnvelope() {
-        assertInstanceOf(EnvelopeSignatureBearer.class, this.obj);
+    void testObjImplementsEnvelopeSignatureBearer() {
+        assertTrue(EnvelopeSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

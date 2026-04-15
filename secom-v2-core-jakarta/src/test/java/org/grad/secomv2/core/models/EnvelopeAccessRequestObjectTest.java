@@ -25,6 +25,9 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,6 +56,11 @@ class EnvelopeAccessRequestObjectTest {
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setDataReference(UUID.randomUUID());
         this.obj.setProductVersion("productVersion");
+        this.obj.setCallbackEndpoint("https://callbackEndpoint");
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
+        this.obj.setEnvelopeSignatureTime(Instant.now());
+        this.obj.setDigitalSignatureReference("digitalReference");
     }
 
     /**
@@ -72,6 +80,35 @@ class EnvelopeAccessRequestObjectTest {
         assertEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getProductVersion(), result.getProductVersion());
+        assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), Arrays.toString(result.getEnvelopeSignatureCertificate()));
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
+
+    }
+
+    /**
+     * Test that we can correctly generate the SECOM signature CSV.
+     */
+    @Test
+    void testGetCsvString() {
+        // Generate the signature CSV
+        String signatureCSV = this.obj.getCsvString();
+
+        // Match the individual entries of the string
+        String[] csv = signatureCSV.split("\\.");
+        assertEquals(this.obj.getReason(), csv[0]);
+        assertEquals(this.obj.getReasonEnum().getValue(), Integer.parseInt(csv[1]));
+        assertEquals(this.obj.getContainerType().asString(), csv[2]);
+        assertEquals(this.obj.getDataProductType().asString(), csv[3]);
+        assertEquals(this.obj.getDataReference().toString(), csv[4]);
+        assertEquals(this.obj.getProductVersion(), csv[5]);
+        assertEquals(this.obj.getCallbackEndpoint(), csv[6]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[7]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[8]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
+        assertEquals(this.obj.getDigitalSignatureReference(), csv[10]);
     }
 
     /**
@@ -79,7 +116,7 @@ class EnvelopeAccessRequestObjectTest {
      */
     @Test
     void testObjExtendsAbstractEnvelope() {
-        assertInstanceOf(AbstractEnvelope.class, this.obj);
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

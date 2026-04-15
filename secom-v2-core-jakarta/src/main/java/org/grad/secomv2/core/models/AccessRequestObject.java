@@ -33,7 +33,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeAccessRequestObject envelope;
     @NotNull
-    @Schema(description = "The signature ot the EnvelopePublicKeyRequestObject in HEX format without whitespace or linebreaks")
+    @Schema(description = "The signature of the EnvelopeAccessRequestObject in HEX format without whitespace or linebreaks")
     @Size(min = 1)
     private String envelopeSignature;
 
@@ -42,6 +42,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeAccessRequestObject getEnvelope() {
         return envelope;
     }
@@ -60,6 +61,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }
