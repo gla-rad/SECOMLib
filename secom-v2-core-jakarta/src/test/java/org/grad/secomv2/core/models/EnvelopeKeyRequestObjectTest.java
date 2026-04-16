@@ -50,7 +50,7 @@ public class EnvelopeKeyRequestObjectTest {
      */
     @BeforeEach
     void setup() throws URISyntaxException, MalformedURLException {
-        //Setup an object mapper
+        // Setup an object mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
 
@@ -65,7 +65,6 @@ public class EnvelopeKeyRequestObjectTest {
         this.obj.setDataReference(UUID.randomUUID());
         this.obj.setPublicCertificate("certificate");
         this.obj.setCallbackEndpoint(new URI("https://callbackendpoint").toURL());
-
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));

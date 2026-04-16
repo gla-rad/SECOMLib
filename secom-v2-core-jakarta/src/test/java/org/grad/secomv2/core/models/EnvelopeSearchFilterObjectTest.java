@@ -65,7 +65,6 @@ class EnvelopeSearchFilterObjectTest {
         this.searchParameters.setUnlocode("unlocode");
         this.searchParameters.setEndpointUri(new URI("http://localhost"));
 
-
         // Generate a new object
         this.obj = new EnvelopeSearchFilterObject();
         this.obj.setQuery(this.searchParameters);
