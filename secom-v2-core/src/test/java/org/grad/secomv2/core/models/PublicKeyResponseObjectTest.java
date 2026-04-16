@@ -49,7 +49,7 @@ public class PublicKeyResponseObjectTest {
         // Create an envelope public key reponse object
         final EnvelopePublicKeyResponseObject envelopePublicKeyResponseObject = new EnvelopePublicKeyResponseObject();
         envelopePublicKeyResponseObject.setPublicCertificate("publicCertificate");
-        envelopePublicKeyResponseObject.setEnvelopeSignatureReference("digitalSignatureRweference");
+        envelopePublicKeyResponseObject.setEnvelopeSignatureReference("envelopeSignatureReference");
         envelopePublicKeyResponseObject.setEnvelopeSignatureCertificate(new String[]{"envelopeSignatureCertificate"});
         envelopePublicKeyResponseObject.setEnvelopeRootCertificateThumbprint("envelopeRootCertificateThumbprint");
         envelopePublicKeyResponseObject.setEnvelopeSignatureTime(Instant.now());

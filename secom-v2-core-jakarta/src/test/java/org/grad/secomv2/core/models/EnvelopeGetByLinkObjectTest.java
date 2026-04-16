@@ -41,6 +41,7 @@ class EnvelopeGetByLinkObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**
@@ -58,6 +59,7 @@ class EnvelopeGetByLinkObjectTest {
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
 
     /**
@@ -74,6 +76,7 @@ class EnvelopeGetByLinkObjectTest {
         assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[1]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[3]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[4]);
     }
 
     /**

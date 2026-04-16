@@ -67,7 +67,7 @@ class EnvelopeSubscriptionObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("digitalSignatureReference");
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**

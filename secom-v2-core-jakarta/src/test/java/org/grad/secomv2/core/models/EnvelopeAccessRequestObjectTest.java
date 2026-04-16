@@ -59,7 +59,7 @@ class EnvelopeAccessRequestObjectTest {
         this.obj.setCallbackEndpoint("https://callbackEndpoint");
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
-        this.obj.setEnvelopeSignatureTime(Instant.now());
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureReference("digitalReference");
     }
 

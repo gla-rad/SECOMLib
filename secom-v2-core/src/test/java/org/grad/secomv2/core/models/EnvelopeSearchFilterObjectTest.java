@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,8 +73,8 @@ class EnvelopeSearchFilterObjectTest {
         this.obj.setLocalOnly(true);
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
-        this.obj.setEnvelopeSignatureTime(Instant.now());
-        this.obj.setEnvelopeSignatureReference("digitalSignatureReference");
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**
@@ -103,6 +104,10 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
 
     /**

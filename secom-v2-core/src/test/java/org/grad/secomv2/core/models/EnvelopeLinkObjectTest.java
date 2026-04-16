@@ -72,7 +72,6 @@ class EnvelopeLinkObjectTest {
         this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
         this.obj.setDataProductType(SECOM_DataProductType.S101);
         this.obj.setExchangeMetadata(this.exchangeMetadata);
-        this.obj.setFromSubscription(Boolean.FALSE);
         this.obj.setSubscriptionIdentifier(UUID.randomUUID());
         this.obj.setAckRequest(AckRequestEnum.NO_ACK_REQUESTED);
         this.obj.setCallbackEndpoint(URI.create("http://example").toURL());
@@ -82,6 +81,7 @@ class EnvelopeLinkObjectTest {
         this.obj.setSize(1);
         this.obj.setTimeToLive(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**
@@ -115,6 +115,7 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getSize(), result.getSize());
         assertEquals(this.obj.getTimeToLive(), result.getTimeToLive());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
 
     /**
@@ -136,16 +137,16 @@ class EnvelopeLinkObjectTest {
         assertEquals(Arrays.toString(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[6]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[7]);
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[8]);
-        assertEquals(this.obj.getFromSubscription().toString(), csv[9]);
-        assertEquals(this.obj.getSubscriptionIdentifier().toString(), csv[10]);
-        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[11]);
-        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[12]);
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[13]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[14]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[15]);
-        assertEquals(String.valueOf(this.obj.getSize()), csv[16]);
-        assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[17]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[18]);
+        assertEquals(this.obj.getSubscriptionIdentifier().toString(), csv[9]);
+        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[10]);
+        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[11]);
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[12]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[13]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[14]);
+        assertEquals(String.valueOf(this.obj.getSize()), csv[15]);
+        assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[16]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[17]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[18]);
     }
 
     /**

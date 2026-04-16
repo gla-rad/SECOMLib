@@ -136,24 +136,6 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     }
 
     /**
-     * Gets from subscription.
-     *
-     * @return the from subscription
-     */
-    public Boolean getFromSubscription() {
-        return fromSubscription;
-    }
-
-    /**
-     * Sets from subscription.
-     *
-     * @param fromSubscription the from subscription
-     */
-    public void setFromSubscription(Boolean fromSubscription) {
-        this.fromSubscription = fromSubscription;
-    }
-
-    /**
      * Get subscription identifier
      *
      * @return subscriptionIdentifier
@@ -269,7 +251,6 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 containerType,
                 dataProductType,
                 exchangeMetadata,
-                fromSubscription,
                 subscriptionIdentifier,
                 ackRequest,
                 callbackEndpoint,
