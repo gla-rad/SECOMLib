@@ -278,7 +278,9 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 envelopeRootCertificateThumbprint,
                 size,
                 timeToLive,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }

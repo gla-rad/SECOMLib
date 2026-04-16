@@ -34,7 +34,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeSubscriptionObject extends AbstractEnvelope{
+public class EnvelopeSubscriptionObject extends AbstractEnvelope {
 
     // Class Variables
     private ContainerTypeEnum containerType;
@@ -258,7 +258,8 @@ public class EnvelopeSubscriptionObject extends AbstractEnvelope{
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }

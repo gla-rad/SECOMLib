@@ -19,7 +19,6 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,7 +67,7 @@ class EnvelopeSubscriptionObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setDigitalSignatureReference("digitalSignatureReference");
+        this.obj.setEnvelopeSignatureReference("digitalSignatureReference");
 
     }
 
@@ -96,7 +95,7 @@ class EnvelopeSubscriptionObjectTest {
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
     /**
      * Test that we can correctly generate the SECOM signature CSV.
@@ -121,7 +120,7 @@ class EnvelopeSubscriptionObjectTest {
         assertEquals(Arrays.toString(this.obj.envelopeSignatureCertificate), csv[10]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[11]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[12]));
-        assertEquals(this.obj.getDigitalSignatureReference().toString(), csv[13]);
+        assertEquals(this.obj.getEnvelopeSignatureReference().toString(), csv[13]);
     }
 
     /**

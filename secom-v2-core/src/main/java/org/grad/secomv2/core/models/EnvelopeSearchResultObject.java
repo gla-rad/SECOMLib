@@ -18,7 +18,6 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 
@@ -69,6 +68,12 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
      */
     public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
 
+    /**
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
         return new Object[]{
@@ -77,7 +82,8 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 

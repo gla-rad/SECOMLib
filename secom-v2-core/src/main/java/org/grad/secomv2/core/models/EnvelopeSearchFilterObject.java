@@ -18,7 +18,6 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
 import java.util.List;
@@ -73,23 +72,26 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         this.geometry = geometry;
     }
 
-
-
     /**
-     * Get localOnly
+     * Get local only
      *
-     * @return localOnly
+     * @return local only
      */
     public Boolean getLocalOnly() { return localOnly; }
 
     /**
-     * Set localOnly
+     * Set local only search
      *
-     * @param localOnly, whether xml should be included
+     * @param localOnly, whether search should be restricted to the local MSR
      */
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
-
+    /**
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
         ArrayList<Object> attributes = new ArrayList<>(List.of(this.query.getAttributeArray()));
@@ -98,7 +100,7 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         attributes.add(envelopeSignatureCertificate);
         attributes.add(envelopeRootCertificateThumbprint);
         attributes.add(envelopeSignatureTime);
-        attributes.add(digitalSignatureReference);
+        attributes.add(envelopeSignatureReference);
 
         return attributes.toArray();
     }

@@ -245,6 +245,12 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
         this.pageSize = pageSize;
     }
 
+    /**
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
         return new Object[]{
@@ -261,7 +267,7 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureReference
         };
     }
 

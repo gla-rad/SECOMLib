@@ -60,7 +60,7 @@ class EnvelopeAccessRequestObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now());
-        this.obj.setDigitalSignatureReference("digitalReference");
+        this.obj.setEnvelopeSignatureReference("digitalReference");
     }
 
     /**
@@ -84,7 +84,7 @@ class EnvelopeAccessRequestObjectTest {
         assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), Arrays.toString(result.getEnvelopeSignatureCertificate()));
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
 
     }
 
@@ -108,7 +108,7 @@ class EnvelopeAccessRequestObjectTest {
         assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[7]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[8]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
-        assertEquals(this.obj.getDigitalSignatureReference(), csv[10]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[10]);
     }
 
     /**

@@ -25,12 +25,9 @@ import org.junit.jupiter.api.Test;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -72,7 +69,7 @@ public class EnvelopeKeyRequestObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setDigitalSignatureReference("digitalSignatureReference");
+        this.obj.setEnvelopeSignatureReference("digitalSignatureReference");
     }
 
     /**
@@ -110,7 +107,7 @@ public class EnvelopeKeyRequestObjectTest {
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[3]));
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[4]);
         assertEquals(this.obj.getCallbackEndpoint().toString(), csv[5]);
-        assertEquals(this.obj.getDigitalSignatureReference(), csv[6]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[6]);
     }
 
     /**

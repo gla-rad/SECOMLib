@@ -26,7 +26,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -74,7 +73,7 @@ class EnvelopeSearchFilterObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now());
-        this.obj.setDigitalSignatureReference("digitalSignatureReference");
+        this.obj.setEnvelopeSignatureReference("digitalSignatureReference");
     }
 
     /**
@@ -135,7 +134,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[16]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[17]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[18]));
-        assertEquals(this.obj.getDigitalSignatureReference(), csv[19]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[19]);
 
     }
 
