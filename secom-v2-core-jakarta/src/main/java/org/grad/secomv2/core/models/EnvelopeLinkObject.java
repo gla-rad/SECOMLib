@@ -56,7 +56,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     private AckRequestEnum ackRequest;
     @NotNull
-    @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
+    @Schema(type = "string", description = "Base URL without trailing slash to the requestor SECOM service.\r\nEndpoint where to send an acknowledgement.\r\nIf not available, the endpoint needs to be available through search service.", example = "https://example.com")
     @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
     private URL callbackEndpoint;
     @NotNull
