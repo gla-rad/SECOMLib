@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +56,7 @@ class EncryptionKeyRequestObjectTest {
         // Create a new envelope upload object
         this.envelopeKeyRequestObject = new EnvelopeKeyRequestObject();
         this.envelopeKeyRequestObject.setDataReference(UUID.randomUUID());
-        this.envelopeKeyRequestObject.setDigitalSignatureReference("digitalSignatureReference");
+        this.envelopeKeyRequestObject.setEnvelopeSignatureReference("envelopeSignatureReference");
         this.envelopeKeyRequestObject.setPublicCertificate("publicCertificate");
         this.envelopeKeyRequestObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.envelopeKeyRequestObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
@@ -80,12 +81,21 @@ class EncryptionKeyRequestObjectTest {
         assertNotNull(result);
         assertNotNull(result.getEnvelope());
         assertEquals(this.obj.getEnvelope().getDataReference(), result.getEnvelope().getDataReference());
-        assertEquals(this.obj.getEnvelope().getDigitalSignatureReference(), result.getEnvelope().getDigitalSignatureReference());
+        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureReference(), result.getEnvelope().getEnvelopeSignatureReference());
         assertEquals(this.obj.getEnvelope().getPublicCertificate(), result.getEnvelope().getPublicCertificate());
         assertArrayEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
     }
+
+    /**
+     * Test that obj implements EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjImplementsEnvelopeSignatureBearer() {
+        assertTrue(EnvelopeSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
+    }
+
 
 }

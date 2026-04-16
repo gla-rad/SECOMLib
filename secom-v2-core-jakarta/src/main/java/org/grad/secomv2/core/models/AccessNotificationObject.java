@@ -20,13 +20,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Access Notification Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessNotificationObject {
+public class AccessNotificationObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
@@ -41,6 +42,7 @@ public class AccessNotificationObject {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeAccessNotificationObject getEnvelope() {
         return envelope;
     }
@@ -59,6 +61,7 @@ public class AccessNotificationObject {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

@@ -48,7 +48,7 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @NotNull
     @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
     @Size(min = 1)
-    protected String digitalSignatureReference;
+    protected String envelopeSignatureReference;
 
     /**
      * Gets envelope signature certificate.
@@ -109,16 +109,16 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
      *
      * @return the digital signature reference
      */
-    public String getDigitalSignatureReference() {
-        return digitalSignatureReference;
+    public String getEnvelopeSignatureReference() {
+        return envelopeSignatureReference;
     }
 
     /**
      * Sets digital signature reference.
      *
-     * @param digitalSignatureReference the digital signature reference
+     * @param envelopeSignatureReference the digital signature reference
      */
-    public void setDigitalSignatureReference(String digitalSignatureReference) {
-        this.digitalSignatureReference = digitalSignatureReference;
+    public void setEnvelopeSignatureReference(String envelopeSignatureReference) {
+        this.envelopeSignatureReference = envelopeSignatureReference;
     }
 }

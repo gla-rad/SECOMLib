@@ -35,24 +35,24 @@ public class PingResponseObject {
     @Schema(description = "The last private interaction date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
-    private Instant lastPrivateInteractionTime;
+    private Instant timestamp;
 
     /**
-     * Gets last private interaction time.
+     * Gets the timestamp.
      *
-     * @return the last private interaction time
+     * @return the timestamp
      */
-    public Instant getLastPrivateInteractionTime() {
-        return lastPrivateInteractionTime;
+    public Instant getTimestamp() {
+        return timestamp;
     }
 
     /**
-     * Sets last private interaction time.
+     * Sets the timestamp.
      *
-     * @param lastPrivateInteractionTime the last private interaction time
+     * @param timestamp the timestamp
      */
-    public void setLastPrivateInteractionTime(Instant lastPrivateInteractionTime) {
-        this.lastPrivateInteractionTime = lastPrivateInteractionTime;
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
     }
 
 }

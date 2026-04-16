@@ -57,7 +57,7 @@ import static org.grad.secomv2.core.interfaces.AccessNotificationServiceInterfac
 import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.EncryptionKeyNotifyServiceInterface.ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
@@ -312,45 +312,43 @@ public class SecomClient {
     }
 
     /**
-     * POST /v2/encryptionkey/notify : The purpose of the interface is to
-     * exchange a temporary secret key. This operation enables a consumer to
-     * request an encrypted secret key from a producer by providing a reference
-     * to the encrypted data and a public certificate for symmetric key
-     * derivation used to protect the temporary encryption key during transfer.
+     * POST /v2/encryptionkey/upload : This operation is used to upload (push)
+     * an encrypted secret key to a consumer.
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKeyNotify(EncryptionKeyNotificationObject encryptionKeyNotificationObject) {
+    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
         return this.secomClient
                 .post()
-                .uri(ENCRYPTION_KEY_NOTIFY_INTERFACE_PATH)
+                .uri(ENCRYPTION_KEY_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(encryptionKeyNotificationObject))
+                .body(BodyInserters.fromValue(encryptionKeyObject))
                 .retrieve()
                 .bodyToMono(EncryptionKeyResponseObject.class)
                 .blockOptional();
     }
 
     /**
-     * POST /v2/encryptionkey : The purpose of the interface is to exchange a
-     * temporary secret key. This operation is used to upload (push) an
-     * encrypted secret key to a consumer.
+     * POST /v2/encryptionkey/request : This operation enables a consumer to
+     * request an encrypted secret key from a producer by providing a
+     * reference to the encrypted data and a public certificate for symmetric
+     * key derivation used to protect the temporary encryption key during
+     * transfer.
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyRequestObject encryptionKeyRequestObject) {
+    public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
         // If a signature provider has been assigned, use it to sign the
         // encryption key object envelop data.
         if(this.signatureProvider != null) {
             encryptionKeyRequestObject.signEnvelope(this.certificateProvider, this.signatureProvider);
         }
 
-
         // And perform the web-call
         return this.secomClient
                 .post()
-                .uri(ENCRYPTION_KEY_INTERFACE_PATH)
+                .uri(ENCRYPTION_KEY_REQUEST_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(encryptionKeyRequestObject))

@@ -16,11 +16,6 @@
 
 package org.grad.secomv2.core.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
-
 /**
  * The SECOM Search Filter Object Class.
  *
@@ -49,6 +44,12 @@ public class EnvelopeRetrieveResultObject extends AbstractEnvelope {
         this.transactionId = transactionId;
     }
 
+    /**
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
         return new Object[]{
@@ -56,7 +57,8 @@ public class EnvelopeRetrieveResultObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }

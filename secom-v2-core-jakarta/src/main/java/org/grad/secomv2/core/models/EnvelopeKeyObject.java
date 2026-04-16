@@ -42,7 +42,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] encryptionKey;
     @NotNull
-    @Schema(type = "string", format = "byte", description = "Inititalisation vector, Base64 encoded\r\nExample: c9fUXeC5xrFuXGNNnGv9iA==")
+    @Schema(type = "string", format = "byte", description = "Initialisation vector, Base64 encoded\r\nExample: c9fUXeC5xrFuXGNNnGv9iA==")
     @JsonSerialize(using = SecomByteArraySerializer.class)
     @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] iv;
@@ -52,7 +52,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     private UUID transactionIdentifier;
     @NotNull
     private DigitalSignatureValueObject digitalSignatureValue;
-    @Schema(description = "expiry time in UTC for the temporaty key")
+    @Schema(description = "expiry time in UTC for the temporary key")
     private Instant expirationTime;
 
     /**
@@ -161,7 +161,9 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                expirationTime
+                expirationTime,
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }

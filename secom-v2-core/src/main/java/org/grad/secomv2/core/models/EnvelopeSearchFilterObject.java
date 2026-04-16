@@ -18,8 +18,9 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -71,32 +72,37 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         this.geometry = geometry;
     }
 
-
-
     /**
-     * Get localOnly
+     * Get local only
      *
-     * @return localOnly
+     * @return local only
      */
     public Boolean getLocalOnly() { return localOnly; }
 
     /**
-     * Set localOnly
+     * Set local only search
      *
-     * @param localOnly, whether xml should be included
+     * @param localOnly, whether search should be restricted to the local MSR
      */
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
+    /**
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
+     *
+     * @return the generated signature CSV attribute array
+     */
     @Override
     public Object[] getAttributeArray() {
-        return new Object[]{
+        return new Object[] {
                 query,
                 geometry,
                 localOnly,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }

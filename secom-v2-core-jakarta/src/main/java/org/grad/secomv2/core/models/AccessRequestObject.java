@@ -20,19 +20,20 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Access Request Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessRequestObject {
+public class AccessRequestObject implements EnvelopeSignatureBearer {
 
     // Class variables
     @NotNull
-    private EnvelopeAccessObject envelope;
+    private EnvelopeAccessRequestObject envelope;
     @NotNull
-    @Schema(description = "The signature ot the EnvelopePublicKeyRequestObject in HEX format without whitespace or linebreaks")
+    @Schema(description = "The signature of the EnvelopeAccessRequestObject in HEX format without whitespace or linebreaks")
     @Size(min = 1)
     private String envelopeSignature;
 
@@ -41,7 +42,8 @@ public class AccessRequestObject {
      *
      * @return the envelope
      */
-    public EnvelopeAccessObject getEnvelope() {
+    @Override
+    public EnvelopeAccessRequestObject getEnvelope() {
         return envelope;
     }
 
@@ -50,7 +52,7 @@ public class AccessRequestObject {
      *
      * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeAccessObject envelope) {
+    public void setEnvelope(EnvelopeAccessRequestObject envelope) {
         this.envelope = envelope;
     }
 
@@ -59,6 +61,7 @@ public class AccessRequestObject {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

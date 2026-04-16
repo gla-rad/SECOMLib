@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -26,7 +27,7 @@ import javax.validation.constraints.Size;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionRequestObject {
+public class SubscriptionRequestObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
@@ -41,6 +42,7 @@ public class SubscriptionRequestObject {
      *
      * @return the envelope
      */
+    @Override
     public EnvelopeSubscriptionObject getEnvelope() {
         return envelope;
     }
@@ -59,6 +61,7 @@ public class SubscriptionRequestObject {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

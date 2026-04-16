@@ -20,7 +20,7 @@ import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.ReasonEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -28,7 +28,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EnvelopeAccessObject extends AbstractEnvelope {
+public class EnvelopeAccessRequestObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
@@ -186,7 +186,7 @@ public class EnvelopeAccessObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureReference
         };
     }
 }

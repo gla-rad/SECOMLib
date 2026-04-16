@@ -41,4 +41,5 @@ class GetByLinkResponseObjectTest {
         assertNotNull(result);
         assertArrayEquals(this.obj.getData(), result.getData());
     }
+
 }

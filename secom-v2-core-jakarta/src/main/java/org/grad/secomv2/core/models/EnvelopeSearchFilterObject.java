@@ -16,13 +16,12 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.Pattern;
-import org.grad.secomv2.core.base.CsvStringGenerator;
-import org.grad.secomv2.core.base.DigitalSignatureBearer;
-import org.grad.secomv2.core.base.GenericDataBearer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The SECOM Search Filter Object Class.
@@ -74,6 +73,12 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         this.geometry = geometry;
     }
 
+    /**
+     * Get local only
+     *
+     * @return local only
+     */
+    public Boolean getLocalOnly() { return localOnly; }
 
     /**
      * Set local only search
@@ -83,45 +88,22 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
     /**
-     * Override the Abstract Envelope implementation to change the Json property name
-     * Gets the digital signature reference
+     * This method should be implemented by all envelop objects to allow the
+     * generation of the signature CSV attribute array
      *
-     * @return the digital signature reference
+     * @return the generated signature CSV attribute array
      */
-    @Override
-    @JsonProperty("envelopeSignatureReference")
-    public String getDigitalSignatureReference() { return digitalSignatureReference; }
-
-    /**
-     * Overrides the Abstract Envelope implementation to change the Json property name
-     * Sets the digital signature reference
-     *
-     * @param digitalSignatureReference the digital signature reference
-     */
-    @Override
-    @JsonProperty("envelopeSignatureReference")
-    public void setDigitalSignatureReference(String digitalSignatureReference) {
-        this.digitalSignatureReference = digitalSignatureReference;
-    }
-
-    /**
-     * Get local only
-     *
-     * @return local only
-     */
-    public Boolean getLocalOnly() { return localOnly; }
-
     @Override
     public Object[] getAttributeArray() {
-        return new Object[]{
+        return new Object[] {
                 query,
                 geometry,
                 localOnly,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
-
 }

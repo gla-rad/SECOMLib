@@ -29,8 +29,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GetSummaryResponseObjectTest {
 

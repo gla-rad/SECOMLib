@@ -19,6 +19,8 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.grad.secomv2.core.base.DigitalSignatureBearer;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -87,4 +89,14 @@ class DataResponseObjectTest {
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag(), result.getExchangeMetadata().getCompressionFlag());
         assertEquals(this.obj.getAckRequest(), result.getAckRequest());
     }
+
+
+    /**
+     * Test that obj implements DigitalSignatureBearer
+     */
+    @Test
+    void testObjImplementsDigitalSignatureBearer() {
+        assertTrue(DigitalSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
+    }
+
 }

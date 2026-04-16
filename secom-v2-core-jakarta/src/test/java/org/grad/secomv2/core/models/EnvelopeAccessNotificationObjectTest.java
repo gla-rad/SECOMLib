@@ -22,10 +22,12 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class EnvelopeAccessNotificationObjectTest {
 
@@ -49,6 +51,13 @@ class EnvelopeAccessNotificationObjectTest {
         this.obj.setDecisionReason("Test");
         this.obj.setDataReference(UUID.randomUUID());
         this.obj.setTransactionIdentifier(UUID.randomUUID());
+
+        // Set signature settings
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
+
     }
 
     /**
@@ -66,5 +75,38 @@ class EnvelopeAccessNotificationObjectTest {
         assertEquals(this.obj.getDecisionReason(), result.getDecisionReason());
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
+
+    /**
+     * Test that we can correctly generate the SECOM signature CSV.
+     */
+    @Test
+    void testGetCsvString() {
+        // Generate the signature CSV
+        String signatureCSV = this.obj.getCsvString();
+
+        // Match the individual entries of the string
+        String[] csv = signatureCSV.split("\\.");
+        assertEquals(this.obj.getDecision(), Boolean.parseBoolean(csv[0]));
+        assertEquals(this.obj.getDecisionReason(), csv[1]);
+        assertEquals(this.obj.getDataReference().toString(), csv[2]);
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[4]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[5]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[6]));
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[7]);
+    }
+
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
+    }
+
 }

@@ -19,8 +19,9 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.grad.secomv2.core.models.enums.AckTypeEnum;
-import org.grad.secomv2.core.models.enums.NackTypeEnum;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
+import org.grad.secomv2.core.models.enums.ReasonEnum;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,10 +32,10 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EnvelopeAckObjectTest {
+class EnvelopeAccessRequestObjectTest {
 
     // Class Variables
-    private EnvelopeAckObject obj;
+    private EnvelopeAccessRequestObject obj;
 
     private ObjectMapper mapper;
 
@@ -48,13 +49,16 @@ class EnvelopeAckObjectTest {
         this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
-        this.obj = new EnvelopeAckObject();
-        this.obj.setCreatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj = new EnvelopeAccessRequestObject();
+        this.obj.setReason("Test");
+        this.obj.setReasonEnum(ReasonEnum.REQUIRED_BY_AUTHORITY);
+        this.obj.setContainerType(ContainerTypeEnum.S100_DataSet);
+        this.obj.setDataProductType(SECOM_DataProductType.S101);
+        this.obj.setDataReference(UUID.randomUUID());
+        this.obj.setProductVersion("productVersion");
+        this.obj.setCallbackEndpoint("https://callbackEndpoint");
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setAckType(AckTypeEnum.OPENED_ACK);
-        this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
@@ -66,18 +70,22 @@ class EnvelopeAckObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        EnvelopeAckObject result = this.mapper.readValue(jsonString, EnvelopeAckObject.class);
+        EnvelopeAccessRequestObject result = this.mapper.readValue(jsonString, EnvelopeAccessRequestObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getCreatedAt(), result.getCreatedAt());
-        assertArrayEquals(this.obj.getEnvelopeCertificate(), result.getEnvelopeCertificate());
+        assertEquals(this.obj.getReason(), result.getReason());
+        assertEquals(this.obj.getReasonEnum(), result.getReasonEnum());
+        assertEquals(this.obj.getContainerType(), result.getContainerType());
+        assertEquals(this.obj.getDataProductType(), result.getDataProductType());
+        assertEquals(this.obj.getDataReference(), result.getDataReference());
+        assertEquals(this.obj.getProductVersion(), result.getProductVersion());
+        assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), Arrays.toString(result.getEnvelopeSignatureCertificate()));
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
-        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
-        assertEquals(this.obj.getAckType(), result.getAckType());
-        assertEquals(this.obj.getNackType(), result.getNackType());
-        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS), result.getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
+
     }
 
     /**
@@ -90,14 +98,17 @@ class EnvelopeAckObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(this.obj.getCreatedAt().getEpochSecond(), Long.parseLong(csv[0]));
-        assertEquals(Arrays.toString(this.obj.getEnvelopeCertificate()), csv[1]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
-        assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
-        assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[7]);
+        assertEquals(this.obj.getReason(), csv[0]);
+        assertEquals(this.obj.getReasonEnum().getValue(), Integer.parseInt(csv[1]));
+        assertEquals(this.obj.getContainerType().asString(), csv[2]);
+        assertEquals(this.obj.getDataProductType().asString(), csv[3]);
+        assertEquals(this.obj.getDataReference().toString(), csv[4]);
+        assertEquals(this.obj.getProductVersion(), csv[5]);
+        assertEquals(this.obj.getCallbackEndpoint(), csv[6]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[7]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[8]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[10]);
     }
 
     /**

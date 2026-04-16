@@ -29,6 +29,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,6 +62,12 @@ class EnvelopeSubscriptionObjectTest {
         this.obj.setSubscriptionPeriodEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setCallbackEndpoint(URI.create("http://localhost").toURL());
         this.obj.setPushAll(Boolean.FALSE);
+
+        // Set signature settings
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("thumbprint");
+        this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**
@@ -84,6 +91,43 @@ class EnvelopeSubscriptionObjectTest {
         assertEquals(this.obj.getSubscriptionPeriodEnd(), result.getSubscriptionPeriodEnd());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
         assertEquals(this.obj.getPushAll(), result.getPushAll());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
+    }
+    /**
+     * Test that we can correctly generate the SECOM signature CSV.
+     */
+    @Test
+    void testGetCsvString() {
+        // Generate the signature CSV
+        String signatureCSV = this.obj.getCsvString();
+
+        // Match the individual entries of the string
+        String[] csv = signatureCSV.split("\\.");
+        assertEquals(this.obj.getContainerType().asString(), csv[0]);
+        assertEquals(this.obj.getDataProductType().asString(), csv[1]);
+        assertEquals(this.obj.getDataReference().toString(), csv[2]);
+        assertEquals(this.obj.getProductVersion(), csv[3]);
+        assertEquals(this.obj.getGeometry(), csv[4]);
+        assertEquals(this.obj.getUnlocode(), csv[5]);
+        assertEquals(this.obj.getSubscriptionPeriodStart().getEpochSecond(), Long.parseLong(csv[6]));
+        assertEquals(this.obj.getSubscriptionPeriodEnd().getEpochSecond(), Long.parseLong(csv[7]));
+        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[8]);
+        assertEquals(this.obj.getPushAll(), Boolean.parseBoolean(csv[9]));
+        assertEquals(Arrays.toString(this.obj.envelopeSignatureCertificate), csv[10]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[11]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[12]));
+        assertEquals(this.obj.getEnvelopeSignatureReference().toString(), csv[13]);
+    }
+
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

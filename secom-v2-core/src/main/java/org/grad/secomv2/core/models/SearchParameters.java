@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.CsvStringGenerator;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.validation.constraints.Pattern;
@@ -27,7 +28,7 @@ import java.net.URI;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SearchParameters {
+public class SearchParameters implements CsvStringGenerator {
 
     // Class Variables
     private String name;
@@ -43,8 +44,6 @@ public class SearchParameters {
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
-    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
-    private String organizationId;
     @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
     private String mmsi;
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
@@ -237,24 +236,6 @@ public class SearchParameters {
     }
 
     /**
-     * Gets organization id.
-     *
-     * @return the organization id
-     */
-    public String getOrganizationId() {
-        return organizationId;
-    }
-
-    /**
-     * Sets organization id.
-     *
-     * @param organizationId the organization id
-     */
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
-
-    /**
      * Gets mmsi.
      *
      * @return the mmsi
@@ -344,4 +325,23 @@ public class SearchParameters {
         this.endpointUri = endpointUri;
     }
 
+    @Override
+    public Object[] getAttributeArray() {
+        return new Object[] {
+                name,
+                status,
+                version,
+                keywords,
+                description,
+                dataProductType,
+                specificationId,
+                designId,
+                instanceId,
+                mmsi,
+                imo,
+                serviceType,
+                unlocode,
+                endpointUri
+        };
+    }
 }

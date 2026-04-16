@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secomv2.core.models;
+
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.grad.secomv2.core.models.enums.AckTypeEnum;
-import org.grad.secomv2.core.models.enums.NackTypeEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -31,10 +32,16 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EnvelopeAckObjectTest {
+/**
+ * {Description}
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
+public class EnvelopeKeyRequestObjectTest {
 
     // Class Variables
-    private EnvelopeAckObject obj;
+    private DigitalSignatureValueObject digitalSignatureValueObject;
+    private EnvelopeKeyRequestObject obj;
 
     private ObjectMapper mapper;
 
@@ -42,19 +49,24 @@ class EnvelopeAckObjectTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() {
-        //Setup an object mapper
+    void setup() throws URISyntaxException, MalformedURLException {
+        // Setup an object mapper
         this.mapper = new ObjectMapper();
         this.mapper.registerModule(new JavaTimeModule());
 
+        // Create a digital signature value
+        this.digitalSignatureValueObject = new DigitalSignatureValueObject();
+        this.digitalSignatureValueObject.setPublicRootCertificateThumbprint("thumbprint");
+        this.digitalSignatureValueObject.setPublicCertificate(new String[]{"certificate"});
+        this.digitalSignatureValueObject.setDigitalSignature("signature");
+
         // Generate a new object
-        this.obj = new EnvelopeAckObject();
-        this.obj.setCreatedAt(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj = new EnvelopeKeyRequestObject();
+        this.obj.setDataReference(UUID.randomUUID());
+        this.obj.setPublicCertificate("certificate");
+        this.obj.setCallbackEndpoint(new URI("https://callbackendpoint").toURL());
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
-        this.obj.setTransactionIdentifier(UUID.randomUUID());
-        this.obj.setAckType(AckTypeEnum.OPENED_ACK);
-        this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
@@ -66,16 +78,15 @@ class EnvelopeAckObjectTest {
     void testJson() throws JsonProcessingException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
-        EnvelopeAckObject result = this.mapper.readValue(jsonString, EnvelopeAckObject.class);
+        EnvelopeKeyRequestObject result = this.mapper.readValue(jsonString, EnvelopeKeyRequestObject.class);
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getCreatedAt(), result.getCreatedAt());
-        assertArrayEquals(this.obj.getEnvelopeCertificate(), result.getEnvelopeCertificate());
+        assertEquals(this.obj.getDataReference(), result.getDataReference());
+        assertEquals(this.obj.getPublicCertificate(), result.getPublicCertificate());
+        assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
+        assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
-        assertEquals(this.obj.getTransactionIdentifier(), result.getTransactionIdentifier());
-        assertEquals(this.obj.getAckType(), result.getAckType());
-        assertEquals(this.obj.getNackType(), result.getNackType());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
         assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
     }
@@ -90,14 +101,13 @@ class EnvelopeAckObjectTest {
 
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
-        assertEquals(this.obj.getCreatedAt().getEpochSecond(), Long.parseLong(csv[0]));
-        assertEquals(Arrays.toString(this.obj.getEnvelopeCertificate()), csv[1]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
-        assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
-        assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[7]);
+        assertEquals(this.obj.getDataReference().toString(), csv[0]);
+        assertEquals(this.obj.getPublicCertificate(), csv[1]);
+        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[2]);
+        assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[3]));
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[4]);
+        assertEquals(this.obj.getCallbackEndpoint().toString(), csv[5]);
+        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[6]);
     }
 
     /**

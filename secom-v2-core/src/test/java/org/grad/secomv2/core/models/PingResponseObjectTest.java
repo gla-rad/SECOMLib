@@ -44,7 +44,7 @@ class PingResponseObjectTest {
 
         // Generate a new object
         this.obj = new PingResponseObject();
-        this.obj.setLastPrivateInteractionTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+        this.obj.setTimestamp(Instant.now().truncatedTo(ChronoUnit.SECONDS));
     }
 
     /**
@@ -58,7 +58,7 @@ class PingResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getLastPrivateInteractionTime(), result.getLastPrivateInteractionTime());
+        assertEquals(this.obj.getTimestamp(), result.getTimestamp());
     }
 
 }

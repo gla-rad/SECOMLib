@@ -97,4 +97,12 @@ class SearchFilterEnvelopeObjectTest {
         assertEquals(this.obj.getGeometry(), result.getGeometry());
     }
 
+    /**
+     * Test that obj extends AbstractEnvelope
+     */
+    @Test
+    void testObjExtendsAbstractEnvelope() {
+        assertTrue(AbstractEnvelope.class.isAssignableFrom(this.obj.getClass()));
+    }
+
 }

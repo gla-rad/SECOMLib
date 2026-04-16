@@ -13,22 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
+
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
- * The SECOM Encryption Key Notification Object Class.
+ * The SECOM Encryption Key Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyNotificationObject {
+public class EncryptionKeyObject implements EnvelopeSignatureBearer  {
 
     // Class Variables
     @NotNull
-    private EnvelopeKeyNotificationObject envelope;
+    private EnvelopeKeyObject envelope;
     @NotNull
+    @Schema(description = "The signature of the EnvelopeKeyObject in HEX format without whitespace or linebreaks")
+    @Size(min = 1)
     private String envelopeSignature;
 
     /**
@@ -36,7 +41,8 @@ public class EncryptionKeyNotificationObject {
      *
      * @return the envelope
      */
-    public EnvelopeKeyNotificationObject getEnvelope() {
+    @Override
+    public EnvelopeKeyObject getEnvelope() {
         return envelope;
     }
 
@@ -45,7 +51,7 @@ public class EncryptionKeyNotificationObject {
      *
      * @param envelope the envelope
      */
-    public void setEnvelope(EnvelopeKeyNotificationObject envelope) {
+    public void setEnvelope(EnvelopeKeyObject envelope) {
         this.envelope = envelope;
     }
 
@@ -54,6 +60,7 @@ public class EncryptionKeyNotificationObject {
      *
      * @return the envelope signature
      */
+    @Override
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }
@@ -63,6 +70,7 @@ public class EncryptionKeyNotificationObject {
      *
      * @param envelopeSignature the envelope signature
      */
+    @Override
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }

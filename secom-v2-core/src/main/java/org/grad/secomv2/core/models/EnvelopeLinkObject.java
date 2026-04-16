@@ -58,7 +58,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
     @NotNull
     private AckRequestEnum ackRequest;
     @NotNull
-    @Schema(type = "string", description = "URL to the requestor\r\nEndpoint where to send an acknowledgement.\r\nIf not availalble, the endpoint where to send an acknowledgement need to be available in service registry lookup.", example = "https://example.com")
+    @Schema(type = "string", description = "Base URL without trailing slash to the requestor SECOM service.\r\nEndpoint where to send an acknowledgement.\r\nIf not available, the endpoint needs to be available through search service.", example = "https://example.com")
     @Pattern(regexp = "^(https?|ftp):\\/\\/[^\\s/$.?#].[^\\s]*$")
     private URL callbackEndpoint;
     @NotNull
@@ -133,24 +133,6 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
      */
     public void setExchangeMetadata(ExchangeMetadata exchangeMetadata) {
         this.exchangeMetadata = exchangeMetadata;
-    }
-
-    /**
-     * Gets from subscription.
-     *
-     * @return the from subscription
-     */
-    public Boolean getFromSubscription() {
-        return fromSubscription;
-    }
-
-    /**
-     * Sets from subscription.
-     *
-     * @param fromSubscription the from subscription
-     */
-    public void setFromSubscription(Boolean fromSubscription) {
-        this.fromSubscription = fromSubscription;
     }
 
     /**
@@ -269,7 +251,6 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 containerType,
                 dataProductType,
                 exchangeMetadata,
-                fromSubscription,
                 subscriptionIdentifier,
                 ackRequest,
                 callbackEndpoint,
@@ -278,7 +259,9 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 envelopeRootCertificateThumbprint,
                 size,
                 timeToLive,
-                envelopeSignatureTime
+                envelopeSignatureTime,
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
         };
     }
 }
