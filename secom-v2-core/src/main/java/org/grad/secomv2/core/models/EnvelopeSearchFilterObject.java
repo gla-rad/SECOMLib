@@ -94,14 +94,15 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     @Override
     public Object[] getAttributeArray() {
-        ArrayList<Object> attributes = new ArrayList<>(List.of(this.query.getAttributeArray()));
-        attributes.add(this.geometry);
-        attributes.add(this.localOnly);
-        attributes.add(envelopeSignatureCertificate);
-        attributes.add(envelopeRootCertificateThumbprint);
-        attributes.add(envelopeSignatureTime);
-        attributes.add(envelopeSignatureReference);
-
-        return attributes.toArray();
+        return new Object[] {
+                query,
+                geometry,
+                localOnly,
+                envelopeSignatureCertificate,
+                envelopeRootCertificateThumbprint,
+                envelopeSignatureTime,
+                // TODO: This is not included in CD3 but it makes sense to include in the code
+                envelopeSignatureReference
+        };
     }
 }
