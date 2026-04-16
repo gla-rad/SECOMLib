@@ -104,6 +104,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getUnlocode(), result.getQuery().getUnlocode());
         assertEquals(this.obj.getQuery().getEndpointUri(), result.getQuery().getEndpointUri());
         assertEquals(this.obj.getGeometry(), result.getGeometry());
+        assertEquals(this.obj.getLocalOnly(), result.getLocalOnly());
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
@@ -140,7 +141,6 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[17]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[18]));
         assertEquals(this.obj.getEnvelopeSignatureReference(), csv[19]);
-
     }
 
     /**
