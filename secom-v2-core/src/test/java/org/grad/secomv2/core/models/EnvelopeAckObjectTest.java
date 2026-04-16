@@ -56,7 +56,7 @@ class EnvelopeAckObjectTest {
         this.obj.setAckType(AckTypeEnum.OPENED_ACK);
         this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("signatureRef");
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**

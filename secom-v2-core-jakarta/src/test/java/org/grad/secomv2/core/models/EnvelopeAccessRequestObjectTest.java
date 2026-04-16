@@ -57,10 +57,10 @@ class EnvelopeAccessRequestObjectTest {
         this.obj.setDataReference(UUID.randomUUID());
         this.obj.setProductVersion("productVersion");
         this.obj.setCallbackEndpoint("https://callbackEndpoint");
-        this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
-        this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
+        this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
+        this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("digitalReference");
+        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
     }
 
     /**
