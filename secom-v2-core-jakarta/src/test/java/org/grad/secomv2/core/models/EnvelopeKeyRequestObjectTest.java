@@ -85,7 +85,7 @@ public class EnvelopeKeyRequestObjectTest {
         assertNotNull(result);
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getPublicCertificate(), result.getPublicCertificate());
-        assertEquals(this.obj.getCallbackEndpoint().toString(), result.getCallbackEndpoint().toString());
+        assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
