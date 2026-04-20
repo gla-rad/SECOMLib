@@ -5,13 +5,14 @@
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-v2-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.6-SNAPSHOT</version>
+    <version>0.0.7-SNAPSHOT</version>
 
     <modules>
         <module>secom-v2-core</module>
         <module>secom-v2-core-jakarta</module>
         <module>secom-v2-springboot2</module>
         <module>secom-v2-springboot3</module>
+        <module>secom-v2-springboot4</module>
     </modules>
 
     <properties>
