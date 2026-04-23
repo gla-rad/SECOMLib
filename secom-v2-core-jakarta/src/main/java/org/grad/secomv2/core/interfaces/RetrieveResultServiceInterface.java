@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
@@ -75,8 +76,15 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
         jakarta.ws.rs.core.Response.Status responseStatus;
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
+        if (ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.UNAUTHORIZED;
+            encryptionKeyResponseObject.setMessage("Not authorized to requested information");
+            return Response.status(responseStatus)
+                    .entity(encryptionKeyResponseObject)
+                    .build();
+        }
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException
+        else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
