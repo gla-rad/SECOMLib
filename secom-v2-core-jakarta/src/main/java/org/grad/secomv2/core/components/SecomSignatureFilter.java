@@ -129,7 +129,6 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             else if (rqstCtx.getUriInfo().getPath().endsWith(SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, SearchFilterObject.class);
             }
-
             // For the POST Get By Link Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, GetByLinkObject.class);
@@ -141,6 +140,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             // For the POST Get Summary Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, GetSummaryFilterObject.class);
+            }
+            // For the POST Retrieve Result Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, RetrieveResultObject.class);
             }
         }
 
