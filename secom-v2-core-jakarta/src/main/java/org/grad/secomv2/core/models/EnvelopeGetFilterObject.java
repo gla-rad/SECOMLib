@@ -260,8 +260,7 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
                 pageSize,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 

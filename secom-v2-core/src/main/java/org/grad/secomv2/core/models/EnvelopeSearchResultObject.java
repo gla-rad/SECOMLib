@@ -76,8 +76,7 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
                 serviceInstance,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 

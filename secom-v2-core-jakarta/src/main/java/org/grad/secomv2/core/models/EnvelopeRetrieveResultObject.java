@@ -56,7 +56,6 @@ public class EnvelopeRetrieveResultObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
         };
     }
 }

@@ -123,8 +123,7 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 }

@@ -56,7 +56,6 @@ class EnvelopeAckObjectTest {
         this.obj.setAckType(AckTypeEnum.OPENED_ACK);
         this.obj.setNackType(NackTypeEnum.UNKNOWN_DATA_TYPE_OR_VERSION);
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setDigitalSignatureReference("signatureRef");
     }
 
     /**
@@ -77,7 +76,6 @@ class EnvelopeAckObjectTest {
         assertEquals(this.obj.getAckType(), result.getAckType());
         assertEquals(this.obj.getNackType(), result.getNackType());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
     }
 
     /**
@@ -97,7 +95,6 @@ class EnvelopeAckObjectTest {
         assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
         assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
-        assertEquals(this.obj.getDigitalSignatureReference(), csv[7]);
     }
 
 }

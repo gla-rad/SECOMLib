@@ -57,8 +57,7 @@ public class EnvelopeGetByLinkObject extends AbstractEnvelope {
                 transactionIdentifier,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 }

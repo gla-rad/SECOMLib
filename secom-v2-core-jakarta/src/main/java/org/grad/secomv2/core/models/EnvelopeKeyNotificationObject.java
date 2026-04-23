@@ -81,8 +81,7 @@ public class EnvelopeKeyNotificationObject extends AbstractEnvelope {
                 callbackEndpoint,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 }

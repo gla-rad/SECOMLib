@@ -111,7 +111,6 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
                 envelopeSignatureTime,
                 envelopeRootCertificateThumbprint,
                 callbackEndpoint,
-                digitalSignatureReference
         };
     }
 }

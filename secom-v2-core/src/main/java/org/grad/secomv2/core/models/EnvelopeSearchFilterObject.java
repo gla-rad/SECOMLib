@@ -96,7 +96,6 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
         };
     }
 }

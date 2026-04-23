@@ -59,7 +59,6 @@ public class EnvelopePublicKeyResponseObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[] {
                 publicCertificate,
-                digitalSignatureReference,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime

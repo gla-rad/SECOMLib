@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -70,6 +71,7 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
      */
     public void setTransactionId(UUID transactionId) { this.transactionId = transactionId; }
 
+
     @Override
     public Object[] getAttributeArray() {
         return new Object[]{
@@ -78,7 +80,6 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                digitalSignatureReference
         };
     }
 

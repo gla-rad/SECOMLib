@@ -82,27 +82,6 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
 
-    /**
-     * Override the Abstract Envelope implementation to change the Json property name
-     * Gets the digital signature reference
-     *
-     * @return the digital signature reference
-     */
-    @Override
-    @JsonProperty("envelopeSignatureReference")
-    public String getDigitalSignatureReference() { return digitalSignatureReference; }
-
-    /**
-     * Overrides the Abstract Envelope implementation to change the Json property name
-     * Sets the digital signature reference
-     *
-     * @param digitalSignatureReference the digital signature reference
-     */
-    @Override
-    @JsonProperty("envelopeSignatureReference")
-    public void setDigitalSignatureReference(String digitalSignatureReference) {
-        this.digitalSignatureReference = digitalSignatureReference;
-    }
 
     /**
      * Get local only
@@ -119,8 +98,7 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
                 localOnly,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                digitalSignatureReference
+                envelopeSignatureTime
         };
     }
 
