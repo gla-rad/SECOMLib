@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
 
@@ -79,7 +80,9 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof SecomSignatureVerificationException
+        ) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
