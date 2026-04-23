@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -81,7 +82,7 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
                 serviceInstance,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                envelopeSignatureTime,
         };
     }
 

@@ -73,6 +73,15 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
         this.geometry = geometry;
     }
 
+
+    /**
+     * Set local only search
+     *
+     * @param localOnly, whether search should be restricted to the local MSR
+     */
+    public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
+
+
     /**
      * Get local only
      *
@@ -95,7 +104,7 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     @Override
     public Object[] getAttributeArray() {
-        return new Object[] {
+        return new Object[]{
                 query,
                 geometry,
                 localOnly,
@@ -104,4 +113,5 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
                 envelopeSignatureTime
         };
     }
+
 }
