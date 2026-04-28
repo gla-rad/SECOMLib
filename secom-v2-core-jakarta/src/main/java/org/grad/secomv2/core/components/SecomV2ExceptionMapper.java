@@ -170,6 +170,7 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 case RETRIEVE_RESULT_INTERFACE_PATH:
                     return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
+                    // TODO: Add GET_PUBLIC_KEY_INTERFACE_PATH, POST_PUBLIC_KEY_INTERFACE_PATH, PUBLIC_KEY_INTERFACE_PATH
                 default:
                     //Nothing to do, continue with the generic rules
             }

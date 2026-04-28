@@ -67,6 +67,8 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
+
+    // TODO: Fix this!!
     static Response handleGetPublicKeyExceptions(Exception ex,
                                                  HttpServletRequest request,
                                                  HttpServletResponse response) {

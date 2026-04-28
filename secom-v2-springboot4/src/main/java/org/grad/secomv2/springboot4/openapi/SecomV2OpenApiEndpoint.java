@@ -1,101 +1,123 @@
-/*
- * Copyright (c) 2025 GLA Research and Development Directorate
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package org.grad.secomv2.springboot4.openapi;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.swagger.v3.jaxrs2.Reader;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Paths;
+import io.swagger.v3.oas.models.tags.Tag;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.interfaces.GenericSecomInterface;
+import org.grad.secomv2.springboot4.openapi.SecomV2OpenApiInfoProvider;
+import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * The SECOM OpenAPI Endpoint
  * <p/>
- * This is the implementation of an endpoint that provides the OpenAPI
- * definition for the Springboot service using the SECOMLib. It
- * automatically identifies all registered controller components and
- * parses them to generate the OpenAPI JSON file which can be served
- * through Swagger.
- *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * Provides the OpenAPI definition for all registered controllers that
+ * implement GenericSecomInterface. Uses SpringDoc's OpenAPI bean
+ * (populated by scanning Spring MVC annotations) and filters it to
+ * only the paths handled by SECOM controllers.
  */
-@Component
-@Path("/")
+@RestController
+@RequestMapping("/")
 public class SecomV2OpenApiEndpoint {
 
-    /**
-     * The Application Context.
-     */
     @Autowired
     private ApplicationContext applicationContext;
 
-    /**
-     * The Default ObjectMapper/
-     */
     @Autowired
     private ObjectMapper objectMapper;
 
-    /**
-     * The SECOM OpenAPI Info Provider Component.
-     */
     @Autowired(required = false)
     private SecomV2OpenApiInfoProvider secomV2OpenApiInfoProvider;
 
     /**
-     * GET /v2/openapi : returns the OpenAPI JSON file generated automatically
-     * for the controller components extending the GenericSecomInterface class.
-     *
-     * @return the OpenAPIJson
-     * @throws JsonProcessingException when the JSON processing fails
+     * SpringDoc's fully-built OpenAPI model — injected automatically when
+     * springdoc-openapi-starter-webmvc-ui is on the classpath.
      */
-    @Path("/" + SecomConstants.SECOM_VERSION + "/openapi.json")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getOpenApiV2() throws JsonProcessingException {
-        // Get the basic OpenAPI information and create a Reader for scanning
-        final Reader reader = new Reader(Optional.ofNullable(secomV2OpenApiInfoProvider)
-                .map(SecomV2OpenApiInfoProvider::getOpenApiInfo)
-                .orElseGet(SecomV2OpenApiInfoProvider::defaultOpenAPIInfo));
+    @Autowired
+    private OpenAPI openAPI;
 
-        // Swagger Core Reader will scan these classes for annotations
-        final Set<Class<?>> v2Classes = this.applicationContext.getBeansOfType(GenericSecomInterface.class).values()
+    /**
+     * Spring MVC's handler mapping — used to find which URL paths belong
+     * to our SECOM controllers.
+     */
+    @Autowired
+    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+
+    /**
+     * GET /v2/openapi.json : returns the OpenAPI JSON filtered to only the
+     * endpoints implemented by GenericSecomInterface beans.
+     */
+    @GetMapping(
+            value = "/" + SecomConstants.SECOM_VERSION + "/openapi.json",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<String> getOpenApiV2() throws JsonProcessingException {
+
+        // 1. Find all SECOM controller classes
+        Set<Class<?>> secomControllerClasses = applicationContext
+                .getBeansOfType(GenericSecomInterface.class)
+                .values()
                 .stream()
                 .map(AopUtils::getTargetClass)
                 .collect(Collectors.toSet());
 
-        // Now parse through the SECOM interfaces and generate the OpenAPI JSON
-        this.objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        this.objectMapper.registerModule(new JavaTimeModule());
-        return Response.ok(this.objectMapper.writeValueAsString(reader.read(v2Classes))).build();
-    }
+        // 2. Find all URL paths that map to those controllers
+        Set<String> secomPaths = requestMappingHandlerMapping
+                .getHandlerMethods()
+                .entrySet()
+                .stream()
+                .filter(e -> secomControllerClasses.contains(
+                        e.getValue().getBeanType()))
+                .flatMap(e -> {
+                    RequestMappingInfo info = e.getKey();
+                    return info.getPatternValues().stream();
+                })
+                .collect(Collectors.toSet());
 
+        // 3. Clone the SpringDoc OpenAPI and apply SECOM info if provided
+        OpenAPI filtered = new OpenAPI();
+        OpenAPI openAPI = Optional.ofNullable(secomV2OpenApiInfoProvider)
+                .map(SecomV2OpenApiInfoProvider::getOpenApiInfo)
+                .orElseGet(SecomV2OpenApiInfoProvider::defaultOpenAPIInfo);
+        filtered.setInfo(openAPI.getInfo());
+        filtered.setServers(openAPI.getServers());
+        filtered.setExternalDocs(openAPI.getExternalDocs());
+        filtered.setComponents(openAPI.getComponents());
+
+        // 4. Filter paths down to only SECOM-handled ones
+        Paths filteredPaths = new Paths();
+        if (openAPI.getPaths() != null) {
+            openAPI.getPaths().forEach((path, item) -> {
+                if (secomPaths.contains(path)) {
+                    filteredPaths.addPathItem(path, item);
+                }
+            });
+        }
+        filtered.setPaths(filteredPaths);
+
+        // 5. Serialise with the same settings as the original
+        ObjectMapper mapper = objectMapper.copy()
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .registerModule(new JavaTimeModule());
+
+        return ResponseEntity.ok(mapper.writeValueAsString(filtered));
+    }
 }

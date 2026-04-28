@@ -29,24 +29,23 @@
 
     <properties>
         <springframework4.version>7.0.7</springframework4.version>
-        <resteasy-spring-boot.version>7.0.0-SNAPSHOT</resteasy-spring-boot.version>
+        <springboot.version>4.0.5</springboot.version>
         <swagger.version>2.2.48</swagger.version>
         <netty.version>1.3.5</netty.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>jboss-releases-repository</id>
-            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
 
         <dependency>
             <groupId>org.grad.secom</groupId>
-            <artifactId>secom-v2-core-jakarta</artifactId>
+            <artifactId>secom-v2-core-springboot</artifactId>
             <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${springboot.version}</version>
         </dependency>
 
         <dependency>
@@ -70,16 +69,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-servlet-spring-boot-starter</artifactId>
-            <version>${resteasy-spring-boot.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.0.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-jaxrs2-jakarta</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>

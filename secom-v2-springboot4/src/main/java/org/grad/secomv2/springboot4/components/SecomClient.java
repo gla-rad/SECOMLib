@@ -20,8 +20,6 @@ import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import jakarta.validation.constraints.Min;
-import jakarta.ws.rs.QueryParam;
 import org.apache.commons.lang3.StringUtils;
 import org.grad.secomv2.core.base.SecomCertificateProvider;
 import org.grad.secomv2.core.base.SecomCompressionProvider;
@@ -31,8 +29,6 @@ import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.grad.secomv2.core.utils.KeyStoreUtils;
-import org.grad.secomv2.springboot4.components.SecomConfigProperties;
-import org.grad.secomv2.springboot4.components.SecomSpringContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -421,16 +417,16 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the object information
      */
-    public Optional<GetResponseObject> get(@QueryParam("dataReference") UUID dataReference,
-                                           @QueryParam("containerType") ContainerTypeEnum containerType,
-                                           @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                           @QueryParam("productVersion") String productVersion,
-                                           @QueryParam("geometry") String geometry,
-                                           @QueryParam("unlocode") String unlocode,
-                                           @QueryParam("validFrom") LocalDateTime validFrom,
-                                           @QueryParam("validTo") LocalDateTime validTo,
-                                           @QueryParam("page") @Min(0) Integer page,
-                                           @QueryParam("pageSize") @Min(0) Integer pageSize) {
+    public Optional<GetResponseObject> get(UUID dataReference,
+                                           ContainerTypeEnum containerType,
+                                           SECOM_DataProductType dataProductType,
+                                           String productVersion,
+                                           String geometry,
+                                           String unlocode,
+                                           LocalDateTime validFrom,
+                                           LocalDateTime validTo,
+                                           Integer page,
+                                           Integer pageSize) {
         return this.secomClient
                 .get()
                 .uri(uriBuilder -> {
@@ -496,15 +492,15 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the summary response object
      */
-    public Optional<GetSummaryResponseObject> getSummary(@QueryParam("containerType") ContainerTypeEnum containerType,
-                                                         @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                                         @QueryParam("productVersion") String productVersion,
-                                                         @QueryParam("geometry") String geometry,
-                                                         @QueryParam("unlocode") String unlocode,
-                                                         @QueryParam("validFrom") LocalDateTime validFrom,
-                                                         @QueryParam("validTo") LocalDateTime validTo,
-                                                         @QueryParam("page") @Min(0) Integer page,
-                                                         @QueryParam("pageSize") @Min(0) Integer pageSize) {
+    public Optional<GetSummaryResponseObject> getSummary(ContainerTypeEnum containerType,
+                                                         SECOM_DataProductType dataProductType,
+                                                         String productVersion,
+                                                         String geometry,
+                                                         String unlocode,
+                                                         LocalDateTime validFrom,
+                                                         LocalDateTime validTo,
+                                                         Integer page,
+                                                         Integer pageSize) {
         return this.secomClient
                 .get()
                 .uri(uriBuilder -> {

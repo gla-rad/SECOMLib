@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2026 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.models;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
+
+import java.time.Instant;
+
+/**
+ * The SECOM Ping Response Object Class
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ */
+public class PingResponseObject {
+
+    // Class Variables
+    @Schema(description = "The last private interaction date-time", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
+    private Instant timestamp;
+
+    /**
+     * Gets the timestamp.
+     *
+     * @return the timestamp
+     */
+    public Instant getTimestamp() {
+        return timestamp;
+    }
+
+    /**
+     * Sets the timestamp.
+     *
+     * @param timestamp the timestamp
+     */
+    public void setTimestamp(Instant timestamp) {
+        this.timestamp = timestamp;
+    }
+
+}
