@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * only the paths handled by SECOM controllers.
  */
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/secom/")
 public class SecomV2OpenApiEndpoint {
 
     @Autowired
