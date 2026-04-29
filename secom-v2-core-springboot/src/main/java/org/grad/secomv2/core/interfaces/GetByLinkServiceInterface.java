@@ -76,7 +76,6 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
      * @param request the request that cause the exception
      * @return the handler response according to the SECOM standard
      */
-    @RequestMapping("/api/secom/")
     static ResponseEntity<Object> handleGetByLinkInterfaceExceptions(Exception ex,
                                                                      HttpServletRequest request) {
         // Create a status object
