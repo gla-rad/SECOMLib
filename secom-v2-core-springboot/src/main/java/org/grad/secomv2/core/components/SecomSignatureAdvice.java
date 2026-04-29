@@ -45,7 +45,8 @@ import java.security.cert.X509Certificate;
 import java.util.Optional;
 
 /**
- * {Description}
+ * SecomSignatureAdvice class used to validate the envelope signature
+ * on incoming requests
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
@@ -68,6 +69,14 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         this.signatureProvider = signatureProvider;
     }
 
+    /**
+     * Only process the advice if the incoming parameter is an EnvelopeSignatureBearer
+     *
+     * @param methodParameter the class type of the body
+     * @param targetType the type of serialised data
+     * @param converterType class converter type
+     * @return boolean indicating if this class is applicable to the returnType
+     */
     @NullMarked
     @Override
     public boolean supports(MethodParameter methodParameter,
@@ -77,6 +86,20 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
                 .isAssignableFrom(methodParameter.getParameterType());
     }
 
+    /**
+     * Invoked before the request body is read and deserialized by an
+     * {@link HttpMessageConverter}. Called only if {@link #supports} returned {@code true}.
+     * We don't need to alter the data before it is deserialized so we just return the input.
+     *
+     * @param inputMessage  the incoming HTTP request
+     * @param parameter     the method parameter the body will be bound to
+     * @param targetType    the target type of the body — may differ from the method
+     *                      parameter type when a generic wrapper is used (e.g.
+     *                      {@code RequestEntity<MyDto>})
+     * @param converterType the {@link HttpMessageConverter} selected to deserialize the body
+     * @return the original {@code inputMessage} or a wrapped/substituted version of it
+     * @throws IOException if the body cannot be prepared for reading
+     */
     @NullMarked
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage,
@@ -86,6 +109,19 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         return inputMessage;
     }
 
+    /**
+     * Invoked after the request body has been read and deserialized by an
+     * {@link HttpMessageConverter}. Called only if {@link #supports} returned {@code true}.
+     *
+     * @param body          the deserialized object produced by the converter
+     * @param inputMessage  the original HTTP request
+     * @param parameter     the method parameter the body is being bound to
+     * @param targetType    the target type of the body — may differ from the method
+     *                      parameter type when a generic wrapper is used (e.g.
+     *                      {@code RequestEntity<MyDto>})
+     * @param converterType the {@link HttpMessageConverter} that deserialized the body
+     * @return the original body object or a modified/replacement version of it
+     */
     @NullMarked
     @Override
     public Object afterBodyRead(Object body,
@@ -113,6 +149,20 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         return body;
     }
 
+    /**
+     * Invoked when the request body is empty (i.e. the request contained no body, or
+     * its content length was zero). Called only if {@link #supports} returned {@code true}.
+     * As we only support bodies which extend EnvelopeSignatureBearer, this should never be called.
+     *
+     * @param body          {@code null} by default, as no body was present in the request
+     * @param inputMessage  the original HTTP request
+     * @param parameter     the method parameter the body would have been bound to
+     * @param targetType    the target type of the body — may differ from the method
+     *                      parameter type when a generic wrapper is used (e.g.
+     *                      {@code RequestEntity<MyDto>})
+     * @param converterType the {@link HttpMessageConverter} that would have been used
+     * @return a default/fallback object to bind to the parameter, or {@code null}
+     */
     @NullMarked
     @Override
     public @Nullable Object handleEmptyBody(@Nullable Object body,
@@ -123,7 +173,13 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         return null;
     }
 
-    private void validateSignature(EnvelopeSignatureBearer obj) {
+    /**
+     * Helper method to validate the signature of the envelope
+     *
+     * @param obj the EnvelopeSignatureBearer to validate
+     * @throws SecomSignatureVerificationException if the signature is not valid
+     */
+    private void validateSignature(EnvelopeSignatureBearer obj) throws SecomSignatureVerificationException {
         boolean valid = true;
 
         // If we have an object, validate the signatures

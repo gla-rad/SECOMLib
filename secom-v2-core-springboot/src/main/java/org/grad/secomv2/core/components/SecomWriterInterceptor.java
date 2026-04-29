@@ -82,7 +82,8 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
     }
 
     /**
-     * Specify the types of data the ResponseBodyAdvice applies to
+     * Specify the types of data the ResponseBodyAdvice applies to. Only process the response
+     * if the data returned is a DigitalSignatureCollectionBearer.
      *
      * @param returnType the class type of the body
      * @param converterType class converter type

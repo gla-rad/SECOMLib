@@ -71,18 +71,48 @@ public class SecomReaderInterceptor implements RequestBodyAdvice {
         this.encryptionProvider = encryptionProvider;
     }
 
+    /**
+     * @param methodParameter   the method parameter of the controller method
+     * @param targetType        the target type, not necessarily the same as the method
+     *                          parameter type (e.g. for {@code HttpEntity<String>})
+     * @param converterType     the selected converter type
+     * @return true
+     */
     @NullMarked
     @Override
     public boolean supports(MethodParameter methodParameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
         return true;
     }
 
+    /**
+     * We don't need to alter the input message so this function just returns the input
+     *
+     * @param inputMessage      the request
+     * @param parameter         the method parameter
+     * @param targetType        the target type, not necessarily the same as the method
+     *                          parameter type (e.g. for {@code HttpEntity<String>})
+     * @param converterType     the converter type selected to read the body
+     * @return the input request or a new instance (never {@code null})
+     * @throws IOException      if an I/O error occurs
+     */
     @NullMarked
     @Override
     public HttpInputMessage beforeBodyRead(HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) throws IOException {
         return inputMessage;
     }
 
+    /**
+     * Invoked after the request body is read and converted into an Object. This function will
+     * decode, decrypt and decompress the payload data
+     *
+     * @param body              the object converted from the request body
+     * @param inputMessage      the request
+     * @param parameter         the method parameter
+     * @param targetType        the target type, not necessarily the same as the method
+     *                          parameter type (e.g. for {@code HttpEntity<String>})
+     * @param converterType     the converter type selected to read the body
+     * @return the body that was passed in or a modified (possibly new) instance
+     */
     @NullMarked
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
@@ -150,6 +180,17 @@ public class SecomReaderInterceptor implements RequestBodyAdvice {
         return body;
     }
 
+    /**
+     * This method just returns the body without altering
+     *
+     * @param body              the object converted from the request body
+     * @param inputMessage      the request
+     * @param parameter         the method parameter
+     * @param targetType        the target type, not necessarily the same as the method
+     *                          parameter type (e.g. for {@code HttpEntity<String>})
+     * @param converterType     the converter type selected to read the body
+     * @return the body that was passed in
+     */
     @NullMarked
     @Override
     public @Nullable Object handleEmptyBody(@Nullable Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {

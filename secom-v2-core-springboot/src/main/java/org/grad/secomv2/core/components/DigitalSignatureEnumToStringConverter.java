@@ -31,6 +31,12 @@ import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 @Component
 public class DigitalSignatureEnumToStringConverter implements Converter<DigitalSignatureAlgorithmEnum, String> {
 
+    /**
+     * Implement the converter function to DigitalSignatureAlgorithmEnum to string
+     *
+     * @param source the DigitalSignatureAlgorithmEnum to convert
+     * @return the string representation of the enum
+     */
     @Override
     @NullMarked
     public String convert(DigitalSignatureAlgorithmEnum source) {
