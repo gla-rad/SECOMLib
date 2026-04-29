@@ -24,7 +24,7 @@ import jakarta.validation.constraints.NotNull;
  *
  * @author Junyeon Won (email: junyeon.won@aivenautics.com)
  */
-public class GetByLinkResponseObject {
+public class GetByLinkResponseObject extends AbstractResponseObject {
     // Class Variables
     @Schema(description = "Data as Base64 encoded binary format")
     @NotNull

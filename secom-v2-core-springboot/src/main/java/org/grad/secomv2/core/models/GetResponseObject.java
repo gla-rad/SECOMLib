@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetResponseObject implements DigitalSignatureCollectionBearer {
+public class GetResponseObject extends AbstractResponseObject implements DigitalSignatureCollectionBearer {
 
     // Class Variables
     private List<DataResponseObject> dataResponseObject;

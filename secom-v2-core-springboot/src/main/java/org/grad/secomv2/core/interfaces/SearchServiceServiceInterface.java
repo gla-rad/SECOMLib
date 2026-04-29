@@ -78,7 +78,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                                                                          HttpServletRequest request) {
         // Create the return objects
         HttpStatus httpStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        SearchResult searchResult = new SearchResult();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -87,21 +87,18 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof SecomSignatureVerificationException) {
-            encryptionKeyResponseObject.setMessage("Bad Request");
+            searchResult.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
-
         } else if(ex instanceof SecomNotFoundException) {
-            encryptionKeyResponseObject.setMessage("Information not found");
+            searchResult.setMessage("Information not found");
             httpStatus = HttpStatus.NOT_FOUND;
-
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
-
+            searchResult.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(encryptionKeyResponseObject);
+                .body(searchResult);
     }
 }

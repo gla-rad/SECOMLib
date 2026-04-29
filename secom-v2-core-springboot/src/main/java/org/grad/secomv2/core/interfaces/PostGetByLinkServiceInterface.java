@@ -79,7 +79,7 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
 
         // Create the return objects
         HttpStatus httpStatus;
-        String message;
+        GetByLinkResponseObject getByLinkResponseObject = new GetByLinkResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,28 +88,24 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            message = "Bad Request";
-
+            getByLinkResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            message = "Not authorized to requested information";
-
+            getByLinkResponseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomInvalidCertificateException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            message = "Invalid certificate";
-
+            getByLinkResponseObject.setMessage("Invalid certificate");
         }  else if(ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            message = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
-
+            httpStatus = HttpStatus.NOT_FOUND;
+            getByLinkResponseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            message = httpStatus.getReasonPhrase();
+            getByLinkResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(message);
+                .body(getByLinkResponseObject);
 
     }
 

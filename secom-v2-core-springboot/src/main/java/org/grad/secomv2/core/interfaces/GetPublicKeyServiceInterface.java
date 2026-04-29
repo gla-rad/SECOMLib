@@ -81,7 +81,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                                                                HttpServletRequest request) {
         // Create the capability response
         HttpStatus httpStatus;
-        String message;
+        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -90,21 +90,21 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            message = "Bad request";
+            publicKeyResponseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            message = "Not authorized to requested information";
+            publicKeyResponseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            message = "Not found";
+            publicKeyResponseObject.setMessage("Not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            message = httpStatus.getReasonPhrase();
+            publicKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(message);
+                .body(publicKeyResponseObject);
 
     }
 

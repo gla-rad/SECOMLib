@@ -89,7 +89,6 @@ public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             encryptionKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
-
         }
 
         return ResponseEntity

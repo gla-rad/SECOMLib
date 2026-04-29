@@ -82,7 +82,7 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
                                                            HttpServletRequest request) {
         // Create the upload link response
         HttpStatus httpStatus;
-        UploadLinkResponseObject uploadResponseObject = new UploadLinkResponseObject();
+        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -90,35 +90,28 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
-            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
-            uploadResponseObject.setMessage("Missing required data for the service");
+            publicKeyResponseObject.setMessage("Missing required data for the service");
             httpStatus = HttpStatus.BAD_REQUEST;
 
         } else if(ex instanceof SecomSignatureVerificationException) {
-            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
-            uploadResponseObject.setMessage("Failed signature verification");
+            publicKeyResponseObject.setMessage("Failed signature verification");
             httpStatus = HttpStatus.BAD_REQUEST;
 
         } else if(ex instanceof SecomInvalidCertificateException) {
-            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
-            uploadResponseObject.setMessage("Invalid Certificate");
+            publicKeyResponseObject.setMessage("Invalid Certificate");
             httpStatus = HttpStatus.BAD_REQUEST;
 
         } else if(ex instanceof SecomSchemaValidationException) {
-            uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
-            uploadResponseObject.setMessage("Schema validation error");
+            publicKeyResponseObject.setMessage("Schema validation error");
             httpStatus = HttpStatus.BAD_REQUEST;
-
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            uploadResponseObject.setSECOM_ResponseCode(null);
-            uploadResponseObject.setMessage(httpStatus.getReasonPhrase());
-
+            publicKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(uploadResponseObject);
+                .body(publicKeyResponseObject);
 
     }
 
