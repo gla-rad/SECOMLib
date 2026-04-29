@@ -55,12 +55,12 @@ class SecomPemUtilsTest {
 
         // Retrieve the certificate from the resources
         final InputStream certInputStream = getClass().getClassLoader().getResourceAsStream("cert.pem");
-        this.resourceCertString = new String(certInputStream.readAllBytes(), StandardCharsets.UTF_8).replaceAll("\n",System.lineSeparator());
+        this.resourceCertString = new String(certInputStream.readAllBytes(), StandardCharsets.UTF_8);
         this.resourceCert = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(this.resourceCertString.getBytes()));
 
         // Retrieve the public key from the resources
         final InputStream publicKeyInputStream = getClass().getClassLoader().getResourceAsStream("publicKey.pem");
-        this.resourcePublicKeyString = new String(publicKeyInputStream.readAllBytes(), StandardCharsets.UTF_8).replaceAll("\n",System.lineSeparator());
+        this.resourcePublicKeyString = new String(publicKeyInputStream.readAllBytes(), StandardCharsets.UTF_8);
 
         // Retrieve the minified certificate string from the resources
         final InputStream minifiedCertInputStream = getClass().getClassLoader().getResourceAsStream("minifiedCert.txt");
