@@ -16,8 +16,6 @@
 
 package org.grad.secomv2.core.base;
 
-import org.springframework.context.annotation.Configuration;
-
 /**
  * The SECOM Certificate Provider Interface.
  *
@@ -28,7 +26,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Configuration
 public interface SecomCertificateProvider {
 
     /**

@@ -17,7 +17,6 @@
 package org.grad.secomv2.core.base;
 
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * The SECOM Signature Provider Interface.
@@ -28,7 +27,6 @@ import org.springframework.context.annotation.Configuration;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-@Configuration
 public interface SecomSignatureProvider {
 
     /**
