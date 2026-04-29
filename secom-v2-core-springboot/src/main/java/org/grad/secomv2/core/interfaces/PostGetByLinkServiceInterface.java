@@ -36,6 +36,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 
+/**
+ * The SECOM POST Get By Link Interface Definition.
+ * </p>
+ * This interface definition can be used by the SECOM-compliant services in
+ * order to direct the implementation of the relevant endpoint according to
+ * the specified SECOM standard version.
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
 @RequestMapping("/api/secom/")
 public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
     /**

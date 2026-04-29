@@ -51,7 +51,6 @@ import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-
 @RequestMapping("/api/secom/")
 public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
 

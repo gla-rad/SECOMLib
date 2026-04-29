@@ -46,6 +46,7 @@ import java.util.UUID;
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
+@RequestMapping("/api/secom/")
 public interface GetByLinkServiceInterface extends GenericSecomInterface {
 
     /**

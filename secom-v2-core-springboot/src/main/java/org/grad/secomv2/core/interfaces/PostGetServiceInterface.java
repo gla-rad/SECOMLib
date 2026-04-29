@@ -43,7 +43,6 @@ import org.springframework.web.client.HttpClientErrorException;
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-
 @RequestMapping("/api/secom/")
 public interface PostGetServiceInterface extends GenericSecomInterface{
     /**
