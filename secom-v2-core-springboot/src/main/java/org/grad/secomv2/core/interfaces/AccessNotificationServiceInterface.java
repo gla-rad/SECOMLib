@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -81,7 +81,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+                || ex instanceof JacksonException
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound) {
             accessNotificationResponseObject.setMessage("Bad Request");

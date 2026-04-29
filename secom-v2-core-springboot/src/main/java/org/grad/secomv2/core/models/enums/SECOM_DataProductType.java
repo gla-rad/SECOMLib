@@ -18,7 +18,6 @@ package org.grad.secomv2.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.fasterxml.jackson.core.JacksonException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 
 import java.util.Arrays;

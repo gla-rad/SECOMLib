@@ -16,9 +16,8 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -37,7 +36,6 @@ class GetByLinkResponseObjectTest {
     void setup() {
         //Set up an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
         this.obj = new GetByLinkResponseObject();
@@ -48,7 +46,7 @@ class GetByLinkResponseObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         GetByLinkResponseObject result = this.mapper.readValue(jsonString, GetByLinkResponseObject.class);

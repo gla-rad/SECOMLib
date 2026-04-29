@@ -16,9 +16,10 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -37,38 +38,24 @@ import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTE
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomInstantSerializer extends StdSerializer<Instant> {
-
-    /**
-     * Instantiates a new Byte array serializer.
-     */
-    protected SecomInstantSerializer() {
-        this(null);
-    }
-
-    /**
-     * Instantiates a new Byte array serializer.
-     *
-     * @param t the byte array class
-     */
-    protected SecomInstantSerializer(Class<Instant> t) {
-        super(t);
-    }
+public class SecomInstantSerializer extends ValueSerializer<Instant> {
 
     /**
      * Implements the serialization procedure of the serializer.
      *
-     * @param instant         The input to be serialized
-     * @param jg                    The JSON generator
-     * @param serializerProvider    The serialization provider
-     * @return the serialized output
-     * @throws IOException for any IO exceptions
+     * @param value           The input to be serialized
+     * @param jsonGenerator   The JSON generator
+     * @param serializationContext    The serialization context
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public void serialize(Instant instant, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-        jg.writeString(Optional.ofNullable(instant)
+    public void serialize(Instant value,
+                          JsonGenerator jsonGenerator,
+                          SerializationContext serializationContext) throws JacksonException {
+        jsonGenerator.writeString(Optional.ofNullable(value)
                 .map(dt -> dt.atZone(ZoneId.systemDefault()))
                 .map(SECOM_DATE_TIME_FORMATTER::format)
                 .orElse(""));
     }
+
 }

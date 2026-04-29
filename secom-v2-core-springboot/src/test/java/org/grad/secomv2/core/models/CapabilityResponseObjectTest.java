@@ -16,9 +16,8 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +45,6 @@ class CapabilityResponseObjectTest {
     void setup() throws MalformedURLException {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
 
         // Create an implementation interfaces object
         ImplementedInterfaces implementedInterfaces = new ImplementedInterfaces();
@@ -76,7 +74,7 @@ class CapabilityResponseObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         CapabilityResponseObject result = this.mapper.readValue(jsonString, CapabilityResponseObject.class);

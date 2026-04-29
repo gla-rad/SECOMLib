@@ -16,9 +16,8 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.ReasonEnum;
@@ -45,7 +44,6 @@ class AccessRequestObjectTest {
     void setup() {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
-        this.mapper.registerModule(new JavaTimeModule());
 
         // Generate a new object
         this.envelopeAccessRequestObject = new EnvelopeAccessRequestObject();
@@ -64,7 +62,7 @@ class AccessRequestObjectTest {
      * Test that we can translate correctly the object onto JSON and back again.
      */
     @Test
-    void testJson() throws JsonProcessingException {
+    void testJson() throws JacksonException {
         // Get the JSON format of the object
         String jsonString = this.mapper.writeValueAsString(this.obj);
         AccessRequestObject result = this.mapper.readValue(jsonString, AccessRequestObject.class);

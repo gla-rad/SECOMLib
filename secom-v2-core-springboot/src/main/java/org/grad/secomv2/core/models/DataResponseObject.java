@@ -17,10 +17,10 @@
 package org.grad.secomv2.core.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
+import org.grad.secomv2.core.base.SecomByteArrayDeserializer;
 import org.grad.secomv2.core.base.SecomByteArraySerializer;
 import org.grad.secomv2.core.base.DigitalSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
@@ -39,7 +39,7 @@ public class DataResponseObject implements DigitalSignatureBearer {
     @NotNull
     @Schema(type = "string", format = "byte")
     @JsonSerialize(using = SecomByteArraySerializer.class)
-    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeserializer.class)
     private byte[] data;
     @JsonProperty
     @NotNull

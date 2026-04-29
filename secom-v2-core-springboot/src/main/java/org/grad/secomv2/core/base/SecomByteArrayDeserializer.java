@@ -16,16 +16,15 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * The ByteArrayDeSerializer Class
+ * The ByteArrayDeserializer Class
  * <p/>
  * In SECOM the data byte arrays should be potentially encrypted and compressed
  * and definitely encoded into Base64. However, the decoding is already handled
@@ -37,36 +36,19 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomByteArrayDeSerializer extends StdDeserializer<byte[]> {
-
-    /**
-     * Instantiates a new Byte array de serializer.
-     */
-    protected SecomByteArrayDeSerializer() {
-        this(null);
-    }
-
-    /**
-     * Instantiates a new Byte array de serializer.
-     *
-     * @param t the byte array class
-     */
-    protected SecomByteArrayDeSerializer(Class<byte[]> t) {
-        super(t);
-    }
+public class SecomByteArrayDeserializer extends ValueDeserializer<byte[]> {
 
     /**
      * Implements the de-serialization procedure of the de-serializer.
      *
-     * @param jp    The JSON Parser
-     * @param ctxt  The deserialization context
+     * @param jsonParser                The JSON Parser
+     * @param deserializationContext    The deserialization context
      * @return the deserialized output
-     * @throws IOException for any IO exceptions
-     * @throws JsonProcessingException for any JSON processing exceptions
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public byte[] deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        final String value = jp.getCodec().readValue(jp, String.class);
+    public byte[] deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws JacksonException {
+        final String value = deserializationContext.readValue(jsonParser, String.class);
         if(value == null) {
             return null;
         }

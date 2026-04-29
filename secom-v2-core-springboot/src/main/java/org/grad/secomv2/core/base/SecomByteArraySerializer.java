@@ -16,12 +16,12 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ValueSerializer;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * The ByteArraySerializer Class
@@ -36,36 +36,23 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomByteArraySerializer extends StdSerializer<byte[]> {
-
-    /**
-     * Instantiates a new Byte array serializer.
-     */
-    protected SecomByteArraySerializer() {
-        this(null);
-    }
-
-    /**
-     * Instantiates a new Byte array serializer.
-     *
-     * @param t the byte array class
-     */
-    protected SecomByteArraySerializer(Class<byte[]> t) {
-        super(t);
-    }
+public class SecomByteArraySerializer extends ValueSerializer<byte[]> {
 
     /**
      * Implements the serialization procedure of the serializer.
      *
-     * @param bytes                 The input to be serialized
-     * @param jg                    The JSON generator
-     * @param serializerProvider    The serialization provider
+     * @param value           The input to be serialized
+     * @param jsonGenerator   The JSON generator
+     * @param serializationContext    The serialization context
      * @return the serialized output
-     * @throws IOException for any IO exceptions
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public void serialize(byte[] bytes, JsonGenerator jg, SerializerProvider serializerProvider) throws IOException {
-        final String input = new String(bytes, StandardCharsets.UTF_8);
-        jg.writeString(input);
+    public void serialize(byte[] value,
+                          tools.jackson.core.JsonGenerator jsonGenerator,
+                          SerializationContext serializationContext) throws JacksonException {
+        jsonGenerator.writeString(Optional.ofNullable(value)
+                .map(dt -> new String(dt, StandardCharsets.UTF_8))
+                .orElse(""));
     }
 }

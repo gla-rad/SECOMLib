@@ -16,11 +16,11 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -37,35 +37,20 @@ import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTE
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomInstantDeserializer extends StdDeserializer<Instant> {
-
-    /**
-     * Instantiates a new Byte array de serializer.
-     */
-    protected SecomInstantDeserializer() {
-        this(null);
-    }
-
-    /**
-     * Instantiates a new Byte array de serializer.
-     *
-     * @param t the byte array class
-     */
-    protected SecomInstantDeserializer(Class<Instant> t) {
-        super(t);
-    }
+public class SecomInstantDeserializer extends ValueDeserializer<Instant> {
 
     /**
      * Implements the de-serialization procedure of the de-serializer.
      *
-     * @param jp        The JSON Parser
-     * @param context   The deserialization context
+     * @param jsonParser                The JSON Parser
+     * @param deserializationContext    The deserialization context
      * @return the deserialized output
-     * @throws IOException for any IO exceptions
+     * @throws JacksonException for any IO exceptions
      */
     @Override
-    public Instant deserialize(JsonParser jp, DeserializationContext context) throws IOException {
-        final String value = jp.getCodec().readValue(jp, String.class);
+    public Instant deserialize(JsonParser jsonParser,
+                               DeserializationContext deserializationContext) throws JacksonException {
+        final String value = deserializationContext.readValue(jsonParser, String.class);
         return Optional.ofNullable(value)
                 .filter(not(String::isBlank))
                 .map(SECOM_DATE_TIME_FORMATTER::parse)

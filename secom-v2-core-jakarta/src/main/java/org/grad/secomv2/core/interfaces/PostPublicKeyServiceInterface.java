@@ -51,7 +51,6 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
      *
      * @return the public key object
      */
-
     // TODO: Check this and update
     @Path(POST_PUBLIC_KEY_INTERFACE_PATH)
     @POST
@@ -66,6 +65,7 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
+    // TODO: Fix this!! It's returning a capability response object
     static Response handlePostPublicKeyInterfaceExceptions(Exception ex,
                                                            HttpServletRequest request,
                                                            HttpServletResponse response) {

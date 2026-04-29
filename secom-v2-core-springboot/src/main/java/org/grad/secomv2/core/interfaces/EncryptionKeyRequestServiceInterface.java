@@ -16,7 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.EncryptionKeyRequestObject;
@@ -79,7 +79,7 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+                || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             encryptionKeyResponseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
