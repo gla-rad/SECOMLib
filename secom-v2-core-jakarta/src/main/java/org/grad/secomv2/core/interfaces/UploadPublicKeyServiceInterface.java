@@ -62,6 +62,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
+    // TODO: Rename this method here and secom-v2-core module
     static Response handleCapabilityInterfaceExceptions(Exception ex,
                                                         HttpServletRequest request,
                                                         HttpServletResponse response) {

@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2026 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.base;
+
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+
+import java.time.Instant;
+import java.util.Optional;
+
+import static java.util.function.Predicate.not;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
+
+/**
+ * The DateTimeDeSerializer Class
+ * <p/>
+ * In SECOM the date-time format is not the frequently used ISO. According to
+ * the standard A DateTime is a combination of a date and a time type.
+ * Character encoding of a DateTime shall follow the example:
+ * EXAMPLE: 19850412T101530
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ */
+public class SecomInstantDeserializer extends ValueDeserializer<Instant> {
+
+    /**
+     * Implements the de-serialization procedure of the de-serializer.
+     *
+     * @param jsonParser                The JSON Parser
+     * @param deserializationContext    The deserialization context
+     * @return the deserialized output
+     * @throws JacksonException for any IO exceptions
+     */
+    @Override
+    public Instant deserialize(JsonParser jsonParser,
+                               DeserializationContext deserializationContext) throws JacksonException {
+        final String value = deserializationContext.readValue(jsonParser, String.class);
+        return Optional.ofNullable(value)
+                .filter(not(String::isBlank))
+                .map(SECOM_DATE_TIME_FORMATTER::parse)
+                .map(Instant::from)
+                .orElse(null);
+    }
+}
