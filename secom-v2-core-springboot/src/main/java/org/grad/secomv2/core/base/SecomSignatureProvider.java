@@ -37,7 +37,7 @@ public interface SecomSignatureProvider {
      * @return the digital signature algorithm for the signature provider
      */
     default DigitalSignatureAlgorithmEnum getSignatureAlgorithm() {
-        return DigitalSignatureAlgorithmEnum.DSA;
+        return DigitalSignatureAlgorithmEnum.SHA2_384_WITH_ECDSA;
     }
 
     /**
