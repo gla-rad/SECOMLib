@@ -65,8 +65,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
      * @return the object in an "application/octet-stream" encoding
      */
     @GetMapping(path = GET_BY_LINK_INTERFACE_PATH,
-                consumes = { MediaType.APPLICATION_JSON_VALUE },
-                produces = { MediaType.APPLICATION_JSON_VALUE })
+                produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
     ResponseEntity<byte[]> getByLink(@RequestParam("transactionIdentifier") @Parameter(schema = @Schema(implementation = String.class, description = "Identifier from the uploaded link")) UUID transactionIdentifier);
 
     /**

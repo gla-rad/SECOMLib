@@ -88,7 +88,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             accessResponseObject.setMessage("Not authorized to requested information");
-            httpStatus = HttpStatus.UNAUTHORIZED;
+            httpStatus = HttpStatus.FORBIDDEN;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             accessResponseObject.setMessage(httpStatus.getReasonPhrase());

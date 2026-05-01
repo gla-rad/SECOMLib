@@ -293,7 +293,7 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the result list of the search
      */
-    public Optional<ResponseSearchObject> searchService(SearchFilterObject searchFilterObject,
+    public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject,
                                                         Integer page,
                                                         Integer pageSize) {
         return this.secomClient
@@ -307,7 +307,7 @@ public class SecomClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(searchFilterObject))
                 .retrieve()
-                .bodyToMono(ResponseSearchObject.class)
+                .bodyToMono(SearchResult.class)
                 .blockOptional();
     }
 
@@ -571,12 +571,15 @@ public class SecomClient {
      * @return the remove subscription response object
      */
     public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
+
         return this.secomClient
                 .method(HttpMethod.DELETE)
-                .uri(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-                .contentType(MediaType.APPLICATION_JSON)
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
+                    builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
+                    return builder.build();
+                })
                 .accept(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(removeSubscriptionObject))
                 .retrieve()
                 .bodyToMono(RemoveSubscriptionResponseObject.class)
                 .blockOptional();

@@ -161,9 +161,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                expirationTime,
-                // TODO: This is not included in CD3 but it makes sense to include in the code
-                envelopeSignatureReference
+                expirationTime
         };
     }
 }

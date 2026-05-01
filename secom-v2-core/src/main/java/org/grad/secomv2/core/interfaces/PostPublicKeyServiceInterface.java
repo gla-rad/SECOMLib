@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
+import org.grad.secomv2.core.models.PublicKeyResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
