@@ -24,14 +24,10 @@ import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
-import org.grad.secomv2.core.models.UploadLinkResponseObject;
-import org.grad.secomv2.core.models.enums.SECOM_ResponseCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

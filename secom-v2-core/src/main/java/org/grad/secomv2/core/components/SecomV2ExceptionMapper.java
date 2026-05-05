@@ -18,7 +18,6 @@ package org.grad.secomv2.core.components;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.interfaces.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.*;
@@ -26,6 +25,8 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
+import org.grad.secomv2.core.interfaces.*;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -35,17 +36,17 @@ import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INT
 import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
 
@@ -168,14 +169,14 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
+                case RETRIEVE_RESULT_INTERFACE_PATH:
+                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
                 case GET_PUBLIC_KEY_INTERFACE_PATH:
                     if(Objects.equals(this.request.getMethod(), "GET")) {
                         return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, this.request, null);
                     }
-                case RETRIEVE_RESULT_INTERFACE_PATH:
-                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
                 default:
                     //Nothing to do, continue with the generic rules
             }

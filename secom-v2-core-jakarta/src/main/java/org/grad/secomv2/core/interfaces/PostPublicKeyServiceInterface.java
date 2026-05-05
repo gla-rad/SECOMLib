@@ -23,7 +23,6 @@ import jakarta.ws.rs.*;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 
 import jakarta.servlet.http.HttpServletRequest;
