@@ -53,7 +53,7 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
 /**
  * The SECOM Exception Manager Class.
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: lawrence.hughes@gla-rad.org)
  */
 @RestControllerAdvice
 public class SecomV2ExceptionMapper {
@@ -141,7 +141,7 @@ public class SecomV2ExceptionMapper {
                 if("GET".equals(method)) {
                     return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
                 } else if("POST".equals(method)) {
-                    return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
+                    return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
                 }
             default:
                 //Nothing to do, continue with the generic rules

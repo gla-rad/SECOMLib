@@ -23,7 +23,7 @@ import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import jakarta.validation.constraints.NotNull;
 
 /**
- * {Description}
+ * The SECOM RetrieveResultsObject implementation
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */

@@ -29,7 +29,6 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.grad.secomv2.core.models.SearchResult;
 
 /**
  The SECOM Retrieve Result Interface Definition.

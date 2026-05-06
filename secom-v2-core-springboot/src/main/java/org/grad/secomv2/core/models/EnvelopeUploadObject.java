@@ -21,7 +21,7 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
-import org.grad.secomv2.core.base.SecomByteArrayDeserializer;
+import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
 import org.grad.secomv2.core.base.SecomByteArraySerializer;
 import org.grad.secomv2.core.base.DigitalSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
@@ -44,7 +44,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
     @JsonProperty
     @Schema(type = "string", format = "byte", description = "The payload XML (e.g. S100_ExchangeSet, S100_DataSet), ZIP or binary The data can be open, protected and/or compressed.")
     @JsonSerialize(using = SecomByteArraySerializer.class)
-    @JsonDeserialize(using = SecomByteArrayDeserializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     @NotNull
     private byte[] data;
     @NotNull

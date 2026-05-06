@@ -26,7 +26,7 @@ import jakarta.validation.constraints.Size;
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public class PublicKeyResponseObject  {
+public class PublicKeyResponseObject {
 
     // Class variables
     @NotNull

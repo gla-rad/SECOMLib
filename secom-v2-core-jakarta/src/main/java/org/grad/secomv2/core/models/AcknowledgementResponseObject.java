@@ -28,7 +28,6 @@ public class AcknowledgementResponseObject extends AbstractResponseObject {
 
     // Class Variables
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;
-    private String message;
 
     /**
      * Gets secom response code.

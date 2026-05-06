@@ -16,12 +16,10 @@
 
 package org.grad.secomv2.core.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import java.util.UUID;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * The SECOM Search Object Result Class.

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,26 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
+import org.grad.secomv2.core.exceptions.*;
+import tools.jackson.core.JacksonException;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import jakarta.ws.rs.*;
-import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
-import org.grad.secomv2.core.exceptions.SecomNotFoundException;
-import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.HttpClientErrorException;
 
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
- * The SECOM POST Public Key Interface Definition.
+ * The SECOM Upload Public Key Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -42,7 +44,8 @@ import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
+@RequestMapping("/api/secom/")
+public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
@@ -56,47 +59,44 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
      *
      * @return the public key object
      */
-    @Path(POST_PUBLIC_KEY_INTERFACE_PATH)
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    Response postPublicKey(PublicKeyRequestObject publicKeyRequestObject);
+    @PostMapping(path = POST_PUBLIC_KEY_INTERFACE_PATH,
+                consumes = { MediaType.APPLICATION_JSON_VALUE },
+                produces = { MediaType.APPLICATION_JSON_VALUE })
+    ResponseEntity<PublicKeyResponseObject> postPublicKey(@Valid @RequestBody PublicKeyRequestObject publicKeyRequestObject);
 
     /**
      * The exception handler implementation for the interface.
      *
      * @param ex the exception that was raised
      * @param request the request that cause the exception
-     * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handlePostPublicKeyInterfaceExceptions(Exception ex,
-                                                           HttpServletRequest request,
-                                                           HttpServletResponse response) {
-        // Create the capability response
-        Response.Status responseStatus;
-
-        // Create the Public Key response
+    static ResponseEntity<Object> handlePostPublicKeyInterfaceExceptions(Exception ex,
+                                                           HttpServletRequest request) {
+        // Create the upload link response
+        HttpStatus httpStatus;
         PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+                || ex instanceof JacksonException
+                || ex instanceof HttpClientErrorException.NotFound) {
+            httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
-        } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else if(ex instanceof SecomNotFoundException){
+            httpStatus = HttpStatus.NOT_FOUND;
         } else {
-            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         // And send the error response back
-        return Response.status(responseStatus)
-                .entity(publicKeyResponseObject)
-                .build();
+        return ResponseEntity
+                .status(httpStatus)
+                .body(publicKeyResponseObject);
+
     }
 
 }

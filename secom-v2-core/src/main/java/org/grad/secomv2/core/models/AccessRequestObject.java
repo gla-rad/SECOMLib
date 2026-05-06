@@ -33,7 +33,7 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeAccessRequestObject envelope;
     @NotNull
-    @Schema(description = "The signature ot the EnvelopeAccessObject in HEX format without whitespace or linebreaks")
+    @Schema(description = "The signature of the EnvelopeAccessRequestObject in HEX format without whitespace or linebreaks")
     @Size(min = 1)
     private String envelopeSignature;
 

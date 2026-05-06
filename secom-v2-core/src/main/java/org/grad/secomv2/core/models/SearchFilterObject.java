@@ -21,7 +21,7 @@ import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import javax.validation.constraints.NotNull;
 
 /**
- * {Description}
+ * The SECOM SearchFilterObject
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
@@ -34,6 +34,7 @@ public class SearchFilterObject implements EnvelopeSignatureBearer {
 
     /**
      * Get the envelope
+     *
      * @return envelope
      */
     public EnvelopeSearchFilterObject getEnvelope() {

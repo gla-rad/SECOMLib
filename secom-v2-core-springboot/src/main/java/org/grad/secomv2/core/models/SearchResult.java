@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotNull;
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
-public class SearchResult extends AbstractResponseObject {
+public class SearchResult {
 
     @NotNull
     private EnvelopeSearchResultObject envelope;

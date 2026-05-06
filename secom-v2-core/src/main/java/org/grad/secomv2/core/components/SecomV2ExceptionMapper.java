@@ -175,7 +175,7 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     if(Objects.equals(this.request.getMethod(), "GET")) {
                         return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, this.request, null);
+                        return UploadPublicKeyServiceInterface.handleUploadPublicKeyInterfaceExceptions(ex, request, null);
                     }
                 default:
                     //Nothing to do, continue with the generic rules

@@ -37,7 +37,6 @@ public class SearchParameters implements CsvStringGenerator {
     private String[] keywords;
     private String description;
     private SECOM_DataProductType dataProductType;
-    private boolean localOnly;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String specificationId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
@@ -161,25 +160,6 @@ public class SearchParameters implements CsvStringGenerator {
     public void setDataProductType(SECOM_DataProductType dataProductType) {
         this.dataProductType = dataProductType;
     }
-
-    /**
-     * Gets localOnly
-     *
-     * @return boolean indicating if search is restricted to local MSR only
-     */
-    public boolean getLocalOnly() {
-        return localOnly;
-    }
-
-    /**
-     * Sets localOnly
-     *
-     * @param localOnly boolean indicating if search is restricted to local MSR only
-     */
-    public void setLocalOnly(boolean localOnly) {
-        this.localOnly = localOnly;
-    }
-
 
     /**
      * Gets specification id.

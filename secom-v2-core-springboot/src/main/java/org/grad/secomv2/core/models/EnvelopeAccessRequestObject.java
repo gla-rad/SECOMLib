@@ -185,8 +185,7 @@ public class EnvelopeAccessRequestObject extends AbstractEnvelope {
                 callbackEndpoint,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                envelopeSignatureReference
+                envelopeSignatureTime
         };
     }
 }
