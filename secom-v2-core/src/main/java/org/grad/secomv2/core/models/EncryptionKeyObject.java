@@ -33,7 +33,6 @@ public class EncryptionKeyObject implements EnvelopeSignatureBearer  {
     private EnvelopeKeyObject envelope;
     @NotNull
     @Schema(description = "The signature of the EnvelopeKeyObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class UploadLinkObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeLinkObject envelope;
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeLinkObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

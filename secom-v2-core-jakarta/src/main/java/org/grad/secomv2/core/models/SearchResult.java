@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -28,6 +29,7 @@ public class SearchResult extends AbstractResponseObject  {
     @NotNull
     private EnvelopeSearchResultObject envelope;
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeSearchResultObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

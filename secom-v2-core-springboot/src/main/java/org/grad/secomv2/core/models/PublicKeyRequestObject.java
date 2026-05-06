@@ -32,8 +32,7 @@ public class PublicKeyRequestObject {
     @NotNull
     private EnvelopePublicKeyRequestObject envelope;
     @NotNull
-    @Schema(description = "The signature ot the EnvelopeObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
+    @Schema(description = "The signature ot the EnvelopePublicKeyRequestObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

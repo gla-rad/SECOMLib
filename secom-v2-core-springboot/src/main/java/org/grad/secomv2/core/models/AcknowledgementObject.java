@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import jakarta.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeAckObject envelope;
     @NotNull
+    @Schema(description = "The signature of the EnvelopeAckObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

@@ -34,7 +34,6 @@ public class AccessNotificationObject implements EnvelopeSignatureBearer {
     private EnvelopeAccessNotificationObject envelope;
     @NotNull
     @Schema(description = "The signature ot the EnvelopeAccessNotificationObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

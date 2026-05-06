@@ -17,6 +17,8 @@
 package org.grad.secomv2.core.models;
 
 import javax.validation.constraints.NotNull;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
@@ -30,6 +32,7 @@ public class GetSummaryFilterObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeGetSummaryFilterObject envelope;
     @NotNull
+    @Schema(description = "The signature of the EnvelopeGetSummaryFilterObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

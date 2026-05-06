@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
@@ -30,6 +31,7 @@ public class GetByLinkObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeGetByLinkObject envelope;
     @NotNull
+    @Schema(description = "The signature of the EnvelopeGetByLinkObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

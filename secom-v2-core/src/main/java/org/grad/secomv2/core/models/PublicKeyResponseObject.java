@@ -33,7 +33,6 @@ public class PublicKeyResponseObject  {
     private EnvelopePublicKeyResponseObject envelope;
     @NotNull
     @Schema(description = "The signature ot the EnvelopePublicKeyResponseObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

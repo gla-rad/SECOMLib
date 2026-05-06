@@ -17,6 +17,7 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
@@ -31,6 +32,7 @@ public class RetrieveResultObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeRetrieveResultObject envelope;
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeRetrieveResultObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**
