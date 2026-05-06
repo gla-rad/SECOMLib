@@ -88,7 +88,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
             searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            searchResult.setMessage("Bad Request");
+            searchResult.setMessage("Information not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             searchResult.setMessage(httpStatus.getReasonPhrase());

@@ -82,10 +82,13 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             responseStatus = HttpStatus.BAD_REQUEST;
+            searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = HttpStatus.NOT_FOUND;
+            searchResult.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            searchResult.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
