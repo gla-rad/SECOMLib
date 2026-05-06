@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 /**
  * The SECOM Encryption Key Object Class.

@@ -19,7 +19,6 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 /**
  * The SECOM Public Request Key Object Class.

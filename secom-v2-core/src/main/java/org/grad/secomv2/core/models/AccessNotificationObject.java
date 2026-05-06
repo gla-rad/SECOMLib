@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * The SECOM Access Notification Object Class.

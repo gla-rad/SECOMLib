@@ -21,8 +21,6 @@ import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import jakarta.validation.constraints.NotNull;
 
-import javax.validation.constraints.Size;
-
 /**
  * The SECOM Encryption Key Object Class.
  *
