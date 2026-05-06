@@ -44,8 +44,8 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     protected Instant envelopeSignatureTime;
+    @Deprecated(since = "SECOM v2 CD3", forRemoval = true)
     @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
-    @Size(min = 1)
     protected String envelopeSignatureReference;
 
     /**
