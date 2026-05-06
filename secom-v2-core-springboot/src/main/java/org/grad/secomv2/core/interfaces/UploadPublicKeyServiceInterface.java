@@ -50,7 +50,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String POST_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
 
     /**
      * POST /v2/publicKey : The purpose of this interface is to receive a public key.
@@ -59,7 +59,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
      *
      * @return the public key object
      */
-    @PostMapping(path = POST_PUBLIC_KEY_INTERFACE_PATH,
+    @PostMapping(path = UPLOAD_PUBLIC_KEY_INTERFACE_PATH,
                 consumes = { MediaType.APPLICATION_JSON_VALUE },
                 produces = { MediaType.APPLICATION_JSON_VALUE })
     ResponseEntity<PublicKeyResponseObject> postPublicKey(@Valid @RequestBody PublicKeyRequestObject publicKeyRequestObject);
