@@ -85,7 +85,7 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                 || ex.getCause() instanceof SecomValidationException) {
             // 422 (Unprocessable Entity) is used when the request is syntactically valid
             // but cannot be processed due to domain-specific validation (SECOM rules).
-            // Note: 422 is not defined in jakarta.ws.rs.Response.Status, so it is set explicitly.
+            // Note: 422 is not defined in javax.ws.rs.Response.Status, so it is set explicitly.
             responseStatusCode = 422;
         }
         else if(ex instanceof SecomNotAuthorisedException) {

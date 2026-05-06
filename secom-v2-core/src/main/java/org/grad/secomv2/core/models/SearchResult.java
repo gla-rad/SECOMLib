@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
 */
-public class SearchResult {
+public class SearchResult extends AbstractResponseObject {
 
     @NotNull
     private EnvelopeSearchResultObject envelope;

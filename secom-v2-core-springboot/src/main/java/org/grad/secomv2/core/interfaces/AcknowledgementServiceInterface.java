@@ -34,8 +34,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.awt.*;
-
 /**
  * The SECOM Acknowledgement Interface Definition.
  * </p>
@@ -89,25 +87,21 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound) {
+            httpStatus = HttpStatus.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setMessage("Missing required data for the service");
-            httpStatus = HttpStatus.BAD_REQUEST;
-
         } else if (ex instanceof SecomSignatureVerificationException) {
+            httpStatus = HttpStatus.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.FAILED_SIGNATURE_VERIFICATION);
             acknowledgementResponseObject.setMessage("Failed signature verification");
-            httpStatus = HttpStatus.BAD_REQUEST;
-
         } else if (ex instanceof SecomInvalidCertificateException) {
+            httpStatus = HttpStatus.FORBIDDEN;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             acknowledgementResponseObject.setMessage("Invalid Certificate");
-            httpStatus = HttpStatus.FORBIDDEN;
-
         } else if (ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.INVALID_CERTIFICATE);
             acknowledgementResponseObject.setMessage("Not authorized to upload ACK");
-            httpStatus = HttpStatus.FORBIDDEN;
-
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
@@ -120,7 +114,6 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
             // And populate the acknowledgement response object
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.SCHEMA_VALIDATION_ERROR);
             acknowledgementResponseObject.setMessage(responseMessage);
-
         }
 
         return ResponseEntity

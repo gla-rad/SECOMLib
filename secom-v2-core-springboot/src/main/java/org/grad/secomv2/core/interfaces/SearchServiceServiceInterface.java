@@ -21,12 +21,9 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
-import org.grad.secomv2.core.models.ResponseSearchObject;
 import org.grad.secomv2.core.models.SearchFilterObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.grad.secomv2.core.models.SearchResult;
@@ -88,10 +85,13 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof SecomSignatureVerificationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            searchResult.setMessage("Bad Request");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            searchResult.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity

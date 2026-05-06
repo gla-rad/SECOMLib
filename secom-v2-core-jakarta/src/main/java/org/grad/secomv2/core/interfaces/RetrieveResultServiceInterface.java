@@ -66,11 +66,11 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
      * @return the handler response according to the SECOM standard
      */
     static Response handleRetrieveResultInterfaceExceptions(Exception ex,
-                                                            HttpServletRequest request,
-                                                            HttpServletResponse response) {
+                                                           HttpServletRequest request,
+                                                           HttpServletResponse response) {
 
         // Create the encryption key response
-        jakarta.ws.rs.core.Response.Status responseStatus;
+        Response.Status responseStatus;
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type

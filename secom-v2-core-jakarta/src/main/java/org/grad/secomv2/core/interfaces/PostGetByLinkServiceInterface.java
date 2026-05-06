@@ -17,13 +17,6 @@
 package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
@@ -32,6 +25,23 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetByLinkObject;
 import org.grad.secomv2.core.models.GetByLinkResponseObject;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+/**
+ * The SECOM POST Get By Link Interface Definition.
+ * </p>
+ * This interface definition can be used by the SECOM-compliant services in
+ * order to direct the implementation of the relevant endpoint according to
+ * the specified SECOM standard version.
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
 public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.

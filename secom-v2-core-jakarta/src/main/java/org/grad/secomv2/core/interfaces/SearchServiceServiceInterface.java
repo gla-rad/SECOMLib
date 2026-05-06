@@ -21,9 +21,8 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.EncryptionKeyResponseObject;
-import org.grad.secomv2.core.models.ResponseSearchObject;
 import org.grad.secomv2.core.models.SearchFilterObject;
+import org.grad.secomv2.core.models.SearchResult;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,7 +31,6 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.grad.secomv2.core.models.SearchResult;
 
 /**
  * The SECOM Search Service Interface Definition.
@@ -77,7 +75,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
 
         // Create the encryption key response
         Response.Status responseStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        SearchResult searchResult = new SearchResult();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -87,18 +85,18 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof NotFoundException
                 || ex instanceof SecomSignatureVerificationException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            encryptionKeyResponseObject.setMessage("Bad Request");
+            searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-            encryptionKeyResponseObject.setMessage("Information not found");
+            searchResult.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
+            searchResult.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(encryptionKeyResponseObject)
+                .entity(searchResult)
                 .build();
     }
 }
