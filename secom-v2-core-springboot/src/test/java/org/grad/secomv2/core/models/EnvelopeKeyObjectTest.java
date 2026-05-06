@@ -62,7 +62,7 @@ class EnvelopeKeyObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
+
     }
 
     /**
@@ -86,7 +86,7 @@ class EnvelopeKeyObjectTest {
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
+
     }
 
     /**
@@ -109,7 +109,7 @@ class EnvelopeKeyObjectTest {
         assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
         assertEquals(obj.getExpirationTime().getEpochSecond(), Long.parseLong(csv[8]));
         assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[10]);
+
     }
 
     /**

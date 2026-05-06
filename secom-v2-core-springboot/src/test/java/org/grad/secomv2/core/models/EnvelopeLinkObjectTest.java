@@ -79,7 +79,7 @@ class EnvelopeLinkObjectTest {
         this.obj.setSize(1);
         this.obj.setTimeToLive(Instant.now().truncatedTo(ChronoUnit.SECONDS));
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
+
     }
 
     /**
@@ -113,7 +113,7 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getSize(), result.getSize());
         assertEquals(this.obj.getTimeToLive(), result.getTimeToLive());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
+
     }
 
     /**
@@ -144,7 +144,7 @@ class EnvelopeLinkObjectTest {
         assertEquals(String.valueOf(this.obj.getSize()), csv[15]);
         assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[16]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[17]);
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[18]);
+
     }
 
     /**

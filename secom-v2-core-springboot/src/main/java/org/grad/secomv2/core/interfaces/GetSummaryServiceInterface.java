@@ -110,19 +110,14 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            getSummaryResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getSummaryResponseObject.setMessage("Not authorized");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            getSummaryResponseObject.setMessage("Information not found");
         } else if(ex instanceof SecomSchemaValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-            getSummaryResponseObject.setMessage("Unprocessable Content");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            getSummaryResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
         return ResponseEntity
                 .status(httpStatus)
