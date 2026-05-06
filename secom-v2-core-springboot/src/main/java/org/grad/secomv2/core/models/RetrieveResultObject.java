@@ -17,13 +17,12 @@
 
 package org.grad.secomv2.core.models;
 
-
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import jakarta.validation.constraints.NotNull;
 
 /**
- * The SECOM RetrieveResultsObject implementation
+ * The SECOM RetrieveResultObject implementation.
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
