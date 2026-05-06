@@ -16,6 +16,7 @@
 package org.grad.secomv2.core.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.base.CsvStringGenerator;
@@ -30,9 +31,8 @@ public class SearchFilterObject implements EnvelopeSignatureBearer {
     // The search filter object
     @NotNull
     private EnvelopeSearchFilterObject envelope;
-
-    // The envelope signature
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeSearchFilterObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

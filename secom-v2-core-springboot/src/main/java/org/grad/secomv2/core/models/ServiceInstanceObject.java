@@ -64,8 +64,6 @@ public class ServiceInstanceObject {
     private String[] sourceMSRs;
     private String[] unsupportedParams;
 
-
-
     /**
      * Gets instance id.
      *

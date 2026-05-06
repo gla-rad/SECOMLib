@@ -36,7 +36,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SecomByteArrayDeserializer extends ValueDeserializer<byte[]> {
+public class SecomByteArrayDeSerializer extends ValueDeserializer<byte[]> {
 
     /**
      * Implements the de-serialization procedure of the de-serializer.

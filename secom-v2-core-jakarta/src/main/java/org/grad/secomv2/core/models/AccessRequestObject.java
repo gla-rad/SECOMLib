@@ -19,7 +19,7 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
@@ -34,7 +34,6 @@ public class AccessRequestObject implements EnvelopeSignatureBearer {
     private EnvelopeAccessRequestObject envelope;
     @NotNull
     @Schema(description = "The signature of the EnvelopeAccessRequestObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

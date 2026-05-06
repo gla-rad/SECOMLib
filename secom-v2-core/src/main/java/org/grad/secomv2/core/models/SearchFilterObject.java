@@ -16,12 +16,13 @@
 package org.grad.secomv2.core.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 
 /**
- * {Description}
+ * The SECOM SearchFilterObject
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
@@ -30,10 +31,12 @@ public class SearchFilterObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeSearchFilterObject envelope;
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeSearchFilterObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**
      * Get the envelope
+     *
      * @return envelope
      */
     public EnvelopeSearchFilterObject getEnvelope() {

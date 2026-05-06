@@ -33,7 +33,15 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
+/**
+ * The SECOM POST Get By Link Interface Definition.
+ * </p>
+ * This interface definition can be used by the SECOM-compliant services in
+ * order to direct the implementation of the relevant endpoint according to
+ * the specified SECOM standard version.
+ *
+ * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
+ */
 public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.

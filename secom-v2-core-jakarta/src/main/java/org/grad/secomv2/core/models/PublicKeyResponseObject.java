@@ -19,21 +19,19 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 /**
  * The SECOM Public Key Response Object Class.
  *
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
-public class PublicKeyResponseObject  {
+public class PublicKeyResponseObject {
 
     // Class variables
     @NotNull
     private EnvelopePublicKeyResponseObject envelope;
     @NotNull
     @Schema(description = "The signature ot the EnvelopePublicKeyResponseObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

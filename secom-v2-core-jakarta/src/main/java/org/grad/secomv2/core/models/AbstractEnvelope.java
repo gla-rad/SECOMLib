@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import org.grad.secomv2.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
@@ -38,16 +37,14 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     @NotNull
     @Schema(description = "Claimed Thumbprint for Signed Root Key (X.509 Certificate) Format: SHA-1 or SHA-256 thumbprint.", example = "AB12CD34EF56AB78CD90EF12AB34CD56EF78AB90")
     @Pattern(regexp = "^[A-Fa-f0-9]{40,64}$")
-    @Size(min = 1)
     protected String envelopeRootCertificateThumbprint;
     @NotNull
     @Schema(description = "Time when encryptionKey envelope is signed Must be in UTC format: yyyy-MM-ddTHH:mm:ssZ.", type = "string",example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
     @JsonSerialize(using = SecomInstantSerializer.class)
     @JsonDeserialize(using = SecomInstantDeserializer.class)
     protected Instant envelopeSignatureTime;
-    @NotNull
+    @Deprecated(since = "SECOM v2 CD3", forRemoval = true)
     @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
-    @Size(min = 1)
     protected String envelopeSignatureReference;
 
     /**

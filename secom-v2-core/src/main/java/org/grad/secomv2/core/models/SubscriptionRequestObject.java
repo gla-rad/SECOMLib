@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * The SECOM Subscription Request Object Class.
@@ -33,8 +32,7 @@ public class SubscriptionRequestObject implements EnvelopeSignatureBearer {
     @NotNull
     private EnvelopeSubscriptionObject envelope;
     @NotNull
-    @Schema(description = "The signature ot the EnvelopeObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
+    @Schema(description = "The signature ot the EnvelopeSubscriptionObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

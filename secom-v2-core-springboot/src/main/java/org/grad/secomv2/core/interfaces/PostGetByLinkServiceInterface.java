@@ -88,19 +88,14 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            getByLinkResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getByLinkResponseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomInvalidCertificateException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getByLinkResponseObject.setMessage("Invalid certificate");
         }  else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            getByLinkResponseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            getByLinkResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity

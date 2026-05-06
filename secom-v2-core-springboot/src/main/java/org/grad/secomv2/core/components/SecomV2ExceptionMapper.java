@@ -18,13 +18,14 @@ package org.grad.secomv2.core.components;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.interfaces.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.interfaces.*;
 
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -35,6 +36,7 @@ import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.A
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
@@ -46,13 +48,12 @@ import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.PO
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 
 /**
  * The SECOM Exception Manager Class.
  *
- * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ * @author Lawrence Hughes (email: lawrence.hughes@gla-rad.org)
  */
 @RestControllerAdvice
 public class SecomV2ExceptionMapper {
@@ -140,7 +141,7 @@ public class SecomV2ExceptionMapper {
                 if("GET".equals(method)) {
                     return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
                 } else if("POST".equals(method)) {
-                    return PostPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
+                    return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
                 }
             default:
                 //Nothing to do, continue with the generic rules

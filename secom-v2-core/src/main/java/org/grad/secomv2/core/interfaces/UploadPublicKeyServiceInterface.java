@@ -16,16 +16,22 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.PublicKeyRequestObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM POST Public Key Interface Definition.
@@ -41,18 +47,18 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publickey";
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
 
     /**
      * GET /v2/publickey : This operation uploads (pushes) a public key
      *
      * @return the public key object
      */
-    @Path(PUBLIC_KEY_INTERFACE_PATH)
+    @Path(UPLOAD_PUBLIC_KEY_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    PublicKeyResponseObject postPublicKey(@Valid PublicKeyResponseObject publicKeyResponseObject);
+    PublicKeyResponseObject postPublicKey(@Valid PublicKeyRequestObject publicKeyRequestObject);
 
     /**
      * The exception handler implementation for the interface.
@@ -62,19 +68,33 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    static Response handleCapabilityInterfaceExceptions(Exception ex,
-                                                        HttpServletRequest request,
-                                                        HttpServletResponse response) {
+    static Response handleUploadPublicKeyInterfaceExceptions(Exception ex,
+                                                             HttpServletRequest request,
+                                                             HttpServletResponse response) {
         // Create the capability response
         Response.Status responseStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+
+        // Create the Public Key response
+        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
 
         // Handle according to the exception type
-        responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof JsonMappingException
+                || ex instanceof NotFoundException) {
+            responseStatus = Response.Status.BAD_REQUEST;
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.FORBIDDEN;
+        } else if(ex instanceof SecomNotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+        } else {
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+        }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(capabilityResponseObject)
+                .entity(publicKeyResponseObject)
                 .build();
     }
 

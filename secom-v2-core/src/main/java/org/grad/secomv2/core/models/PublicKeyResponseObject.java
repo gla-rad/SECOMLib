@@ -19,7 +19,6 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * The SECOM Public Key Response Object Class.
@@ -33,7 +32,6 @@ public class PublicKeyResponseObject  {
     private EnvelopePublicKeyResponseObject envelope;
     @NotNull
     @Schema(description = "The signature ot the EnvelopePublicKeyResponseObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

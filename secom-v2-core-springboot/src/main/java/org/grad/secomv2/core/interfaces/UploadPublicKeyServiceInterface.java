@@ -17,21 +17,14 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.exceptions.*;
 import tools.jackson.core.JacksonException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
-import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
-import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
-import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
-import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
-import org.grad.secomv2.core.models.UploadLinkResponseObject;
-import org.grad.secomv2.core.models.enums.SECOM_ResponseCodeEnum;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +36,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
- * The SECOM POST Public Key Interface Definition.
+ * The SECOM Upload Public Key Interface Definition.
  * </p>
  * This interface definition can be used by the SECOM-compliant services in
  * order to direct the implementation of the relevant endpoint according to
@@ -52,12 +45,12 @@ import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
 @RequestMapping("/api/secom/")
-public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
+public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
 
     /**
      * The Interface Endpoint Path.
      */
-    String POST_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
 
     /**
      * POST /v2/publicKey : The purpose of this interface is to receive a public key.
@@ -66,7 +59,7 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
      *
      * @return the public key object
      */
-    @PostMapping(path = POST_PUBLIC_KEY_INTERFACE_PATH,
+    @PostMapping(path = UPLOAD_PUBLIC_KEY_INTERFACE_PATH,
                 consumes = { MediaType.APPLICATION_JSON_VALUE },
                 produces = { MediaType.APPLICATION_JSON_VALUE })
     ResponseEntity<PublicKeyResponseObject> postPublicKey(@Valid @RequestBody PublicKeyRequestObject publicKeyRequestObject);
@@ -90,25 +83,16 @@ public interface PostPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
-            publicKeyResponseObject.setMessage("Missing required data for the service");
             httpStatus = HttpStatus.BAD_REQUEST;
-
-        } else if(ex instanceof SecomSignatureVerificationException) {
-            publicKeyResponseObject.setMessage("Failed signature verification");
-            httpStatus = HttpStatus.BAD_REQUEST;
-
-        } else if(ex instanceof SecomInvalidCertificateException) {
-            publicKeyResponseObject.setMessage("Invalid Certificate");
-            httpStatus = HttpStatus.BAD_REQUEST;
-
-        } else if(ex instanceof SecomSchemaValidationException) {
-            publicKeyResponseObject.setMessage("Schema validation error");
-            httpStatus = HttpStatus.BAD_REQUEST;
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            httpStatus = HttpStatus.FORBIDDEN;
+        } else if(ex instanceof SecomNotFoundException){
+            httpStatus = HttpStatus.NOT_FOUND;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            publicKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
+        // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
                 .body(publicKeyResponseObject);

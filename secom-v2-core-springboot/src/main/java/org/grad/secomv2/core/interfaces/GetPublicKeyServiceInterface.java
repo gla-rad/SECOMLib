@@ -56,10 +56,10 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publickey";
+    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
 
     /**
-     * GET /v2/publickey : This operation receives a get request for a public key.
+     * GET /v2/publicKey : This operation receives a get request for a public key.
      * If authorized, the key is sent back in the response. It is up to the service
      * provider to apply relevant authorization procedure and access control to information.
      *
@@ -90,16 +90,12 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            publicKeyResponseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            publicKeyResponseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            publicKeyResponseObject.setMessage("Not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            publicKeyResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity

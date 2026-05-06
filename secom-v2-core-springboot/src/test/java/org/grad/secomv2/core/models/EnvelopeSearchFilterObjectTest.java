@@ -71,7 +71,7 @@ class EnvelopeSearchFilterObjectTest {
         this.obj.setEnvelopeSignatureCertificate(new String[]{"certificate"});
         this.obj.setEnvelopeRootCertificateThumbprint("certificateThumbprint");
         this.obj.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-        this.obj.setEnvelopeSignatureReference("envelopeSignatureReference");
+
     }
 
     /**
@@ -105,7 +105,7 @@ class EnvelopeSearchFilterObjectTest {
         assertArrayEquals(this.obj.getEnvelopeSignatureCertificate(), result.getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime(), result.getEnvelopeSignatureTime());
-        assertEquals(this.obj.getEnvelopeSignatureReference(), result.getEnvelopeSignatureReference());
+
     }
 
     /**
@@ -137,7 +137,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[16]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[17]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[18]));
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[19]);
+
     }
 
     /**

@@ -37,6 +37,7 @@ import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.A
 import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
@@ -170,7 +171,12 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 case RETRIEVE_RESULT_INTERFACE_PATH:
                     return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
-                    // TODO: Add GET_PUBLIC_KEY_INTERFACE_PATH, POST_PUBLIC_KEY_INTERFACE_PATH, PUBLIC_KEY_INTERFACE_PATH
+                case GET_PUBLIC_KEY_INTERFACE_PATH:
+                    if(Objects.equals(this.request.getMethod(), "GET")) {
+                        return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
+                    } else if(Objects.equals(this.request.getMethod(), "POST")) {
+                        return UploadPublicKeyServiceInterface.handleUploadPublicKeyInterfaceExceptions(ex, request, null);
+                    }
                 default:
                     //Nothing to do, continue with the generic rules
             }

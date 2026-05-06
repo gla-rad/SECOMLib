@@ -65,8 +65,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
      * @return the object in an "application/octet-stream" encoding
      */
     @GetMapping(path = GET_BY_LINK_INTERFACE_PATH,
-                consumes = { MediaType.APPLICATION_JSON_VALUE },
-                produces = { MediaType.APPLICATION_JSON_VALUE })
+                produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
     ResponseEntity<byte[]> getByLink(@RequestParam("transactionIdentifier") @Parameter(schema = @Schema(implementation = String.class, description = "Identifier from the uploaded link")) UUID transactionIdentifier);
 
     /**
@@ -79,8 +78,8 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
     static ResponseEntity<Object> handleGetByLinkInterfaceExceptions(Exception ex,
                                                                      HttpServletRequest request) {
         // Create a status object
-        HttpStatus httpStatus;
-        String message;
+        HttpStatus responseStatus;
+        String responseText;
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,29 +87,26 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
-            httpStatus = HttpStatus.BAD_REQUEST;
-            message = "Bad Request";
-
+            responseStatus = HttpStatus.BAD_REQUEST;
+            responseText = "Bad Request";
         } else if(ex instanceof SecomNotAuthorisedException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            message = "Not authorized to requested information";
-
+            responseStatus = HttpStatus.FORBIDDEN;
+            responseText = "Not authorized to requested information";
         } else if(ex instanceof SecomInvalidCertificateException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-            message = "Invalid certificate";
-
+            responseStatus = HttpStatus.FORBIDDEN;
+            responseText = "Invalid certificate";
         }  else if(ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.NOT_FOUND;
-            message = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
-
+            responseStatus = HttpStatus.NOT_FOUND;
+            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
         } else {
-            httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            message = httpStatus.getReasonPhrase();
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseText = responseStatus.getReasonPhrase();
         }
 
+        // And send the error response back
         return ResponseEntity
-                .status(httpStatus)
-                .body(message);
+                .status(responseStatus)
+                .body(responseText);
 
     }
 

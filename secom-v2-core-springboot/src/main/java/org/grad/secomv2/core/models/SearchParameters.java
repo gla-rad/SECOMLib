@@ -43,9 +43,7 @@ public class SearchParameters implements CsvStringGenerator {
     private String designId;
     @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
     private String instanceId;
-//    @Pattern(regexp = "^urn:mrn:[a-z0-9][a-z0-9-]{0,31}:[a-z0-9()+,\\-.:=@;$_!*'%/?#]+$")
-//    private String organizationId;
-    @Pattern(regexp = "^(MID\\d{6}|0MID\\d{5}|00MID\\{4})")
+    @Pattern(regexp = "^\\d{9}")
     private String mmsi;
     @Pattern(regexp = "^\\d{7}(?:\\d{2})?$")
     private String imo;

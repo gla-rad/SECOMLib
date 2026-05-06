@@ -19,7 +19,7 @@ package org.grad.secomv2.core.models;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.grad.secomv2.core.base.SecomByteArrayDeserializer;
+import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
 import org.grad.secomv2.core.base.SecomByteArraySerializer;
 
 import jakarta.validation.constraints.NotNull;
@@ -39,12 +39,12 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     @NotNull
     @Schema(type = "string", format = "byte", description = "The protected symmetric encryption key, Base64 encoded\r\nExample : KQdEi+9iUlq8B9cwWY...U8A2iDPhz7g==")
     @JsonSerialize(using = SecomByteArraySerializer.class)
-    @JsonDeserialize(using = SecomByteArrayDeserializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] encryptionKey;
     @NotNull
     @Schema(type = "string", format = "byte", description = "Initialisation vector, Base64 encoded\r\nExample: c9fUXeC5xrFuXGNNnGv9iA==")
     @JsonSerialize(using = SecomByteArraySerializer.class)
-    @JsonDeserialize(using = SecomByteArrayDeserializer.class)
+    @JsonDeserialize(using = SecomByteArrayDeSerializer.class)
     private byte[] iv;
     @NotNull
     @Schema(type = "string", format = "uuid", description = "Identifier to the transaction with the encrypted data", example = "550e8400-e29b-41d4-a716-446655440000")
@@ -161,9 +161,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                expirationTime,
-                // TODO: This is not included in CD3 but it makes sense to include in the code
-                envelopeSignatureReference
+                expirationTime
         };
     }
 }

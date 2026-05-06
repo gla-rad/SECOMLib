@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class GetSummaryResponseObject extends AbstractResponseObject {
+public class GetSummaryResponseObject {
 
     // Class Variables
     @Schema(description = "Description of the information object")

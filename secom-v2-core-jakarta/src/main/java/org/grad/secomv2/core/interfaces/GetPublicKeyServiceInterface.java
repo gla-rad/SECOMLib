@@ -17,10 +17,15 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
 
@@ -44,10 +49,10 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publickey";
+    String GET_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
 
     /**
-     * GET /v2/publickey : This operation receives a get request for a public key.
+     * GET /v2/publicKey : This operation receives a get request for a public key.
      * If authorized, the key is sent back in the response. It is up to the service
      * provider to apply relevant authorization procedure and access control to information.
      *
@@ -67,20 +72,33 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
      * @param response the response for the request
      * @return the handler response according to the SECOM standard
      */
-    // TODO: Fix this!! It's returning a capability response object
     static Response handleGetPublicKeyExceptions(Exception ex,
                                                  HttpServletRequest request,
                                                  HttpServletResponse response) {
         // Create the capability response
         Response.Status responseStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+
+        // Create the Public Key response
+        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
 
         // Handle according to the exception type
-        responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof JsonMappingException
+                || ex instanceof NotFoundException) {
+            responseStatus = Response.Status.BAD_REQUEST;
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.FORBIDDEN;
+        } else if(ex instanceof SecomNotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+        } else {
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+        }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(capabilityResponseObject)
+                .entity(publicKeyResponseObject)
                 .build();
     }
 

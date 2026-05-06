@@ -6,14 +6,13 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SecomByteArrayDeserializerTest {
+class SecomByteArrayDeSerializerTest {
 
     // Test Parameters
-    SecomByteArrayDeserializer secomByteArrayDeserializer;
+    SecomByteArrayDeSerializer secomByteArrayDeserializer;
     private ObjectMapper objectMapper;
     private JsonNode jsonNode;
 
@@ -22,7 +21,7 @@ class SecomByteArrayDeserializerTest {
      */
     @BeforeEach
     void setup() {
-        this.secomByteArrayDeserializer = new SecomByteArrayDeserializer();
+        this.secomByteArrayDeserializer = new SecomByteArrayDeSerializer();
         this.objectMapper = new ObjectMapper();
     }
 

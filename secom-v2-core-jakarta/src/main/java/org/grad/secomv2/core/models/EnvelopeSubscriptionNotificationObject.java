@@ -86,9 +86,7 @@ public class EnvelopeSubscriptionNotificationObject extends AbstractEnvelope {
                 eventEnum,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                // TODO: This is not included in CD3 but it makes sense to include in the code
-                envelopeSignatureReference
+                envelopeSignatureTime
         };
     }
 }

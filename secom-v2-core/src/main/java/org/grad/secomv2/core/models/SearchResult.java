@@ -17,6 +17,8 @@
 package org.grad.secomv2.core.models;
 
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,11 +26,12 @@ import javax.validation.constraints.NotNull;
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
 */
-public class SearchResult {
+public class SearchResult extends AbstractResponseObject {
 
     @NotNull
     private EnvelopeSearchResultObject envelope;
     @NotNull
+    @Schema(description = "The signature ot the EnvelopeSearchResultObject in HEX format without whitespace or linebreaks")
     private String envelopeSignature;
 
     /**

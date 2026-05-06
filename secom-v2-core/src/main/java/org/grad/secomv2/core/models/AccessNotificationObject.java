@@ -20,7 +20,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * The SECOM Access Notification Object Class.
@@ -34,7 +33,6 @@ public class AccessNotificationObject implements EnvelopeSignatureBearer {
     private EnvelopeAccessNotificationObject envelope;
     @NotNull
     @Schema(description = "The signature ot the EnvelopeAccessNotificationObject in HEX format without whitespace or linebreaks")
-    @Size(min = 1)
     private String envelopeSignature;
 
     /**

@@ -71,7 +71,7 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
         // Create the encryption key response
         Response.Status responseStatus;
-        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        SearchResult searchResult = new SearchResult();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -80,18 +80,18 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            encryptionKeyResponseObject.setMessage("Bad Request");
+            searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-            encryptionKeyResponseObject.setMessage("Information not found");
+            searchResult.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
+            searchResult.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(encryptionKeyResponseObject)
+                .entity(searchResult)
                 .build();
     }
 }

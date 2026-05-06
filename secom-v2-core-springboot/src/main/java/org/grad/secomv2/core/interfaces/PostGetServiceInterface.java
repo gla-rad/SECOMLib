@@ -81,21 +81,16 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            getResponseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-            getResponseObject.setMessage("Unprocessable Content");
         }
         else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            getResponseObject.setMessage("Not authorized");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            getResponseObject.setMessage("Information not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            getResponseObject.setMessage(httpStatus.getReasonPhrase());
         }
         return ResponseEntity
                 .status(httpStatus)

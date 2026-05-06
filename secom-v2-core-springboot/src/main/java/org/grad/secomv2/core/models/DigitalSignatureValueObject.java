@@ -21,7 +21,6 @@ import org.grad.secomv2.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 
 /**
  * The SECOM Digital Signature Value Class.
@@ -39,7 +38,6 @@ public class DigitalSignatureValueObject implements CsvStringGenerator {
     private String[] publicCertificate;
     @NotNull
     @Schema(description = "(S100) The digital signature in HEX format as one row, no trailing return/new line")
-    @Size(min = 1)
     private String digitalSignature;
 
     /**
