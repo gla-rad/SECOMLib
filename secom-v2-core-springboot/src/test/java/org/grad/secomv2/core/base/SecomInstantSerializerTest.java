@@ -17,7 +17,6 @@
 package org.grad.secomv2.core.base;
 
 import tools.jackson.core.JsonGenerator;
-import tools.jackson.core.json.WriterBasedJsonGenerator;
 import tools.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
