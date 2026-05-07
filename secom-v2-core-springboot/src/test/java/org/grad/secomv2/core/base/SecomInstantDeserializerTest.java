@@ -32,7 +32,6 @@ class SecomInstantDeserializerTest {
     // Test Parameters
     SecomInstantDeserializer secomInstantDeserializer;
     private ObjectMapper objectMapper;
-    private JsonNode jsonNode;
 
     /**
      * Set up some base data.
