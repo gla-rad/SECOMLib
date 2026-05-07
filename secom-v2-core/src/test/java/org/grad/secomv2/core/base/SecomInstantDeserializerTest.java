@@ -16,9 +16,8 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,15 +25,12 @@ import java.io.IOException;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
 
 class SecomInstantDeserializerTest {
 
     // Test Parameters
     SecomInstantDeserializer secomInstantDeserializer;
+    ObjectMapper objectMapper;
 
     /**
      * Set up some base data.
@@ -42,6 +38,9 @@ class SecomInstantDeserializerTest {
     @BeforeEach
     void setup() {
         this.secomInstantDeserializer = new SecomInstantDeserializer();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(Instant.class, this.secomInstantDeserializer);
+        this.objectMapper = new ObjectMapper().registerModule(module);
     }
 
     /**
@@ -50,18 +49,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeInstant() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2001-01-01T12:13:14Z").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14Z"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -70,18 +59,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeInstantDLS() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2008-08-08T12:13:14+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
     }
 
     /**
@@ -90,18 +69,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDate() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2001-01-01T12:13:14Z").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14Z"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -110,18 +79,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDateDLS() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2008-08-08T12:13:14Z").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14Z"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14Z"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -130,18 +89,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeDateWithOffset() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2001-01-01T12:13:14+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14+01:00\"", Instant.class));
     }
 
     /**
@@ -150,18 +99,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeDateWithOffsetDLS() throws IOException {
-        // Make some mocks to test easily
-        ObjectCodec objectCodecMock = mock(ObjectCodec.class);
-        doReturn("2008-08-08T12:13:14+01:00").when(objectCodecMock).readValue(any(), eq(String.class));
-        JsonParser jsonParserMock = mock(JsonParser.class);
-        doReturn(objectCodecMock).when(jsonParserMock).getCodec();
-        DeserializationContext deserializationContextMock = mock(DeserializationContext.class);
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(jsonParserMock, deserializationContextMock);
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
     }
 
 }
