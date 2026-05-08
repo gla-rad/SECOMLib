@@ -16,13 +16,13 @@
 
 package org.grad.secomv2.core.base;
 
-import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -41,8 +41,11 @@ class SecomInstantSerializerTest {
         // Initialise the serializer
         this.secomInstantSerializer = new SecomInstantSerializer();
 
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, this.secomInstantSerializer);
+
         // Initialise the object mapper
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
@@ -54,17 +57,11 @@ class SecomInstantSerializerTest {
         // Get a test time instance
         Instant instant = Instant.now();
 
-        // Serialize the input
-        final StringWriter stringWriter = new StringWriter();
-        try (JsonGenerator jsonGenerator = this.objectMapper.createGenerator(stringWriter)) {
-            this.secomInstantSerializer.serialize(instant, jsonGenerator, this.objectMapper._serializationContext());
-        }
+        // Check they match
+        // writeValueAsString includes " in the output so remove them
+        String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
 
-        // And get the result
-        String result = stringWriter.toString();
-
-        // Make sure it seems fine
-        assertNotNull(result);
-        assertTrue(result.matches("(\"\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))\""));
+        assertNotNull(serialisedInstant);
+        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
 }

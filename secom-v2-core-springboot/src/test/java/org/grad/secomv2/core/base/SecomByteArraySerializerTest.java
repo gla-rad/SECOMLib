@@ -2,11 +2,12 @@ package org.grad.secomv2.core.base;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.jackson.core.JsonGenerator;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
 import java.io.IOException;
-import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,8 +25,11 @@ class SecomByteArraySerializerTest {
         // Initialise the serializer
         this.secomByteArraySerializer = new SecomByteArraySerializer();
 
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(byte[].class, this.secomByteArraySerializer);
+
         // Initialise the object mapper
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
@@ -34,21 +38,14 @@ class SecomByteArraySerializerTest {
      */
     @Test
     void testSerialize() throws IOException {
-        // Get a test time instance
-        byte[] bytes = new byte[]{'a', 'b', 'c', 'd'};
+        // Get a test string
+        String testString = "hello world";
+        byte[] testByteArray = testString.getBytes(StandardCharsets.UTF_8);
 
-        // Serialize the input
-        final StringWriter stringWriter = new StringWriter();
-        try (JsonGenerator jsonGenerator = this.objectMapper.createGenerator(stringWriter)) {
-            this.secomByteArraySerializer.serialize(bytes, jsonGenerator, this.objectMapper._serializationContext());
-        }
-
-        // And get the result
-        String result = stringWriter.toString();
-
-        // Make sure it seems fine
-        assertNotNull(result);
-        assertEquals("\"abcd\"", result);
+        // Check they match
+        // writeValueAsString includes " in the output so remove them
+        String serialisedByteArray = this.objectMapper.writeValueAsString(testByteArray).replace("\"", "");
+        assertEquals(testString, serialisedByteArray);
     }
 
 }

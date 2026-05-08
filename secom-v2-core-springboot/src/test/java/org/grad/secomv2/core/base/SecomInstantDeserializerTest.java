@@ -18,8 +18,8 @@ package org.grad.secomv2.core.base;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ class SecomInstantDeserializerTest {
         this.secomInstantDeserializer = new SecomInstantDeserializer();
         SimpleModule module = new SimpleModule();
         module.addDeserializer(Instant.class, this.secomInstantDeserializer);
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
