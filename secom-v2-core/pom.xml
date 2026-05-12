@@ -20,6 +20,7 @@
         <version.maven.javax.activation.api>2.0.0</version.maven.javax.activation.api>
         <version.maven.javax.validation-api>2.0.1.Final</version.maven.javax.validation-api>
         <version.maven.servlet.api>2.5</version.maven.servlet.api>
+        <jackson.version>2.19.0</jackson.version>
     </properties>
 
     <dependencies>

@@ -28,7 +28,6 @@
         <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
         <maven-release-plugin.version>3.0.1</maven-release-plugin.version>
         <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
-        <jackson.version>2.19.0</jackson.version>
         <junit.jupiter.version>5.12.2</junit.jupiter.version>
         <junit.platform.version>1.12.2</junit.platform.version>
     </properties>

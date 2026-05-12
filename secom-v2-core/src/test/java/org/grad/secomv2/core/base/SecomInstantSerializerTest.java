@@ -40,7 +40,7 @@ class SecomInstantSerializerTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
 
         // Initialise the serializer
         this.secomInstantSerializer = new SecomInstantSerializer();
@@ -80,9 +80,6 @@ class SecomInstantSerializerTest {
         // writeValueAsString includes " in the output so remove them
         String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
         assertEquals(secomDateTime, serialisedInstant);
-
         assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
-
     }
-
 }

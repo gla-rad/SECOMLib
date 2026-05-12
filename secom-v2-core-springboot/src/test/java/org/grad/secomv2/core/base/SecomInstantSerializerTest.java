@@ -24,7 +24,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SecomInstantSerializerTest {
@@ -37,7 +41,8 @@ class SecomInstantSerializerTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
+
         // Initialise the serializer
         this.secomInstantSerializer = new SecomInstantSerializer();
 
@@ -57,11 +62,24 @@ class SecomInstantSerializerTest {
         // Get a test time instance
         Instant instant = Instant.now();
 
+        // Format the date time
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_DATE_TIME_FORMAT)
+                .optionalStart()
+                .parseLenient()
+                .appendOffset("+HH:MM", "Z")
+                .parseStrict()
+                .optionalEnd()
+                .toFormatter()
+                .withZone(ZoneId.systemDefault());
+
+        String secomDateTime = formatter.format(instant);
+
         // Check they match
         // writeValueAsString includes " in the output so remove them
         String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
-
-        assertNotNull(serialisedInstant);
+        assertEquals(secomDateTime, serialisedInstant);
         assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
 }

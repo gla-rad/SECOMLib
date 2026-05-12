@@ -19,6 +19,7 @@
         <version.maven.jakarta.activation.api>2.0.0</version.maven.jakarta.activation.api>
         <version.maven.jakarta.validation-api>3.0.0</version.maven.jakarta.validation-api>
         <version.maven.servlet.api>5.0.0</version.maven.servlet.api>
+        <jackson.version>2.19.0</jackson.version>
     </properties>
 
     <dependencies>
