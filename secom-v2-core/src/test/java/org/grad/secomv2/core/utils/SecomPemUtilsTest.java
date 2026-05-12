@@ -165,7 +165,7 @@ class SecomPemUtilsTest {
 
         // Assert that it's correct
         assertNotNull(stringCertFromPem);
-        assertEquals(this.resourceCertString, stringCertFromPem);
+        assertEquals(this.resourceCertString.replaceAll("\n", System.lineSeparator()), stringCertFromPem);
     }
 
     /**
@@ -193,7 +193,7 @@ class SecomPemUtilsTest {
 
         // Assert that it's correct
         assertNotNull(stringPublicKeyFromPem);
-        assertEquals(this.resourcePublicKeyString, stringPublicKeyFromPem);
+        assertEquals(this.resourcePublicKeyString.replaceAll("\n", System.lineSeparator()), stringPublicKeyFromPem);
     }
 
     /**

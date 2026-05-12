@@ -16,16 +16,19 @@
 
 package org.grad.secomv2.core.base;
 
-import tools.jackson.core.JsonGenerator;
-import tools.jackson.core.json.WriterBasedJsonGenerator;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SecomInstantSerializerTest {
@@ -38,12 +41,16 @@ class SecomInstantSerializerTest {
      * Set up some base data.
      */
     @BeforeEach
-    void setup() throws IOException {
+    void setup() {
+
         // Initialise the serializer
         this.secomInstantSerializer = new SecomInstantSerializer();
 
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, this.secomInstantSerializer);
+
         // Initialise the object mapper
-        this.objectMapper = new ObjectMapper();
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
@@ -55,17 +62,24 @@ class SecomInstantSerializerTest {
         // Get a test time instance
         Instant instant = Instant.now();
 
-        // Serialize the input
-        final StringWriter stringWriter = new StringWriter();
-        try (JsonGenerator jsonGenerator = this.objectMapper.createGenerator(stringWriter)) {
-            this.secomInstantSerializer.serialize(instant, jsonGenerator, this.objectMapper._serializationContext());
-        }
+        // Format the date time
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_DATE_TIME_FORMAT)
+                .optionalStart()
+                .parseLenient()
+                .appendOffset("+HH:MM", "Z")
+                .parseStrict()
+                .optionalEnd()
+                .toFormatter()
+                .withZone(ZoneId.systemDefault());
 
-        // And get the result
-        String result = stringWriter.toString();
+        String secomDateTime = formatter.format(instant);
 
-        // Make sure it seems fine
-        assertNotNull(result);
-        assertTrue(result.matches("(\"\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))\""));
+        // Check they match
+        // writeValueAsString includes " in the output so remove them
+        String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
+        assertEquals(secomDateTime, serialisedInstant);
+        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
 }

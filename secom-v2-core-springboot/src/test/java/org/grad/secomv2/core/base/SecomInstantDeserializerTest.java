@@ -18,8 +18,9 @@ package org.grad.secomv2.core.base;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -31,7 +32,6 @@ class SecomInstantDeserializerTest {
     // Test Parameters
     SecomInstantDeserializer secomInstantDeserializer;
     private ObjectMapper objectMapper;
-    private JsonNode jsonNode;
 
     /**
      * Set up some base data.
@@ -39,7 +39,9 @@ class SecomInstantDeserializerTest {
     @BeforeEach
     void setup() {
         this.secomInstantDeserializer = new SecomInstantDeserializer();
-        this.objectMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(Instant.class, this.secomInstantDeserializer);
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
@@ -48,14 +50,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeInstant() {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2001-01-01T12:13:14Z");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14Z"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -64,14 +60,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeInstantDLS() {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2008-08-08T12:13:14+01:00");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
     }
 
     /**
@@ -80,14 +70,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDate() {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2001-01-01T12:13:14Z");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14Z"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -96,14 +80,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeUTCDateDLS() {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2008-08-08T12:13:14Z");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14Z"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14Z"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14Z\"", Instant.class));
     }
 
     /**
@@ -112,14 +90,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeDateWithOffset() throws IOException {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2001-01-01T12:13:14+01:00");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14+01:00\"", Instant.class));
     }
 
     /**
@@ -128,14 +100,8 @@ class SecomInstantDeserializerTest {
      */
     @Test
     void testDeserializeDateWithOffsetDLS() throws IOException {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("2008-08-08T12:13:14+01:00");
-
-        // And deserialize
-        Instant result = this.secomInstantDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"), result);
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
     }
 
 }

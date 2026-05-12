@@ -13,11 +13,14 @@
     <version>0.0.7-SNAPSHOT</version>
 
     <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <version.maven.javax.ws.rs-api>2.1.1</version.maven.javax.ws.rs-api>
         <version.maven.javax.xml.bind-api>2.3.1</version.maven.javax.xml.bind-api>
         <version.maven.javax.activation.api>2.0.0</version.maven.javax.activation.api>
         <version.maven.javax.validation-api>2.0.1.Final</version.maven.javax.validation-api>
         <version.maven.servlet.api>2.5</version.maven.servlet.api>
+        <jackson.version>2.19.0</jackson.version>
     </properties>
 
     <dependencies>
@@ -67,12 +70,6 @@
             <artifactId>swagger-annotations</artifactId>
             <version>2.2.30</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1</version>
         </dependency>
 
         <dependency>

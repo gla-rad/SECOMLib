@@ -2,9 +2,11 @@ package org.grad.secomv2.core.base;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,7 +16,6 @@ class SecomByteArrayDeSerializerTest {
     // Test Parameters
     SecomByteArrayDeSerializer secomByteArrayDeserializer;
     private ObjectMapper objectMapper;
-    private JsonNode jsonNode;
 
     /**
      * Set up some base data.
@@ -22,7 +23,9 @@ class SecomByteArrayDeSerializerTest {
     @BeforeEach
     void setup() {
         this.secomByteArrayDeserializer = new SecomByteArrayDeSerializer();
-        this.objectMapper = new ObjectMapper();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(byte[].class, this.secomByteArrayDeserializer);
+        this.objectMapper = JsonMapper.builder().addModule(module).build();
     }
 
     /**
@@ -30,15 +33,19 @@ class SecomByteArrayDeSerializerTest {
      * array.
      */
     @Test
-    void testDeserializeInstant() {
-        // Make some mocks to test easily
-        this.jsonNode = this.objectMapper.createObjectNode().stringNode("abcd");
+    void testDeserializeByteArray() throws IOException {
+        byte[] result = this.objectMapper.readValue("\"hello world\"", byte[].class);
+        assertArrayEquals("hello world".getBytes(StandardCharsets.UTF_8), result);
+    }
 
-        // And deserialize
-        byte[] result = this.secomByteArrayDeserializer.deserialize(this.objectMapper.createParser(this.jsonNode.toString()), this.objectMapper._deserializationContext());
-
-        // Make sure the result seems correct
-        assertEquals("abcd", new String(result, StandardCharsets.UTF_8));
+    /**
+     * make sure we can correctly deserialize a more realistic incoming byte array as a string
+     */
+    @Test
+    void testDeserializeBase64String() throws IOException {
+        String base64 = "aGVsbG8gd29ybGQ=";
+        byte[] result = this.objectMapper.readValue("\"" + base64 + "\"", byte[].class);
+        assertArrayEquals(base64.getBytes(StandardCharsets.UTF_8), result);
     }
 
 }

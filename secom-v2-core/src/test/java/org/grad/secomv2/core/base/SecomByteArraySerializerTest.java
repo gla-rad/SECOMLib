@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,31 +22,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class SecomInstantSerializerTest {
+class SecomByteArraySerializerTest {
 
     // Test Variables
     ObjectMapper objectMapper;
-    SecomInstantSerializer secomInstantSerializer;
+    SecomByteArraySerializer secomByteArraySerializer;
 
     /**
      * Set up some base data.
      */
     @BeforeEach
-    void setup() {
+    void setup() throws IOException {
 
         // Initialise the serializer
-        this.secomInstantSerializer = new SecomInstantSerializer();
+        this.secomByteArraySerializer = new SecomByteArraySerializer();
 
         SimpleModule module = new SimpleModule();
-        module.addSerializer(Instant.class, this.secomInstantSerializer);
+        module.addSerializer(byte[].class, this.secomByteArraySerializer);
 
         // Initialise the object mapper
         this.objectMapper = new ObjectMapper().registerModule(module);
@@ -54,32 +56,20 @@ class SecomInstantSerializerTest {
     }
 
     /**
-     * Test that we can successfully serialise a temporal instant according to
-     * the SECOM standard.
+     * Test that we can successfully serialise a byte array to string
+     *
      */
     @Test
     void testSerialize() throws IOException {
-        // Get a test time instance
-        Instant instant = Instant.now();
-
-        // Format the date time
-        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                .parseCaseInsensitive()
-                .appendPattern(SECOM_DATE_TIME_FORMAT)
-                .optionalStart()
-                .parseLenient()
-                .appendOffset("+HH:MM", "Z")
-                .parseStrict()
-                .optionalEnd()
-                .toFormatter()
-                .withZone(ZoneId.systemDefault());
-
-        String secomDateTime = formatter.format(instant);
+        // Get a test string
+        String testString = "hello world";
+        byte[] testByteArray = testString.getBytes(StandardCharsets.UTF_8);
 
         // Check they match
         // writeValueAsString includes " in the output so remove them
-        String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
-        assertEquals(secomDateTime, serialisedInstant);
-        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
+        String serialisedByteArray = this.objectMapper.writeValueAsString(testByteArray).replace("\"", "");
+        assertEquals(testString, serialisedByteArray);
+
     }
+
 }

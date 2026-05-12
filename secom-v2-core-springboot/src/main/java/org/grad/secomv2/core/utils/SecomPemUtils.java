@@ -107,6 +107,8 @@ public class SecomPemUtils {
     public static String getMinifiedPemFromCertString(String cert) {
         return cert
             // 1. Remove all line feed characters
+            .replaceAll("\n", "")
+            .replaceAll("\r\n", "")
             .replaceAll(System.lineSeparator(), "")
             // 2. Remove header -----BEGIN CERTIFICATE-----
             .replaceAll("-----BEGIN CERTIFICATE-----", "")
@@ -155,6 +157,8 @@ public class SecomPemUtils {
     public static String getMinifiedPemFromPublicKeyString(String publicKey) {
         return publicKey
             // 1. Remove all line feed characters
+            .replaceAll("\n", "")
+            .replaceAll("\r\n", "")
             .replaceAll(System.lineSeparator(), "")
             // 2. Remove header -----BEGIN PUBLIC KEY-----
             .replaceAll("-----BEGIN PUBLIC KEY-----", "")

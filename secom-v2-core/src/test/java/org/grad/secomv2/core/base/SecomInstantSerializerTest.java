@@ -16,47 +16,41 @@
 
 package org.grad.secomv2.core.base;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.json.WriterBasedJsonGenerator;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.time.Instant;
-import java.util.Map;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMAT;
 
 class SecomInstantSerializerTest {
 
     // Test Variables
     ObjectMapper objectMapper;
     SecomInstantSerializer secomInstantSerializer;
-    StringWriter stringWriter;
-    WriterBasedJsonGenerator jsonGenerator;
-    SerializerProvider serializerProvider;
 
     /**
      * Set up some base data.
      */
     @BeforeEach
-    void setup() throws IOException {
-        // Initialise the object mapper
-        this.objectMapper = new ObjectMapper();
+    void setup() {
 
         // Initialise the serializer
         this.secomInstantSerializer = new SecomInstantSerializer();
 
-        // Create a json generator
-        this.stringWriter = new StringWriter();
-        this.jsonGenerator = (WriterBasedJsonGenerator) new JsonFactory().createGenerator(this.stringWriter);
+        SimpleModule module = new SimpleModule();
+        module.addSerializer(Instant.class, this.secomInstantSerializer);
 
-        // And add a serialisation provider
-        this.serializerProvider = new ObjectMapper().getSerializerProvider();
+        // Initialise the object mapper
+        this.objectMapper = new ObjectMapper().registerModule(module);
+
     }
 
     /**
@@ -68,27 +62,24 @@ class SecomInstantSerializerTest {
         // Get a test time instance
         Instant instant = Instant.now();
 
-        // Begin the JSON Generation
-        this.jsonGenerator.writeStartObject();
+        // Format the date time
+        DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .parseCaseInsensitive()
+                .appendPattern(SECOM_DATE_TIME_FORMAT)
+                .optionalStart()
+                .parseLenient()
+                .appendOffset("+HH:MM", "Z")
+                .parseStrict()
+                .optionalEnd()
+                .toFormatter()
+                .withZone(ZoneId.systemDefault());
 
-        // Serialize the input
-        jsonGenerator.writeFieldName("date");
-        secomInstantSerializer.serialize(instant, this.jsonGenerator, this.serializerProvider);
+        String secomDateTime = formatter.format(instant);
 
-        // Finish the JSON Generation
-        this.jsonGenerator.writeEndObject();
-        this.jsonGenerator.close();
-
-        // And get the final result
-        final Map<String, String> result = this.objectMapper.readValue(
-                this.stringWriter.toString(),
-                new TypeReference<>() {}
-        );
-
-        // Make sure it seems fine
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertTrue(result.get("date").matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
+        // Check they match
+        // writeValueAsString includes " in the output so remove them
+        String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
+        assertEquals(secomDateTime, serialisedInstant);
+        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
     }
-
 }
