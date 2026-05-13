@@ -16,7 +16,6 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
@@ -65,7 +64,6 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
      * @return the envelope signature
      */
     @Override
-    @JsonProperty("digitalSignature")
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }
