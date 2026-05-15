@@ -287,20 +287,12 @@ public class SecomClient {
      * service instances to consume.
      *
      * @param searchFilterObject    The search filter object
-     * @param page the page number to be retrieved
-     * @param pageSize the maximum page size
      * @return the result list of the search
      */
-    public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject,
-                                                        Integer page,
-                                                        Integer pageSize) {
+    public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
         return this.secomClient
                 .post()
-                .uri(uriBuilder -> uriBuilder
-                        .path(SEARCH_SERVICE_INTERFACE_PATH)
-                        .queryParam("page", page)
-                        .queryParam("pageSize", pageSize)
-                        .build())
+                .uri(SEARCH_SERVICE_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(searchFilterObject))
