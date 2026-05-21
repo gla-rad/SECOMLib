@@ -19,6 +19,7 @@ package org.grad.secomv2.core.components;
 import org.grad.secomv2.core.base.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
@@ -58,28 +59,17 @@ import java.util.Base64;
 public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
 
     // Class Variables
-    private final SecomCompressionProvider compressionProvider;
-    private final SecomEncryptionProvider encryptionProvider;
-    private final SecomCertificateProvider certificateProvider;
-    private final SecomSignatureProvider signatureProvider;
+    @Autowired(required = false)
+    private SecomCompressionProvider compressionProvider;
 
-    /**
-     * The Class Constructor.
-     *
-     * @param compressionProvider   The SECOM compression provider
-     * @param encryptionProvider    The SECOM encryption provider
-     * @param certificateProvider   The SECOM certificate provider
-     * @param signatureProvider     The SECOM signature provider
-     */
-    public SecomWriterInterceptor(SecomCompressionProvider compressionProvider,
-                                  SecomEncryptionProvider encryptionProvider,
-                                  SecomCertificateProvider certificateProvider,
-                                  SecomSignatureProvider signatureProvider) {
-        this.compressionProvider = compressionProvider;
-        this.encryptionProvider = encryptionProvider;
-        this.certificateProvider = certificateProvider;
-        this.signatureProvider = signatureProvider;
-    }
+    @Autowired(required = false)
+    private SecomEncryptionProvider encryptionProvider;
+
+    @Autowired(required = false)
+    private SecomCertificateProvider certificateProvider;
+
+    @Autowired(required = false)
+    private SecomSignatureProvider signatureProvider;
 
     /**
      * Specify the types of data the ResponseBodyAdvice applies to. Only process the response

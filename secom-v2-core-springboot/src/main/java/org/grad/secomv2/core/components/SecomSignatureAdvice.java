@@ -28,6 +28,7 @@ import org.grad.secomv2.core.utils.PkiUtils;
 import org.grad.secomv2.core.utils.SecomPemUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -53,27 +54,28 @@ import java.util.Optional;
 @ControllerAdvice
 public class SecomSignatureAdvice implements RequestBodyAdvice {
 
-    private final SecomCompressionProvider compressionProvider;
-    private final SecomEncryptionProvider encryptionProvider;
-    private final SecomTrustStoreProvider trustStoreProvider;
-    private final SecomSignatureProvider signatureProvider;
+    @Autowired(required = false)
+    private SecomCompressionProvider compressionProvider;
+
+    @Autowired(required = false)
+    private SecomEncryptionProvider encryptionProvider;
+
+    @Autowired(required = false)
+    private SecomTrustStoreProvider trustStoreProvider;
+
+    @Autowired(required = false)
+    private SecomSignatureProvider signatureProvider;
 
 
-    public SecomSignatureAdvice(SecomCompressionProvider compressionProvider,
-                                SecomEncryptionProvider encryptionProvider,
-                                SecomTrustStoreProvider trustStoreProvider,
-                                SecomSignatureProvider signatureProvider) {
-        this.compressionProvider = compressionProvider;
-        this.encryptionProvider = encryptionProvider;
-        this.trustStoreProvider = trustStoreProvider;
-        this.signatureProvider = signatureProvider;
+    public SecomSignatureAdvice() {
+
     }
 
     /**
      * Only process the advice if the incoming parameter is an EnvelopeSignatureBearer
      *
      * @param methodParameter the class type of the body
-     * @param targetType the type of serialised data
+     * @param targetType the type of serialized data
      * @param converterType class converter type
      * @return boolean indicating if this class is applicable to the returnType
      */
