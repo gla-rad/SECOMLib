@@ -82,6 +82,8 @@ import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INT
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+
+// TODO Sign envelopes
 public class SecomClient {
 
     // Class Variables

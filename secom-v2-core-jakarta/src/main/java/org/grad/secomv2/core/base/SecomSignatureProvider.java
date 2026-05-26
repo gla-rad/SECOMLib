@@ -43,19 +43,41 @@ public interface SecomSignatureProvider {
     /**
      * The signature generation operation. It simply required the payload that
      * will be used to generate the signature, which will be returned as a
-     * String.
+     * String. </br>
+     * </br>
+     * @implNote SECOM v2 now uses the algorithm used to generate the certificate,
+     * use generateSignature(DigitalSignatureCertificate signatureCertificate, byte[] payload) instead
      *
      * @param signatureCertificate  The digital signature certificate to be used for the signature generation
      * @param algorithm             The algorithm to be used for the signature generation
      * @param payload               The payload to be signed, (preferably Base64 encoded)
      * @return The signature generated
      */
-    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload);
+    @Deprecated(forRemoval = true, since = "SECOM v2 CD3")
+    default byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload){
+        return generateSignature(signatureCertificate, payload);
+    }
+
+
+    /**
+     * The signature generation operation. It simply required the payload that
+     * will be used to generate the signature, which will be returned as a
+     * String.
+     *
+     * @param signatureCertificate  The digital signature certificate to be used for the signature generation
+     * @param payload               The payload to be signed, (preferably Base64 encoded)
+     * @return The signature generated
+     */
+    byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, byte[] payload);
+
 
     /**
      * The signature validation operation. This should support the provision
      * of the message content (preferably in a Base64 format, and the signature
-     * to validate the content against.
+     * to validate the content against.</br>
+     * </br>
+     * @implNote SECOM v2 now uses the algorithm used to generate the certificate,
+     * use validateSignature(String[] signatureCertificates, byte[] signature, byte[] content)
      *
      * @param signatureCertificates The digital signature certificates to be used for the signature generation
      * @param algorithm             The algorithm used for the signature generation
@@ -63,6 +85,22 @@ public interface SecomSignatureProvider {
      * @param content               The content to be validated
      * @return whether the signature validation was successful or not
      */
-    boolean validateSignature(String[] signatureCertificates, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content);
+    @Deprecated(forRemoval = true, since = "SECOM v2 CD3")
+    default boolean validateSignature(String[] signatureCertificates, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content){
+        return validateSignature(signatureCertificates, signature, content);
+    }
+
+    /**
+     * The signature validation operation. This should support the provision
+     * of the message content (preferably in a Base64 format, and the signature
+     * to validate the content against.
+     *
+     * @param signatureCertificates The digital signature certificates to be used for the signature generation
+     * @param signature             The signature to validate the content against
+     * @param content               The content to be validated
+     * @return whether the signature validation was successful or not
+     */
+    boolean validateSignature(String[] signatureCertificates, byte[] signature, byte[] content);
+
 
 }

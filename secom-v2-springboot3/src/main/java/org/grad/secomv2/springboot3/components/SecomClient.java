@@ -207,6 +207,10 @@ public class SecomClient {
      * @return the access notification response object
      */
     public Optional<AccessNotificationResponseObject> accessNotification(AccessNotificationObject accessNotificationObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ACCESS_NOTIFICATION_INTERFACE_PATH)
@@ -226,6 +230,10 @@ public class SecomClient {
      * @return the request access response object
      */
     public Optional<AccessResponseObject> requestAccess(AccessRequestObject accessRequestObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ACCESS_INTERFACE_PATH)
@@ -292,6 +300,11 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
+
+        if(this.getSignatureProvider() != null) {
+            searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(SEARCH_SERVICE_INTERFACE_PATH)
@@ -310,6 +323,11 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ENCRYPTION_KEY_INTERFACE_PATH)
@@ -383,6 +401,10 @@ public class SecomClient {
      * @return the get by link response object
      */
     public Optional<GetByLinkResponseObject> postGetByLink(GetByLinkObject getByLinkObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getByLinkObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(POST_GET_BY_LINK_INTERFACE_PATH)
@@ -456,6 +478,11 @@ public class SecomClient {
      * @return the get response object
      */
     public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         //Prepare the upload envelope if valid
         final EnvelopeGetFilterObject envelope = getFilterObject.getEnvelope();
         return this.secomClient
@@ -526,6 +553,11 @@ public class SecomClient {
      * @return the summary response object
      */
     public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(POST_GET_SUMMARY_INTERFACE_PATH)
@@ -605,6 +637,11 @@ public class SecomClient {
      * @return the subscription response object
      */
     public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(SUBSCRIPTION_INTERFACE_PATH)
