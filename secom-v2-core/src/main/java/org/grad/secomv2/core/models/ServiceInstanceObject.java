@@ -48,7 +48,6 @@ public class ServiceInstanceObject {
     private String organizationId;
     @NotNull
     private String endpointUri;
-    @NotNull
     private String[] endpointType;
     private String[] keywords;
     private String[] unlocode;
