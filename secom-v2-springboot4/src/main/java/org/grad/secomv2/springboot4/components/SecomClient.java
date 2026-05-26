@@ -281,7 +281,6 @@ public class SecomClient {
      * @return the request access response object
      */
     public Optional<AccessResponseObject> requestAccess(AccessRequestObject accessRequestObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             accessRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
