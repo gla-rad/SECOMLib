@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.base;
 
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -70,11 +71,11 @@ public class SecomConstants {
                 .appendPattern(SECOM_TIME_FORMAT)
                 .optionalStart()
                 .parseLenient()
-                .appendOffset("+HH:MM", "Z")
+                .appendOffset("+HHMM", "Z")
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()
-                .withZone(ZoneId.systemDefault());
+                .withZone(ZoneOffset.UTC);
     }
 
     public static final String SECOM_DATE_TIME_FORMAT = SECOM_DATE_FORMAT + "'T'" + SECOM_TIME_FORMAT;
@@ -89,7 +90,7 @@ public class SecomConstants {
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()
-                .withZone(ZoneId.systemDefault());
+                .withZone(ZoneOffset.UTC);
     }
 
 }

@@ -31,7 +31,7 @@ public class GetSummaryResponseObject {
 
     // Class Variables
     @Schema(description = "Description of the information object")
-    private List<SummaryObject> informationSummaryObject;
+    private List<SummaryObject> summaryObject;
     @NotNull
     private PaginationObject pagination;
 
@@ -40,17 +40,17 @@ public class GetSummaryResponseObject {
      *
      * @return the summary object
      */
-    public List<SummaryObject> getInformationSummaryObject() {
-        return informationSummaryObject;
+    public List<SummaryObject> getSummaryObject() {
+        return summaryObject;
     }
 
     /**
      * Sets summary object.
      *
-     * @param informationSummaryObject the summary object
+     * @param summaryObject the summary object
      */
-    public void setInformationSummaryObject(List<SummaryObject> informationSummaryObject) {
-        this.informationSummaryObject = informationSummaryObject;
+    public void setSummaryObject(List<SummaryObject> summaryObject) {
+        this.summaryObject = summaryObject;
     }
 
     /**

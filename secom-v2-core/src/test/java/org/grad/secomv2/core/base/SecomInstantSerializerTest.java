@@ -24,6 +24,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -72,7 +73,7 @@ class SecomInstantSerializerTest {
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()
-                .withZone(ZoneId.systemDefault());
+                .withZone(ZoneOffset.UTC);
 
         String secomDateTime = formatter.format(instant);
 
