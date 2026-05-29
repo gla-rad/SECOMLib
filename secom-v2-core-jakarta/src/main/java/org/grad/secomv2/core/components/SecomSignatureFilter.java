@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.interfaces.*;
 import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -164,22 +165,29 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 );
             }
 
+
+            try {
+                valid &= this.signatureProvider.validateSignature(
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelope)
+                                .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
+                                .orElse(null),
+                        digitalSignatureAlgorithm,
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelopeSignature)
+                                .map(DatatypeConverter::parseHexBinary)
+                                .orElse(null),
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelope)
+                                .map(AbstractEnvelope::getCsvString)
+                                .map(String::getBytes)
+                                .orElse(null));
+
+
+            } catch (Exception ex) {
+                throw new SecomValidationException(ex.getMessage());
+            }
             // Then validate the envelope signature
-            valid &= this.signatureProvider.validateSignature(
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelope)
-                            .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
-                            .orElse(null),
-                    digitalSignatureAlgorithm,
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelopeSignature)
-                            .map(DatatypeConverter::parseHexBinary)
-                            .orElse(null),
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelope)
-                            .map(AbstractEnvelope::getCsvString)
-                            .map(String::getBytes)
-                            .orElse(null));
 
             // Finally validate the data signature if present
             if(obj.getEnvelope() instanceof DigitalSignatureBearer) {
