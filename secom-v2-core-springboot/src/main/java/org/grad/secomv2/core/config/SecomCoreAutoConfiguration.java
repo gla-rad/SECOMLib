@@ -16,10 +16,7 @@
 package org.grad.secomv2.core.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import org.grad.secomv2.core.components.SecomReaderInterceptor;
-import org.grad.secomv2.core.components.SecomSignatureAdvice;
-import org.grad.secomv2.core.components.SecomV2ExceptionMapper;
-import org.grad.secomv2.core.components.SecomWriterInterceptor;
+import org.grad.secomv2.core.components.*;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -36,7 +33,13 @@ import tools.jackson.databind.json.JsonMapper;
         SecomSignatureAdvice.class,
         SecomReaderInterceptor.class,
         SecomWriterInterceptor.class,
-        SecomV2ExceptionMapper.class
+        SecomV2ExceptionMapper.class,
+        ContainerTypeToStringConverterProvider.class,
+        StringToContainerTypeConverterProvider.class,
+        DigitalSignatureEnumToStringConverter.class,
+        DigitalSignatureStringToEnumConverter.class,
+        InstantToISOConverterProvider.class,
+        ISOToInstantConverterProvider.class
         })
 public class SecomCoreAutoConfiguration {
 

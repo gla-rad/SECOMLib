@@ -20,6 +20,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -58,7 +59,7 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
 @RestControllerAdvice
 public class SecomV2ExceptionMapper {
 
-
+    final String API_PATH = "/api/secom";
     /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
@@ -72,11 +73,6 @@ public class SecomV2ExceptionMapper {
         String path = request.getRequestURI();
         String method = request.getMethod();
 
-        // If exception is not for this version, throw it again for the other exception handler
-        if(!path.startsWith("/" + SecomConstants.SECOM_VERSION)) {
-            throw ex;
-        }
-
         //First log the message
         final Logger secomLogger = Logger.getLogger(Optional.of(ex)
                         .map(Exception::getCause)
@@ -89,55 +85,68 @@ public class SecomV2ExceptionMapper {
                 .map(ExceptionUtils::getStackTrace)
                 .orElse("Unknown stacktrace..."));
 
+        secomLogger.severe("API URL was: " + path);
+        secomLogger.severe("API method was: " + method);
+        secomLogger.severe("Exception was: " + ex.getClass().getSimpleName());
+
+        // If exception is not for this version, throw it again for the other exception handler
+        if(!path.contains("/" + SecomConstants.SECOM_VERSION + "/")) {
+            throw ex;
+        }
+
+        if(ex instanceof HttpRequestMethodNotSupportedException) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        }
+
         // Then handle
         switch(path) {
-            case ACCESS_INTERFACE_PATH:
+            case API_PATH + ACCESS_INTERFACE_PATH:
                 return AccessServiceInterface.handleAccessInterfaceExceptions(ex, request);
-            case ACCESS_NOTIFICATION_INTERFACE_PATH:
+            case API_PATH + ACCESS_NOTIFICATION_INTERFACE_PATH:
                 return AccessNotificationServiceInterface.handleAccessNotificationInterfaceExceptions(ex, request);
-            case ACKNOWLEDGMENT_INTERFACE_PATH:
+            case API_PATH + ACKNOWLEDGMENT_INTERFACE_PATH:
                 return AcknowledgementServiceInterface.handleAcknowledgementInterfaceExceptions(ex, request);
-            case CAPABILITY_INTERFACE_PATH:
+            case API_PATH + CAPABILITY_INTERFACE_PATH:
                 return CapabilityServiceInterface.handleCapabilityInterfaceExceptions(ex, request);
-            case SEARCH_SERVICE_INTERFACE_PATH:
+            case API_PATH + SEARCH_SERVICE_INTERFACE_PATH:
                 return SearchServiceServiceInterface.handleSearchServiceInterfaceExceptions(ex, request);
-            case ENCRYPTION_KEY_INTERFACE_PATH:
+            case API_PATH + ENCRYPTION_KEY_INTERFACE_PATH:
                 return EncryptionKeyServiceInterface.handleEncryptionInterfaceExceptions(ex, request);
-            case ENCRYPTION_KEY_REQUEST_INTERFACE_PATH:
+            case API_PATH + ENCRYPTION_KEY_REQUEST_INTERFACE_PATH:
                 return EncryptionKeyRequestServiceInterface.handleEncryptionKeyRequestInterfaceExceptions(ex, request);
-            case GET_BY_LINK_INTERFACE_PATH: // Also for upload
+            case API_PATH + GET_BY_LINK_INTERFACE_PATH: // Also for upload
                 if("GET".equals(method)) {
                     return GetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, request);
                 } else if("POST".equals(method)) {
                     return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, request);
                 }
-            case POST_GET_BY_LINK_INTERFACE_PATH:
+            case API_PATH + POST_GET_BY_LINK_INTERFACE_PATH:
                 return PostGetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, request);
-            case GET_INTERFACE_PATH: // Also for upload
+            case API_PATH + GET_INTERFACE_PATH: // Also for upload
                 if("GET".equals(method)) {
                     return GetServiceInterface.handleGetInterfaceExceptions(ex, request);
                 } else if("POST".equals(method)) {
                     return UploadServiceInterface.handleUploadInterfaceExceptions(ex, request);
                 }
-            case POST_GET_INTERFACE_PATH:
+            case API_PATH + POST_GET_INTERFACE_PATH:
                 return PostGetServiceInterface.handleGerInterfaceException(ex, request);
-            case GET_SUMMARY_INTERFACE_PATH:
+            case API_PATH + GET_SUMMARY_INTERFACE_PATH:
                 return GetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, request);
-            case POST_GET_SUMMARY_INTERFACE_PATH:
+            case API_PATH + POST_GET_SUMMARY_INTERFACE_PATH:
                 return PostGetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, request);
-            case PING_INTERFACE_PATH:
+            case API_PATH + PING_INTERFACE_PATH:
                 return PingServiceInterface.handlePingInterfaceExceptions(ex, request);
-            case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
+            case API_PATH + SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
                 if("POST".equals(method)) {
                     return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, request);
                 } else if("DELETE".equals(method)) {
                     return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, request);
                 }
-            case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
+            case API_PATH + SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                 return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, request);
-            case RETRIEVE_RESULT_INTERFACE_PATH:
+            case API_PATH + RETRIEVE_RESULT_INTERFACE_PATH:
                 return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, request);
-            case GET_PUBLIC_KEY_INTERFACE_PATH:
+            case API_PATH + GET_PUBLIC_KEY_INTERFACE_PATH:
                 if("GET".equals(method)) {
                     return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
                 } else if("POST".equals(method)) {

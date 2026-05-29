@@ -22,6 +22,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -29,6 +30,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Base64;
 
 /**
@@ -84,9 +87,21 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType,
                             Class converterType) {
 
-        Class<?> paramType = returnType.getParameterType();
+        Class<?> rawType = returnType.getParameterType();
+        if (DigitalSignatureCollectionBearer.class.isAssignableFrom(rawType)) {
+            return true;
+        }
+        if (ResponseEntity.class.isAssignableFrom(rawType)) {
+            Type genericType = returnType.getGenericParameterType();
+            if (genericType instanceof ParameterizedType pt) {
+                Type[] args = pt.getActualTypeArguments();
+                if (args.length > 0 && args[0] instanceof Class<?> bodyType) {
+                    return DigitalSignatureCollectionBearer.class.isAssignableFrom(bodyType);
+                }
+            }
+        }
+        return false;
 
-        return DigitalSignatureCollectionBearer.class.isAssignableFrom(paramType) || byte[].class.isAssignableFrom(paramType);
     }
 
     /**
@@ -115,7 +130,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
 
         String path = servletRequest.getServletRequest().getRequestURI();
 
-        if (!path.startsWith("/" + SecomConstants.SECOM_VERSION)) {
+        if (!path.contains("/" + SecomConstants.SECOM_VERSION + "/")) {
             return body;
         }
 
