@@ -83,19 +83,20 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                     .entity(encryptionKeyResponseObject)
                     .build();
         }
+        else if(ex instanceof SecomNotFoundException || ex instanceof NotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+            encryptionKeyResponseObject.setMessage("Information not found");
+        }
+
         // Handle according to the exception type
         else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException
                 || ex instanceof SecomSignatureVerificationException
         ) {
             responseStatus = Response.Status.BAD_REQUEST;
             encryptionKeyResponseObject.setMessage("Bad Request");
-        } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-            encryptionKeyResponseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
