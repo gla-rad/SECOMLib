@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
 
@@ -76,16 +77,22 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
         EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
-                || ex instanceof JsonMappingException
+        if (ex instanceof SecomSignatureVerificationException) {
+            responseStatus = Response.Status.UNAUTHORIZED;
+            encryptionKeyResponseObject.setMessage("Unauthorized");
+
+        } else if (ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
-            encryptionKeyResponseObject.setMessage("Bad Request");
-        } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
             encryptionKeyResponseObject.setMessage("Information not found");
+
+        } else if (ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
+                || ex instanceof ValidationException
+                || ex instanceof JsonMappingException) {
+            responseStatus = Response.Status.BAD_REQUEST;
+            encryptionKeyResponseObject.setMessage("Bad Request");
+
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
