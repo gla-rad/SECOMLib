@@ -99,6 +99,7 @@ public class SecomV2OpenApiEndpoint {
 
         openAPI.setInfo(secomInfo.getInfo());
         openAPI.setExternalDocs(secomInfo.getExternalDocs());
+        openAPI.getServers().addAll(secomInfo.getServers());
 
         // 4. Merge the components
         Optional.ofNullable(secomInfo.getComponents()).ifPresent(c -> {
