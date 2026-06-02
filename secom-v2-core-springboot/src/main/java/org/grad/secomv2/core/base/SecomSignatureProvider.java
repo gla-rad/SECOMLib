@@ -53,7 +53,6 @@ public interface SecomSignatureProvider {
      * @param payload               The payload to be signed, (preferably Base64 encoded)
      * @return The signature generated
      */
-    @Deprecated(forRemoval = true, since = "SECOM v2 CD3")
     default byte[] generateSignature(DigitalSignatureCertificate signatureCertificate, DigitalSignatureAlgorithmEnum algorithm, byte[] payload){
         return generateSignature(signatureCertificate, payload);
     }
@@ -85,7 +84,6 @@ public interface SecomSignatureProvider {
      * @param content               The content to be validated
      * @return whether the signature validation was successful or not
      */
-    @Deprecated(forRemoval = true, since = "SECOM v2 CD3")
     default boolean validateSignature(String[] signatureCertificates, DigitalSignatureAlgorithmEnum algorithm, byte[] signature, byte[] content){
         return validateSignature(signatureCertificates, signature, content);
     }

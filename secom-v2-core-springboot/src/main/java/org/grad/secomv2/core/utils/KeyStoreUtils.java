@@ -64,14 +64,9 @@ public class KeyStoreUtils {
         KeyStore clientKeyStore = KeyStore.getInstance(Optional.ofNullable(keystoreType).orElse(KeyStore.getDefaultType()));
 
         // Check if keystore exists as a file, otherwise get it from the classpath
-        InputStream ksFileInputStream = Files.exists(keystorePath)
-                ? Files.newInputStream(keystorePath)
-                : KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystore);
-        if (ksFileInputStream == null) {
-            throw new IOException("Keystore not found at path or classpath: " + keystore);
-        }
-        try (InputStream stream = ksFileInputStream) {
-            clientKeyStore.load(stream, keystorePassword.toCharArray());
+        try (InputStream ksFileInputStream = Files.exists(keystorePath) ? Files.newInputStream(keystorePath) : KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystore)) {
+            clientKeyStore.load(ksFileInputStream, keystorePassword.toCharArray());
+
             return clientKeyStore;
         }
     }

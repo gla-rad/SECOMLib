@@ -156,8 +156,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
                 transactionIdentifier,
                 ackType,
                 nackType,
-                envelopeSignatureTime,
-                envelopeSignatureReference
+                envelopeSignatureTime
         };
     }
 

@@ -34,6 +34,9 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Base64;
 
+import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * The SECOM Writer Interceptor.
  * <p>
@@ -60,6 +63,7 @@ import java.util.Base64;
  */
 @ControllerAdvice
 public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
+
 
     // Class Variables
     @Autowired(required = false)
@@ -130,7 +134,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
 
         String path = servletRequest.getServletRequest().getRequestURI();
 
-        if (!path.contains("/" + SecomConstants.SECOM_VERSION + "/")) {
+        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             return body;
         }
 

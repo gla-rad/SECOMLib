@@ -9,7 +9,6 @@ import io.swagger.v3.oas.models.Paths;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.interfaces.GenericSecomInterface;
 import org.springdoc.core.service.OpenAPIService;
-import org.springdoc.webmvc.api.OpenApiWebMvcResource;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;

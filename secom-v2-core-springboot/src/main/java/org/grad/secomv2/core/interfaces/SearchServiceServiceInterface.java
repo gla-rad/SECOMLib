@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
@@ -83,7 +84,8 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof SecomSignatureVerificationException) {
+                || ex instanceof SecomSignatureVerificationException
+                || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             searchResult.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {

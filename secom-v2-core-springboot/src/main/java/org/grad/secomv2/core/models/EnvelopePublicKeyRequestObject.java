@@ -61,8 +61,7 @@ public class EnvelopePublicKeyRequestObject extends AbstractEnvelope {
                 publicCertificate,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime,
-                envelopeSignatureReference
+                envelopeSignatureTime
         };
     }
 }

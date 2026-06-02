@@ -40,6 +40,11 @@ public class SecomConstants {
     public static final String SECOM_VERSION = "v2";
 
     /**
+     * The SECOM API path
+     */
+    public static final String API_PATH = "/api/secom";
+
+    /**
      * The Algorithm to be used for generating signatures.
      */
     public static final String CERTIFICATE_THUMBPRINT_HASH = "SHA-256";

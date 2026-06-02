@@ -45,6 +45,9 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Optional;
 
+import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
+
 /**
  * SecomSignatureAdvice class used to validate the envelope signature
  * on incoming requests
@@ -138,7 +141,7 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
 
         String path = servletRequest.getServletRequest().getRequestURI();
 
-        if (!path.startsWith("/" + SecomConstants.SECOM_VERSION)) {
+        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
             return body;
         }
 

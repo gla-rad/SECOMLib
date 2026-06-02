@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
+import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -86,7 +87,8 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof HttpMessageNotReadableException
                 || ex instanceof IllegalArgumentException
-                || ex instanceof ConstraintViolationException) {
+                || ex instanceof ConstraintViolationException
+                || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException) {

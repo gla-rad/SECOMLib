@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.interfaces.*;
 
 import java.util.Optional;
@@ -49,7 +48,8 @@ import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.PO
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
-
+import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Exception Manager Class.
@@ -59,7 +59,6 @@ import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBS
 @RestControllerAdvice
 public class SecomV2ExceptionMapper {
 
-    final String API_PATH = "/api/secom";
     /**
      * Generate the response based on the exceptions thrown by the respective
      * SECOM endpoint called. This can be extracted by the request context.
@@ -85,12 +84,12 @@ public class SecomV2ExceptionMapper {
                 .map(ExceptionUtils::getStackTrace)
                 .orElse("Unknown stacktrace..."));
 
-        secomLogger.severe("API URL was: " + path);
-        secomLogger.severe("API method was: " + method);
-        secomLogger.severe("Exception was: " + ex.getClass().getSimpleName());
+        secomLogger.warning("API URL was: " + path);
+        secomLogger.warning("API method was: " + method);
+        secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
 
         // If exception is not for this version, throw it again for the other exception handler
-        if(!path.contains("/" + SecomConstants.SECOM_VERSION + "/")) {
+        if(!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             throw ex;
         }
 

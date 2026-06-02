@@ -18,6 +18,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.exceptions.*;
+import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
@@ -82,7 +83,8 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
-                || ex instanceof HttpClientErrorException.NotFound) {
+                || ex instanceof HttpClientErrorException.NotFound
+                || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
