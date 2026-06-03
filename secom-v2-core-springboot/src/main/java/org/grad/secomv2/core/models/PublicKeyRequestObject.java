@@ -19,13 +19,15 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.DigitalSignatureBearer;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Public Request Key Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class PublicKeyRequestObject {
+public class PublicKeyRequestObject implements EnvelopeSignatureBearer {
 
     // Class variables
     @NotNull
@@ -69,4 +71,5 @@ public class PublicKeyRequestObject {
     public void setEnvelopeSignature(String envelopeSignature) {
         this.envelopeSignature = envelopeSignature;
     }
+
 }

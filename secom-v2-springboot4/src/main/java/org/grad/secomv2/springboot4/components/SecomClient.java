@@ -39,10 +39,12 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
+import javax.print.URIException;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -75,6 +77,7 @@ import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceIn
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM Client Class.
@@ -307,7 +310,7 @@ public class SecomClient {
      * @param acknowledgementObject  the acknowledgement object
      * @return the acknowledgement response object
      */
-    public Optional<AcknowledgementResponseObject> acknowledgment(AcknowledgementObject acknowledgementObject) {
+    public Optional<AcknowledgementResponseObject> acknowledgement(AcknowledgementObject acknowledgementObject) {
         // If a signature provider has been assigned, use it to sign the
         // acknowledgment object envelop data.
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
@@ -774,6 +777,52 @@ public class SecomClient {
                 .body(BodyInserters.fromValue(uploadLinkObject))
                 .retrieve()
                 .bodyToMono(UploadLinkResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/publicKey: The Rest operation GET /publicKey
+     * This operation receives a get request for a public key. If authorized, the key is sent back in the
+     * response. It is up to the service provider to apply relevant authorization procedure and access
+     * control to information.
+     *
+     * @param certificateThumbprint Claimed Thumbprint for signed key (X.509 Certificate)
+     * @param dataProtection Flag indicating that the requested key is for symmetric
+     *                       key derivation in exchange for a random encryption key
+     * @return PublicKeyObject The returned publicKeyObject
+     */
+    public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) throws URISyntaxException {
+        return this.secomClient
+                .get()
+                .uri(new URI(GET_PUBLIC_KEY_INTERFACE_PATH + "?dataProtection=" + dataProtection + "&certificateThumbprint=" + certificateThumbprint))
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/publicKey: The Rest operation - POST /publicKey
+     * This operation uploads (pushes) a public key.
+     *
+     * @param publicKeyRequestObject Public certificate x.509 in PEM format, Base64 encoded byte array.
+     * @return PublicKeyResponseObject
+     */
+    public Optional<PublicKeyResponseObject> uploadPublicKey(PublicKeyRequestObject publicKeyRequestObject) {
+        //Prepare the upload link envelope if valid
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            publicKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(GET_PUBLIC_KEY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(publicKeyRequestObject))
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
                 .blockOptional();
     }
 

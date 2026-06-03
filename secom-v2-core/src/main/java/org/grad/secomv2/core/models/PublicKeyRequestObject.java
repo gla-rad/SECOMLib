@@ -17,6 +17,7 @@ package org.grad.secomv2.core.models;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 
@@ -25,7 +26,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class PublicKeyRequestObject {
+public class PublicKeyRequestObject implements EnvelopeSignatureBearer {
 
     // Class variables
     @NotNull
