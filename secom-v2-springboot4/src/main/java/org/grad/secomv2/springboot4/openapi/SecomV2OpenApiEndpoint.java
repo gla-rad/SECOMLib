@@ -106,7 +106,6 @@ public class SecomV2OpenApiEndpoint {
                 c.getSecuritySchemes().forEach((k, v) -> openAPI.getComponents().addSecuritySchemes(k, v));
         });
 
-
         // 5. Filter paths from SpringDoc's scanned spec down to only SECOM-handled ones
         Paths filteredPaths = new Paths();
         if (openAPI.getPaths() != null) {
