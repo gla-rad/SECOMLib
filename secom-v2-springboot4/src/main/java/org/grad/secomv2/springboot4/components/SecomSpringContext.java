@@ -50,7 +50,7 @@ public class SecomSpringContext implements ApplicationContextAware {
         }
         try {
             return context.getBean(beanClass);
-        } catch (NoSuchBeanDefinitionException ex) {
+        } catch (NoSuchBeanDefinitionException | IllegalStateException ex) {
             return null;
         }
     }

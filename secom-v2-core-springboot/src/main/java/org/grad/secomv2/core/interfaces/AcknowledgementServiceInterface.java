@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.*;
@@ -86,7 +87,8 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof SecomNotFoundException
-                || ex instanceof HttpClientErrorException.NotFound) {
+                || ex instanceof HttpClientErrorException.NotFound
+                || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             acknowledgementResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             acknowledgementResponseObject.setMessage("Missing required data for the service");

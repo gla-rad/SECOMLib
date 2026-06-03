@@ -66,6 +66,7 @@ public class KeyStoreUtils {
         // Check if keystore exists as a file, otherwise get it from the classpath
         try (InputStream ksFileInputStream = Files.exists(keystorePath) ? Files.newInputStream(keystorePath) : KeyStoreUtils.class.getClassLoader().getResourceAsStream(keystore)) {
             clientKeyStore.load(ksFileInputStream, keystorePassword.toCharArray());
+
             return clientKeyStore;
         }
     }

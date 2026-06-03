@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -45,7 +46,9 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
     protected Instant envelopeSignatureTime;
     @Deprecated(since = "SECOM v2 CD3", forRemoval = true)
     @Schema(type = "string", description = "(S-100) Specifies the algorithm used to compute envelopeSignature\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
+    @JsonIgnore
     protected String envelopeSignatureReference;
+
 
     /**
      * Gets envelope signature certificate.

@@ -68,7 +68,7 @@ class GetSummaryResponseObjectTest {
 
         // Generate a new object
         this.obj = new GetSummaryResponseObject();
-        this.obj.setInformationSummaryObject(Collections.singletonList(this.summaryObject));
+        this.obj.setSummaryObject(Collections.singletonList(this.summaryObject));
         this.obj.setPagination(this.paginationObject);
     }
 
@@ -83,21 +83,21 @@ class GetSummaryResponseObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertNotNull(result.getInformationSummaryObject());
-        assertEquals(1, result.getInformationSummaryObject().size());
-        assertNotNull(this.obj.getInformationSummaryObject().get(0));
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getDataReference(), result.getInformationSummaryObject().get(0).getDataReference());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getDataProtection(), result.getInformationSummaryObject().get(0).getDataProtection());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getDataCompression(), result.getInformationSummaryObject().get(0).getDataCompression());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getContainerType(), result.getInformationSummaryObject().get(0).getContainerType());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getDataProductType(), result.getInformationSummaryObject().get(0).getDataProductType());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_identifier(), result.getInformationSummaryObject().get(0).getInfo_identifier());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_name(), result.getInformationSummaryObject().get(0).getInfo_name());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_status(), result.getInformationSummaryObject().get(0).getInfo_status());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_description(), result.getInformationSummaryObject().get(0).getInfo_description());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_lastModifiedDate(), result.getInformationSummaryObject().get(0).getInfo_lastModifiedDate());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_productVersion(), result.getInformationSummaryObject().get(0).getInfo_productVersion());
-        assertEquals(this.obj.getInformationSummaryObject().get(0).getInfo_size(), result.getInformationSummaryObject().get(0).getInfo_size());
+        assertNotNull(result.getSummaryObject());
+        assertEquals(1, result.getSummaryObject().size());
+        assertNotNull(this.obj.getSummaryObject().get(0));
+        assertEquals(this.obj.getSummaryObject().get(0).getDataReference(), result.getSummaryObject().get(0).getDataReference());
+        assertEquals(this.obj.getSummaryObject().get(0).getDataProtection(), result.getSummaryObject().get(0).getDataProtection());
+        assertEquals(this.obj.getSummaryObject().get(0).getDataCompression(), result.getSummaryObject().get(0).getDataCompression());
+        assertEquals(this.obj.getSummaryObject().get(0).getContainerType(), result.getSummaryObject().get(0).getContainerType());
+        assertEquals(this.obj.getSummaryObject().get(0).getDataProductType(), result.getSummaryObject().get(0).getDataProductType());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_identifier(), result.getSummaryObject().get(0).getInfo_identifier());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_name(), result.getSummaryObject().get(0).getInfo_name());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_status(), result.getSummaryObject().get(0).getInfo_status());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_description(), result.getSummaryObject().get(0).getInfo_description());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_lastModifiedDate(), result.getSummaryObject().get(0).getInfo_lastModifiedDate());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_productVersion(), result.getSummaryObject().get(0).getInfo_productVersion());
+        assertEquals(this.obj.getSummaryObject().get(0).getInfo_size(), result.getSummaryObject().get(0).getInfo_size());
         assertNotNull(result.getPagination());
         assertEquals(this.obj.getPagination().getMaxItemsPerPage(), result.getPagination().getMaxItemsPerPage());
         assertEquals(this.obj.getPagination().getTotalItems(), result.getPagination().getTotalItems());

@@ -79,7 +79,6 @@ class EncryptionKeyRequestObjectTest {
         assertNotNull(result);
         assertNotNull(result.getEnvelope());
         assertEquals(this.obj.getEnvelope().getDataReference(), result.getEnvelope().getDataReference());
-        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureReference(), result.getEnvelope().getEnvelopeSignatureReference());
         assertEquals(this.obj.getEnvelope().getPublicCertificate(), result.getEnvelope().getPublicCertificate());
         assertArrayEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
         assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());

@@ -143,12 +143,6 @@ public class SecomClient {
                     .handshakeTimeout(Duration.of(2, ChronoUnit.SECONDS)));
         }
 
-        // Initialise the provider beans by default if possible
-        this.certificateProvider = SecomSpringContext.getBean(SecomCertificateProvider.class);
-        this.signatureProvider = SecomSpringContext.getBean(SecomSignatureProvider.class);
-        this.encryptionProvider = SecomSpringContext.getBean(SecomEncryptionProvider.class);
-        this.compressionProvider = SecomSpringContext.getBean(SecomCompressionProvider.class);
-
         // And create the SECOM web client
         this.secomClient = WebClient.builder()
                 .clientConnector(new ReactorClientHttpConnector(httpConnector))
@@ -168,6 +162,9 @@ public class SecomClient {
      * @return the certificate provider
      */
     public SecomCertificateProvider getCertificateProvider() {
+        if (certificateProvider == null) {
+            certificateProvider = SecomSpringContext.getBean(SecomCertificateProvider.class);
+        }
         return certificateProvider;
     }
 
@@ -186,6 +183,9 @@ public class SecomClient {
      * @return the signature provider
      */
     public SecomSignatureProvider getSignatureProvider() {
+        if (signatureProvider == null) {
+            signatureProvider = SecomSpringContext.getBean(SecomSignatureProvider.class);
+        }
         return signatureProvider;
     }
 
@@ -199,6 +199,49 @@ public class SecomClient {
     }
 
     /**
+     * Gets encryption provider.
+     *
+     * @return the encryption provider
+     */
+    public SecomEncryptionProvider getEncryptionProvider() {
+        if (encryptionProvider == null) {
+            encryptionProvider = SecomSpringContext.getBean(SecomEncryptionProvider.class);
+        }
+        return encryptionProvider;
+    }
+
+    /**
+     * Sets encryption provider.
+     *
+     * @param encryptionProvider the encryption provider
+     */
+    public void setEncryptionProvider(SecomEncryptionProvider encryptionProvider) {
+        this.encryptionProvider = encryptionProvider;
+    }
+
+    /**
+     * Gets compression provider.
+     *
+     * @return the compression provider
+     */
+    public SecomCompressionProvider getCompressionProvider() {
+        if (compressionProvider == null) {
+            compressionProvider = SecomSpringContext.getBean(SecomCompressionProvider.class);
+        }
+        return compressionProvider;
+    }
+
+    /**
+     * Sets compression provider.
+     *
+     * @param compressionProvider the compression provider
+     */
+    public void setCompressionProvider(SecomCompressionProvider compressionProvider) {
+        this.compressionProvider = compressionProvider;
+    }
+
+
+    /**
      * POST /v2/access/notification : Result from Access Request performed on a
      * service instance shall be sent asynchronous through this client
      * interface.
@@ -207,6 +250,10 @@ public class SecomClient {
      * @return the access notification response object
      */
     public Optional<AccessNotificationResponseObject> accessNotification(AccessNotificationObject accessNotificationObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ACCESS_NOTIFICATION_INTERFACE_PATH)
@@ -226,6 +273,10 @@ public class SecomClient {
      * @return the request access response object
      */
     public Optional<AccessResponseObject> requestAccess(AccessRequestObject accessRequestObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ACCESS_INTERFACE_PATH)
@@ -251,8 +302,8 @@ public class SecomClient {
     public Optional<AcknowledgementResponseObject> acknowledgment(AcknowledgementObject acknowledgementObject) {
         // If a signature provider has been assigned, use it to sign the
         // acknowledgment object envelop data.
-        if(this.signatureProvider != null) {
-            acknowledgementObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        if(this.getSignatureProvider() != null) {
+            acknowledgementObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
         // And perform the web-call
@@ -292,6 +343,11 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
+
+        if(this.getSignatureProvider() != null) {
+            searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(SEARCH_SERVICE_INTERFACE_PATH)
@@ -310,6 +366,11 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(ENCRYPTION_KEY_INTERFACE_PATH)
@@ -333,8 +394,8 @@ public class SecomClient {
     public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
         // If a signature provider has been assigned, use it to sign the
         // encryption key object envelop data.
-        if(this.signatureProvider != null) {
-            encryptionKeyRequestObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        if(this.getSignatureProvider() != null) {
+            encryptionKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
         // And perform the web-call
@@ -383,6 +444,10 @@ public class SecomClient {
      * @return the get by link response object
      */
     public Optional<GetByLinkResponseObject> postGetByLink(GetByLinkObject getByLinkObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getByLinkObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(POST_GET_BY_LINK_INTERFACE_PATH)
@@ -442,8 +507,8 @@ public class SecomClient {
                 .bodyToMono(GetResponseObject.class)
                 .blockOptional()
                 .map(response -> response.decodeData())
-                .map(response -> response.decompressData(this.compressionProvider))
-                .map(response -> response.decryptData(this.encryptionProvider))
+                .map(response -> response.decompressData(this.getCompressionProvider()))
+                .map(response -> response.decryptData(this.getEncryptionProvider()))
                 .map(GetResponseObject.class::cast);
     }
 
@@ -456,6 +521,11 @@ public class SecomClient {
      * @return the get response object
      */
     public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         //Prepare the upload envelope if valid
         final EnvelopeGetFilterObject envelope = getFilterObject.getEnvelope();
         return this.secomClient
@@ -526,6 +596,11 @@ public class SecomClient {
      * @return the summary response object
      */
     public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(POST_GET_SUMMARY_INTERFACE_PATH)
@@ -605,6 +680,11 @@ public class SecomClient {
      * @return the subscription response object
      */
     public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
+
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(SUBSCRIPTION_INTERFACE_PATH)
@@ -628,17 +708,17 @@ public class SecomClient {
         //Prepare the upload envelope if valid
         final EnvelopeUploadObject envelope = uploadObject.getEnvelope();
         if(envelope != null) {
-            envelope.prepareMetadata(this.signatureProvider)
-                    .signData(this.certificateProvider, this.signatureProvider)
-                    .encryptData(this.encryptionProvider)
-                    .compressData(this.compressionProvider)
+            envelope.prepareMetadata(this.getSignatureProvider())
+                    .signData(this.getCertificateProvider(), this.getSignatureProvider())
+                    .encryptData(this.getEncryptionProvider())
+                    .compressData(this.getCompressionProvider())
                     .encodeData();
         }
 
         // If a signature provider has been assigned, use it to sign the
         // upload object envelop data.
-        if(this.signatureProvider != null) {
-            uploadObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        if(this.getSignatureProvider() != null) {
+            uploadObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
         // And perform the web-call
@@ -665,13 +745,13 @@ public class SecomClient {
         //Prepare the upload link envelope if valid
         final EnvelopeLinkObject envelope = uploadLinkObject.getEnvelope();
         if(envelope != null) {
-            envelope.prepareMetadata(this.signatureProvider);
+            envelope.prepareMetadata(this.getSignatureProvider());
         }
 
         // If a signature provider has been assigned, use it to sign the
         // upload object envelop data.
-        if(this.signatureProvider != null) {
-            uploadLinkObject.signEnvelope(this.certificateProvider, this.signatureProvider);
+        if(this.getSignatureProvider() != null) {
+            uploadLinkObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
         // And perform the web-call

@@ -16,6 +16,10 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import jakarta.validation.UnexpectedTypeException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -80,15 +84,15 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
      */
     @GetMapping(path = GET_SUMMARY_INTERFACE_PATH,
                 produces = { MediaType.APPLICATION_JSON_VALUE })
-    ResponseEntity<GetSummaryResponseObject> getSummary(@RequestParam("containerType") @Parameter(schema = @Schema(description = "Data Type requested")) @SecomV2Param ContainerTypeEnum containerType,
-                                        @RequestParam("dataProductType") @Parameter(schema = @Schema(description = "Data product type name See: https://registry.iho.int/productspec/list.do (column 'Product ID')")) @SecomV2Param SECOM_DataProductType dataProductType,
-                                        @RequestParam("productVersion") @Parameter(schema = @Schema(description = "S-100 based Product specification version")) String productVersion,
-                                        @RequestParam("geometry") @Parameter(schema = @Schema(description = "Geometry condition for geo-located information objects as WKT LineString or Polygon")) String geometry,
-                                        @RequestParam("unlocode") @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") @Parameter(schema = @Schema(description = "See UN web page")) String unlocode,
-                                        @RequestParam("validFrom") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) @SecomV2Param Instant validFrom,
-                                        @RequestParam("validTo") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) @SecomV2Param Instant validTo,
-                                        @RequestParam("page") @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")) Integer page,
-                                        @RequestParam("pageSize") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize);
+    ResponseEntity<GetSummaryResponseObject> getSummary(@RequestParam(value = "containerType", required = false) @Parameter(schema = @Schema(description = "Data Type requested")) ContainerTypeEnum containerType,
+                                        @RequestParam(value = "dataProductType", required = false) @Parameter(schema = @Schema(description = "Data product type name See: https://registry.iho.int/productspec/list.do (column 'Product ID')")) SECOM_DataProductType dataProductType,
+                                        @RequestParam(value = "productVersion", required = false) @Parameter(schema = @Schema(description = "S-100 based Product specification version")) String productVersion,
+                                        @RequestParam(value = "geometry", required = false) @Parameter(schema = @Schema(description = "Geometry condition for geo-located information objects as WKT LineString or Polygon")) String geometry,
+                                        @RequestParam(value = "unlocode", required = false) @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") @Parameter(schema = @Schema(description = "See UN web page")) String unlocode,
+                                        @RequestParam(value = "validFrom", required = false) @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) Instant validFrom,
+                                        @RequestParam(value = "validTo", required = false) @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) Instant validTo,
+                                        @RequestParam(value = "page", required = false) @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")) Integer page,
+                                        @RequestParam(value = "pageSize", required = false) @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize);
 
     /**
      * The exception handler implementation for the interface.
@@ -108,7 +112,11 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
-                || ex instanceof HttpClientErrorException.NotFound) {
+                || ex instanceof HttpClientErrorException.NotFound
+                || ex instanceof MethodArgumentNotValidException
+                || ex instanceof MethodArgumentTypeMismatchException
+                || ex instanceof HandlerMethodValidationException
+                || ex instanceof UnexpectedTypeException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;

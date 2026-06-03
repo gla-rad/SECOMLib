@@ -77,7 +77,7 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
      * This function performs the actual signing operation of the data signature
      * bearer. In this, the data to be signed is accessed and translated onto
      * a byte array. Then the provided SECOM signature provider will be used
-     * to perform the signing wich will be used to generate and attach the
+     * to perform the signing which will be used to generate and attach the
      * SECOM exchange metadata.
      *
      * @param certificateProvider   The SECOM certificate provider to be used

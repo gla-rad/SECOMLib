@@ -19,8 +19,10 @@ package org.grad.secomv2.core.components;
 import org.grad.secomv2.core.base.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -28,7 +30,12 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Base64;
+
+import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
 /**
  * The SECOM Writer Interceptor.
@@ -57,29 +64,19 @@ import java.util.Base64;
 @ControllerAdvice
 public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
 
-    // Class Variables
-    private final SecomCompressionProvider compressionProvider;
-    private final SecomEncryptionProvider encryptionProvider;
-    private final SecomCertificateProvider certificateProvider;
-    private final SecomSignatureProvider signatureProvider;
 
-    /**
-     * The Class Constructor.
-     *
-     * @param compressionProvider   The SECOM compression provider
-     * @param encryptionProvider    The SECOM encryption provider
-     * @param certificateProvider   The SECOM certificate provider
-     * @param signatureProvider     The SECOM signature provider
-     */
-    public SecomWriterInterceptor(SecomCompressionProvider compressionProvider,
-                                  SecomEncryptionProvider encryptionProvider,
-                                  SecomCertificateProvider certificateProvider,
-                                  SecomSignatureProvider signatureProvider) {
-        this.compressionProvider = compressionProvider;
-        this.encryptionProvider = encryptionProvider;
-        this.certificateProvider = certificateProvider;
-        this.signatureProvider = signatureProvider;
-    }
+    // Class Variables
+    @Autowired(required = false)
+    private SecomCompressionProvider compressionProvider;
+
+    @Autowired(required = false)
+    private SecomEncryptionProvider encryptionProvider;
+
+    @Autowired(required = false)
+    private SecomCertificateProvider certificateProvider;
+
+    @Autowired(required = false)
+    private SecomSignatureProvider signatureProvider;
 
     /**
      * Specify the types of data the ResponseBodyAdvice applies to. Only process the response
@@ -94,9 +91,21 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
     public boolean supports(MethodParameter returnType,
                             Class converterType) {
 
-        Class<?> paramType = returnType.getParameterType();
+        Class<?> rawType = returnType.getParameterType();
+        if (DigitalSignatureCollectionBearer.class.isAssignableFrom(rawType) || byte[].class.isAssignableFrom(rawType)) {
+            return true;
+        }
+        if (ResponseEntity.class.isAssignableFrom(rawType)) {
+            Type genericType = returnType.getGenericParameterType();
+            if (genericType instanceof ParameterizedType pt) {
+                Type[] args = pt.getActualTypeArguments();
+                if (args.length > 0 && args[0] instanceof Class<?> bodyType) {
+                    return DigitalSignatureCollectionBearer.class.isAssignableFrom(bodyType) || byte[].class.isAssignableFrom(bodyType);
+                }
+            }
+        }
+        return false;
 
-        return DigitalSignatureCollectionBearer.class.isAssignableFrom(paramType) || byte[].class.isAssignableFrom(paramType);
     }
 
     /**
@@ -125,7 +134,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
 
         String path = servletRequest.getServletRequest().getRequestURI();
 
-        if (!path.startsWith("/" + SecomConstants.SECOM_VERSION)) {
+        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             return body;
         }
 

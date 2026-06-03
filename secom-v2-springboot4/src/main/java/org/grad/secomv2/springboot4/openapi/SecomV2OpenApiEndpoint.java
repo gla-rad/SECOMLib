@@ -8,6 +8,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Paths;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.interfaces.GenericSecomInterface;
+import org.springdoc.core.service.OpenAPIService;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -48,7 +49,7 @@ public class SecomV2OpenApiEndpoint {
      * springdoc-openapi-starter-webmvc-ui is on the classpath.
      */
     @Autowired
-    private OpenAPI openAPI;
+    private OpenAPIService openAPIService;
 
     /**
      * Spring MVC's handler mapping — used to find which URL paths belong
@@ -66,6 +67,8 @@ public class SecomV2OpenApiEndpoint {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<String> getOpenApiV2() throws JsonProcessingException {
+
+        OpenAPI openAPI = openAPIService.getCachedOpenAPI(Locale.getDefault());
 
         // 1. Find all SECOM controller classes
         Set<Class<?>> secomControllerClasses = applicationContext
@@ -89,16 +92,21 @@ public class SecomV2OpenApiEndpoint {
                 .collect(Collectors.toSet());
 
         // 3. Clone the SpringDoc OpenAPI and apply SECOM info if provided
-        OpenAPI filtered = new OpenAPI();
-        OpenAPI openAPI = Optional.ofNullable(secomV2OpenApiInfoProvider)
+        OpenAPI secomInfo = Optional.ofNullable(secomV2OpenApiInfoProvider)
                 .map(SecomV2OpenApiInfoProvider::getOpenApiInfo)
                 .orElseGet(SecomV2OpenApiInfoProvider::defaultOpenAPIInfo);
-        filtered.setInfo(openAPI.getInfo());
-        filtered.setServers(openAPI.getServers());
-        filtered.setExternalDocs(openAPI.getExternalDocs());
-        filtered.setComponents(openAPI.getComponents());
 
-        // 4. Filter paths down to only SECOM-handled ones
+        openAPI.setInfo(secomInfo.getInfo());
+        openAPI.setExternalDocs(secomInfo.getExternalDocs());
+        openAPI.getServers().addAll(secomInfo.getServers());
+
+        // 4. Merge the components
+        Optional.ofNullable(secomInfo.getComponents()).ifPresent(c -> {
+            if (c.getSecuritySchemes() != null)
+                c.getSecuritySchemes().forEach((k, v) -> openAPI.getComponents().addSecuritySchemes(k, v));
+        });
+
+        // 5. Filter paths from SpringDoc's scanned spec down to only SECOM-handled ones
         Paths filteredPaths = new Paths();
         if (openAPI.getPaths() != null) {
             openAPI.getPaths().forEach((path, item) -> {
@@ -107,13 +115,13 @@ public class SecomV2OpenApiEndpoint {
                 }
             });
         }
-        filtered.setPaths(filteredPaths);
+        openAPI.setPaths(filteredPaths);
 
-        // 5. Serialise with the same settings as the original
+        // 6. Serialise with the same settings as the original
         ObjectMapper mapper = objectMapper.copy()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .registerModule(new JavaTimeModule());
 
-        return ResponseEntity.ok(mapper.writeValueAsString(filtered));
+        return ResponseEntity.ok(mapper.writeValueAsString(openAPI));
     }
 }

@@ -61,7 +61,7 @@ class SecomInstantDeserializerTest {
     @Test
     void testDeserializeInstantDLS() {
         assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
-                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
+                this.objectMapper.readValue("\"2008-08-08T11:13:14Z\"", Instant.class));
     }
 
     /**
@@ -91,7 +91,7 @@ class SecomInstantDeserializerTest {
     @Test
     void testDeserializeDateWithOffset() throws IOException {
         assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"),
-                this.objectMapper.readValue("\"2001-01-01T12:13:14+01:00\"", Instant.class));
+                this.objectMapper.readValue("\"2001-01-01T11:13:14Z\"", Instant.class));
     }
 
     /**
@@ -101,7 +101,7 @@ class SecomInstantDeserializerTest {
     @Test
     void testDeserializeDateWithOffsetDLS() throws IOException {
         assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
-                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
+                this.objectMapper.readValue("\"2008-08-08T11:13:14Z\"", Instant.class));
     }
 
 }

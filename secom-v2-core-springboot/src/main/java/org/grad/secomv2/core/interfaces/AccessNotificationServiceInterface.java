@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -83,7 +84,8 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof SecomNotFoundException
-                || ex instanceof HttpClientErrorException.NotFound) {
+                || ex instanceof HttpClientErrorException.NotFound
+                || ex instanceof JsonParseException) {
             accessNotificationResponseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
         } else {

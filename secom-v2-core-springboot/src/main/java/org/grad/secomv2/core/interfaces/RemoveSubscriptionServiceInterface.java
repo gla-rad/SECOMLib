@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
@@ -63,9 +64,8 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
      * @return the remove subscription response object
      */
     @DeleteMapping(path = REMOVE_SUBSCRIPTION_INTERFACE_PATH,
-                    consumes = { MediaType.APPLICATION_JSON_VALUE },
                     produces = { MediaType.APPLICATION_JSON_VALUE })
-    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestParam(value="subscriptionIdentifier") UUID subscriptionIdentifier);
+    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestParam("subscriptionIdentifier") UUID subscriptionIdentifier);
 
     /**
      * The exception handler implementation for the interface.
@@ -94,6 +94,9 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
             removeSubscriptionResponseObject.setMessage("Subscriber identifier not found");
+        } else if (ex instanceof MissingServletRequestParameterException){
+            httpStatus = HttpStatus.NOT_FOUND;
+            removeSubscriptionResponseObject.setMessage("Missing required parameter");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
             removeSubscriptionResponseObject.setMessage(httpStatus.getReasonPhrase());

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
@@ -68,11 +68,11 @@ class SecomInstantSerializerTest {
                 .appendPattern(SECOM_DATE_TIME_FORMAT)
                 .optionalStart()
                 .parseLenient()
-                .appendOffset("+HH:MM", "Z")
+                .appendOffset("+HHMM", "Z")
                 .parseStrict()
                 .optionalEnd()
                 .toFormatter()
-                .withZone(ZoneId.systemDefault());
+                .withZone(ZoneOffset.UTC);
 
         String secomDateTime = formatter.format(instant);
 
@@ -80,6 +80,6 @@ class SecomInstantSerializerTest {
         // writeValueAsString includes " in the output so remove them
         String serialisedInstant = this.objectMapper.writeValueAsString(instant).replace("\"", "");
         assertEquals(secomDateTime, serialisedInstant);
-        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2}):(\\d{2}))"));
+        assertTrue(serialisedInstant.matches("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2}):(\\d{2})(Z|\\+(\\d{2})(\\d{2}))"));
     }
 }
