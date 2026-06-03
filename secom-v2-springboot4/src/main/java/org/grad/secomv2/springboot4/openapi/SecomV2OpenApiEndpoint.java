@@ -67,9 +67,6 @@ public class SecomV2OpenApiEndpoint {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<String> getOpenApiV2() throws JsonProcessingException {
-
-        OpenAPI openAPI = openAPIService.getCachedOpenAPI(Locale.getDefault());
-
         // 1. Find all SECOM controller classes
         Set<Class<?>> secomControllerClasses = applicationContext
                 .getBeansOfType(GenericSecomInterface.class)
@@ -96,32 +93,32 @@ public class SecomV2OpenApiEndpoint {
                 .map(SecomV2OpenApiInfoProvider::getOpenApiInfo)
                 .orElseGet(SecomV2OpenApiInfoProvider::defaultOpenAPIInfo);
 
-        openAPI.setInfo(secomInfo.getInfo());
-        openAPI.setExternalDocs(secomInfo.getExternalDocs());
-        openAPI.getServers().addAll(secomInfo.getServers());
+        secomInfo.setInfo(secomInfo.getInfo());
+        secomInfo.setExternalDocs(secomInfo.getExternalDocs());
+        secomInfo.getServers().addAll(secomInfo.getServers());
 
         // 4. Merge the components
         Optional.ofNullable(secomInfo.getComponents()).ifPresent(c -> {
             if (c.getSecuritySchemes() != null)
-                c.getSecuritySchemes().forEach((k, v) -> openAPI.getComponents().addSecuritySchemes(k, v));
+                c.getSecuritySchemes().forEach((k, v) -> secomInfo.getComponents().addSecuritySchemes(k, v));
         });
 
         // 5. Filter paths from SpringDoc's scanned spec down to only SECOM-handled ones
         Paths filteredPaths = new Paths();
-        if (openAPI.getPaths() != null) {
-            openAPI.getPaths().forEach((path, item) -> {
+        if (secomInfo.getPaths() != null) {
+            secomInfo.getPaths().forEach((path, item) -> {
                 if (secomPaths.contains(path)) {
                     filteredPaths.addPathItem(path, item);
                 }
             });
         }
-        openAPI.setPaths(filteredPaths);
+        secomInfo.setPaths(filteredPaths);
 
         // 6. Serialise with the same settings as the original
         ObjectMapper mapper = objectMapper.copy()
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
                 .registerModule(new JavaTimeModule());
 
-        return ResponseEntity.ok(mapper.writeValueAsString(openAPI));
+        return ResponseEntity.ok(mapper.writeValueAsString(secomInfo));
     }
 }
