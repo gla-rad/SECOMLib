@@ -92,7 +92,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
                             Class converterType) {
 
         Class<?> rawType = returnType.getParameterType();
-        if (DigitalSignatureCollectionBearer.class.isAssignableFrom(rawType)) {
+        if (DigitalSignatureCollectionBearer.class.isAssignableFrom(rawType) || byte[].class.isAssignableFrom(rawType)) {
             return true;
         }
         if (ResponseEntity.class.isAssignableFrom(rawType)) {
@@ -100,7 +100,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
             if (genericType instanceof ParameterizedType pt) {
                 Type[] args = pt.getActualTypeArguments();
                 if (args.length > 0 && args[0] instanceof Class<?> bodyType) {
-                    return DigitalSignatureCollectionBearer.class.isAssignableFrom(bodyType);
+                    return DigitalSignatureCollectionBearer.class.isAssignableFrom(bodyType) || byte[].class.isAssignableFrom(bodyType);
                 }
             }
         }
