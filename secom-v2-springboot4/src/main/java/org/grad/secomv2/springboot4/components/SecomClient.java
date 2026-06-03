@@ -791,10 +791,15 @@ public class SecomClient {
      *                       key derivation in exchange for a random encryption key
      * @return PublicKeyObject The returned publicKeyObject
      */
-    public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) throws URISyntaxException {
+    public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) {
         return this.secomClient
                 .get()
-                .uri(new URI(GET_PUBLIC_KEY_INTERFACE_PATH + "?dataProtection=" + dataProtection + "&certificateThumbprint=" + certificateThumbprint))
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_PUBLIC_KEY_INTERFACE_PATH);
+                    builder = certificateThumbprint != null ? builder.queryParam("certificateThumbprint", certificateThumbprint) : builder;
+                    builder.queryParam("dataProtection", dataProtection);
+                    return builder.build();
+                })
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToMono(PublicKeyResponseObject.class)
