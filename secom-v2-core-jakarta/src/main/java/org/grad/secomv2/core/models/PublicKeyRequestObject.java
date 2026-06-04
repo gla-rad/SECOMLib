@@ -22,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
- * The SECOM Public Request Key Object Class.
+ * The SECOM Public Key Request Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */

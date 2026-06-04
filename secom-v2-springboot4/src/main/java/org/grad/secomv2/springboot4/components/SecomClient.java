@@ -41,10 +41,7 @@ import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
 import tools.jackson.databind.json.JsonMapper;
 
-import javax.print.URIException;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -311,8 +308,6 @@ public class SecomClient {
      * @return the acknowledgement response object
      */
     public Optional<AcknowledgementResponseObject> acknowledgement(AcknowledgementObject acknowledgementObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // acknowledgment object envelop data.
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             acknowledgementObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -354,7 +349,6 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
-
         if(this.getSignatureProvider() != null) {
             searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -376,8 +370,7 @@ public class SecomClient {
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
-
+    public Optional<EncryptionKeyResponseObject> uploadEncryptionKey(EncryptionKeyObject encryptionKeyObject) {
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -403,8 +396,6 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // encryption key object envelop data.
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             encryptionKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -532,7 +523,6 @@ public class SecomClient {
      * @return the get response object
      */
     public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -605,7 +595,6 @@ public class SecomClient {
      * @return the summary response object
      */
     public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -647,9 +636,8 @@ public class SecomClient {
      * @return the remove subscription response object
      */
     public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
-
         return this.secomClient
-                .method(HttpMethod.DELETE)
+                .delete()
                 .uri(uriBuilder -> {
                     UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
                     builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
@@ -669,7 +657,6 @@ public class SecomClient {
      * @return the subscription notification response object
      */
     public Optional<SubscriptionNotificationResponseObject> subscriptionNotification(SubscriptionNotificationObject subscriptionNotificationObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             subscriptionNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -694,7 +681,6 @@ public class SecomClient {
      * @return the subscription response object
      */
     public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -729,8 +715,7 @@ public class SecomClient {
                     .encodeData();
         }
 
-        // If a signature provider has been assigned, use it to sign the
-        // upload object envelop data.
+        // If a signature provider has been assigned, use it to sign the data
         if(this.getSignatureProvider() != null) {
             uploadObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }

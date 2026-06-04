@@ -40,7 +40,6 @@ import reactor.netty.http.client.HttpClient;
 import javax.validation.constraints.Min;
 import javax.ws.rs.QueryParam;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyStoreException;
@@ -85,7 +84,6 @@ import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INT
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-
 public class SecomClient {
 
     // Class Variables
@@ -303,9 +301,7 @@ public class SecomClient {
      * @return the acknowledgement response object
      */
     public Optional<AcknowledgementResponseObject> acknowledgement(AcknowledgementObject acknowledgementObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // acknowledgment object envelop data.
-        if(this.getSignatureProvider() != null) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             acknowledgementObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
@@ -346,7 +342,6 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
-
         if(this.getSignatureProvider() != null) {
             searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -368,8 +363,7 @@ public class SecomClient {
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
-
+    public Optional<EncryptionKeyResponseObject> uploadEncryptionKey(EncryptionKeyObject encryptionKeyObject) {
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -395,9 +389,7 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // encryption key object envelop data.
-        if(this.getSignatureProvider() != null) {
+        if(this.getSignatureProvider() != null  && this.getCertificateProvider() != null) {
             encryptionKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
@@ -479,16 +471,16 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the object information
      */
-    public Optional<GetResponseObject> get(@QueryParam("dataReference") UUID dataReference,
-                                           @QueryParam("containerType") ContainerTypeEnum containerType,
-                                           @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                           @QueryParam("productVersion") String productVersion,
-                                           @QueryParam("geometry") String geometry,
-                                           @QueryParam("unlocode") String unlocode,
-                                           @QueryParam("validFrom") LocalDateTime validFrom,
-                                           @QueryParam("validTo") LocalDateTime validTo,
-                                           @QueryParam("page") @Min(0) Integer page,
-                                           @QueryParam("pageSize") @Min(0) Integer pageSize) {
+    public Optional<GetResponseObject> get(UUID dataReference,
+                                           ContainerTypeEnum containerType,
+                                           SECOM_DataProductType dataProductType,
+                                           String productVersion,
+                                           String geometry,
+                                           String unlocode,
+                                           LocalDateTime validFrom,
+                                           LocalDateTime validTo,
+                                           Integer page,
+                                           Integer pageSize) {
         return this.secomClient
                 .get()
                 .uri(uriBuilder -> {
@@ -524,13 +516,10 @@ public class SecomClient {
      * @return the get response object
      */
     public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
 
-        //Prepare the upload envelope if valid
-        final EnvelopeGetFilterObject envelope = getFilterObject.getEnvelope();
         return this.secomClient
                 .post()
                 .uri(POST_GET_INTERFACE_PATH)
@@ -559,15 +548,15 @@ public class SecomClient {
      * @param pageSize the maximum page size
      * @return the summary response object
      */
-    public Optional<GetSummaryResponseObject> getSummary(@QueryParam("containerType") ContainerTypeEnum containerType,
-                                                         @QueryParam("dataProductType") SECOM_DataProductType dataProductType,
-                                                         @QueryParam("productVersion") String productVersion,
-                                                         @QueryParam("geometry") String geometry,
-                                                         @QueryParam("unlocode") String unlocode,
-                                                         @QueryParam("validFrom") LocalDateTime validFrom,
-                                                         @QueryParam("validTo") LocalDateTime validTo,
-                                                         @QueryParam("page") @Min(0) Integer page,
-                                                         @QueryParam("pageSize") @Min(0) Integer pageSize) {
+    public Optional<GetSummaryResponseObject> getSummary(ContainerTypeEnum containerType,
+                                                         SECOM_DataProductType dataProductType,
+                                                         String productVersion,
+                                                         String geometry,
+                                                         String unlocode,
+                                                         LocalDateTime validFrom,
+                                                         LocalDateTime validTo,
+                                                         Integer page,
+                                                         Integer pageSize) {
         return this.secomClient
                 .get()
                 .uri(uriBuilder -> {
@@ -599,7 +588,6 @@ public class SecomClient {
      * @return the summary response object
      */
     public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -641,9 +629,8 @@ public class SecomClient {
      * @return the remove subscription response object
      */
     public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
-
         return this.secomClient
-                .method(HttpMethod.DELETE)
+                .delete()
                 .uri(uriBuilder -> {
                     UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
                     builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
@@ -663,6 +650,10 @@ public class SecomClient {
      * @return the subscription notification response object
      */
     public Optional<SubscriptionNotificationResponseObject> subscriptionNotification(SubscriptionNotificationObject subscriptionNotificationObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            subscriptionNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
                 .post()
                 .uri(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
@@ -683,7 +674,6 @@ public class SecomClient {
      * @return the subscription response object
      */
     public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -718,8 +708,7 @@ public class SecomClient {
                     .encodeData();
         }
 
-        // If a signature provider has been assigned, use it to sign the
-        // upload object envelop data.
+        // If a signature provider has been assigned, use it to sign the data
         if(this.getSignatureProvider() != null) {
             uploadObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
