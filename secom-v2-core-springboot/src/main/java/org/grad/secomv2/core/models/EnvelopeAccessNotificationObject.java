@@ -31,7 +31,6 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
     private Boolean decision;
     @NotNull
     private String decisionReason;
-    @NotNull
     private UUID dataReference;
     @NotNull
     private UUID transactionIdentifier;
