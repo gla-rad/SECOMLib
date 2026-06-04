@@ -34,6 +34,7 @@ import java.util.Arrays;
  *
  * @author Nikolaos.Vastardis@gla-rad.org
  */
+
 public interface SecomV2OpenApiInfoProvider {
 
     /**
@@ -42,7 +43,7 @@ public interface SecomV2OpenApiInfoProvider {
      *
      * @return the OpenAPI definition.
      */
-    OpenAPI getOpenApiInfo();
+    //OpenAPI getOpenApiInfo();
 
     /**
      * Returns the default OpenAPI definition information used for the service
@@ -50,7 +51,7 @@ public interface SecomV2OpenApiInfoProvider {
      *
      * @return the default OpenAPI definition.
      */
-    static OpenAPI defaultOpenAPIInfo() {
+    default OpenAPI getOpenApiInfo() {
         return new OpenAPI().schema("secom-v2", new Schema<>().$schema("openapi.json"))
                 .info(new Info().title("SECOM v2.0 Interfaces")
                         .description("The SECOM v2.0 Interfaces of the Service")
