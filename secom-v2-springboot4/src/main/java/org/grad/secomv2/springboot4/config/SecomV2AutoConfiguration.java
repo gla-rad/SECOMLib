@@ -17,7 +17,7 @@ package org.grad.secomv2.springboot4.config;
 
 import org.grad.secomv2.springboot4.components.SecomConfigProperties;
 import org.grad.secomv2.springboot4.components.SecomSpringContext;
-import org.grad.secomv2.springboot4.openapi.SecomV2OpenAPIConfiguration;
+import org.grad.secomv2.springboot4.openapi.SecomV2OpenApiConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Import;
@@ -31,7 +31,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         SecomSpringContext.class,
         SecomV2RequestLoggingFilterConfig.class,
-        SecomV2OpenAPIConfiguration.class
+        SecomV2OpenApiConfiguration.class
 })
 public class SecomV2AutoConfiguration {
 
