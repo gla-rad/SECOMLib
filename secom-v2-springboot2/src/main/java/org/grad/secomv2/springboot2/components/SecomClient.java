@@ -69,6 +69,7 @@ import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFA
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
@@ -356,6 +357,31 @@ public class SecomClient {
                 .bodyToMono(SearchResult.class)
                 .blockOptional();
     }
+
+    /**
+     * POST /v2/retrieveResult : The purpose of this interface is to retrieve additional
+     * results from the search service global search.
+     *
+     * @param retrieveResultObject    The retrieve results object
+     * @return the result list of the search
+     */
+    public Optional<SearchResult> retrieveResult(RetrieveResultObject retrieveResultObject) {
+
+        if(this.getSignatureProvider() != null) {
+            retrieveResultObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(RETRIEVE_RESULT_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(retrieveResultObject))
+                .retrieve()
+                .bodyToMono(SearchResult.class)
+                .blockOptional();
+    }
+
 
     /**
      * POST /v2/encryptionkey/upload : This operation is used to upload (push)
