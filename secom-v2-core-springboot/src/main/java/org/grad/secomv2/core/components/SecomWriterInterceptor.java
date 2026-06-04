@@ -132,7 +132,7 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
         ServletServerHttpRequest servletRequest =
                 (ServletServerHttpRequest) request;
 
-        String path = servletRequest.getServletRequest().getRequestURI();
+        String path = servletRequest.getServletRequest().getServletPath();
 
         if (!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             return body;

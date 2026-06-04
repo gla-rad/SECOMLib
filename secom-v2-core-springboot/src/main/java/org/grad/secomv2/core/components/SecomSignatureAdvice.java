@@ -139,7 +139,7 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         ServletServerHttpRequest servletRequest =
                 (ServletServerHttpRequest) inputMessage;
 
-        String path = servletRequest.getServletRequest().getRequestURI();
+        String path = servletRequest.getServletRequest().getServletPath();
 
         if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
             return body;

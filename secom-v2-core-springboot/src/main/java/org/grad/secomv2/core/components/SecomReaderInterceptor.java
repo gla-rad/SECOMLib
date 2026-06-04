@@ -112,7 +112,7 @@ public class SecomReaderInterceptor implements RequestBodyAdvice {
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType, Class<? extends HttpMessageConverter<?>> converterType) {
 
         String path = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
-                .getRequest().getRequestURI();
+                .getRequest().getServletPath();
 
         if (!path.startsWith("/" + SecomConstants.SECOM_VERSION)) {
             return body;

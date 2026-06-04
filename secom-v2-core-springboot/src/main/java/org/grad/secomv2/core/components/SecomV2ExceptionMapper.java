@@ -69,7 +69,8 @@ public class SecomV2ExceptionMapper {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception ex, HttpServletRequest request) throws Exception {
         // Get the path and method for the request
-        String path = request.getRequestURI();
+        String base = request.getContextPath();
+        String path = request.getServletPath();
         String method = request.getMethod();
 
         //First log the message
@@ -84,6 +85,7 @@ public class SecomV2ExceptionMapper {
                 .map(ExceptionUtils::getStackTrace)
                 .orElse("Unknown stacktrace..."));
 
+        secomLogger.warning("API Context was: " + base);
         secomLogger.warning("API URL was: " + path);
         secomLogger.warning("API method was: " + method);
         secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
