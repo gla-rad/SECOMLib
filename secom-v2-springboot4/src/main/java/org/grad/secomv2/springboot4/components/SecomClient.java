@@ -39,7 +39,6 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
-import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
@@ -70,11 +69,13 @@ import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POS
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM Client Class.
@@ -307,9 +308,7 @@ public class SecomClient {
      * @param acknowledgementObject  the acknowledgement object
      * @return the acknowledgement response object
      */
-    public Optional<AcknowledgementResponseObject> acknowledgment(AcknowledgementObject acknowledgementObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // acknowledgment object envelop data.
+    public Optional<AcknowledgementResponseObject> acknowledgement(AcknowledgementObject acknowledgementObject) {
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             acknowledgementObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -351,7 +350,6 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
-
         if(this.getSignatureProvider() != null) {
             searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -368,13 +366,35 @@ public class SecomClient {
     }
 
     /**
+     * POST /v2/retrieveResult : The purpose of this interface is to retrieve additional
+     * results from the search service global search.
+     *
+     * @param retrieveResultObject    The retrieve results object
+     * @return the result list of the search
+     */
+    public Optional<SearchResult> retrieveResult(RetrieveResultObject retrieveResultObject) {
+        if(this.getSignatureProvider() != null) {
+            retrieveResultObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(RETRIEVE_RESULT_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(retrieveResultObject))
+                .retrieve()
+                .bodyToMono(SearchResult.class)
+                .blockOptional();
+    }
+
+    /**
      * POST /v2/encryptionkey/upload : This operation is used to upload (push)
      * an encrypted secret key to a consumer.
      *
      * @return the encryption key response object
      */
-    public Optional<EncryptionKeyResponseObject> encryptionKey(EncryptionKeyObject encryptionKeyObject) {
-
+    public Optional<EncryptionKeyResponseObject> uploadEncryptionKey(EncryptionKeyObject encryptionKeyObject) {
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -400,8 +420,6 @@ public class SecomClient {
      * @return the encryption key response object
      */
     public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
-        // If a signature provider has been assigned, use it to sign the
-        // encryption key object envelop data.
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             encryptionKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -529,7 +547,6 @@ public class SecomClient {
      * @return the get response object
      */
     public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -602,7 +619,6 @@ public class SecomClient {
      * @return the summary response object
      */
     public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -644,9 +660,8 @@ public class SecomClient {
      * @return the remove subscription response object
      */
     public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
-
         return this.secomClient
-                .method(HttpMethod.DELETE)
+                .delete()
                 .uri(uriBuilder -> {
                     UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
                     builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
@@ -666,7 +681,6 @@ public class SecomClient {
      * @return the subscription notification response object
      */
     public Optional<SubscriptionNotificationResponseObject> subscriptionNotification(SubscriptionNotificationObject subscriptionNotificationObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             subscriptionNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -691,7 +705,6 @@ public class SecomClient {
      * @return the subscription response object
      */
     public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
-
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -726,8 +739,7 @@ public class SecomClient {
                     .encodeData();
         }
 
-        // If a signature provider has been assigned, use it to sign the
-        // upload object envelop data.
+        // If a signature provider has been assigned, use it to sign the data
         if(this.getSignatureProvider() != null) {
             uploadObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -774,6 +786,57 @@ public class SecomClient {
                 .body(BodyInserters.fromValue(uploadLinkObject))
                 .retrieve()
                 .bodyToMono(UploadLinkResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/publicKey: The Rest operation GET /publicKey
+     * This operation receives a get request for a public key. If authorized, the key is sent back in the
+     * response. It is up to the service provider to apply relevant authorization procedure and access
+     * control to information.
+     *
+     * @param certificateThumbprint Claimed Thumbprint for signed key (X.509 Certificate)
+     * @param dataProtection Flag indicating that the requested key is for symmetric
+     *                       key derivation in exchange for a random encryption key
+     * @return PublicKeyObject The returned publicKeyObject
+     */
+    public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) {
+        return this.secomClient
+                .get()
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_PUBLIC_KEY_INTERFACE_PATH);
+                    builder = certificateThumbprint != null ? builder.queryParam("certificateThumbprint", certificateThumbprint) : builder;
+                    builder.queryParam("dataProtection", dataProtection);
+                    return builder.build();
+                })
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/publicKey: The Rest operation - POST /publicKey
+     * This operation uploads (pushes) a public key.
+     *
+     * @param publicKeyRequestObject Public certificate x.509 in PEM format, Base64 encoded byte array.
+     * @return PublicKeyResponseObject
+     */
+    public Optional<PublicKeyResponseObject> uploadPublicKey(PublicKeyRequestObject publicKeyRequestObject) {
+        //Prepare the upload link envelope if valid
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            publicKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(GET_PUBLIC_KEY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(publicKeyRequestObject))
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
                 .blockOptional();
     }
 
