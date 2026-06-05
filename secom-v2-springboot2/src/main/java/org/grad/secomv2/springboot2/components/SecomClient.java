@@ -366,7 +366,6 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> retrieveResult(RetrieveResultObject retrieveResultObject) {
-
         if(this.getSignatureProvider() != null) {
             retrieveResultObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -381,7 +380,6 @@ public class SecomClient {
                 .bodyToMono(SearchResult.class)
                 .blockOptional();
     }
-
 
     /**
      * POST /v2/encryptionkey/upload : This operation is used to upload (push)
@@ -834,6 +832,5 @@ public class SecomClient {
                 .bodyToMono(PublicKeyResponseObject.class)
                 .blockOptional();
     }
-
 
 }
