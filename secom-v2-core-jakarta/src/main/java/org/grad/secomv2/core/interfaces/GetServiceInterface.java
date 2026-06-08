@@ -19,11 +19,13 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -106,7 +108,9 @@ public interface GetServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof SecomSchemaValidationException
+                || ex instanceof ConstraintViolationException) {
             responseStatus = Response.Status.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;

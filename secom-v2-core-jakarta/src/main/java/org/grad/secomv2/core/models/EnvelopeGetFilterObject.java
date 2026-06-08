@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -60,6 +61,7 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
     private Instant validTo;
     @NotNull
     @Schema(description = "Requested pagination page")
+    @Min(1)
     private Integer page;
     @NotNull
     @Schema(description = "Requested pagination page size")

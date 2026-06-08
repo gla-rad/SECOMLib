@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
@@ -80,8 +81,8 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                                         @QueryParam("productVersion") @Parameter(schema = @Schema(description = "S-100 based Product specification version")) String productVersion,
                                         @QueryParam("geometry") @Parameter(schema = @Schema(description = "Geometry condition for geo-located information objects as WKT LineString or Polygon")) String geometry,
                                         @QueryParam("unlocode") @Pattern(regexp = "^[a-zA-Z]{2}[a-zA-Z2-9]{3}") @Parameter(schema = @Schema(description = "See UN web page")) String unlocode,
-                                        @QueryParam("validFrom") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) @SecomV2Param Instant validFrom,
-                                        @QueryParam("validTo") @Pattern(regexp ="^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) @SecomV2Param Instant validTo,
+                                        @QueryParam("validFrom") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period start for information object")) @SecomV2Param Instant validFrom,
+                                        @QueryParam("validTo") @Parameter(schema = @Schema(implementation = String.class, description = "Time related to validity period end for information object")) @SecomV2Param Instant validTo,
                                         @QueryParam("page") @Min(1) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")) Integer page,
                                         @QueryParam("pageSize") @Min(0) @Parameter(schema = @Schema(implementation = Integer.class, description = "Requested pagination page size. Must be a positive integer >= 0.", defaultValue = "100")) Integer pageSize);
 
@@ -105,14 +106,14 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof SecomSchemaValidationException
+                || ex instanceof ConstraintViolationException) {
             responseStatus = Response.Status.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-        } else if(ex instanceof SecomSchemaValidationException) {
-            responseStatus = Response.Status.fromStatusCode(422);
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
