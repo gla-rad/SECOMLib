@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.Instant;
@@ -51,6 +52,7 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
     @Schema(description = "Valid until time")
     private Instant validTo;
     @Schema(description = "Requested pagination page")
+    @Min(1)
     private Integer page;
     @Schema(description = "Requested pagination page size")
     private Integer pageSize;
