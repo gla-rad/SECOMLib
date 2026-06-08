@@ -15,14 +15,11 @@
  */
 package org.grad.secomv2.springboot4.config;
 
-import io.swagger.v3.oas.models.OpenAPI;
 import org.grad.secomv2.springboot4.components.SecomConfigProperties;
 import org.grad.secomv2.springboot4.components.SecomSpringContext;
-import org.grad.secomv2.springboot4.openapi.SecomV2OpenApiEndpoint;
+import org.grad.secomv2.springboot4.openapi.SecomV2OpenApiConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -34,13 +31,8 @@ import org.springframework.context.annotation.Import;
 @Import({
         SecomSpringContext.class,
         SecomV2RequestLoggingFilterConfig.class,
-        SecomV2OpenApiEndpoint.class
+        SecomV2OpenApiConfiguration.class
 })
 public class SecomV2AutoConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean(OpenAPI.class)
-    public OpenAPI secomDefaultOpenAPI() {
-        return new OpenAPI();
-    }
 }

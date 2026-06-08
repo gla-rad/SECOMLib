@@ -29,7 +29,6 @@ import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.grad.secomv2.core.utils.KeyStoreUtils;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -37,8 +36,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriBuilder;
 import reactor.netty.http.client.HttpClient;
 
-import jakarta.validation.constraints.Min;
-import jakarta.ws.rs.QueryParam;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -367,7 +364,6 @@ public class SecomClient {
      * @return the result list of the search
      */
     public Optional<SearchResult> retrieveResult(RetrieveResultObject retrieveResultObject) {
-
         if(this.getSignatureProvider() != null) {
             retrieveResultObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }

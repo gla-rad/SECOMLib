@@ -52,6 +52,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
     private UUID transactionIdentifier;
     @NotNull
     private DigitalSignatureValueObject digitalSignatureValue;
+    @NotNull
     @Schema(description = "expiry time in UTC for the temporary key")
     private Instant expirationTime;
 

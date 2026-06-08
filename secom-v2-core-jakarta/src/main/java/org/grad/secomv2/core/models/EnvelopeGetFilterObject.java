@@ -34,36 +34,26 @@ import java.util.UUID;
 public class EnvelopeGetFilterObject extends AbstractEnvelope {
 
     // Class Variables
-    @NotNull
     @Schema(description = "Reference to information object, e.g. from the Get Summary response")
     private UUID dataReference;
-    @NotNull
     private ContainerTypeEnum containerType;
-    @NotNull
     @Schema(description = "Data product type name requested, e.g. S-124, S-421")
     private SECOM_DataProductType dataProductType;
-    @NotNull
     @Schema(description = "S-100 based Product type version requested, e.g. 1.0.0")
     private String productVersion;
-    @NotNull
     @Schema(type = "string", description = "Geometry condition for geolocated information objects", example = "POLYGON ((0.65 51.42, 0.65 52.26, 2.68 52.26, 2.68 51.42, 0.65 51.42))")
     @Pattern(regexp = "^([A-Z]+\\s*\\(\\(?\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*(,\\s*(-?\\d+(\\.\\d+)?)\\s+-?\\d+(\\.\\d+)?(?:\\s+-?\\d+(\\.\\d+)?)?\\s*)*\\)\\)?\\s*)+$")
     private String geometry;
-    @NotNull
     @Schema(description = "Code of defined object", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @NotNull
     @Schema(description = "Valid from time")
     private Instant validFrom;
-    @NotNull
     @Schema(description = "Valid until time")
     private Instant validTo;
-    @NotNull
     @Schema(description = "Requested pagination page")
     @Min(1)
     private Integer page;
-    @NotNull
     @Schema(description = "Requested pagination page size")
     private Integer pageSize;
 
