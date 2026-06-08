@@ -47,13 +47,9 @@ public class EnvelopeGetSummaryFilterObject extends AbstractEnvelope {
     @Schema(description = "Code of defined object See: https://unece.org/trade/cefact/unlocode-code-list-country-and-territory", type = "string", example = "GBHRW")
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
-    @Schema(description = "Time related to validity period start for information object", type = "string", example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
+    @Schema(description = "Time related to validity period start for information object")
     private Instant validFrom;
-    @Schema(description = "Time related to validity period end for information object", type = "string", example = "1985-04-12T10:15:30Z", pattern =  "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|\\+\\d{4})?")
-    @JsonSerialize(using = SecomInstantSerializer.class)
-    @JsonDeserialize(using = SecomInstantDeserializer.class)
+    @Schema(description = "Time related to validity period end for information object")
     private Instant validTo;
     @Schema(description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")
     private Integer page;
