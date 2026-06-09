@@ -105,7 +105,7 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException) {
             responseStatus = Response.Status.fromStatusCode(422);
-        } else if (ex instanceof ValidationException
+        } else if(ex instanceof ValidationException
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
