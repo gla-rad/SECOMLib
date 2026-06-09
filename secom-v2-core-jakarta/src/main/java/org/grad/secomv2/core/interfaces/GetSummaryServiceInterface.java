@@ -103,12 +103,11 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException) {
+            responseStatus = Response.Status.fromStatusCode(422);
+        } else if (ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException
-                || ex instanceof SecomSchemaValidationException
-                || ex instanceof ConstraintViolationException) {
+                || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;

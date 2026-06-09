@@ -81,17 +81,18 @@ public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException) {
+            responseStatus = Response.Status.fromStatusCode(422);
+        } else if(ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof IllegalArgumentException
+                || ex instanceof SecomSchemaValidationException) {
             responseStatus = Response.Status.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-        } else if(ex instanceof SecomSchemaValidationException) {
-            responseStatus = Response.Status.fromStatusCode(422);
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }

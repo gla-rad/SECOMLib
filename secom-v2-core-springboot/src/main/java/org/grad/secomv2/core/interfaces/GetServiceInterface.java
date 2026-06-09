@@ -108,8 +108,9 @@ public interface GetServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException) {
+            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+        } else if(ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof MethodArgumentTypeMismatchException

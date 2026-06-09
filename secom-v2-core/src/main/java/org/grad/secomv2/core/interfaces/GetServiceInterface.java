@@ -30,6 +30,7 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -103,8 +104,9 @@ public interface GetServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException){
+            responseStatus = Response.Status.fromStatusCode(422);
+        } else if(ex instanceof ValidationException
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;

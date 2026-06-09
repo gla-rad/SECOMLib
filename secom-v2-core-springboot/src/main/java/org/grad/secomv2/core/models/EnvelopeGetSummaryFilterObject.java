@@ -19,8 +19,12 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.SecomInstantDeserializer;
+import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 
 import java.time.Instant;
 
@@ -45,8 +49,12 @@ public class EnvelopeGetSummaryFilterObject extends AbstractEnvelope {
     @Pattern(regexp = "[A-Z]{5}")
     private String unlocode;
     @Schema(description = "Time related to validity period start for information object")
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant validFrom;
     @Schema(description = "Time related to validity period end for information object")
+    @JsonSerialize(using = SecomInstantSerializer.class)
+    @JsonDeserialize(using = SecomInstantDeserializer.class)
     private Instant validTo;
     @Schema(description = "Requested pagination page. Must be a positive integer >= 1..", defaultValue = "1")
     @Min(1)
