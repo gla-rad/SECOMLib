@@ -97,23 +97,23 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                                                         HttpServletRequest request,
                                                         HttpServletResponse response) {
         // Create the get summary response
-        Response.Status responseStatus;
+        int responseStatus;
         GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException) {
-            responseStatus = Response.Status.fromStatusCode(422);
+            responseStatus = 422;
         } else if(ex instanceof ValidationException
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+            responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
+            responseStatus = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back

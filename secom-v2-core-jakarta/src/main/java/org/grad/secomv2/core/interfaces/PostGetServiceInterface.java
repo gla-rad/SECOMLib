@@ -73,7 +73,7 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                                                 HttpServletRequest request,
                                                 HttpServletResponse response) {
         // Create the get response
-        Response.Status responseStatusCode;
+        int responseStatusCode;
         GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
@@ -82,18 +82,18 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
             // 422 (Unprocessable Entity) is used when the request is syntactically valid
             // but cannot be processed due to domain-specific validation (SECOM rules).
             // Note: 422 is not defined in javax.ws.rs.Response.Status, so it is set explicitly.
-            responseStatusCode = Response.Status.fromStatusCode(422);
+            responseStatusCode = 422;
         } else if(ex instanceof ValidationException
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException
                 || ex instanceof IllegalArgumentException) {
-            responseStatusCode = Response.Status.BAD_REQUEST;
+            responseStatusCode = Response.Status.BAD_REQUEST.getStatusCode();
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatusCode = Response.Status.FORBIDDEN;
+            responseStatusCode = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatusCode = Response.Status.NOT_FOUND;
+            responseStatusCode = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatusCode = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseStatusCode = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back
