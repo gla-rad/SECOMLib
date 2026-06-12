@@ -17,20 +17,21 @@
 package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
+import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.GetSummaryFilterObject;
+import org.grad.secomv2.core.models.GetSummaryResponseObject;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.ValidationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
-import org.grad.secomv2.core.exceptions.SecomNotFoundException;
-import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
-import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.GetSummaryFilterObject;
-import org.grad.secomv2.core.models.GetSummaryResponseObject;
 
 /**
  * The SECOM POST Get Summary Interface Definition.
@@ -76,24 +77,25 @@ public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
                                                         HttpServletRequest request,
                                                         HttpServletResponse response) {
         // Create the get summary response
-        Response.Status responseStatus;
+        int responseStatus;
         GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
+            responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-        } else if(ex instanceof SecomSchemaValidationException) {
-            responseStatus = Response.Status.fromStatusCode(422);
+            responseStatus = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back

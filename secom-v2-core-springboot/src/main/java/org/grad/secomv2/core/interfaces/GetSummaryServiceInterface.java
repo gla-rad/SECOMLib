@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -110,23 +111,22 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof MethodArgumentNotValidException
                 || ex instanceof MethodArgumentTypeMismatchException
-                || ex instanceof HandlerMethodValidationException
-                || ex instanceof UnexpectedTypeException) {
+                || ex instanceof UnexpectedTypeException
+                || ex instanceof ConstraintViolationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
+        } else if(ex instanceof ValidationException) {
+            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-        } else if(ex instanceof SecomSchemaValidationException) {
-            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
+
         return ResponseEntity
                 .status(httpStatus)
                 .body(getSummaryResponseObject);

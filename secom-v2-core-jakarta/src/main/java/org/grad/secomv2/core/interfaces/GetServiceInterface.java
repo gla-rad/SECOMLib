@@ -19,6 +19,7 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.ConstraintViolationException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
@@ -36,6 +37,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -98,22 +100,25 @@ public interface GetServiceInterface extends GenericSecomInterface {
                                                  HttpServletRequest request,
                                                   HttpServletResponse response) {
         // Create the get response
-        Response.Status responseStatus;
+        int responseStatus;
         GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
+            responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
+            responseStatus = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back

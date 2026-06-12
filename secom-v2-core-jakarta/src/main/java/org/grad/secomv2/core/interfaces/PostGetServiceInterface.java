@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import jakarta.validation.ConstraintViolationException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
@@ -26,8 +27,8 @@ import org.grad.secomv2.core.models.GetResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -73,31 +74,29 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                                                 HttpServletRequest request,
                                                 HttpServletResponse response) {
         // Create the get response
-        int responseStatusCode;
+        int responseStatus;
         GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
-        if(ex instanceof ValidationException
+        if(ex instanceof SecomValidationException
+                || ex.getCause() instanceof SecomValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
-            responseStatusCode = Response.Status.BAD_REQUEST.getStatusCode();
-        } else if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException) {
-            // 422 (Unprocessable Entity) is used when the request is syntactically valid
-            // but cannot be processed due to domain-specific validation (SECOM rules).
-            // Note: 422 is not defined in jakarta.ws.rs.Response.Status, so it is set explicitly.
-            responseStatusCode = 422;
-        }
-        else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatusCode = Response.Status.FORBIDDEN.getStatusCode();
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
+            responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
+        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatusCode = Response.Status.NOT_FOUND.getStatusCode();
+            responseStatus = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatusCode = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back
-        return Response.status(responseStatusCode)
+        return Response.status(responseStatus)
                 .entity(getResponseObject)
                 .build();
     }

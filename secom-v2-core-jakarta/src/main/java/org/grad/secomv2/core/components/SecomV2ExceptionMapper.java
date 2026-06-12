@@ -122,6 +122,10 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                 .map(ExceptionUtils::getStackTrace)
                 .orElse("Unknown stacktrace..."));
 
+        secomLogger.warning("API URL was: " + this.uriInfo.getPath());
+        secomLogger.warning("API method was: " + this.request.getMethod());
+        secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
+
         // Then handle
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {

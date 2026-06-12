@@ -30,6 +30,7 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -98,22 +99,25 @@ public interface GetServiceInterface extends GenericSecomInterface {
                                                  HttpServletRequest request,
                                                   HttpServletResponse response) {
         // Create the get response
-        Response.Status responseStatus;
+        int responseStatus;
         GetResponseObject getResponseObject = new GetResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
-            responseStatus = Response.Status.BAD_REQUEST;
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
+            responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
-            responseStatus = Response.Status.FORBIDDEN;
+            responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
+            responseStatus = Response.Status.NOT_FOUND.getStatusCode();
         } else {
-            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back

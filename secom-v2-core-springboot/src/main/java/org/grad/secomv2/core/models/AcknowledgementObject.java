@@ -65,7 +65,6 @@ public class AcknowledgementObject implements EnvelopeSignatureBearer {
      * @return the envelope signature
      */
     @Override
-    @JsonProperty("digitalSignature")
     public String getEnvelopeSignature() {
         return envelopeSignature;
     }

@@ -17,8 +17,10 @@
 package org.grad.secomv2.core.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -82,25 +84,24 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
-                || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof HttpMessageNotReadableException
-                || ex instanceof IllegalArgumentException
+                || ex instanceof MethodArgumentTypeMismatchException
+                || ex instanceof UnexpectedTypeException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof JsonParseException) {
+                || ex instanceof HttpMessageNotReadableException
+                || ex instanceof IllegalArgumentException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-        } else if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException) {
+        } else if(ex instanceof ValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-        }
-        else if(ex instanceof SecomNotAuthorisedException) {
+        } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
+
         return ResponseEntity
                 .status(httpStatus)
                 .body(getResponseObject);
