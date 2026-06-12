@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -114,7 +115,8 @@ public interface GetServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof MethodArgumentTypeMismatchException
                 || ex instanceof UnexpectedTypeException
-                || ex instanceof ConstraintViolationException) {
+                || ex instanceof ConstraintViolationException
+                || ex instanceof HandlerMethodValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof ValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;

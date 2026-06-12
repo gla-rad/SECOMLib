@@ -115,7 +115,8 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof MethodArgumentTypeMismatchException
                 || ex instanceof UnexpectedTypeException
-                || ex instanceof ConstraintViolationException) {
+                || ex instanceof ConstraintViolationException
+                || ex instanceof HandlerMethodValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof ValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
