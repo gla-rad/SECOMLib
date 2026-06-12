@@ -104,12 +104,14 @@ public interface GetServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException){
-            responseStatus = 422;
-        } else if(ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {

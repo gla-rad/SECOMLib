@@ -23,7 +23,6 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
-import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetSummaryResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -31,6 +30,7 @@ import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
@@ -102,12 +102,14 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException) {
-            responseStatus = 422;
-        } else if(ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {

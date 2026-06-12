@@ -25,7 +25,6 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
-import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -38,6 +37,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+
 import java.time.Instant;
 import java.util.UUID;
 
@@ -105,12 +105,14 @@ public interface GetServiceInterface extends GenericSecomInterface {
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
-                || ex.getCause() instanceof SecomValidationException) {
-            responseStatus = 422;
-        } else if(ex instanceof ValidationException
+                || ex.getCause() instanceof SecomValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof NotFoundException
+                || ex instanceof ConstraintViolationException
+                || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+        } else if(ex instanceof ValidationException){
+            responseStatus = 422;
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
         } else if(ex instanceof SecomNotFoundException) {
