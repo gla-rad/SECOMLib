@@ -25,11 +25,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Base64;
@@ -129,10 +129,9 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
                                             ServerHttpRequest request,
                                             ServerHttpResponse response) {
         // Get request path
-        ServletServerHttpRequest servletRequest =
-                (ServletServerHttpRequest) request;
-
-        String path = servletRequest.getServletRequest().getServletPath();
+        ServletRequestAttributes attrs =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        String path = attrs.getRequest().getServletPath();
 
         if (!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             return body;

@@ -32,8 +32,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdvice;
 
 import java.io.IOException;
@@ -136,10 +137,10 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
                                 Class<? extends HttpMessageConverter<?>> converterType) {
 
         // Path check
-        ServletServerHttpRequest servletRequest =
-                (ServletServerHttpRequest) inputMessage;
+        ServletRequestAttributes attrs =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        String path = attrs.getRequest().getServletPath();
 
-        String path = servletRequest.getServletRequest().getServletPath();
 
         if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
             return body;

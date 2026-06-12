@@ -36,6 +36,8 @@ import tools.jackson.databind.json.JsonMapper;
         SecomV2ExceptionMapper.class,
         ContainerTypeToStringConverterProvider.class,
         StringToContainerTypeConverterProvider.class,
+        DataProductTypeToStringConverterProvider.class,
+        StringToDataProductTypeConverterProvider.class,
         DigitalSignatureEnumToStringConverter.class,
         DigitalSignatureStringToEnumConverter.class,
         InstantToISOConverterProvider.class,
