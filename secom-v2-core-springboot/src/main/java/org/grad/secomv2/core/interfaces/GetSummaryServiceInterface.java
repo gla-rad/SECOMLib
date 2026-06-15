@@ -117,12 +117,10 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof MethodArgumentTypeMismatchException
                 || ex instanceof UnexpectedTypeException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof HandlerMethodValidationException) {
+                || ex instanceof HandlerMethodValidationException
+                || ex instanceof ValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseObject.setMessage("Bad request");
-        } else if(ex instanceof ValidationException) {
-            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-            responseObject.setMessage("Unprocessable content");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
             responseObject.setMessage("Not authorized to requested information");

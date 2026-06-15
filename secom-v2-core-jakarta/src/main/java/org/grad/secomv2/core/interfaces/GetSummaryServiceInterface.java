@@ -107,12 +107,10 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof IllegalArgumentException) {
+                || ex instanceof IllegalArgumentException
+                || ex instanceof ValidationException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
             responseObject.setMessage("Bad request");
-        } else if(ex instanceof ValidationException){
-            responseStatus = 422;
-            responseObject.setMessage("Unprocessable Content");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
             responseObject.setMessage("Not authorised to requested information");

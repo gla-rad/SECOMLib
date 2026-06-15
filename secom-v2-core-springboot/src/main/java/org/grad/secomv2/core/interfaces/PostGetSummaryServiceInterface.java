@@ -95,12 +95,10 @@ public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof UnexpectedTypeException
                 || ex instanceof ConstraintViolationException
                 || ex instanceof HttpMessageNotReadableException
-                || ex instanceof IllegalArgumentException) {
+                || ex instanceof IllegalArgumentException
+                || ex instanceof ValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseObject.setMessage("Bad request");
-        } else if(ex instanceof ValidationException) {
-            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
-            responseObject.setMessage("Unprocessable content");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
             responseObject.setMessage("Not authorized to requested information");
