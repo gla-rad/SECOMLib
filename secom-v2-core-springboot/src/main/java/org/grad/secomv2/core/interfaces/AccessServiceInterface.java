@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -73,10 +74,10 @@ public interface AccessServiceInterface extends GenericSecomInterface {
      * @return the handler response according to the SECOM standard
      */
     static ResponseEntity<Object> handleAccessInterfaceExceptions(Exception ex,
-                                                          HttpServletRequest request) {
+                                                                                 HttpServletRequest request) {
         // Create the access response
         HttpStatus httpStatus;
-        AccessResponseObject accessResponseObject = new AccessResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -86,19 +87,19 @@ public interface AccessServiceInterface extends GenericSecomInterface {
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
-            accessResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            accessResponseObject.setMessage("Not authorized to requested information");
+            responseObject.setMessage("Not authorized to requested information");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            accessResponseObject.setMessage(httpStatus.getReasonPhrase());
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(accessResponseObject);
+                .body(responseObject);
 
     }
 

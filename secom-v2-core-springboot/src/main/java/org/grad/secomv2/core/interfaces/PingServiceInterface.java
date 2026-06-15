@@ -20,6 +20,7 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.PingResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +65,7 @@ public interface PingServiceInterface extends GenericSecomInterface {
     static ResponseEntity<Object> handlePingInterfaceExceptions(Exception ex,
                                                   HttpServletRequest request) {
         // Create the ping response
-        PingResponseObject pingResponseObject = new PingResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         HttpStatus httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
@@ -72,7 +73,7 @@ public interface PingServiceInterface extends GenericSecomInterface {
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(pingResponseObject);
+                .body(responseObject);
     }
 
 }

@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.PingResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,14 +68,14 @@ public interface PingServiceInterface extends GenericSecomInterface {
                                                   HttpServletResponse response) {
         // Create the ping response
         Response.Status responseStatus;
-        PingResponseObject pingResponseObject = new PingResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(pingResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

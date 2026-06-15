@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -79,7 +80,7 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                                                               HttpServletRequest request) {
         // Create the get response
         HttpStatus httpStatus;
-        GetResponseObject getResponseObject = new GetResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -92,19 +93,23 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                 || ex instanceof HttpMessageNotReadableException
                 || ex instanceof IllegalArgumentException) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof ValidationException) {
             httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+            responseObject.setMessage("Unprocessable content");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Information not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(getResponseObject);
+                .body(responseObject);
     }
 
 }

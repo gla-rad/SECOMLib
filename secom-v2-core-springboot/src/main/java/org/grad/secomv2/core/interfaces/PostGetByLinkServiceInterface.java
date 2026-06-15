@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -80,7 +81,7 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
 
         // Create the return objects
         HttpStatus httpStatus;
-        GetByLinkResponseObject getByLinkResponseObject = new GetByLinkResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -90,19 +91,21 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-        } else if(ex instanceof SecomNotAuthorisedException) {
+            responseObject.setMessage("Bad request");
+        } else if(ex instanceof SecomNotAuthorisedException
+                || ex instanceof SecomInvalidCertificateException) {
             httpStatus = HttpStatus.FORBIDDEN;
-        } else if(ex instanceof SecomInvalidCertificateException) {
-            httpStatus = HttpStatus.FORBIDDEN;
-        }  else if(ex instanceof SecomNotFoundException) {
+            responseObject.setMessage("Not authorized to requested information");
+        } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(getByLinkResponseObject);
+                .body(responseObject);
 
     }
 

@@ -77,7 +77,6 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
      */
     static ResponseEntity<Object> handleUploadLinkInterfaceExceptions(Exception ex,
                                                               HttpServletRequest request) {
-
         // Create the upload link response
         HttpStatus httpStatus;
         UploadLinkResponseObject uploadResponseObject = new UploadLinkResponseObject();

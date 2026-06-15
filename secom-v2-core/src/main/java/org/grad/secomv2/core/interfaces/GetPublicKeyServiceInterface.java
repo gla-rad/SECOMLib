@@ -24,8 +24,8 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +79,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
         Response.Status responseStatus;
 
         // Create the Public Key response
-        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,17 +88,20 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
+            responseObject.setMessage("Not authorised to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
+            responseObject.setMessage("Not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(publicKeyResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import tools.jackson.core.JacksonException;
@@ -77,7 +78,7 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                                                                         HttpServletRequest request) {
         // Create the subscription response
         HttpStatus httpStatus;
-        SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,19 +89,19 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                 || ex instanceof MethodArgumentNotValidException
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            subscriptionResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            subscriptionResponseObject.setMessage("Not authorized to requested information");
+            responseObject.setMessage("Not authorized to requested information");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionResponseObject.setMessage(httpStatus.getReasonPhrase());
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(subscriptionResponseObject);
+                .body(responseObject);
     }
 
 }

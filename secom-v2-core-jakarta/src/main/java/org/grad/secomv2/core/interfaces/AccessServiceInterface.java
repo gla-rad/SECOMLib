@@ -31,6 +31,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.ResponseObject;
 
 /**
  * The SECOM Access Interface Definition.
@@ -74,7 +75,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
                                                     HttpServletResponse response) {
         // Create the access response
         Response.Status responseStatus;
-        AccessResponseObject accessResponseObject = new AccessResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,18 +85,18 @@ public interface AccessServiceInterface extends GenericSecomInterface {
                 || ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            accessResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            accessResponseObject.setMessage("Not authorized to requested information");
+            responseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            accessResponseObject.setMessage(responseStatus.getReasonPhrase());
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(accessResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

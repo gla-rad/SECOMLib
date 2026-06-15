@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.CapabilityResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,14 +69,14 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
                                                         HttpServletResponse response) {
         // Create the capability response
         Response.Status responseStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(capabilityResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

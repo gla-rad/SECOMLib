@@ -22,6 +22,7 @@ import org.grad.secomv2.core.models.CapabilityResponseObject;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +67,7 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
     static ResponseEntity<Object> handleCapabilityInterfaceExceptions(Exception ex,
                                                               HttpServletRequest request) {
         // Create the capability response
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         HttpStatus httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
@@ -74,7 +75,7 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(capabilityResponseObject);
+                .body(responseObject);
     }
 
 }

@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.grad.secomv2.core.models.SubscriptionRequestObject;
 import org.grad.secomv2.core.models.SubscriptionResponseObject;
 
@@ -74,7 +75,7 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                                                           HttpServletResponse response) {
         // Create the subscription response
         Response.Status responseStatus;
-        SubscriptionResponseObject subscriptionResponseObject = new SubscriptionResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -83,18 +84,18 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            subscriptionResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            subscriptionResponseObject.setMessage("Not authorized to requested information");
+            responseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionResponseObject.setMessage(responseStatus.getReasonPhrase());
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(subscriptionResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

@@ -27,6 +27,7 @@ import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
@@ -101,7 +102,7 @@ public interface GetServiceInterface extends GenericSecomInterface {
                                                   HttpServletResponse response) {
         // Create the get response
         int responseStatus;
-        GetResponseObject getResponseObject = new GetResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -111,19 +112,23 @@ public interface GetServiceInterface extends GenericSecomInterface {
                 || ex instanceof ConstraintViolationException
                 || ex instanceof IllegalArgumentException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof ValidationException){
             responseStatus = 422;
+            responseObject.setMessage("Unprocessable content");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND.getStatusCode();
+            responseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(getResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

@@ -26,6 +26,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.ResponseObject;
 
 /**
  * The SECOM Capability Interface Definition.
@@ -68,14 +69,14 @@ public interface CapabilityServiceInterface extends GenericSecomInterface {
                                                         HttpServletResponse response) {
         // Create the capability response
         Response.Status responseStatus;
-        CapabilityResponseObject capabilityResponseObject = new CapabilityResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(capabilityResponseObject)
+                .entity(responseObject)
                 .build();
     }
 
