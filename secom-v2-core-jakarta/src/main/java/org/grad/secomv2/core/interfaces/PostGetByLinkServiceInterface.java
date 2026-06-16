@@ -27,11 +27,12 @@ import org.grad.secomv2.core.models.GetByLinkResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.ResponseObject;
 
 /**
  * The SECOM POST Get By Link Interface Definition.
@@ -77,7 +78,7 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                                                        HttpServletResponse response) {
         // Create the get by link response
         Response.Status responseStatus = null;
-        String responseText = null;
+        ResponseObject responseObject = new  ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -86,24 +87,24 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseText = "Bad Request";
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            responseText = "Not authorized to requested information";
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomInvalidCertificateException) {
             responseStatus = Response.Status.FORBIDDEN;
-            responseText = "Invalid Certificate";
+            responseObject.setMessage("Invalid Certificate");
         }  else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
+            responseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseText = responseStatus.getReasonPhrase();
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(responseText)
+                .entity(responseObject)
                 .build();
     }
 

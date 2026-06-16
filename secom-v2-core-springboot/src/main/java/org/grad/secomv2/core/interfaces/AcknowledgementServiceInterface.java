@@ -121,7 +121,6 @@ public interface AcknowledgementServiceInterface extends GenericSecomInterface {
         return ResponseEntity
                 .status(httpStatus)
                 .body(acknowledgementResponseObject);
-
     }
 
 }

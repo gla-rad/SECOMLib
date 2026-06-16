@@ -23,6 +23,7 @@ import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetFilterObject;
 import org.grad.secomv2.core.models.GetResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +76,7 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                                                 HttpServletResponse response) {
         // Create the get response
         int responseStatus;
-        GetResponseObject getResponseObject = new GetResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -83,21 +84,23 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof IllegalArgumentException) {
+                || ex instanceof IllegalArgumentException
+                || ex instanceof ValidationException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
-        } else if(ex instanceof ValidationException){
-            responseStatus = 422;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND.getStatusCode();
+            responseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(getResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

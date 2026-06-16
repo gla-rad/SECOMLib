@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -71,11 +72,9 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     static Response handleUploadPublicKeyInterfaceExceptions(Exception ex,
                                                              HttpServletRequest request,
                                                              HttpServletResponse response) {
-        // Create the capability response
+        // Create the upload public key response
         Response.Status responseStatus;
-
-        // Create the Public Key response
-        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,17 +83,20 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
+            responseObject.setMessage("Not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(publicKeyResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

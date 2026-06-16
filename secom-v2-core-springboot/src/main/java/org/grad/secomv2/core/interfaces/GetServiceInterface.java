@@ -18,6 +18,7 @@ package org.grad.secomv2.core.interfaces;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.UnexpectedTypeException;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
@@ -106,7 +107,7 @@ public interface GetServiceInterface extends GenericSecomInterface {
                                                                HttpServletRequest request) {
         // Create the get response
         HttpStatus httpStatus;
-        GetResponseObject getResponseObject = new GetResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -116,21 +117,23 @@ public interface GetServiceInterface extends GenericSecomInterface {
                 || ex instanceof MethodArgumentTypeMismatchException
                 || ex instanceof UnexpectedTypeException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof HandlerMethodValidationException) {
+                || ex instanceof HandlerMethodValidationException
+                || ex instanceof ValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-        } else if(ex instanceof ValidationException) {
-            httpStatus = HttpStatus.UNPROCESSABLE_CONTENT;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Information not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(getResponseObject);
+                .body(responseObject);
     }
 
 }

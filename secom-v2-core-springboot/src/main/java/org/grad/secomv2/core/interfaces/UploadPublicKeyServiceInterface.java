@@ -18,6 +18,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.exceptions.*;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.validation.Valid;
@@ -74,9 +75,9 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
      */
     static ResponseEntity<Object> handlePostPublicKeyInterfaceExceptions(Exception ex,
                                                            HttpServletRequest request) {
-        // Create the upload link response
+        // Create the upload public key response
         HttpStatus httpStatus;
-        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -86,10 +87,13 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException){
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
@@ -97,7 +101,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(publicKeyResponseObject);
+                .body(responseObject);
 
     }
 

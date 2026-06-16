@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Pattern;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.ResponseObject;
 
 /**
  * The SECOM GET Public Key Interface Definition.
@@ -79,7 +80,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
         Response.Status responseStatus;
 
         // Create the Public Key response
-        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,17 +89,20 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
+            responseObject.setMessage("Not authorised to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
+            responseObject.setMessage("Not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(publicKeyResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

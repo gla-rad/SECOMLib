@@ -19,8 +19,6 @@ package org.grad.secomv2.core.interfaces;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.ValidationException;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -31,6 +29,10 @@ import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetSummaryFilterObject;
 import org.grad.secomv2.core.models.GetSummaryResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
+
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ValidationException;
 
 /**
  * The SECOM POST Get Summary Interface Definition.
@@ -77,7 +79,7 @@ public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
                                                         HttpServletResponse response) {
         // Create the get summary response
         int responseStatus;
-        GetSummaryResponseObject getSummaryResponseObject = new GetSummaryResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -85,21 +87,23 @@ public interface PostGetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException
                 || ex instanceof ConstraintViolationException
-                || ex instanceof IllegalArgumentException) {
+                || ex instanceof IllegalArgumentException
+                || ex instanceof ValidationException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
-        } else if(ex instanceof ValidationException){
-            responseStatus = 422;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND.getStatusCode();
+            responseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(getSummaryResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

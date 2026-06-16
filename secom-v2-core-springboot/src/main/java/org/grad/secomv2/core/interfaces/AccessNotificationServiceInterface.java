@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -75,9 +76,8 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
 
         // Create the access notification response
         HttpStatus httpStatus;
-        AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
-        // Handle according to the exception type
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
@@ -86,16 +86,16 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
-            accessNotificationResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            accessNotificationResponseObject.setMessage(httpStatus.getReasonPhrase());
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(accessNotificationResponseObject);
+                .body(responseObject);
 
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.AccessRequestObject;
 import org.grad.secomv2.core.models.AccessResponseObject;
+import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,7 +75,7 @@ public interface AccessServiceInterface extends GenericSecomInterface {
                                                     HttpServletResponse response) {
         // Create the access response
         Response.Status responseStatus;
-        AccessResponseObject accessResponseObject = new AccessResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,18 +85,18 @@ public interface AccessServiceInterface extends GenericSecomInterface {
                 || ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            accessResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            accessResponseObject.setMessage("Not authorized to requested information");
+            responseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            accessResponseObject.setMessage(responseStatus.getReasonPhrase());
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(accessResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

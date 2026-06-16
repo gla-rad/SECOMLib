@@ -17,6 +17,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -81,7 +82,7 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                                                                HttpServletRequest request) {
         // Create the capability response
         HttpStatus httpStatus;
-        PublicKeyResponseObject publicKeyResponseObject = new PublicKeyResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -90,17 +91,20 @@ public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(publicKeyResponseObject);
+                .body(responseObject);
 
     }
 

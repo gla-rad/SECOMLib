@@ -17,9 +17,9 @@
 package org.grad.secomv2.core.components;
 
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -41,8 +41,11 @@ public class StringToDataProductTypeConverterProvider implements Converter<Strin
      */
     @Override
     @NullMarked
-    public SECOM_DataProductType convert(String source) {
+    public @Nullable SECOM_DataProductType convert(String source) {
         try {
+            if(source.isEmpty()) {
+                return null;
+            }
             return SECOM_DataProductType.fromString(source);
         } catch (Exception ex) { // Direct to BAD_REQUEST
             throw new SecomValidationException(ex.getMessage());

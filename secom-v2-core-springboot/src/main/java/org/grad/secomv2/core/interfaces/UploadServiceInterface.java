@@ -28,7 +28,6 @@ import org.grad.secomv2.core.models.UploadResponseObject;
 import org.grad.secomv2.core.models.enums.SECOM_ResponseCodeEnum;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;

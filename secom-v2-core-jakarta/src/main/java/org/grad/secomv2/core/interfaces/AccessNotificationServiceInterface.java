@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import jakarta.validation.ValidationException;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.grad.secomv2.core.models.ResponseObject;
 
 /**
  * The SECOM Access Notification Interface Definition.
@@ -74,7 +75,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                                                                 HttpServletResponse response) {
         // Create the access notification response
         Response.Status responseStatus;
-        AccessNotificationResponseObject accessNotificationResponseObject = new AccessNotificationResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,15 +85,15 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex instanceof SecomNotFoundException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            accessNotificationResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            accessNotificationResponseObject.setMessage(responseStatus.getReasonPhrase());
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(accessNotificationResponseObject)
+                .entity(responseObject)
                 .build();
     }
 

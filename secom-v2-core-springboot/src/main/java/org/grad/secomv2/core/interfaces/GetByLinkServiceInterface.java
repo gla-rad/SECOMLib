@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -79,7 +80,7 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
                                                                      HttpServletRequest request) {
         // Create a status object
         HttpStatus responseStatus;
-        String responseText;
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,25 +89,25 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             responseStatus = HttpStatus.BAD_REQUEST;
-            responseText = "Bad Request";
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = HttpStatus.FORBIDDEN;
-            responseText = "Not authorized to requested information";
+            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomInvalidCertificateException) {
             responseStatus = HttpStatus.FORBIDDEN;
-            responseText = "Invalid certificate";
+            responseObject.setMessage("Invalid certificate");
         }  else if(ex instanceof SecomNotFoundException) {
             responseStatus = HttpStatus.NOT_FOUND;
-            responseText = String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier());
+            responseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseText = responseStatus.getReasonPhrase();
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity
                 .status(responseStatus)
-                .body(responseText);
+                .body(responseObject);
 
     }
 

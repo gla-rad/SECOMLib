@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -78,7 +79,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                                                                               HttpServletRequest request) {
         // Create the remove subscription response
         HttpStatus httpStatus;
-        RemoveSubscriptionResponseObject removeSubscriptionResponseObject = new RemoveSubscriptionResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -87,25 +88,25 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            removeSubscriptionResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            removeSubscriptionResponseObject.setMessage("Not authorized to remove subscription");
+            responseObject.setMessage("Not authorized to remove subscription");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            removeSubscriptionResponseObject.setMessage("Subscriber identifier not found");
+            responseObject.setMessage("Subscriber identifier not found");
         } else if (ex instanceof MissingServletRequestParameterException){
             httpStatus = HttpStatus.NOT_FOUND;
-            removeSubscriptionResponseObject.setMessage("Missing required parameter");
+            responseObject.setMessage("Missing required parameter");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            removeSubscriptionResponseObject.setMessage(httpStatus.getReasonPhrase());
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(removeSubscriptionResponseObject);
+                .body(responseObject);
     }
 
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import jakarta.ws.rs.*;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.ResponseObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationObject;
 import org.grad.secomv2.core.models.SubscriptionNotificationResponseObject;
 
@@ -73,7 +74,7 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
                                                                       HttpServletResponse response) {
         // Create the subscription notification response
         Response.Status responseStatus;
-        SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -82,15 +83,15 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            subscriptionNotificationResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionNotificationResponseObject.setMessage(responseStatus.getReasonPhrase());
+            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(subscriptionNotificationResponseObject)
+                .entity(responseObject)
                 .build();
     }
 }

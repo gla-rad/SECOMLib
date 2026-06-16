@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -74,7 +75,7 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
                                                                       HttpServletRequest request) {
         // Create the subscription notification response
         HttpStatus httpStatus;
-        SubscriptionNotificationResponseObject subscriptionNotificationResponseObject = new SubscriptionNotificationResponseObject();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -84,15 +85,15 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            subscriptionNotificationResponseObject.setMessage("Bad Request");
+            responseObject.setMessage("Bad Request");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            subscriptionNotificationResponseObject.setMessage(httpStatus.getReasonPhrase());
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return ResponseEntity
                 .status(httpStatus)
-                .body(subscriptionNotificationResponseObject);
+                .body(responseObject);
     }
 }
