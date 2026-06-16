@@ -75,7 +75,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
      */
     static ResponseEntity<Object> handlePostPublicKeyInterfaceExceptions(Exception ex,
                                                            HttpServletRequest request) {
-        // Create the upload link response
+        // Create the upload public key response
         HttpStatus httpStatus;
         ResponseObject responseObject = new ResponseObject();
 
