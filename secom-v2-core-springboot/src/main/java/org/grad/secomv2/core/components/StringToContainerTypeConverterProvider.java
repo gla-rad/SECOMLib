@@ -19,6 +19,7 @@ package org.grad.secomv2.core.components;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
@@ -40,8 +41,11 @@ public class StringToContainerTypeConverterProvider implements Converter<String,
      */
     @Override
     @NullMarked
-    public ContainerTypeEnum convert(String source) {
+    public @Nullable ContainerTypeEnum convert(String source) {
         try {
+            if(source.isEmpty()) {
+                return null;
+            }
             return ContainerTypeEnum.fromValue(Integer.parseInt(source));
         } catch (Exception ex) { // Direct to BAD_REQUEST
             throw new SecomValidationException(ex.getMessage());
