@@ -14,7 +14,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
  * 2 = Deprecated
  * 3 = Deleted
  */
-public enum ServiceInstanceStatusEnum {
+public enum ServiceInstanceStatusEnum implements SECOM_Enum {
 
     PROVISIONAL(0),
     RELEASED(1),
@@ -30,6 +30,11 @@ public enum ServiceInstanceStatusEnum {
     @JsonValue
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public String asString() {
+        return String.valueOf(value);
     }
 
     @JsonCreator
