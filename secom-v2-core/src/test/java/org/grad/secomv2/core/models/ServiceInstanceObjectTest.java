@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.ServiceInstanceStatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +50,7 @@ class ServiceInstanceObjectTest {
         this.obj = new ServiceInstanceObject();
         this.obj.setInstanceId("instanceId");
         this.obj.setName("name");
-        this.obj.setStatus("status");
+        this.obj.setStatus(ServiceInstanceStatusEnum.PROVISIONAL);
         this.obj.setDescription("description");
         this.obj.setDataProductType(new SECOM_DataProductType[]{SECOM_DataProductType.S101});
         this.obj.setOrganizationId("organizationId");
