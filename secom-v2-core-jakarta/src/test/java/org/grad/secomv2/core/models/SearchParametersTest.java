@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.ServiceInstanceStatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,7 @@ class SearchParametersTest {
         // Generate a new object
         this.obj = new SearchParameters();
         this.obj.setName("name");
-        this.obj.setStatus("status");
+        this.obj.setStatus(ServiceInstanceStatusEnum.PROVISIONAL);
         this.obj.setVersion("version");
         this.obj.setKeywords(new String[]{"keywords"});
         this.obj.setDescription("description");
