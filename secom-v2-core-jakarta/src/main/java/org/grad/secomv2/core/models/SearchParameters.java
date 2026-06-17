@@ -16,11 +16,14 @@
 
 package org.grad.secomv2.core.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.CsvStringGenerator;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.models.enums.ServiceInstanceStatusEnum;
+
 import java.net.URI;
 
 /**
@@ -32,7 +35,7 @@ public class SearchParameters implements CsvStringGenerator {
 
     // Class Variables
     private String name;
-    private String status;
+    private ServiceInstanceStatusEnum status;
     private String version;
     private String[] keywords;
     private String description;
@@ -78,7 +81,7 @@ public class SearchParameters implements CsvStringGenerator {
      *
      * @return the status
      */
-    public String getStatus() {
+    public ServiceInstanceStatusEnum getStatus() {
         return status;
     }
 
@@ -87,7 +90,7 @@ public class SearchParameters implements CsvStringGenerator {
      *
      * @param status the status
      */
-    public void setStatus(String status) {
+    public void setStatus(ServiceInstanceStatusEnum status) {
         this.status = status;
     }
 
@@ -306,6 +309,30 @@ public class SearchParameters implements CsvStringGenerator {
     public void setEndpointUri(URI endpointUri) {
         this.endpointUri = endpointUri;
     }
+
+    /**
+     * Checks if the search parameters are empty
+     * @return boolean indicating if the search parameters are empty
+     */
+    @JsonIgnore
+    public boolean isEmpty() {
+        return (name == null || name.isBlank()) &&
+                (status == null &&
+                (version == null || version.isBlank()) &&
+                (keywords == null || keywords.length == 0) &&
+                (description == null || description.isBlank()) &&
+                dataProductType == null &&
+                (specificationId == null || specificationId.isBlank()) &&
+                (designId == null || designId.isBlank()) &&
+                (instanceId == null || instanceId.isBlank()) &&
+                (mmsi == null || mmsi.isBlank()) &&
+                (imo == null || imo.isBlank()) &&
+                (serviceType == null || serviceType.isBlank()) &&
+                (unlocode == null || unlocode.isBlank()) &&
+                endpointUri == null);
+    }
+
+
 
     @Override
     public Object[] getAttributeArray() {
