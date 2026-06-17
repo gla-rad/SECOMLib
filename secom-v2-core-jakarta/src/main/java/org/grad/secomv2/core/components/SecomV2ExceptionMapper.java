@@ -122,8 +122,18 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                 .orElse("Unknown stacktrace..."));
 
         // Then handle
-        if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
-            switch(this.request.getPathInfo()) {
+        String pathInfo = this.request.getPathInfo();
+
+        if (pathInfo != null) {
+            // Handle retrieveResult requests including /transactionId
+            if (pathInfo.equals(RETRIEVE_RESULT_INTERFACE_PATH)
+                    || pathInfo.startsWith(RETRIEVE_RESULT_INTERFACE_PATH + "/")) {
+                return RetrieveResultServiceInterface
+                        .handleRetrieveResultInterfaceExceptions(ex, this.request, null);
+            }
+
+
+            switch(pathInfo) {
                 case ACCESS_INTERFACE_PATH:
                     return AccessServiceInterface.handleAccessInterfaceExceptions(ex, this.request, null);
                 case ACCESS_NOTIFICATION_INTERFACE_PATH:
