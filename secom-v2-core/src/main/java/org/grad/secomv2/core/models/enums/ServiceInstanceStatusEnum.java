@@ -33,12 +33,14 @@ public enum ServiceInstanceStatusEnum {
 
     @JsonCreator
     public static ServiceInstanceStatusEnum fromValue(int value) {
-        for (ServiceInstanceStatusEnum status : ServiceInstanceStatusEnum.values()) {
-            if (status.value == value) {
-                return status;
-            }
+        switch (value) {
+            case 0: return PROVISIONAL;
+            case 1: return RELEASED;
+            case 2: return DEPRECATED;
+            case 3: return DELETED;
+            default:
+                throw new IllegalArgumentException(
+                        "Unknown ServiceInstanceStatus value: " + value);
         }
-        throw new IllegalArgumentException("Unknown ServiceInstanceStatus value: " + value);
     }
-
 }
