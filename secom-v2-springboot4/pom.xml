@@ -19,13 +19,13 @@
     <parent>
         <groupId>org.grad.secom</groupId>
         <artifactId>secom-v2-parent</artifactId>
-        <version>0.0.7-SNAPSHOT</version>
+        <version>0.1.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.grad.secom</groupId>
     <artifactId>secom-v2-springboot4</artifactId>
-    <version>0.0.7-SNAPSHOT</version>
+    <version>0.1.0</version>
 
     <properties>
         <springframework4.version>7.0.7</springframework4.version>
