@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.ServiceInstanceStatusEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +49,7 @@ class SearchFilterEnvelopeObjectTest {
         // Generate a new search parameters object
         this.searchParameters = new SearchParameters();
         this.searchParameters.setName("name");
-        this.searchParameters.setStatus("status");
+        this.searchParameters.setStatus(ServiceInstanceStatusEnum.PROVISIONAL);
         this.searchParameters.setVersion("version");
         this.searchParameters.setKeywords(new String[]{"keywords"});
         this.searchParameters.setDescription("description");
