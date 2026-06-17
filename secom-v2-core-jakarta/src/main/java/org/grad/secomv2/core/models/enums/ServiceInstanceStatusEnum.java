@@ -3,6 +3,7 @@ package org.grad.secomv2.core.models.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
 
 /**
  * The SECOM ServiceInstanceStatus Enum.
@@ -39,7 +40,7 @@ public enum ServiceInstanceStatusEnum {
             case 2: return DEPRECATED;
             case 3: return DELETED;
             default:
-                throw new IllegalArgumentException(
+                throw new SecomValidationException(
                         "Unknown ServiceInstanceStatus value: " + value);
         }
     }
