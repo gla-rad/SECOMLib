@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.*;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
+import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.interfaces.*;
 import org.grad.secomv2.core.models.*;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
@@ -129,7 +130,6 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             else if (rqstCtx.getUriInfo().getPath().endsWith(SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, SearchFilterObject.class);
             }
-
             // For the POST Get By Link Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, GetByLinkObject.class);
@@ -141,6 +141,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             // For the POST Get Summary Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, GetSummaryFilterObject.class);
+            }
+            // For the POST Retrieve Result Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, RetrieveResultObject.class);
             }
         }
 
@@ -161,22 +165,29 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                 );
             }
 
+
+            try {
+                valid &= this.signatureProvider.validateSignature(
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelope)
+                                .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
+                                .orElse(null),
+                        digitalSignatureAlgorithm,
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelopeSignature)
+                                .map(DatatypeConverter::parseHexBinary)
+                                .orElse(null),
+                        Optional.of(obj)
+                                .map(EnvelopeSignatureBearer::getEnvelope)
+                                .map(AbstractEnvelope::getCsvString)
+                                .map(String::getBytes)
+                                .orElse(null));
+
+
+            } catch (Exception ex) {
+                throw new SecomValidationException(ex.getMessage());
+            }
             // Then validate the envelope signature
-            valid &= this.signatureProvider.validateSignature(
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelope)
-                            .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
-                            .orElse(null),
-                    digitalSignatureAlgorithm,
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelopeSignature)
-                            .map(DatatypeConverter::parseHexBinary)
-                            .orElse(null),
-                    Optional.of(obj)
-                            .map(EnvelopeSignatureBearer::getEnvelope)
-                            .map(AbstractEnvelope::getCsvString)
-                            .map(String::getBytes)
-                            .orElse(null));
 
             // Finally validate the data signature if present
             if(obj.getEnvelope() instanceof DigitalSignatureBearer) {

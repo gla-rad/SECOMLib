@@ -18,7 +18,9 @@ package org.grad.secomv2.core.interfaces;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import org.grad.secomv2.core.base.SecomConstants;
+import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
+import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.*;
 
@@ -71,27 +73,36 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
         // Create the encryption key response
         Response.Status responseStatus;
-        ResponseObject responseObject = new ResponseObject();
+        EncryptionKeyResponseObject encryptionKeyResponseObject = new EncryptionKeyResponseObject();
+        if (ex instanceof SecomNotAuthorisedException) {
+            responseStatus = Response.Status.UNAUTHORIZED;
+            encryptionKeyResponseObject.setMessage("Not authorized to requested information");
+            return Response.status(responseStatus)
+                    .entity(encryptionKeyResponseObject)
+                    .build();
+        }
+        else if(ex instanceof SecomNotFoundException || ex instanceof NotFoundException) {
+            responseStatus = Response.Status.NOT_FOUND;
+            encryptionKeyResponseObject.setMessage("Information not found");
+        }
 
         // Handle according to the exception type
-        if(ex instanceof SecomValidationException
+        else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JsonMappingException
-                || ex instanceof NotFoundException) {
+                || ex instanceof SecomSignatureVerificationException
+        ) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseObject.setMessage("Bad Request");
-        } else if(ex instanceof SecomNotFoundException) {
-            responseStatus = Response.Status.NOT_FOUND;
-            responseObject.setMessage("Information not found");
+            encryptionKeyResponseObject.setMessage("Bad Request");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(responseStatus.getReasonPhrase());
+            encryptionKeyResponseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back
         return Response.status(responseStatus)
-                .entity(responseObject)
+                .entity(encryptionKeyResponseObject)
                 .build();
     }
 }

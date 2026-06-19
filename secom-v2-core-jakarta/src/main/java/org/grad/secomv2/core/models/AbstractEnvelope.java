@@ -103,21 +103,4 @@ public abstract class AbstractEnvelope implements CsvStringGenerator {
         this.envelopeSignatureTime = envelopeSignatureTime;
     }
 
-    /**
-     * Gets digital signature reference.
-     *
-     * @return the digital signature reference
-     */
-    public String getEnvelopeSignatureReference() {
-        return envelopeSignatureReference;
-    }
-
-    /**
-     * Sets digital signature reference.
-     *
-     * @param envelopeSignatureReference the digital signature reference
-     */
-    public void setEnvelopeSignatureReference(String envelopeSignatureReference) {
-        this.envelopeSignatureReference = envelopeSignatureReference;
-    }
 }

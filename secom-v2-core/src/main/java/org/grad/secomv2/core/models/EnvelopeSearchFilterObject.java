@@ -94,13 +94,13 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
      */
     @Override
     public Object[] getAttributeArray() {
-        return new Object[] {
+        return new Object[]{
                 query,
                 geometry,
                 localOnly,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                envelopeSignatureTime,
         };
     }
 }

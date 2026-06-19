@@ -56,7 +56,7 @@ public class EnvelopeRetrieveResultObject extends AbstractEnvelope {
                 transactionId,
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
-                envelopeSignatureTime
+                envelopeSignatureTime,
         };
     }
 }

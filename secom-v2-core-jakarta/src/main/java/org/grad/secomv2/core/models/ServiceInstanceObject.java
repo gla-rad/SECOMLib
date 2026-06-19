@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.models.enums.ServiceInstanceStatusEnum;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -38,7 +39,7 @@ public class ServiceInstanceObject {
     @NotNull
     private String name;
     @NotNull
-    private String status;
+    private ServiceInstanceStatusEnum status;
     @NotNull
     private String description;
     private SECOM_DataProductType[] dataProductType;
@@ -46,7 +47,6 @@ public class ServiceInstanceObject {
     private String organizationId;
     @NotNull
     private String endpointUri;
-    @NotNull
     private String[] endpointType;
     private String[] keywords;
     private String[] unlocode;
@@ -121,7 +121,7 @@ public class ServiceInstanceObject {
      *
      * @return the status
      */
-    public String getStatus() {
+    public ServiceInstanceStatusEnum getStatus() {
         return status;
     }
 
@@ -130,7 +130,7 @@ public class ServiceInstanceObject {
      *
      * @param status the status
      */
-    public void setStatus(String status) {
+    public void setStatus(ServiceInstanceStatusEnum status) {
         this.status = status;
     }
 

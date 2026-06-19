@@ -259,7 +259,6 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
                 envelopeSignatureCertificate,
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
-                envelopeSignatureReference
         };
     }
 
