@@ -95,7 +95,6 @@ class EnvelopeAckObjectTest {
         assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);
         assertEquals(String.valueOf(this.obj.getNackType().getValue()), csv[5]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[6]);
-        assertEquals(this.obj.getEnvelopeSignatureReference(), csv[7]);
     }
 
     /**

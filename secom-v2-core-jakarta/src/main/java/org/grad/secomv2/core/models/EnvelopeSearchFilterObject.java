@@ -90,13 +90,6 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
     public Boolean getLocalOnly() { return localOnly; }
 
     /**
-     * Set local only search
-     *
-     * @param localOnly, whether search should be restricted to the local MSR
-     */
-    public void setLocalOnly(Boolean localOnly) { this.localOnly = localOnly; }
-
-    /**
      * This method should be implemented by all envelop objects to allow the
      * generation of the signature CSV attribute array
      *

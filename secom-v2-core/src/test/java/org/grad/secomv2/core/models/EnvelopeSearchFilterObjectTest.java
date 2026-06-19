@@ -120,7 +120,10 @@ class EnvelopeSearchFilterObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getQuery().getName(), csv[0]);
-        assertEquals(this.obj.getQuery().getStatus(), csv[1]);
+
+        String statusCode = String.valueOf(this.obj.getQuery().getStatus().getValue());
+        assertEquals(statusCode, csv[1]);
+
         assertEquals(this.obj.getQuery().getVersion(), csv[2]);
         assertEquals(Arrays.toString(this.obj.getQuery().getKeywords()), csv[3]);
         assertEquals(this.obj.getQuery().getDescription(), csv[4]);
