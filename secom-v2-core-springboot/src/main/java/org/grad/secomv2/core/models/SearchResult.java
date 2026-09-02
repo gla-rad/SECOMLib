@@ -18,13 +18,14 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 /**
  * The SECOM Search Result  Class.
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
  */
-public class SearchResult extends AbstractResponseObject {
+public class SearchResult implements EnvelopeSignatureBearer {
 
     @NotNull
     private EnvelopeSearchResultObject envelope;

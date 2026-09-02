@@ -40,16 +40,22 @@ import jakarta.ws.rs.core.Response;
 public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
     /**
-     * The Interface Endpoint Path.
+     * The Interface Endpoint Path Base, i.e. without the transactionId path variable.
      */
-    String RETRIEVE_RESULT_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/retrieveResult";
+    String RETRIEVE_RESULT_INTERFACE_PATH_BASE = "/" + SecomConstants.SECOM_VERSION + "/retrieveResult";
 
     /**
-     * POST /v2/retrieveResult : The purpose of this interface is pull results of a
+     * The Interface Endpoint Path.
+     */
+    String RETRIEVE_RESULT_INTERFACE_PATH = RETRIEVE_RESULT_INTERFACE_PATH_BASE + "/{transactionId}";
+
+    /**
+     * POST /v2/retrieveResults/{transactionId} : The purpose of this interface is pull results of a
      * search transaction for which more results may arrive asynchronously. The search
      * transaction is identified by the transactionId field in the response to the iniitial
      * searchService request.
      *
+     * @param transactionId    The transaction ID of the search
      * @param retrieveResultObject    The search filter object
      * @return the result object
      */
@@ -57,7 +63,7 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    SearchResult retrieveResult(@Valid RetrieveResultObject retrieveResultObject);
+    SearchResult retrieveResult(@PathParam("transactionId") String transactionId, @Valid RetrieveResultObject retrieveResultObject);
 
     /**
      * The exception handler implementation for the interface.

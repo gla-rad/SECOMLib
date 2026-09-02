@@ -366,7 +366,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v2/retrieveResult : The purpose of this interface is to retrieve additional
+     * POST /v2/retrieveResults/{transactionId} : The purpose of this interface is to retrieve additional
      * results from the search service global search.
      *
      * @param retrieveResultObject    The retrieve results object
@@ -379,7 +379,9 @@ public class SecomClient {
 
         return this.secomClient
                 .post()
-                .uri(RETRIEVE_RESULT_INTERFACE_PATH)
+                .uri(uriBuilder -> uriBuilder
+                        .path(RETRIEVE_RESULT_INTERFACE_PATH)
+                        .build(retrieveResultObject.getEnvelope().getTransactionId()))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(retrieveResultObject))

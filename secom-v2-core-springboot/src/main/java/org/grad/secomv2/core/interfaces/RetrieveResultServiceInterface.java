@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import jakarta.websocket.server.PathParam;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
@@ -34,6 +35,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.HttpClientErrorException;
 
 /**
@@ -45,23 +47,31 @@ import org.springframework.web.client.HttpClientErrorException;
 public interface RetrieveResultServiceInterface extends GenericSecomInterface {
 
     /**
-     * The Interface Endpoint Path.
+     * The Interface Endpoint Path Base, i.e. without the transactionId path variable.
      */
-    String RETRIEVE_RESULT_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/retrieveResult";
+    String RETRIEVE_RESULT_INTERFACE_PATH_BASE = "/" + SecomConstants.SECOM_VERSION + "/retrieveResult";
 
     /**
-     * POST /v2/retrieveResult : The purpose of this interface is pull results of a
+     * The Interface Endpoint Path.
+     */
+    String RETRIEVE_RESULT_INTERFACE_PATH = RETRIEVE_RESULT_INTERFACE_PATH_BASE + "/{transactionId}";
+
+    /**
+     * POST /v2/retrieveResults/{transactionId} : The purpose of this interface is pull results of a
      * search transaction for which more results may arrive asynchronously. The search
      * transaction is identified by the transactionId field in the response to the initial
      * searchService request.
      *
+     * @param transactionId    The transaction ID of the search
      * @param retrieveResultObject    The search filter object
      * @return the result object
      */
     @PostMapping(path = RETRIEVE_RESULT_INTERFACE_PATH,
                 consumes = { MediaType.APPLICATION_JSON_VALUE },
                 produces = { MediaType.APPLICATION_JSON_VALUE })
-    ResponseEntity<SearchResult> retrieveResult(@Valid @RequestBody RetrieveResultObject retrieveResultObject);
+    ResponseEntity<SearchResult> retrieveResult(
+            @PathVariable String transactionId,
+            @Valid @RequestBody RetrieveResultObject retrieveResultObject);
 
     /**
      * The exception handler implementation for the interface.
