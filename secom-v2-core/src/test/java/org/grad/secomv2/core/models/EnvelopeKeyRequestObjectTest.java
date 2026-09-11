@@ -101,7 +101,7 @@ public class EnvelopeKeyRequestObjectTest {
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getDataReference().toString(), csv[0]);
         assertEquals(this.obj.getPublicCertificate(), csv[1]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[2]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[2]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[3]));
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[4]);
         assertEquals(this.obj.getCallbackEndpoint().toString(), csv[5]);

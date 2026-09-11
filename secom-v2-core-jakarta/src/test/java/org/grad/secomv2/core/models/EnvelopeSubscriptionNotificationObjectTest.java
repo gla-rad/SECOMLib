@@ -76,7 +76,7 @@ class EnvelopeSubscriptionNotificationObjectTest {
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getSubscriptionIdentifier().toString(), csv[0]);
         assertEquals(String.valueOf(this.obj.getEventEnum().getValue()), csv[1]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[2]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[2]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[3]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[4]);
 

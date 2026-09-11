@@ -89,7 +89,7 @@ class EnvelopeAckObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getCreatedAt().getEpochSecond(), Long.parseLong(csv[0]));
-        assertEquals(Arrays.toString(this.obj.getEnvelopeCertificate()), csv[1]);
+        assertEquals(String.join(",", this.obj.getEnvelopeCertificate()), csv[1]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
         assertEquals(String.valueOf(this.obj.getAckType().getValue()), csv[4]);

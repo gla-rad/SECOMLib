@@ -126,7 +126,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(statusCode, csv[1]);
 
         assertEquals(this.obj.getQuery().getVersion(), csv[2]);
-        assertEquals(Arrays.toString(this.obj.getQuery().getKeywords()), csv[3]);
+        assertEquals(String.join(",", this.obj.getQuery().getKeywords()), csv[3]);
         assertEquals(this.obj.getQuery().getDescription(), csv[4]);
         assertEquals(this.obj.getQuery().getDataProductType().asString(), csv[5]);
         assertEquals(this.obj.getQuery().getSpecificationId(), csv[6]);
@@ -139,7 +139,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(this.obj.getQuery().getEndpointUri().toString(), csv[13]);
         assertEquals(this.obj.getGeometry(), csv[14]);
         assertEquals(this.obj.getLocalOnly(), Boolean.parseBoolean(csv[15]));
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[16]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[16]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[17]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[18]));
     }

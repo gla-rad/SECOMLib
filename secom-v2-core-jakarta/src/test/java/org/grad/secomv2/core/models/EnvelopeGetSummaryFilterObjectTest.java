@@ -107,7 +107,7 @@ class EnvelopeGetSummaryFilterObjectTest {
         assertEquals(String.valueOf(this.obj.getValidTo().getEpochSecond()), csv[6]);
         assertEquals(String.valueOf(this.obj.getPage()), csv[7]);
         assertEquals(String.valueOf(this.obj.getPageSize()), csv[8]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[9]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[9]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[10]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[11]);
 

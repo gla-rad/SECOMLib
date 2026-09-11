@@ -81,7 +81,7 @@ class DigitalSignatureValueObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(obj.getPublicRootCertificateThumbprint(), csv[0]);
-        assertEquals(Arrays.toString(obj.getPublicCertificate()), csv[1]);
+        assertEquals(String.join(",", obj.getPublicCertificate()), csv[1]);
         assertEquals(obj.getDigitalSignature(), csv[2]);
     }
 

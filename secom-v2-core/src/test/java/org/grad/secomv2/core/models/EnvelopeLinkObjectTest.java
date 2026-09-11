@@ -132,14 +132,14 @@ class EnvelopeLinkObjectTest {
         assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), csv[3]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[4]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[5]);
-        assertEquals(Arrays.toString(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[6]);
+        assertEquals(String.join(",", this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[6]);
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[7]);
         assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[8]);
         assertEquals(this.obj.getSubscriptionIdentifier().toString(), csv[9]);
         assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[10]);
         assertEquals(this.obj.getCallbackEndpoint().toString(), csv[11]);
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[12]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[13]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[13]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[14]);
         assertEquals(String.valueOf(this.obj.getSize()), csv[15]);
         assertEquals(String.valueOf(this.obj.getTimeToLive().getEpochSecond()), csv[16]);
