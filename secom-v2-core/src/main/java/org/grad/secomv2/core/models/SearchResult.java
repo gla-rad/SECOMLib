@@ -18,6 +18,7 @@ package org.grad.secomv2.core.models;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 
 import javax.validation.constraints.NotNull;
 
@@ -26,7 +27,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author Jakob Svenningsen (email: jakob@dmc.international)
 */
-public class SearchResult extends AbstractResponseObject {
+public class SearchResult implements EnvelopeSignatureBearer {
 
     @NotNull
     private EnvelopeSearchResultObject envelope;

@@ -38,7 +38,6 @@ import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterf
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
@@ -99,12 +98,6 @@ public class SecomV2ExceptionMapper {
             return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
         }
 
-        // The Retrieve Result interface path contains a transactionId path variable,
-        // so it cannot be matched with an exact switch/case label
-        if(path.contains(API_PATH + RETRIEVE_RESULT_INTERFACE_PATH_BASE)) {
-            return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, request);
-        }
-
         // Then handle
         switch(path) {
             case API_PATH + ACCESS_INTERFACE_PATH:
@@ -158,7 +151,11 @@ public class SecomV2ExceptionMapper {
                     return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
                 }
             default:
-
+                // The Retrieve Result interface path contains a transactionId path variable,
+                // so it cannot be matched with an exact switch/case label
+                if(path.contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)) {
+                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, request);
+                }
                 //Nothing to do, continue with the generic rules
         }
 

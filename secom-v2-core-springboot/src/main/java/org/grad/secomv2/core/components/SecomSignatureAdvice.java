@@ -143,12 +143,11 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         String path = attrs.getRequest().getServletPath();
 
-
-//  Note: Might be relevant to allow version distinguishing.
-//  Not enforcing this allows SECOM like APIs to use the ControllerAdvice
-//        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
-//            return body;
-//        }
+        // Note: Might be relevant to allow version distinguishing.
+        // Not enforcing this allows SECOM like APIs to use the ControllerAdvice
+        /*if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
+            return body;
+        }*/
 
         if (!(body instanceof EnvelopeSignatureBearer obj)) {
             return body;
@@ -292,24 +291,22 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         // Access out trust store
         final KeyStore trustStore = this.trustStoreProvider.getTrustStore();
 
-
-
+        // Check is we have a valid root certificate thumbprint
         if (rootCertificateThumbprint == null) {
-            throw new SecomSchemaValidationException("envelopeRootCertificateThumbprint is a " +
-                    "required attribute");
+            throw new SecomSchemaValidationException(
+                    "envelopeRootCertificateThumbprint is a required attribute"
+            );
         }
 
         // Check that the clients rootCertificateThumbprint is known in our trust store
         // This supports multiple root certificates int he SECOM trust store
         try {
             boolean found = false;
-
             Enumeration<String> certs = trustStore.aliases();
 
+            // Check all the provided certificates one-by-one for a matching thumbprint
             while (certs.hasMoreElements()) {
-                X509Certificate rootX509Certificate =
-                        (X509Certificate) trustStore.getCertificate(certs.nextElement());
-
+                X509Certificate rootX509Certificate = (X509Certificate) trustStore.getCertificate(certs.nextElement());
                 String rootX509CertificateThumbprint =
                         SecomPemUtils.getCertThumbprint(
                                 rootX509Certificate,
@@ -321,12 +318,11 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
                 }
             }
 
+            // If nothing found, raise an issue
             if (!found) {
                 throw new SecomInvalidCertificateException(
                         "The provided SECOM CA root certificate is not recognised");
             }
-
-
         } catch (CertificateEncodingException e) {
             throw new SecomValidationException(e.getMessage());
         } catch (KeyStoreException e) {
@@ -334,7 +330,6 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         } catch (NoSuchAlgorithmException e) {
             throw new SecomNotFoundException(e.getMessage());
         }
-
 
         // Now parse the provided certificate and check its validity
         final X509Certificate[] x509Certificates;
@@ -358,6 +353,5 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
             throw new SecomInvalidCertificateException(ex.getMessage());
         }
     }
-
 
 }

@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -76,11 +77,12 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                                                                          HttpServletRequest request) {
         // Create the return objects
         HttpStatus httpStatus;
-        SearchResult searchResult = new SearchResult();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomSignatureVerificationException) {
             httpStatus = HttpStatus.UNAUTHORIZED;
+            responseObject.setMessage("Unauthorized");
         } else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
@@ -88,14 +90,17 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof IllegalArgumentException) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Information not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(searchResult);
+                .body(responseObject);
     }
 }
