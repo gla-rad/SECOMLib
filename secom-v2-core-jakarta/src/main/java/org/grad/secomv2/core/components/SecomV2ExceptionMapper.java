@@ -39,7 +39,6 @@ import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterf
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
-import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
@@ -126,6 +125,7 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
         secomLogger.warning("API method was: " + this.request.getMethod());
         secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
 
+
         // Then handle
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {
@@ -173,8 +173,6 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     }
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
-                case RETRIEVE_RESULT_INTERFACE_PATH:
-                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
                 case GET_PUBLIC_KEY_INTERFACE_PATH:
                     if(Objects.equals(this.request.getMethod(), "GET")) {
                         return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);

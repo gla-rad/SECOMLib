@@ -142,9 +142,11 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         String path = attrs.getRequest().getServletPath();
 
 
-        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
-            return body;
-        }
+//  Note: Might be relevant to allow version distinguishing.
+//  Not enforcing this allows SECOM like APIs to use the ControllerAdvice
+//        if (!path.startsWith(API_PATH + "/" + SECOM_VERSION)) {
+//            return body;
+//        }
 
         if (!(body instanceof EnvelopeSignatureBearer obj)) {
             return body;
