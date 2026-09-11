@@ -100,8 +100,9 @@ public enum SECOM_DataProductType implements SECOM_Enum {
      */
     @JsonCreator
     public static SECOM_DataProductType fromString(String value) {
+        final String normalisedValue = value == null ? null : value.replace("-", "");
         return Arrays.stream(SECOM_DataProductType.values())
-                .filter(t -> Objects.equals(t.getValue(), value))
+                .filter(t -> Objects.equals(t.getValue().replace("-", ""), normalisedValue))
                 .findFirst()
                 .orElseThrow(() -> new SecomValidationException("Invalid SECOM_DataProductType value: " + value));
     }
