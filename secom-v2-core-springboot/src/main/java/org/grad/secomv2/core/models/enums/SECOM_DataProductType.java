@@ -102,7 +102,7 @@ public enum SECOM_DataProductType implements SECOM_Enum {
     public static SECOM_DataProductType fromString(String value) {
         final String normalisedValue = value == null ? null : value.replace("-", "");
         return Arrays.stream(SECOM_DataProductType.values())
-                .filter(t -> Objects.equals(t.getValue().replace("-", ""), normalisedValue))
+                .filter(t -> t.getValue().replace("-", "").equalsIgnoreCase(normalisedValue))
                 .findFirst()
                 .orElseThrow(() -> new SecomValidationException("Invalid SECOM_DataProductType value: " + value));
     }
@@ -115,9 +115,9 @@ public enum SECOM_DataProductType implements SECOM_Enum {
      */
     public static SECOM_DataProductType fromDescription(String description) {
         return Arrays.stream(SECOM_DataProductType.values())
-                .filter(t -> Objects.equals(t.getDescription(), description))
+                .filter(t ->  t.getDescription().equalsIgnoreCase(description))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new SecomValidationException("Invalid SECOM_DataProductType value: " + description));
     }
 
     /**
