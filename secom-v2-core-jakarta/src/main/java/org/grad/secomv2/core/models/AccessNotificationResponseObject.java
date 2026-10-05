@@ -21,6 +21,6 @@ package org.grad.secomv2.core.models;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessNotificationResponseObject extends AbstractResponseObject {
+public class AccessNotificationResponseObject extends AbstractMessageResponseObject {
 
 }

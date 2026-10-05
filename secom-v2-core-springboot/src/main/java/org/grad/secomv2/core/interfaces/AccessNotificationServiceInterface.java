@@ -86,11 +86,9 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
-            responseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         return ResponseEntity
