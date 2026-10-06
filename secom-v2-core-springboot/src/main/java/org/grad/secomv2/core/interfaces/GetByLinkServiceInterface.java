@@ -89,19 +89,14 @@ public interface GetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             responseStatus = HttpStatus.BAD_REQUEST;
-            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = HttpStatus.FORBIDDEN;
-            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomInvalidCertificateException) {
             responseStatus = HttpStatus.FORBIDDEN;
-            responseObject.setMessage("Invalid certificate");
         }  else if(ex instanceof SecomNotFoundException) {
             responseStatus = HttpStatus.NOT_FOUND;
-            responseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

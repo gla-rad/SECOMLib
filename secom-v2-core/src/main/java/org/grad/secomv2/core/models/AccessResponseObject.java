@@ -23,7 +23,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AccessResponseObject extends AbstractResponseObject {
+public class AccessResponseObject extends AbstractMessageResponseObject {
 
     // Class Variables
     private UUID transactionIdentifier;
@@ -45,4 +45,5 @@ public class AccessResponseObject extends AbstractResponseObject {
     public void setTransactionIdentifier(UUID transactionIdentifier) {
         this.transactionIdentifier = transactionIdentifier;
     }
+
 }

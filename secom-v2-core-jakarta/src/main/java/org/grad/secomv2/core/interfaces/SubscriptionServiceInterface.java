@@ -84,13 +84,10 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            responseObject.setMessage("Not authorized to requested information");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

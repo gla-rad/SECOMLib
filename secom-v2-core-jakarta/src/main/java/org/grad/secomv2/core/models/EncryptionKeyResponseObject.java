@@ -24,7 +24,7 @@ import org.grad.secomv2.core.models.enums.SECOM_ResponseCodeEnum;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class EncryptionKeyResponseObject extends AbstractResponseObject {
+public class EncryptionKeyResponseObject extends AbstractMessageResponseObject {
 
     // Class Variables
     private SECOM_ResponseCodeEnum SECOM_ResponseCode;

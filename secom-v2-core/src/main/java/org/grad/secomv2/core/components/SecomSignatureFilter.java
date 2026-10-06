@@ -18,10 +18,9 @@ package org.grad.secomv2.core.components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.*;
+import org.grad.secomv2.core.exceptions.*;
 import org.grad.secomv2.core.interfaces.*;
 import org.grad.secomv2.core.models.*;
-import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
-import org.grad.secomv2.core.exceptions.SecomSignatureVerificationException;
 import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secomv2.core.utils.PkiUtils;
 import org.grad.secomv2.core.utils.SecomPemUtils;
@@ -40,8 +39,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 import java.util.Optional;
 
 /**
@@ -270,30 +272,48 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
      * @param certificates                   The received certificate to be verified
      * @param rootCertificateThumbprint     The received root certificate thumbprint
      */
-    private void checkCertificate(String[] certificates, String rootCertificateThumbprint) {
+    private void checkCertificate(String[] certificates, String rootCertificateThumbprint)  {
         // Access out trust store
         final KeyStore trustStore = this.trustStoreProvider.getTrustStore();
 
-        // Get our own root certificate
-        final X509Certificate rootX509Certificate;
-        try {
-            rootX509Certificate = (X509Certificate) trustStore.getCertificate(this.trustStoreProvider.getCARootCertificateAlias());
-        } catch (KeyStoreException ex) {
-            throw new SecomInvalidCertificateException(ex.getMessage());
+        // Check is we have a valid root certificate thumbprint
+        if (rootCertificateThumbprint == null) {
+            throw new SecomSchemaValidationException(
+                    "envelopeRootCertificateThumbprint is a required attribute"
+            );
         }
 
-        // In SECOM the root certificate is actually optional, so just check if
-        // it exists and id so match the thumbprint with our root certificate
-        if(rootCertificateThumbprint != null) {
-            final String rootX509CertificateThumbprint;
-            try {
-                rootX509CertificateThumbprint = SecomPemUtils.getCertThumbprint(rootX509Certificate, SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
-                if(rootCertificateThumbprint.compareTo(rootX509CertificateThumbprint) != 0) {
-                    throw new SecomInvalidCertificateException("The provided SECOM CA root certificate is not recognised");
+        // Check that the clients rootCertificateThumbprint is known in our trust store
+        // This supports multiple root certificates int he SECOM trust store
+        try {
+            boolean found = false;
+            Enumeration<String> certs = trustStore.aliases();
+
+            // Check all the provided certificates one-by-one for a matching thumbprint
+            while (certs.hasMoreElements()) {
+                X509Certificate rootX509Certificate = (X509Certificate) trustStore.getCertificate(certs.nextElement());
+                String rootX509CertificateThumbprint =
+                        SecomPemUtils.getCertThumbprint(
+                                rootX509Certificate,
+                                SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
+
+                if (rootCertificateThumbprint.equals(rootX509CertificateThumbprint)) {
+                    found = true;
+                    break;
                 }
-            } catch (GeneralSecurityException ex) {
-                throw new SecomInvalidCertificateException("Failed to generate the SECOM CA root certificate thumbprint");
             }
+
+            // If nothing found, raise an issue
+            if (!found) {
+                throw new SecomInvalidCertificateException(
+                        "The provided SECOM CA root certificate is not recognised");
+            }
+        } catch (CertificateEncodingException e) {
+            throw new SecomValidationException(e.getMessage());
+        } catch (KeyStoreException e) {
+            throw new SecomInvalidCertificateException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecomNotFoundException(e.getMessage());
         }
 
         // Now parse the provided certificate and check its validity

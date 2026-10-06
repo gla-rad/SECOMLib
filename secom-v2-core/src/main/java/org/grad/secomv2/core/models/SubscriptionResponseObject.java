@@ -23,7 +23,7 @@ import java.util.UUID;
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class SubscriptionResponseObject extends AbstractResponseObject {
+public class SubscriptionResponseObject extends AbstractMessageResponseObject {
 
     // Class Variables
     private UUID subscriptionIdentifier;

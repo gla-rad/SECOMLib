@@ -125,14 +125,6 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
         secomLogger.warning("API method was: " + this.request.getMethod());
         secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
 
-        // The Retrieve Result interface path contains a transactionId path variable,
-        // so it cannot be matched with an exact switch/case label
-        if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo)
-                .filter(path -> path.contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE))
-                .isPresent()) {
-            return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
-        }
-
         // Then handle
         if(Optional.ofNullable(this.request).map(HttpServletRequest::getPathInfo).isPresent()) {
             switch(this.request.getPathInfo()) {
@@ -187,7 +179,14 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                         return UploadPublicKeyServiceInterface.handleUploadPublicKeyInterfaceExceptions(ex, request, null);
                     }
                 default:
-                    //Nothing to do, continue with the generic rules
+                    // Get the request path
+                    final String path = this.request.getPathInfo();
+                    // The Retrieve Result interface path contains a transactionId path variable,
+                    // so it cannot be matched with an exact switch/case label
+                    if(path.contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)) {
+                        return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, this.request, null);
+                    }
+                    //Else nothing to do, continue with the generic rules
             }
         }
 

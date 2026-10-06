@@ -85,10 +85,8 @@ public interface SubscriptionNotificationServiceInterface extends GenericSecomIn
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            responseObject.setMessage("Bad Request");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back

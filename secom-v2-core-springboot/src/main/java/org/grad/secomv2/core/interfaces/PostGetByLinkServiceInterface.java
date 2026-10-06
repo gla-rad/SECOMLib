@@ -91,14 +91,11 @@ public interface PostGetByLinkServiceInterface extends GenericSecomInterface {
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof JsonParseException) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException
                 || ex instanceof SecomInvalidCertificateException) {
             httpStatus = HttpStatus.FORBIDDEN;
-            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
-            responseObject.setMessage(String.format("Information with %s not found", ((SecomNotFoundException) ex).getIdentifier()));
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }

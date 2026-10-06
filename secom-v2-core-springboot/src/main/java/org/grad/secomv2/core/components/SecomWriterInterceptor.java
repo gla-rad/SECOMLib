@@ -104,8 +104,8 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
                 Type[] args = pt.getActualTypeArguments();
                 if (args.length > 0 && args[0] instanceof Class<?> bodyType) {
                     return DigitalSignatureCollectionBearer.class.isAssignableFrom(bodyType)
-                            || byte[].class.isAssignableFrom(bodyType)
-                            || EnvelopeSignatureBearer.class.isAssignableFrom(bodyType);
+                            || EnvelopeSignatureBearer.class.isAssignableFrom(bodyType)
+                            || byte[].class.isAssignableFrom(bodyType);
                 }
             }
         }
@@ -134,14 +134,15 @@ public class SecomWriterInterceptor implements ResponseBodyAdvice<Object> {
                                             ServerHttpRequest request,
                                             ServerHttpResponse response) {
         // Get request path
-        ServletRequestAttributes attrs =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         String path = attrs.getRequest().getServletPath();
 
+        // Sanity Check
         if (!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
             return body;
         }
 
+        // For empty just move on
         if (body == null) {
             return null;
         }

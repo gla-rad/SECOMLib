@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -76,7 +77,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                                                                          HttpServletRequest request) {
         // Create the return objects
         HttpStatus httpStatus;
-        SearchResult searchResult = new SearchResult();
+        ResponseObject responseObject = new ResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomSignatureVerificationException) {
@@ -96,6 +97,6 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
 
         return ResponseEntity
                 .status(httpStatus)
-                .body(searchResult);
+                .body(responseObject);
     }
 }

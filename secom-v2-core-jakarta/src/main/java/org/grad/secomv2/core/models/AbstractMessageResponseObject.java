@@ -16,36 +16,32 @@
 
 package org.grad.secomv2.core.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.grad.secomv2.core.models.enums.SECOM_ResponseCodeEnum;
-
 /**
- * The SECOM Acknowledgement Response Object Class.
+ * The SECOM Abstract Message Response Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class AcknowledgementResponseObject extends AbstractMessageResponseObject {
+public abstract class AbstractMessageResponseObject extends AbstractResponseObject {
 
     // Class Variables
-    private SECOM_ResponseCodeEnum SECOM_ResponseCode;
+    private String message;
 
     /**
-     * Gets secom response code.
+     * Gets response text.
      *
-     * @return the secom response code
+     * @return the response message
      */
-    @JsonProperty("SECOM_ResponseCode")
-    public SECOM_ResponseCodeEnum getSECOM_ResponseCode() {
-        return SECOM_ResponseCode;
+    public String getMessage() {
+        return message;
     }
 
     /**
-     * Sets secom response code.
+     * Sets response text.
      *
-     * @param SECOM_ResponseCode the secom response code
+     * @param message the response message
      */
-    public void setSECOM_ResponseCode(SECOM_ResponseCodeEnum SECOM_ResponseCode) {
-        this.SECOM_ResponseCode = SECOM_ResponseCode;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

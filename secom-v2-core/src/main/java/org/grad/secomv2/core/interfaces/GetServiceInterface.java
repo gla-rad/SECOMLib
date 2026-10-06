@@ -112,13 +112,10 @@ public interface GetServiceInterface extends GenericSecomInterface {
                 || ex instanceof IllegalArgumentException
                 || ex instanceof ValidationException) {
             responseStatus = Response.Status.BAD_REQUEST.getStatusCode();
-            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN.getStatusCode();
-            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND.getStatusCode();
-            responseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex).getStatusCode();
         }

@@ -84,7 +84,6 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
         // Handle according to the exception type
         if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.UNAUTHORIZED;
-            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
@@ -92,13 +91,10 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                 || ex instanceof NotFoundException
                 || ex instanceof SecomSignatureVerificationException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-            responseObject.setMessage("Information not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
-            responseObject.setMessage(responseStatus.getReasonPhrase());
         }
 
         // And send the error response back

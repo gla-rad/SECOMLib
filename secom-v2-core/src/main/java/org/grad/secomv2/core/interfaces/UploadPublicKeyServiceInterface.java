@@ -83,13 +83,10 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
                 || ex instanceof JsonMappingException
                 || ex instanceof NotFoundException) {
             responseStatus = Response.Status.BAD_REQUEST;
-            responseObject.setMessage("Bad request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             responseStatus = Response.Status.FORBIDDEN;
-            responseObject.setMessage("Not authorized to requested information");
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = Response.Status.NOT_FOUND;
-            responseObject.setMessage("Not found");
         } else {
             responseStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
         }
