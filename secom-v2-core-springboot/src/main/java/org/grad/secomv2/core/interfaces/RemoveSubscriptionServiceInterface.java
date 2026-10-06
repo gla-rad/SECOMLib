@@ -79,7 +79,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                                                                               HttpServletRequest request) {
         // Create the remove subscription response
         HttpStatus httpStatus;
-        ResponseObject responseObject = new ResponseObject();
+        RemoveSubscriptionResponseObject responseObject = new RemoveSubscriptionResponseObject();
 
         // Handle according to the exception type
         if(ex instanceof SecomValidationException
@@ -88,14 +88,19 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            responseObject.setMessage("Bad Request");
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
+            responseObject.setMessage("Not authorized to remove subscription");
         } else if(ex instanceof SecomNotFoundException) {
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Subscriber identifier not found");
         } else if (ex instanceof MissingServletRequestParameterException){
             httpStatus = HttpStatus.NOT_FOUND;
+            responseObject.setMessage("Subscriber identifier not found");
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);
+            responseObject.setMessage(httpStatus.getReasonPhrase());
         }
 
         // And send the error response back
