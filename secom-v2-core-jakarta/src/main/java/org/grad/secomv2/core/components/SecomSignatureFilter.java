@@ -1,0 +1,346 @@
+/*
+ * Copyright (c) 2025 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.components;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.grad.secomv2.core.base.*;
+import org.grad.secomv2.core.exceptions.*;
+import org.grad.secomv2.core.interfaces.*;
+import org.grad.secomv2.core.models.*;
+import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
+import org.grad.secomv2.core.utils.PkiUtils;
+import org.grad.secomv2.core.utils.SecomPemUtils;
+
+import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.ws.rs.container.ContainerRequestFilter;
+import jakarta.ws.rs.container.PreMatching;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.ext.Provider;
+import jakarta.ws.rs.ext.Providers;
+import jakarta.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Enumeration;
+import java.util.Optional;
+
+/**
+ * The SECOM Signature Filter
+ *
+ * When receiving a SECOM request, upload (and upload linke) messages might
+ * contain a signature. These need to be verified to ensure that the request
+ * has not been altered by unauthorised entities.
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ */
+@Provider
+@PreMatching
+public class SecomSignatureFilter implements ContainerRequestFilter {
+
+    /**
+     * The JAX-RS Providers Context.
+     */
+    @Context
+    Providers providers;
+
+    // Class Variables
+    private SecomCompressionProvider compressionProvider;
+    private SecomEncryptionProvider encryptionProvider;
+    private SecomTrustStoreProvider trustStoreProvider;
+    private SecomSignatureProvider signatureProvider;
+
+    /**
+     * The Class Constructor.
+     *
+     * @param trustStoreProvider    The SECOM trust store provider
+     * @param signatureProvider     The SECOM signature provider
+     */
+    public SecomSignatureFilter(SecomCompressionProvider compressionProvider,
+                                SecomEncryptionProvider encryptionProvider,
+                                SecomTrustStoreProvider trustStoreProvider,
+                                SecomSignatureProvider signatureProvider) {
+        this.compressionProvider = compressionProvider;
+        this.encryptionProvider = encryptionProvider;
+        this.trustStoreProvider = trustStoreProvider;
+        this.signatureProvider = signatureProvider;
+    }
+
+    /**
+     * The ContainerResponseFilter filter function implementation.
+     *
+     * @param rqstCtx   The filter's request context
+     * @throws IOException When IO Exceptions occur
+     */
+    @Override
+    public void filter(ContainerRequestContext rqstCtx) throws IOException {
+        // Sanity Check
+        if(!rqstCtx.getUriInfo().getPath().startsWith("/" + SecomConstants.SECOM_VERSION)) {
+            return;
+        }
+
+        // No need to do anything without a signature validator
+        if(this.signatureProvider == null) {
+            return;
+        }
+
+        // Start with a true valid flag
+        boolean valid = true;
+        EnvelopeSignatureBearer obj = null;
+
+        // Currently, SECOM only needs to validate POST requests
+        if(rqstCtx.getRequest().getMethod().equals("POST")) {
+            // For the Upload Interface Requests
+            if (rqstCtx.getUriInfo().getPath().endsWith(UploadServiceInterface.UPLOAD_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, UploadObject.class);
+            }
+            // For the Upload Link Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, UploadLinkObject.class);
+            }
+            // For the Acknowledgement Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, AcknowledgementObject.class);
+            }
+            // For the Encryption Key Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, EncryptionKeyRequestObject.class);
+            }
+            // For the Search Service Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, SearchFilterObject.class);
+            }
+            // For the POST Get By Link Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, GetByLinkObject.class);
+            }
+            // For the POST Get Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetServiceInterface.POST_GET_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, GetFilterObject.class);
+            }
+            // For the POST Get Summary Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH)){
+                obj = this.parseRequestBody(rqstCtx, GetSummaryFilterObject.class);
+            }
+            // For the POST Retrieve Result Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)){
+                obj = this.parseRequestBody(rqstCtx, RetrieveResultObject.class);
+            }
+        }
+
+        // If we have an object, validate the signatures
+        if(obj != null && obj.getEnvelope() != null) {
+            // First decide on the signature algorithm
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(obj)
+                    .map(EnvelopeSignatureBearer::getEnvelopeSignatureAlgorithm)
+                    .orElseGet(() -> Optional.of(this.signatureProvider)
+                            .map(SecomSignatureProvider::getSignatureAlgorithm)
+                            .orElse(DigitalSignatureAlgorithmEnum.DSA));
+
+            // Then validate the envelope certificate
+            if(this.trustStoreProvider != null) {
+                checkCertificate(
+                        obj.getEnvelope().getEnvelopeSignatureCertificate(),
+                        obj.getEnvelope().getEnvelopeRootCertificateThumbprint()
+                );
+            }
+
+            // Then validate the envelope signature
+            valid &= this.signatureProvider.validateSignature(
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelope)
+                            .map(AbstractEnvelope::getEnvelopeSignatureCertificate)
+                            .orElse(null),
+                    digitalSignatureAlgorithm,
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelopeSignature)
+                            .map(DatatypeConverter::parseHexBinary)
+                            .orElse(null),
+                    Optional.of(obj)
+                            .map(EnvelopeSignatureBearer::getEnvelope)
+                            .map(AbstractEnvelope::getCsvString)
+                            .map(String::getBytes)
+                            .orElse(null));
+
+            // Finally validate the data signature if present
+            if(obj.getEnvelope() instanceof DigitalSignatureBearer) {
+                final DigitalSignatureBearer dataObj = (DigitalSignatureBearer)obj.getEnvelope();
+
+                // First validate the data certificate
+                if(this.trustStoreProvider != null) {
+                    checkCertificate(
+                            Optional.of(dataObj)
+                                    .map(DigitalSignatureBearer::getExchangeMetadata)
+                                    .map(ExchangeMetadata::getDigitalSignatureValue)
+                                    .map(DigitalSignatureValueObject::getPublicCertificate)
+                                    .orElse(null),
+                            Optional.of(dataObj)
+                                    .map(DigitalSignatureBearer::getExchangeMetadata)
+                                    .map(ExchangeMetadata::getDigitalSignatureValue)
+                                    .map(DigitalSignatureValueObject::getPublicRootCertificateThumbprint)
+                                    .orElse(null)
+                    );
+                }
+
+                // Then validate the data signature
+                valid &= this.signatureProvider.validateSignature(
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(ExchangeMetadata::getDigitalSignatureValue)
+                                .map(DigitalSignatureValueObject::getPublicCertificate)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(ExchangeMetadata::getDigitalSignatureReference)
+                                .orElse(digitalSignatureAlgorithm),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::getExchangeMetadata)
+                                .map(ExchangeMetadata::getDigitalSignatureValue)
+                                .map(DigitalSignatureValueObject::getDigitalSignature)
+                                .map(DatatypeConverter::parseHexBinary)
+                                .orElse(null),
+                        Optional.of(dataObj)
+                                .map(DigitalSignatureBearer::decodeData)
+                                .map(dataBearer -> dataBearer.decompressData(this.compressionProvider))
+                                .map(dataBearer -> dataBearer.decryptData(this.encryptionProvider))
+                                .map(GenericDataBearer::getData)
+                                .orElse(null));
+            }
+        }
+
+        // For everything else just move one if valid
+        if(!valid) {
+            throw new SecomSignatureVerificationException("Received message signature could not be verified!");
+        }
+    }
+
+    /**
+     * A helper method that parses the data in the body of the incoming request.
+     * One issue is that after we read that data, the request input stream is
+     * left empty, so we need to recreate it with the original data once more.
+     * <p/>
+     * Here is a pointer: https://github.com/quarkusio/quarkus/issues/17430
+     * <p/>
+     * Once we have the request we can use the provided object mapper to
+     * translate the JSON string into an actual SECOM object.
+     *
+     * @param rqstCtx       The incoming request context
+     * @param clazz         The class to map the request body into
+     * @return the mapped object, populated by the request body
+     * @param <T> the generic class to use for the mapping
+     * @throws IOException for any IO exceptions while reading the data
+     */
+    private <T> T parseRequestBody(ContainerRequestContext rqstCtx, Class<T> clazz) throws IOException {
+        // Get the request input stream and read the data
+        final InputStream is = rqstCtx.getEntityStream();
+        final byte[] data = is.readAllBytes();
+        final String body = new String(data, StandardCharsets.UTF_8);
+
+        // Update the input stream with a new one to re-initialise it
+        rqstCtx.setEntityStream(new ByteArrayInputStream(data));
+
+        // Get the JAX-RS registered object mapper and map the data to the object
+        return providers.getContextResolver(ObjectMapper.class, rqstCtx.getMediaType())
+                .getContext(UploadObject.class)
+                .readValue(body, clazz);
+    }
+
+    /**
+     * As specified in section 6.2.2 of SECOM, the procedure to verify the
+     * client’s certificate shall be:
+     * <ul>
+     *     <li>the server shall verify that the client’s certificate is valid;</li>
+     *     <li>the server shall verify that the client’s certificate is issued by SECOM PKI.</li>
+     * </ul>
+     * @param certificates                   The received certificate to be verified
+     * @param rootCertificateThumbprint     The received root certificate thumbprint
+     */
+    private void checkCertificate(String[] certificates, String rootCertificateThumbprint)  {
+        // Access out trust store
+        final KeyStore trustStore = this.trustStoreProvider.getTrustStore();
+
+        // Check is we have a valid root certificate thumbprint
+        if (rootCertificateThumbprint == null) {
+            throw new SecomSchemaValidationException(
+                    "envelopeRootCertificateThumbprint is a required attribute"
+            );
+        }
+
+        // Check that the clients rootCertificateThumbprint is known in our trust store
+        // This supports multiple root certificates int he SECOM trust store
+        try {
+            boolean found = false;
+            Enumeration<String> certs = trustStore.aliases();
+
+            // Check all the provided certificates one-by-one for a matching thumbprint
+            while (certs.hasMoreElements()) {
+                X509Certificate rootX509Certificate = (X509Certificate) trustStore.getCertificate(certs.nextElement());
+                String rootX509CertificateThumbprint =
+                        SecomPemUtils.getCertThumbprint(
+                                rootX509Certificate,
+                                SecomConstants.CERTIFICATE_THUMBPRINT_HASH);
+
+                if (rootCertificateThumbprint.equals(rootX509CertificateThumbprint)) {
+                    found = true;
+                    break;
+                }
+            }
+
+            // If nothing found, raise an issue
+            if (!found) {
+                throw new SecomInvalidCertificateException(
+                        "The provided SECOM CA root certificate is not recognised");
+            }
+        } catch (CertificateEncodingException e) {
+            throw new SecomValidationException(e.getMessage());
+        } catch (KeyStoreException e) {
+            throw new SecomInvalidCertificateException(e.getMessage());
+        } catch (NoSuchAlgorithmException e) {
+            throw new SecomNotFoundException(e.getMessage());
+        }
+
+        // Now parse the provided certificate and check its validity
+        final X509Certificate[] x509Certificates;
+        try {
+            x509Certificates = SecomPemUtils.getCertsFromPem(certificates);
+            if(x509Certificates != null) {
+                for(X509Certificate x509Certificate : x509Certificates) {
+                    x509Certificate.checkValidity();
+                }
+            }
+        } catch (CertificateException ex) {
+            throw new SecomInvalidCertificateException(ex.getMessage());
+        }
+
+        // Finally verify the provided certificate and check its validity
+        try {
+            if(!PkiUtils.verifyCertificateChain(x509Certificates, trustStore)) {
+                throw new SecomInvalidCertificateException("Failed to verify the certificate chain...");
+            }
+        } catch (GeneralSecurityException ex) {
+            throw new SecomInvalidCertificateException(ex.getMessage());
+        }
+    }
+
+}

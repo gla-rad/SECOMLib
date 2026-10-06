@@ -1,0 +1,169 @@
+/*
+ * Copyright (c) 2026 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.components;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import jakarta.servlet.http.HttpServletRequest;
+import org.grad.secomv2.core.interfaces.*;
+
+import java.util.Optional;
+import java.util.logging.Logger;
+
+import static org.grad.secomv2.core.interfaces.AccessNotificationServiceInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
+
+/**
+ * The SECOM Exception Manager Class.
+ *
+ * @author Lawrence Hughes (email: lawrence.hughes@gla-rad.org)
+ */
+@RestControllerAdvice
+public class SecomV2ExceptionMapper {
+
+    /**
+     * Generate the response based on the exceptions thrown by the respective
+     * SECOM endpoint called. This can be extracted by the request context.
+     *
+     * @param ex the exception that was thrown
+     * @return the response to be returned
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleException(Exception ex, HttpServletRequest request) throws Exception {
+        // Get the path and method for the request
+        String base = request.getContextPath();
+        String path = request.getServletPath();
+        String method = request.getMethod();
+
+        //First log the message
+        final Logger secomLogger = Logger.getLogger(Optional.of(ex)
+                        .map(Exception::getCause)
+                        .map(Throwable::toString)
+                        .orElse("SecomExceptionMapper.class"));
+        secomLogger.severe(Optional.of(ex)
+                        .map(Exception::getMessage)
+                        .orElse("Unknown error..."));
+        secomLogger.fine(Optional.of(ex)
+                .map(ExceptionUtils::getStackTrace)
+                .orElse("Unknown stacktrace..."));
+
+        secomLogger.warning("API Context was: " + base);
+        secomLogger.warning("API URL was: " + path);
+        secomLogger.warning("API method was: " + method);
+        secomLogger.warning("Exception was: " + ex.getClass().getSimpleName());
+
+        // If exception is not for this version, throw it again for the other exception handler
+        if(!path.startsWith(API_PATH + "/" + SECOM_VERSION + "/")) {
+            throw ex;
+        }
+
+        if(ex instanceof HttpRequestMethodNotSupportedException) {
+            return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
+        }
+
+        // Then handle
+        switch(path) {
+            case API_PATH + ACCESS_INTERFACE_PATH:
+                return AccessServiceInterface.handleAccessInterfaceExceptions(ex, request);
+            case API_PATH + ACCESS_NOTIFICATION_INTERFACE_PATH:
+                return AccessNotificationServiceInterface.handleAccessNotificationInterfaceExceptions(ex, request);
+            case API_PATH + ACKNOWLEDGMENT_INTERFACE_PATH:
+                return AcknowledgementServiceInterface.handleAcknowledgementInterfaceExceptions(ex, request);
+            case API_PATH + CAPABILITY_INTERFACE_PATH:
+                return CapabilityServiceInterface.handleCapabilityInterfaceExceptions(ex, request);
+            case API_PATH + SEARCH_SERVICE_INTERFACE_PATH:
+                return SearchServiceServiceInterface.handleSearchServiceInterfaceExceptions(ex, request);
+            case API_PATH + ENCRYPTION_KEY_INTERFACE_PATH:
+                return EncryptionKeyServiceInterface.handleEncryptionInterfaceExceptions(ex, request);
+            case API_PATH + ENCRYPTION_KEY_REQUEST_INTERFACE_PATH:
+                return EncryptionKeyRequestServiceInterface.handleEncryptionKeyRequestInterfaceExceptions(ex, request);
+            case API_PATH + GET_BY_LINK_INTERFACE_PATH: // Also for upload
+                if("GET".equals(method)) {
+                    return GetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, request);
+                } else if("POST".equals(method)) {
+                    return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, request);
+                }
+            case API_PATH + POST_GET_BY_LINK_INTERFACE_PATH:
+                return PostGetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, request);
+            case API_PATH + GET_INTERFACE_PATH: // Also for upload
+                if("GET".equals(method)) {
+                    return GetServiceInterface.handleGetInterfaceExceptions(ex, request);
+                } else if("POST".equals(method)) {
+                    return UploadServiceInterface.handleUploadInterfaceExceptions(ex, request);
+                }
+            case API_PATH + POST_GET_INTERFACE_PATH:
+                return PostGetServiceInterface.handleGerInterfaceException(ex, request);
+            case API_PATH + GET_SUMMARY_INTERFACE_PATH:
+                return GetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, request);
+            case API_PATH + POST_GET_SUMMARY_INTERFACE_PATH:
+                return PostGetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, request);
+            case API_PATH + PING_INTERFACE_PATH:
+                return PingServiceInterface.handlePingInterfaceExceptions(ex, request);
+            case API_PATH + SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
+                if("POST".equals(method)) {
+                    return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, request);
+                } else if("DELETE".equals(method)) {
+                    return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, request);
+                }
+            case API_PATH + SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
+                return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, request);
+            case API_PATH + GET_PUBLIC_KEY_INTERFACE_PATH:
+                if("GET".equals(method)) {
+                    return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
+                } else if("POST".equals(method)) {
+                    return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
+                }
+            default:
+                // The Retrieve Result interface path contains a transactionId path variable,
+                // so it cannot be matched with an exact switch/case label
+                if(path.contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)) {
+                    return RetrieveResultServiceInterface.handleRetrieveResultInterfaceExceptions(ex, request);
+                }
+                //Nothing to do, continue with the generic rules
+        }
+
+
+        // For everything else, just return an internal server error
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Internal server error");
+    }
+
+}

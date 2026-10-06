@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2025 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.core.base;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.time.Instant;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class SecomInstantDeserializerTest {
+
+    // Test Parameters
+    SecomInstantDeserializer secomInstantDeserializer;
+    ObjectMapper objectMapper;
+
+    /**
+     * Set up some base data.
+     */
+    @BeforeEach
+    void setup() {
+        this.secomInstantDeserializer = new SecomInstantDeserializer();
+        SimpleModule module = new SimpleModule();
+        module.addDeserializer(Instant.class, this.secomInstantDeserializer);
+        this.objectMapper = new ObjectMapper().registerModule(module);
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted local dates.
+     */
+    @Test
+    void testDeserializeInstant() throws IOException {
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted local daylight-saving dates.
+     */
+    @Test
+    void testDeserializeInstantDLS() throws IOException {
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted UTC dates.
+     */
+    @Test
+    void testDeserializeUTCDate() throws IOException {
+        assertEquals(Instant.parse("2001-01-01T12:13:14Z"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14Z\"", Instant.class));
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted UTC daylight-saving dates.
+     */
+    @Test
+    void testDeserializeUTCDateDLS() throws IOException {
+        assertEquals(Instant.parse("2008-08-08T12:13:14Z"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14Z\"", Instant.class));
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted dates with offsets.
+     */
+    @Test
+    void testDeserializeDateWithOffset() throws IOException {
+        assertEquals(Instant.parse("2001-01-01T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2001-01-01T12:13:14+01:00\"", Instant.class));
+    }
+
+    /**
+     * make sure we can correctly deserialize the incoming SECOM-compliant
+     * formatted daylight-saving dates with offsets.
+     */
+    @Test
+    void testDeserializeDateWithOffsetDLS() throws IOException {
+        assertEquals(Instant.parse("2008-08-08T12:13:14+01:00"),
+                this.objectMapper.readValue("\"2008-08-08T12:13:14+01:00\"", Instant.class));
+    }
+
+}

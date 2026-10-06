@@ -1,0 +1,845 @@
+/*
+ * Copyright (c) 2025 GLA Research and Development Directorate
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.grad.secomv2.springboot3.components;
+
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslProvider;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.grad.secomv2.core.base.SecomCertificateProvider;
+import org.grad.secomv2.core.base.SecomCompressionProvider;
+import org.grad.secomv2.core.base.SecomEncryptionProvider;
+import org.grad.secomv2.core.base.SecomSignatureProvider;
+import org.grad.secomv2.core.models.*;
+import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
+import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
+import org.grad.secomv2.core.utils.KeyStoreUtils;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriBuilder;
+import reactor.netty.http.client.HttpClient;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.grad.secomv2.core.base.SecomConstants.SECOM_DATE_TIME_FORMATTER;
+import static org.grad.secomv2.core.interfaces.AccessNotificationServiceInterface.ACCESS_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.AccessServiceInterface.ACCESS_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.AcknowledgementServiceInterface.ACKNOWLEDGMENT_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABILITY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetByLinkServiceInterface.GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetServiceInterface.GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INTERFACE_PATH;
+
+/**
+ * The SECOM Client Class.
+ * <p/>
+ * This class can be used to register Springboot beans that connect to SECOM
+ * compliant services and access/push information in the standardised
+ * interfaces.
+ *
+ * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
+ */
+public class SecomClient {
+
+    // Class Variables
+    WebClient secomClient;
+    SecomCertificateProvider certificateProvider;
+    SecomSignatureProvider signatureProvider;
+    SecomEncryptionProvider encryptionProvider;
+    SecomCompressionProvider compressionProvider;
+
+    /**
+     * The SECOM Client Constructor.
+     *
+     * The client constructor is build as a simple class, not a Spring component
+     * as it can be used for multiple connections. According to the provided
+     * SECOM configuration properties, the SSL can be configured to pick up
+     * and also provide client certificates for the communication.
+     *
+     * @param url       the URL of the SECOM service
+     * @param config    the SECOM configuration properties bundle
+     * @throws IOException for IO exceptions
+     * @throws KeyStoreException for exceptions while handling the key-store
+     * @throws NoSuchAlgorithmException for exceptions onthe key-store alghorithm
+     * @throws CertificateException for certificate exceptions
+     * @throws UnrecoverableKeyException for certificate key exceptions
+     */
+    public SecomClient(URL url, SecomConfigProperties config) throws IOException, KeyStoreException, NoSuchAlgorithmException, CertificateException, UnrecoverableKeyException {
+        // Initialise the HTTP connection configuration
+        HttpClient httpConnector = HttpClient
+                .create()
+                .followRedirect(true);
+
+        // When a valid SECOM configuration is provided, use it
+        if(Objects.nonNull(config)) {
+            // Start Setting up the SSL context builder.
+            SslContextBuilder sslContextBuilder = SslContextBuilder
+                    .forClient();
+
+            // If we have a keystore and a valid password
+            if (StringUtils.isNotBlank(config.getKeystore()) && StringUtils.isNotBlank(config.getKeystorePassword())) {
+                sslContextBuilder.keyManager(KeyStoreUtils.getKeyManagerFactory(
+                        config.getKeystore(), config.getKeystorePassword(), config.getKeystoreType(), null));
+            }
+
+            // If we have a truststore and a valid password
+            if (StringUtils.isNotBlank(config.getTruststore()) && StringUtils.isNotBlank(config.getTruststorePassword())) {
+                sslContextBuilder.trustManager(KeyStoreUtils.getTrustManagerFactory(
+                        config.getTruststore(), config.getTruststorePassword(), config.getTruststoreType(), null));
+            }
+            // Otherwise, check is an insecure policy it to be applied
+            else if (config.getInsecureSslPolicy()) {
+                 sslContextBuilder.trustManager(InsecureTrustManagerFactory.INSTANCE);
+            }
+
+            // Add the SSL context to the HTTP connector
+            SslContext sslContext = sslContextBuilder
+                    .sslProvider(SslProvider.JDK)
+                    .build();
+            httpConnector = httpConnector.secure(spec -> spec.sslContext(sslContext)
+                    .handshakeTimeout(Duration.of(2, ChronoUnit.SECONDS)));
+        }
+
+        // And create the SECOM web client
+        this.secomClient = WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(httpConnector))
+                .baseUrl(url.toString())
+                .codecs(configurer -> configurer
+                        .defaultCodecs()
+                        .maxInMemorySize(Optional.ofNullable(config)
+                                .map(SecomConfigProperties::getClientMaxMemorySize)
+                                .orElse(-1)))
+                //.filter(setJWT())
+                .build();
+    }
+
+    /**
+     * Return the WebClient to provide access for extended calls.
+     *
+     * @return the SECOM WebClient.
+     */
+    public WebClient getSecomClient() {
+        return this.secomClient;
+    }
+
+    /**
+     * Gets certificate provider.
+     *
+     * @return the certificate provider
+     */
+    public SecomCertificateProvider getCertificateProvider() {
+        if (certificateProvider == null) {
+            certificateProvider = SecomSpringContext.getBean(SecomCertificateProvider.class);
+        }
+        return certificateProvider;
+    }
+
+    /**
+     * Sets certificate provider.
+     *
+     * @param certificateProvider the certificate provider
+     */
+    public void setCertificateProvider(SecomCertificateProvider certificateProvider) {
+        this.certificateProvider = certificateProvider;
+    }
+
+    /**
+     * Gets signature provider.
+     *
+     * @return the signature provider
+     */
+    public SecomSignatureProvider getSignatureProvider() {
+        if (signatureProvider == null) {
+            signatureProvider = SecomSpringContext.getBean(SecomSignatureProvider.class);
+        }
+        return signatureProvider;
+    }
+
+    /**
+     * Sets signature provider.
+     *
+     * @param signatureProvider the signature provider
+     */
+    public void setSignatureProvider(SecomSignatureProvider signatureProvider) {
+        this.signatureProvider = signatureProvider;
+    }
+
+    /**
+     * Gets encryption provider.
+     *
+     * @return the encryption provider
+     */
+    public SecomEncryptionProvider getEncryptionProvider() {
+        if (encryptionProvider == null) {
+            encryptionProvider = SecomSpringContext.getBean(SecomEncryptionProvider.class);
+        }
+        return encryptionProvider;
+    }
+
+    /**
+     * Sets encryption provider.
+     *
+     * @param encryptionProvider the encryption provider
+     */
+    public void setEncryptionProvider(SecomEncryptionProvider encryptionProvider) {
+        this.encryptionProvider = encryptionProvider;
+    }
+
+    /**
+     * Gets compression provider.
+     *
+     * @return the compression provider
+     */
+    public SecomCompressionProvider getCompressionProvider() {
+        if (compressionProvider == null) {
+            compressionProvider = SecomSpringContext.getBean(SecomCompressionProvider.class);
+        }
+        return compressionProvider;
+    }
+
+    /**
+     * Sets compression provider.
+     *
+     * @param compressionProvider the compression provider
+     */
+    public void setCompressionProvider(SecomCompressionProvider compressionProvider) {
+        this.compressionProvider = compressionProvider;
+    }
+
+
+    /**
+     * POST /v2/access/notification : Result from Access Request performed on a
+     * service instance shall be sent asynchronous through this client
+     * interface.
+     *
+     * @param accessNotificationObject  the access notification object
+     * @return the access notification response object
+     */
+    public Optional<AccessNotificationResponseObject> accessNotification(AccessNotificationObject accessNotificationObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(ACCESS_NOTIFICATION_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(accessNotificationObject))
+                .retrieve()
+                .bodyToMono(AccessNotificationResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/access : Access to the service instance information can be
+     * requested through the Request Access interface.
+     *
+     * @param accessRequestObject the request access object
+     * @return the request access response object
+     */
+    public Optional<AccessResponseObject> requestAccess(AccessRequestObject accessRequestObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            accessRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(ACCESS_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(accessRequestObject))
+                .retrieve()
+                .bodyToMono(AccessResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/acknowledgement : During upload of information, an
+     * acknowledgement can be requested which is expected to be received when
+     * the uploaded message has been delivered to the end system (technical
+     * acknowledgement), and an acknowledgement when the message has been opened
+     * (read) by the end user (operational acknowledgement). The acknowledgement
+     * contains a reference to object delivered.
+     *
+     * @param acknowledgementObject  the acknowledgement object
+     * @return the acknowledgement response object
+     */
+    public Optional<AcknowledgementResponseObject> acknowledgement(AcknowledgementObject acknowledgementObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            acknowledgementObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(ACKNOWLEDGMENT_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(acknowledgementObject))
+                .retrieve()
+                .bodyToMono(AcknowledgementResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/capability : The purpose of the interface is to provide a dynamic
+     * method to ask a service instance at runtime what interfaces are
+     * accessible, and what payload formats and version are valid.
+     *
+     * @return the capability response object
+     */
+    public Optional<CapabilityResponseObject> capability() {
+        return this.secomClient
+                .get()
+                .uri(CAPABILITY_INTERFACE_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(CapabilityResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/searchService : The purpose of this interface is to search for
+     * service instances to consume.
+     *
+     * @param searchFilterObject    The search filter object
+     * @return the result list of the search
+     */
+    public Optional<SearchResult> searchService(SearchFilterObject searchFilterObject) {
+        if(this.getSignatureProvider() != null) {
+            searchFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(SEARCH_SERVICE_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(searchFilterObject))
+                .retrieve()
+                .bodyToMono(SearchResult.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/retrieveResults/{transactionId} : The purpose of this interface is to retrieve additional
+     * results from the search service global search.
+     *
+     * @param retrieveResultObject    The retrieve results object
+     * @return the result list of the search
+     */
+    public Optional<SearchResult> retrieveResult(RetrieveResultObject retrieveResultObject) {
+        if(this.getSignatureProvider() != null) {
+            retrieveResultObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(uriBuilder -> uriBuilder
+                        .path(RETRIEVE_RESULT_INTERFACE_PATH)
+                        .build(retrieveResultObject.getEnvelope().getTransactionId()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(retrieveResultObject))
+                .retrieve()
+                .bodyToMono(SearchResult.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/encryptionkey/upload : This operation is used to upload (push)
+     * an encrypted secret key to a consumer.
+     *
+     * @return the encryption key response object
+     */
+    public Optional<EncryptionKeyResponseObject> uploadEncryptionKey(EncryptionKeyObject encryptionKeyObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            encryptionKeyObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(ENCRYPTION_KEY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(encryptionKeyObject))
+                .retrieve()
+                .bodyToMono(EncryptionKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/encryptionkey/request : This operation enables a consumer to
+     * request an encrypted secret key from a producer by providing a
+     * reference to the encrypted data and a public certificate for symmetric
+     * key derivation used to protect the temporary encryption key during
+     * transfer.
+     *
+     * @return the encryption key response object
+     */
+    public Optional<EncryptionKeyResponseObject> encryptionKeyRequest(EncryptionKeyRequestObject encryptionKeyRequestObject) {
+        if(this.getSignatureProvider() != null  && this.getCertificateProvider() != null) {
+            encryptionKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(ENCRYPTION_KEY_REQUEST_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(encryptionKeyRequestObject))
+                .retrieve()
+                .bodyToMono(EncryptionKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/object/link : The Get By Link interface is used for pulling
+     * information from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
+     *
+     * @param transactionIdentifier the transaction identifier
+     * @return the object in an "application/octet-stream" encoding
+     */
+    public Optional<byte[]> getByLink(UUID transactionIdentifier) {
+        return this.secomClient
+                .get()
+                .uri(uriBuilder -> uriBuilder
+                        .path(GET_BY_LINK_INTERFACE_PATH)
+                        .queryParam("transactionIdentifier", transactionIdentifier)
+                        .build())
+                .accept(MediaType.APPLICATION_OCTET_STREAM)
+                .retrieve()
+                .bodyToMono(byte[].class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/search/link : The Get By Link interface is used for pulling
+     * information using POST method from a data storage handled by the information owner. The
+     * link to the data storage can be exchanged with Upload Link interface.
+     * The owner of the information (provider) is responsible for relevant
+     * authentication and authorization procedure before returning information.
+     *
+     * @param getByLinkObject the get by link object
+     * @return the get by link response object
+     */
+    public Optional<GetByLinkResponseObject> postGetByLink(GetByLinkObject getByLinkObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getByLinkObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(POST_GET_BY_LINK_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getByLinkObject))
+                .retrieve()
+                .bodyToMono(GetByLinkResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/object : The Get interface is used for pulling information from a
+     * service provider. The owner of the information (provider) is responsible
+     * for the authorization procedure before returning information.
+     *
+     * @param dataReference the object data reference
+     * @param containerType the object data container type
+     * @param dataProductType the object data product type
+     * @param productVersion the object data product version
+     * @param geometry the object geometry
+     * @param unlocode the object UNLOCODE
+     * @param validFrom the object valid from time
+     * @param validTo the object valid to time
+     * @param page the page number to be retrieved
+     * @param pageSize the maximum page size
+     * @return the object information
+     */
+    public Optional<GetResponseObject> get(UUID dataReference,
+                                           ContainerTypeEnum containerType,
+                                           SECOM_DataProductType dataProductType,
+                                           String productVersion,
+                                           String geometry,
+                                           String unlocode,
+                                           LocalDateTime validFrom,
+                                           LocalDateTime validTo,
+                                           Integer page,
+                                           Integer pageSize) {
+        return this.secomClient
+                .get()
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_INTERFACE_PATH);
+                    builder = dataReference != null ? builder.queryParam("dataReference", dataReference) : builder;
+                    builder = containerType != null ? builder.queryParam("containerType", containerType.getValue()) : builder;
+                    builder = dataProductType != null ? builder .queryParam("dataProductType", dataProductType.name()) : builder;
+                    builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
+                    builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
+                    builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", SECOM_DATE_TIME_FORMATTER.format(validFrom)) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", SECOM_DATE_TIME_FORMATTER.format(validTo)) : builder;
+                    builder = page != null ? builder.queryParam("page", page) : builder;
+                    builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
+                    return builder.build();
+                })
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(GetResponseObject.class)
+                .blockOptional()
+                .map(response -> response.decodeData())
+                .map(response -> response.decompressData(this.getCompressionProvider()))
+                .map(response -> response.decryptData(this.getEncryptionProvider()))
+                .map(GetResponseObject.class::cast);
+    }
+
+    /**
+     * POST /v2/object/search : The Post Get interface is used for pulling information from a
+     * service provider using a POST request. The owner of the information (provider) is responsible
+     * for the authorization procedure before returning information.
+     *
+     * @param getFilterObject  the get filter object
+     * @return the get response object
+     */
+    public Optional<GetResponseObject> postGet(GetFilterObject getFilterObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(POST_GET_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getFilterObject))
+                .retrieve()
+                .bodyToMono(GetResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/object/summary :  A list of information shall be returned from
+     * this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
+     *
+     * @param containerType the object data container type
+     * @param dataProductType the object data product type
+     * @param productVersion the object data product version
+     * @param geometry the object geometry
+     * @param unlocode the object UNLOCODE
+     * @param validFrom the object valid from time
+     * @param validTo the object valid to time
+     * @param page the page number to be retrieved
+     * @param pageSize the maximum page size
+     * @return the summary response object
+     */
+    public Optional<GetSummaryResponseObject> getSummary(ContainerTypeEnum containerType,
+                                                         SECOM_DataProductType dataProductType,
+                                                         String productVersion,
+                                                         String geometry,
+                                                         String unlocode,
+                                                         LocalDateTime validFrom,
+                                                         LocalDateTime validTo,
+                                                         Integer page,
+                                                         Integer pageSize) {
+        return this.secomClient
+                .get()
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_SUMMARY_INTERFACE_PATH);
+                    builder = containerType != null ? builder.queryParam("containerType", containerType.getValue()) : builder;
+                    builder = dataProductType != null ? builder .queryParam("dataProductType", dataProductType.name()) : builder;
+                    builder = productVersion != null ? builder.queryParam("productVersion", productVersion) : builder;
+                    builder = geometry != null ? builder.queryParam("geometry", geometry): builder;
+                    builder = unlocode != null ? builder.queryParam("unlocode", unlocode) : builder;
+                    builder = validFrom != null ? builder.queryParam("validFrom", SECOM_DATE_TIME_FORMATTER.format(validFrom)) : builder;
+                    builder = validTo != null ? builder.queryParam("validTo", SECOM_DATE_TIME_FORMATTER.format(validTo)) : builder;
+                    builder = page != null ? builder.queryParam("page", page) : builder;
+                    builder = pageSize != null ? builder.queryParam("pageSize", pageSize) : builder;
+                    return builder.build();
+                })
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(GetSummaryResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/search/summary : A list of information shall be returned
+     * from this interface. The summary contains identity, status and short
+     * description of each information object. The actual information object
+     * shall be retrieved using the Get interface.
+     *
+     * @param getSummaryFilterObject the get summary filter object
+     * @return the summary response object
+     */
+    public Optional<GetSummaryResponseObject> postGetSummary(GetSummaryFilterObject getSummaryFilterObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            getSummaryFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(POST_GET_SUMMARY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(getSummaryFilterObject))
+                .retrieve()
+                .bodyToMono(GetSummaryResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/ping : The purpose of the interface is to provide a dynamic
+     * method to ask for the technical status of the specific service instance.
+     *
+     * @return the status response object
+     */
+    public Optional<PingResponseObject> ping() {
+        return this.secomClient
+                .get()
+                .uri(PING_INTERFACE_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(PingResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * DELETE /v2/subscription : Subscription(s) can be removed either
+     * internally by information owner, or externally by the consumer. This
+     * interface shall be used by the consumer to request removal of
+     * subscription.
+     *
+     * @param removeSubscriptionObject the remove subscription object
+     * @return the remove subscription response object
+     */
+    public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
+        return this.secomClient
+                .delete()
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
+                    builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
+                    return builder.build();
+                })
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(RemoveSubscriptionResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/subscription/notification : The interface receives notifications
+     * when a subscription is created or removed by the information provider.
+     *
+     * @param subscriptionNotificationObject the subscription notification request object
+     * @return the subscription notification response object
+     */
+    public Optional<SubscriptionNotificationResponseObject> subscriptionNotification(SubscriptionNotificationObject subscriptionNotificationObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            subscriptionNotificationObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(subscriptionNotificationObject))
+                .retrieve()
+                .bodyToMono(SubscriptionNotificationResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/subscription : Request subscription on information, either
+     * specific information according to parameters, or the information
+     * accessible upon decision by the information provider.
+     *
+     * @param subscriptionRequestObject the subscription object
+     * @return the subscription response object
+     */
+    public Optional<SubscriptionResponseObject> subscription(SubscriptionRequestObject subscriptionRequestObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            subscriptionRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(SUBSCRIPTION_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(subscriptionRequestObject))
+                .retrieve()
+                .bodyToMono(SubscriptionResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object : The interface shall be used for uploading (pushing)
+     * data to a consumer. The operation expects one single data object and
+     * its metadata.
+     *
+     * @param uploadObject  the upload object
+     * @return the upload response object
+     */
+    public Optional<UploadResponseObject> upload(UploadObject uploadObject) {
+        //Prepare the upload envelope if valid
+        final EnvelopeUploadObject envelope = uploadObject.getEnvelope();
+        if(envelope != null) {
+            envelope.prepareMetadata(this.getSignatureProvider())
+                    .signData(this.getCertificateProvider(), this.getSignatureProvider())
+                    .encryptData(this.getEncryptionProvider())
+                    .compressData(this.getCompressionProvider())
+                    .encodeData();
+        }
+
+        // If a signature provider has been assigned, use it to sign the data
+        if(this.getSignatureProvider() != null) {
+            uploadObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(UPLOAD_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(uploadObject))
+                .retrieve()
+                .bodyToMono(UploadResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/object/link : The REST operation POST /object/link. The
+     * interface shall be used for uploading (pushing) a link to data to a
+     * consumer.
+     *
+     * @param uploadLinkObject  the upload link object
+     * @return the upload link response object
+     */
+    public Optional<UploadLinkResponseObject> uploadLink(UploadLinkObject uploadLinkObject) {
+        //Prepare the upload link envelope if valid
+        final EnvelopeLinkObject envelope = uploadLinkObject.getEnvelope();
+        if(envelope != null) {
+            envelope.prepareMetadata(this.getSignatureProvider());
+        }
+
+        // If a signature provider has been assigned, use it to sign the
+        // upload object envelop data.
+        if(this.getSignatureProvider() != null) {
+            uploadLinkObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(UPLOAD_LINK_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(uploadLinkObject))
+                .retrieve()
+                .bodyToMono(UploadLinkResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * GET /v2/publicKey: The Rest operation GET /publicKey
+     * This operation receives a get request for a public key. If authorized, the key is sent back in the
+     * response. It is up to the service provider to apply relevant authorization procedure and access
+     * control to information.
+     *
+     * @param certificateThumbprint Claimed Thumbprint for signed key (X.509 Certificate)
+     * @param dataProtection Flag indicating that the requested key is for symmetric
+     *                       key derivation in exchange for a random encryption key
+     * @return PublicKeyObject The returned publicKeyObject
+     */
+    public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) throws URISyntaxException {
+        return this.secomClient
+                .get()
+                .uri(uriBuilder -> {
+                    UriBuilder builder = uriBuilder.path(GET_PUBLIC_KEY_INTERFACE_PATH);
+                    builder = certificateThumbprint != null ? builder.queryParam("certificateThumbprint", certificateThumbprint) : builder;
+                    builder.queryParam("dataProtection", dataProtection);
+                    return builder.build();
+                })
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/publicKey: The Rest operation - POST /publicKey
+     * This operation uploads (pushes) a public key.
+     *
+     * @param publicKeyRequestObject Public certificate x.509 in PEM format, Base64 encoded byte array.
+     * @return PublicKeyResponseObject
+     */
+    public Optional<PublicKeyResponseObject> uploadPublicKey(PublicKeyRequestObject publicKeyRequestObject) {
+        //Prepare the upload link envelope if valid
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            publicKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        // And perform the web-call
+        return this.secomClient
+                .post()
+                .uri(GET_PUBLIC_KEY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(publicKeyRequestObject))
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
+                .blockOptional();
+    }
+
+}
