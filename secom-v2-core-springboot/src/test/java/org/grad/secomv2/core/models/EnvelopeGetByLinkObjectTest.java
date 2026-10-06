@@ -85,7 +85,7 @@ class EnvelopeGetByLinkObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[0]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[1]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[1]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[2]);
         assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[3]);
     }

@@ -93,7 +93,7 @@ class SECOM_ExchangeMetadataObjectTest {
         assertEquals(this.obj.getProtectionScheme(), csv[1]);
         assertEquals(this.obj.getDigitalSignatureReference().toString().toLowerCase(), csv[2]);
         assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
-        assertEquals(Arrays.toString(this.obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
+        assertEquals(String.join(",", this.obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
         assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
         assertEquals(this.obj.getCompressionFlag().toString(), csv[6]);
     }

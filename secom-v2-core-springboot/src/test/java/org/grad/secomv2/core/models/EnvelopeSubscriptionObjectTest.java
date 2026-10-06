@@ -114,7 +114,7 @@ class EnvelopeSubscriptionObjectTest {
         assertEquals(this.obj.getSubscriptionPeriodEnd().getEpochSecond(), Long.parseLong(csv[7]));
         assertEquals(this.obj.getCallbackEndpoint().toString(), csv[8]);
         assertEquals(this.obj.getPushAll(), Boolean.parseBoolean(csv[9]));
-        assertEquals(Arrays.toString(this.obj.envelopeSignatureCertificate), csv[10]);
+        assertEquals(String.join(",", this.obj.envelopeSignatureCertificate), csv[10]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[11]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[12]));
 

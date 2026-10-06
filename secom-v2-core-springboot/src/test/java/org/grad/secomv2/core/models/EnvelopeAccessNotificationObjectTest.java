@@ -92,7 +92,7 @@ class EnvelopeAccessNotificationObjectTest {
         assertEquals(this.obj.getDecisionReason(), csv[1]);
         assertEquals(this.obj.getDataReference().toString(), csv[2]);
         assertEquals(this.obj.getTransactionIdentifier().toString(), csv[3]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[4]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[4]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[5]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[6]));
 

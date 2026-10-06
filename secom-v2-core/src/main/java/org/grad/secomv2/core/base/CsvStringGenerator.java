@@ -122,7 +122,7 @@ public interface CsvStringGenerator {
         } else if(attribute instanceof String[]) {
             return Optional.of(attribute)
                     .map(String[].class::cast)
-                    .map(Arrays::toString)
+                    .map(array -> String.join(",", array))
                     .orElse("");
         } else {
             return attribute.toString();

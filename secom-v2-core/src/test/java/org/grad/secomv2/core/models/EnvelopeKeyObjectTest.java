@@ -103,9 +103,9 @@ class EnvelopeKeyObjectTest {
         assertEquals(new String(obj.getIv(), StandardCharsets.UTF_8), new String(Base64.getDecoder().decode(csv[1])));
         assertEquals(obj.getTransactionIdentifier().toString(), csv[2]);
         assertEquals(obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
-        assertEquals(Arrays.toString(obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
+        assertEquals(String.join(",", obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
         assertEquals(obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
-        assertEquals(Arrays.toString(obj.getEnvelopeSignatureCertificate()), csv[6]);
+        assertEquals(String.join(",", obj.getEnvelopeSignatureCertificate()), csv[6]);
         assertEquals(obj.getEnvelopeRootCertificateThumbprint(), csv[7]);
         assertEquals(obj.getExpirationTime().getEpochSecond(), Long.parseLong(csv[8]));
         assertEquals(obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));

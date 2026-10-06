@@ -80,7 +80,7 @@ class EnvelopeAccessRequestObjectTest {
         assertEquals(this.obj.getDataReference(), result.getDataReference());
         assertEquals(this.obj.getProductVersion(), result.getProductVersion());
         assertEquals(this.obj.getCallbackEndpoint(), result.getCallbackEndpoint());
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), Arrays.toString(result.getEnvelopeSignatureCertificate()));
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), String.join(",", result.getEnvelopeSignatureCertificate()));
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), result.getEnvelopeRootCertificateThumbprint());
         assertEquals(this.obj.getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS), result.getEnvelopeSignatureTime());
     }
@@ -102,7 +102,7 @@ class EnvelopeAccessRequestObjectTest {
         assertEquals(this.obj.getDataReference().toString(), csv[4]);
         assertEquals(this.obj.getProductVersion(), csv[5]);
         assertEquals(this.obj.getCallbackEndpoint(), csv[6]);
-        assertEquals(Arrays.toString(this.obj.getEnvelopeSignatureCertificate()), csv[7]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[7]);
         assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[8]);
         assertEquals(this.obj.getEnvelopeSignatureTime().getEpochSecond(), Long.parseLong(csv[9]));
     }
