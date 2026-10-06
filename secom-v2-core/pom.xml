@@ -20,7 +20,7 @@
         <version.maven.javax.activation.api>2.0.0</version.maven.javax.activation.api>
         <version.maven.javax.validation-api>2.0.1.Final</version.maven.javax.validation-api>
         <version.maven.servlet.api>2.5</version.maven.servlet.api>
-        <jackson.version>2.19.0</jackson.version>
+        <jackson.version>2.22.3</jackson.version>
     </properties>
 
     <dependencies>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
+            <version>2.22</version>
             <scope>provided</scope>
         </dependency>
 
