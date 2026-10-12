@@ -23,20 +23,21 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.RemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.UUID;
 
 /**
  * The SECOM Remove Subscription Interface Definition.
@@ -53,20 +54,21 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
     /**
      * The Interface Endpoint Path.
      */
-    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription";
+    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription/delete";
 
     /**
-     * DELETE /v2/subscription : Subscription(s) can be removed either
+     * POST /v2/subscription/delete : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
      * subscription.
      *
-     * @param subscriptionIdentifier the subscription identifier to remove
+     * @param removeSubscriptionObject the remove subscription object
      * @return the remove subscription response object
      */
-    @DeleteMapping(path = REMOVE_SUBSCRIPTION_INTERFACE_PATH,
-                    produces = { MediaType.APPLICATION_JSON_VALUE })
-    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@RequestParam("subscriptionIdentifier") UUID subscriptionIdentifier);
+    @PostMapping(path = REMOVE_SUBSCRIPTION_INTERFACE_PATH,
+                consumes = { MediaType.APPLICATION_JSON_VALUE },
+                produces = { MediaType.APPLICATION_JSON_VALUE })
+    ResponseEntity<RemoveSubscriptionResponseObject> removeSubscription(@Valid @RequestBody RemoveSubscriptionObject removeSubscriptionObject);
 
     /**
      * The exception handler implementation for the interface.

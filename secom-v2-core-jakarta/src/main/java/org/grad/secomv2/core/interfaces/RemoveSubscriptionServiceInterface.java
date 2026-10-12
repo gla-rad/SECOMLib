@@ -21,6 +21,7 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
+import org.grad.secomv2.core.models.RemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.grad.secomv2.core.models.ResponseObject;
 
-import javax.validation.ValidationException;
-import java.util.UUID;
+import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 /**
  * The SECOM Remove Subscription Interface Definition.
@@ -47,22 +48,22 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
     /**
      * The Interface Endpoint Path.
      */
-    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription";
+    String REMOVE_SUBSCRIPTION_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/subscription/delete";
 
     /**
-     * DELETE /v2/subscription : Subscription(s) can be removed either
+     * POST /v2/subscription/delete : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
      * subscription.
      *
-     * @param subscriptionIdentifier the subscription identifier to remove
+     * @param removeSubscriptionObject the remove subscription object
      * @return the remove subscription response object
      */
     @Path(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
-    @DELETE
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    RemoveSubscriptionResponseObject removeSubscription(@QueryParam(value="subscriptionIdentifier") UUID subscriptionIdentifier);
+    RemoveSubscriptionResponseObject removeSubscription(@Valid RemoveSubscriptionObject removeSubscriptionObject);
 
     /**
      * The exception handler implementation for the interface.

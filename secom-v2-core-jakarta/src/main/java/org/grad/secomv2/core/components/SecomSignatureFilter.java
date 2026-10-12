@@ -151,6 +151,34 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetPublicKeyServiceInterface.POST_GET_PUBLIC_KEY_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, PublicKeyFilterObject.class);
             }
+            // For the Access Request Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(AccessServiceInterface.ACCESS_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, AccessRequestObject.class);
+            }
+            // For the Access Notification Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(AccessNotificationServiceInterface.ACCESS_NOTIFICATION_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, AccessNotificationObject.class);
+            }
+            // For the Subscription Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, SubscriptionRequestObject.class);
+            }
+            // For the Remove Subscription Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, RemoveSubscriptionObject.class);
+            }
+            // For the Subscription Notification Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, SubscriptionNotificationObject.class);
+            }
+            // For the Search Service Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, SearchFilterObject.class);
+            }
+            // For the Upload Public Key Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(UploadPublicKeyServiceInterface.UPLOAD_PUBLIC_KEY_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, PublicKeyRequestObject.class);
+            }
             // For the POST Retrieve Result Interface Requests
             else if (rqstCtx.getUriInfo().getPath().contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)){
                 obj = this.parseRequestBody(rqstCtx, RetrieveResultObject.class);

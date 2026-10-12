@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 GLA Research and Development Directorate
+ * Copyright (c) 2026 GLA Research and Development Directorate
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,61 @@
 
 package org.grad.secomv2.core.models;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
+
 import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
 
 /**
- * The SECOM Remove Subscription Request Class.
+ * The SECOM Remove Subscription Object Class.
  *
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
-public class RemoveSubscriptionObject {
+public class RemoveSubscriptionObject implements EnvelopeSignatureBearer {
 
     // Class Variables
     @NotNull
-    private UUID subscriptionIdentifier;
+    private EnvelopeRemoveSubscriptionObject envelope;
+    @NotNull
+    @Schema(description = "The signature of the EnvelopeRemoveSubscriptionObject in HEX format without whitespace or linebreaks")
+    private String envelopeSignature;
 
     /**
-     * Gets subscription identifier.
+     * Gets envelope.
      *
-     * @return the subscription identifier
+     * @return the envelope
      */
-    public UUID getSubscriptionIdentifier() {
-        return subscriptionIdentifier;
+    @Override
+    public EnvelopeRemoveSubscriptionObject getEnvelope() {
+        return envelope;
     }
 
     /**
-     * Sets subscription identifier.
+     * Sets envelope.
      *
-     * @param subscriptionIdentifier the subscription identifier
+     * @param envelope the envelope
      */
-    public void setSubscriptionIdentifier(UUID subscriptionIdentifier) {
-        this.subscriptionIdentifier = subscriptionIdentifier;
+    public void setEnvelope(EnvelopeRemoveSubscriptionObject envelope) {
+        this.envelope = envelope;
+    }
+
+    /**
+     * Gets envelope signature.
+     *
+     * @return the envelope signature
+     */
+    @Override
+    public String getEnvelopeSignature() {
+        return envelopeSignature;
+    }
+
+    /**
+     * Sets envelope signature.
+     *
+     * @param envelopeSignature the envelope signature
+     */
+    @Override
+    public void setEnvelopeSignature(String envelopeSignature) {
+        this.envelopeSignature = envelopeSignature;
     }
 }

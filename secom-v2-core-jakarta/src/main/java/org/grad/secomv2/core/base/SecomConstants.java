@@ -30,11 +30,6 @@ import java.time.format.DateTimeFormatterBuilder;
 public class SecomConstants {
 
     /**
-     * The SECOM Data Protection Scheme.
-     */
-    public static final String SECOM_PROTECTION_SCHEME = "SECOM";
-
-    /**
      * The SECOM Version.
      */
     public static final String SECOM_VERSION = "v2";
