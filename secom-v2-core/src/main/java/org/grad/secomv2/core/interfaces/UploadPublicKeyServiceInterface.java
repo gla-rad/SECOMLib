@@ -22,7 +22,6 @@ import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
-import org.grad.secomv2.core.models.PublicKeyResponseObject;
 import org.grad.secomv2.core.models.ResponseObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,7 +32,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM POST Public Key Interface Definition.
@@ -49,18 +47,20 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey/upload";
 
     /**
-     * GET /v2/publickey : This operation uploads (pushes) a public key
+     * POST /v2/publicKey/upload : This operation uploads (pushes) a public
+     * key.
      *
-     * @return the public key object
+     * @param publicKeyRequestObject the public key request object
+     * @return the response object
      */
     @Path(UPLOAD_PUBLIC_KEY_INTERFACE_PATH)
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    PublicKeyResponseObject postPublicKey(@Valid PublicKeyRequestObject publicKeyRequestObject);
+    ResponseObject postPublicKey(@Valid PublicKeyRequestObject publicKeyRequestObject);
 
     /**
      * The exception handler implementation for the interface.

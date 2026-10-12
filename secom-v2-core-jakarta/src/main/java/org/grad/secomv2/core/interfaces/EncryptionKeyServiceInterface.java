@@ -44,10 +44,10 @@ public interface EncryptionKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String ENCRYPTION_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionkey";
+    String ENCRYPTION_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/encryptionKey/upload";
 
     /**
-     * POST /v2/encryptionkey/upload : The purpose of the interface is to exchange a
+     * POST /v2/encryptionKey/upload : The purpose of the interface is to exchange a
      * temporary secret key. This operation is used to generate and return an
      * encrypted secret key to a consumer.
      *

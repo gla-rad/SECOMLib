@@ -18,17 +18,20 @@ package org.grad.secomv2.core.models;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
+import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RemoveSubscriptionObjectTest {
 
     // Class Variables
+    private EnvelopeRemoveSubscriptionObject envelopeRemoveSubscriptionObject;
     private RemoveSubscriptionObject obj;
     private ObjectMapper mapper;
 
@@ -40,9 +43,17 @@ class RemoveSubscriptionObjectTest {
         //Setup an object mapper
         this.mapper = new ObjectMapper();
 
+        // Create a new envelope remove subscription object
+        this.envelopeRemoveSubscriptionObject = new EnvelopeRemoveSubscriptionObject();
+        this.envelopeRemoveSubscriptionObject.setSubscriptionIdentifier(UUID.randomUUID());
+        this.envelopeRemoveSubscriptionObject.setEnvelopeSignatureCertificate(new String[]{"envelopeCertificate"});
+        this.envelopeRemoveSubscriptionObject.setEnvelopeRootCertificateThumbprint("envelopeThumbprint");
+        this.envelopeRemoveSubscriptionObject.setEnvelopeSignatureTime(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+
         // Generate a new object
         this.obj = new RemoveSubscriptionObject();
-        this.obj.setSubscriptionIdentifier(UUID.randomUUID());
+        this.obj.setEnvelope(this.envelopeRemoveSubscriptionObject);
+        this.obj.setEnvelopeSignature("signature");
     }
 
     /**
@@ -56,7 +67,20 @@ class RemoveSubscriptionObjectTest {
 
         // Make sure it looks OK
         assertNotNull(result);
-        assertEquals(this.obj.getSubscriptionIdentifier(), result.getSubscriptionIdentifier());
+        assertNotNull(result.getEnvelope());
+        assertEquals(this.obj.getEnvelope().getSubscriptionIdentifier(), result.getEnvelope().getSubscriptionIdentifier());
+        assertArrayEquals(this.obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
+        assertEquals(this.obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
+        assertEquals(this.obj.getEnvelope().getEnvelopeSignatureTime(), result.getEnvelope().getEnvelopeSignatureTime());
+        assertEquals(this.obj.getEnvelopeSignature(), result.getEnvelopeSignature());
+    }
+
+    /**
+     * Test that obj implements EnvelopeSignatureBearer
+     */
+    @Test
+    void testObjImplementsEnvelopeSignatureBearer() {
+        assertTrue(EnvelopeSignatureBearer.class.isAssignableFrom(this.obj.getClass()));
     }
 
 }

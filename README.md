@@ -312,11 +312,14 @@ addition, all exception handling takes place in the background. If additional
 errors are to be handled, simply raise an appropriate SECOM exception.
 
 In line with the SECOM ed2.0 specification, the library provides the full set of
-SECOM v2.0 interfaces, including (amongst others) the *Capability*, *Get*,
-*GetSummary*, *GetByLink*, the corresponding *POST* variants, *Upload*,
-*UploadLink*, *Subscription*, *RemoveSubscription*, *SubscriptionNotification*,
-*Access*, *AccessNotification*, *Acknowledgement*, *EncryptionKey*,
-*EncryptionKeyRequest*, *GetPublicKey*, *UploadPublicKey* and *Ping* interfaces.
+SECOM v2.0 interfaces, including (amongst others) the *Capability*,
+*PostGet*, *PostGetSummary*, *PostGetByLink*, *Upload*, *UploadLink*,
+*Subscription*, *RemoveSubscription*, *SubscriptionNotification*, *Access*,
+*AccessNotification*, *Acknowledgement*, *EncryptionKey*,
+*EncryptionKeyRequest*, *PostGetPublicKey*, *UploadPublicKey* and *Ping*
+interfaces. The legacy *GET* variants (*Get*, *GetSummary*, *GetByLink* and
+*GetPublicKey*) are still available but have been deprecated, since SECOM v2.0
+replaced them with *POST* operations.
 
 ### SECOM Functionality Customisation
 

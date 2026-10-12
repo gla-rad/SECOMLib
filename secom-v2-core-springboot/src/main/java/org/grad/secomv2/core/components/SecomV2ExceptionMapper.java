@@ -48,6 +48,8 @@ import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.PO
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.UploadPublicKeyServiceInterface.UPLOAD_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.base.SecomConstants.API_PATH;
 import static org.grad.secomv2.core.base.SecomConstants.SECOM_VERSION;
 
@@ -121,6 +123,7 @@ public class SecomV2ExceptionMapper {
                 } else if("POST".equals(method)) {
                     return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, request);
                 }
+                break;
             case API_PATH + POST_GET_BY_LINK_INTERFACE_PATH:
                 return PostGetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, request);
             case API_PATH + GET_INTERFACE_PATH: // Also for upload
@@ -129,6 +132,7 @@ public class SecomV2ExceptionMapper {
                 } else if("POST".equals(method)) {
                     return UploadServiceInterface.handleUploadInterfaceExceptions(ex, request);
                 }
+                break;
             case API_PATH + POST_GET_INTERFACE_PATH:
                 return PostGetServiceInterface.handleGerInterfaceException(ex, request);
             case API_PATH + GET_SUMMARY_INTERFACE_PATH:
@@ -137,22 +141,18 @@ public class SecomV2ExceptionMapper {
                 return PostGetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, request);
             case API_PATH + PING_INTERFACE_PATH:
                 return PingServiceInterface.handlePingInterfaceExceptions(ex, request);
-            case API_PATH + SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
-                if("POST".equals(method)) {
-                    return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, request);
-                } else if("DELETE".equals(method)) {
-                    return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, request);
-                }
+            case API_PATH + SUBSCRIPTION_INTERFACE_PATH:
+                return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, request);
+            case API_PATH + REMOVE_SUBSCRIPTION_INTERFACE_PATH:
+                return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, request);
             case API_PATH + SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                 return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, request);
             case API_PATH + POST_GET_PUBLIC_KEY_INTERFACE_PATH:
                 return PostGetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
             case API_PATH + GET_PUBLIC_KEY_INTERFACE_PATH:
-                if("GET".equals(method)) {
-                    return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
-                } else if("POST".equals(method)) {
-                    return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
-                }
+                return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
+            case API_PATH + UPLOAD_PUBLIC_KEY_INTERFACE_PATH:
+                return UploadPublicKeyServiceInterface.handlePostPublicKeyInterfaceExceptions(ex, request);
             default:
                 // The Retrieve Result interface path contains a transactionId path variable,
                 // so it cannot be matched with an exact switch/case label

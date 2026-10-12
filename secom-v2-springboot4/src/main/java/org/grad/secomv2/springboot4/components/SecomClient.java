@@ -402,7 +402,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v2/encryptionkey/upload : This operation is used to upload (push)
+     * POST /v2/encryptionKey/upload : This operation is used to upload (push)
      * an encrypted secret key to a consumer.
      *
      * @return the encryption key response object
@@ -424,7 +424,7 @@ public class SecomClient {
     }
 
     /**
-     * POST /v2/encryptionkey/request : This operation enables a consumer to
+     * POST /v2/encryptionKey/request : This operation enables a consumer to
      * request an encrypted secret key from a producer by providing a
      * reference to the encrypted data and a public certificate for symmetric
      * key derivation used to protect the temporary encryption key during
@@ -673,7 +673,7 @@ public class SecomClient {
     }
 
     /**
-     * DELETE /v2/subscription : Subscription(s) can be removed either
+     * POST /v2/subscription/delete : Subscription(s) can be removed either
      * internally by information owner, or externally by the consumer. This
      * interface shall be used by the consumer to request removal of
      * subscription.
@@ -682,14 +682,16 @@ public class SecomClient {
      * @return the remove subscription response object
      */
     public Optional<RemoveSubscriptionResponseObject> removeSubscription(RemoveSubscriptionObject removeSubscriptionObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            removeSubscriptionObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
         return this.secomClient
-                .delete()
-                .uri(uriBuilder -> {
-                    UriBuilder builder = uriBuilder.path(REMOVE_SUBSCRIPTION_INTERFACE_PATH);
-                    builder = removeSubscriptionObject != null ? builder.queryParam("subscriptionIdentifier", removeSubscriptionObject.getSubscriptionIdentifier()) : builder;
-                    return builder.build();
-                })
+                .post()
+                .uri(REMOVE_SUBSCRIPTION_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(removeSubscriptionObject))
                 .retrieve()
                 .bodyToMono(RemoveSubscriptionResponseObject.class)
                 .blockOptional();
@@ -866,14 +868,14 @@ public class SecomClient {
     }
 
     /**
-     * POST /v2/publicKey: The Rest operation - POST /publicKey
-     * This operation uploads (pushes) a public key.
+     * POST /v2/publicKey/upload : This operation uploads (pushes) a public
+     * key.
      *
      * @param publicKeyRequestObject Public certificate x.509 in PEM format, Base64 encoded byte array.
-     * @return PublicKeyResponseObject
+     * @return the response object
      */
-    public Optional<PublicKeyResponseObject> uploadPublicKey(PublicKeyRequestObject publicKeyRequestObject) {
-        //Prepare the upload link envelope if valid
+    public Optional<ResponseObject> uploadPublicKey(PublicKeyRequestObject publicKeyRequestObject) {
+        // Prepare the upload public key envelope if valid
         if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
             publicKeyRequestObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
         }
@@ -886,7 +888,7 @@ public class SecomClient {
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(publicKeyRequestObject))
                 .retrieve()
-                .bodyToMono(PublicKeyResponseObject.class)
+                .bodyToMono(ResponseObject.class)
                 .blockOptional();
     }
 

@@ -27,7 +27,6 @@ import jakarta.validation.ValidationException;
 import org.grad.secomv2.core.models.PublicKeyRequestObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.grad.secomv2.core.models.PublicKeyResponseObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.HttpClientErrorException;
 
-import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM Upload Public Key Interface Definition.
@@ -53,19 +51,19 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey/upload";
 
     /**
-     * POST /v2/publicKey : The purpose of this interface is to receive a public key.
-     * If authorized, the key is sent back in the response. It is up to the service
-     * provider to apply relevant authorization procedure and access control to information.
+     * POST /v2/publicKey/upload : This operation uploads (pushes) a public
+     * key.
      *
-     * @return the public key object
+     * @param publicKeyRequestObject the public key request object
+     * @return the response object
      */
     @PostMapping(path = UPLOAD_PUBLIC_KEY_INTERFACE_PATH,
                 consumes = { MediaType.APPLICATION_JSON_VALUE },
                 produces = { MediaType.APPLICATION_JSON_VALUE })
-    ResponseEntity<PublicKeyResponseObject> postPublicKey(@Valid @RequestBody PublicKeyRequestObject publicKeyRequestObject);
+    ResponseEntity<ResponseObject> postPublicKey(@Valid @RequestBody PublicKeyRequestObject publicKeyRequestObject);
 
     /**
      * The exception handler implementation for the interface.

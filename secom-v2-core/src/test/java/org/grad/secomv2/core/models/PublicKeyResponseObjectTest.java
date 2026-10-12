@@ -48,7 +48,7 @@ public class PublicKeyResponseObjectTest {
 
         // Create an envelope public key reponse object
         final EnvelopePublicKeyResponseObject envelopePublicKeyResponseObject = new EnvelopePublicKeyResponseObject();
-        envelopePublicKeyResponseObject.setPublicCertificate("publicCertificate");
+        envelopePublicKeyResponseObject.setPublicCertificate(new String[]{"publicCertificate"});
         envelopePublicKeyResponseObject.setEnvelopeSignatureCertificate(new String[]{"envelopeSignatureCertificate"});
         envelopePublicKeyResponseObject.setEnvelopeRootCertificateThumbprint("envelopeRootCertificateThumbprint");
         envelopePublicKeyResponseObject.setEnvelopeSignatureTime(Instant.now());
@@ -71,7 +71,7 @@ public class PublicKeyResponseObjectTest {
 
         assertNotNull(result);
         assertNotNull(result.getEnvelope());
-        assertEquals(obj.getEnvelope().getPublicCertificate(), result.getEnvelope().getPublicCertificate());
+        assertArrayEquals(obj.getEnvelope().getPublicCertificate(), result.getEnvelope().getPublicCertificate());
         assertArrayEquals(obj.getEnvelope().getEnvelopeSignatureCertificate(), result.getEnvelope().getEnvelopeSignatureCertificate());
         assertEquals(obj.getEnvelope().getEnvelopeRootCertificateThumbprint(), result.getEnvelope().getEnvelopeRootCertificateThumbprint());
         assertEquals(obj.getEnvelope().getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS), result.getEnvelope().getEnvelopeSignatureTime().truncatedTo(ChronoUnit.SECONDS));

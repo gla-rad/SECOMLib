@@ -49,6 +49,8 @@ import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.PO
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.UploadPublicKeyServiceInterface.UPLOAD_PUBLIC_KEY_INTERFACE_PATH;
 
 /**
  * The SECOM Exception Manager Class.
@@ -149,6 +151,7 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return UploadLinkServiceInterface.handleUploadLinkInterfaceExceptions(ex, this.request, null);
                     }
+                    break;
                 case POST_GET_BY_LINK_INTERFACE_PATH:
                     return PostGetByLinkServiceInterface.handleGetByLinkInterfaceExceptions(ex, this.request, null);
                 case GET_INTERFACE_PATH: // Also for upload
@@ -157,6 +160,7 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     } else if(Objects.equals(this.request.getMethod(), "POST")) {
                         return UploadServiceInterface.handleUploadInterfaceExceptions(ex, this.request, null);
                     }
+                    break;
                 case POST_GET_INTERFACE_PATH:
                     return PostGetServiceInterface.handleGerInterfaceException(ex, this.request, null);
                 case GET_SUMMARY_INTERFACE_PATH:
@@ -165,22 +169,18 @@ public class SecomV2ExceptionMapper implements ExceptionMapper<Exception>, Conte
                     return PostGetSummaryServiceInterface.handleGetSummaryInterfaceExceptions(ex, this.request, null);
                 case PING_INTERFACE_PATH:
                     return PingServiceInterface.handlePingInterfaceExceptions(ex, this.request, null);
-                case SUBSCRIPTION_INTERFACE_PATH: // Also for remove subscription
-                    if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
-                    } else if(Objects.equals(this.request.getMethod(), "DELETE")) {
-                        return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
-                    }
+                case SUBSCRIPTION_INTERFACE_PATH:
+                    return SubscriptionServiceInterface.handleSubscriptionInterfaceExceptions(ex, this.request, null);
+                case REMOVE_SUBSCRIPTION_INTERFACE_PATH:
+                    return RemoveSubscriptionServiceInterface.handleRemoveSubscriptionInterfaceExceptions(ex, this.request, null);
                 case SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                     return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, this.request, null);
                 case POST_GET_PUBLIC_KEY_INTERFACE_PATH:
                     return PostGetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
                 case GET_PUBLIC_KEY_INTERFACE_PATH:
-                    if(Objects.equals(this.request.getMethod(), "GET")) {
-                        return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
-                    } else if(Objects.equals(this.request.getMethod(), "POST")) {
-                        return UploadPublicKeyServiceInterface.handleUploadPublicKeyInterfaceExceptions(ex, request, null);
-                    }
+                    return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, this.request, null);
+                case UPLOAD_PUBLIC_KEY_INTERFACE_PATH:
+                    return UploadPublicKeyServiceInterface.handleUploadPublicKeyInterfaceExceptions(ex, this.request, null);
                 default:
                     // Get the request path
                     final String path = this.request.getPathInfo();

@@ -28,15 +28,15 @@ public class EnvelopePublicKeyResponseObject extends AbstractEnvelope {
 
     // Class Variables
     @NotNull
-    @Schema(description = "(S100) Public Key for claimed identity")
-    private String publicCertificate;
+    @Schema(description = "Public certificate(s) x.509 in PEM format, Base64 encoded byte array")
+    private String[] publicCertificate;
 
     /**
      * Gets public certificate.
      *
      * @return the public certificate
      */
-    public String getPublicCertificate() {
+    public String[] getPublicCertificate() {
         return publicCertificate;
     }
 
@@ -45,7 +45,7 @@ public class EnvelopePublicKeyResponseObject extends AbstractEnvelope {
      *
      * @param publicCertificate the public certificate
      */
-    public void setPublicCertificate(String publicCertificate) {
+    public void setPublicCertificate(String[] publicCertificate) {
         this.publicCertificate = publicCertificate;
     }
 
