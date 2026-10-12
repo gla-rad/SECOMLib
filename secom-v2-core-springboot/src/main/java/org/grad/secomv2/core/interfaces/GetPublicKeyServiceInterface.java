@@ -26,17 +26,14 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
-import org.grad.secomv2.core.models.CapabilityResponseObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;

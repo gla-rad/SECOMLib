@@ -20,7 +20,6 @@ import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.models.CapabilityResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.http.HttpStatus;

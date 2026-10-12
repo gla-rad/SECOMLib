@@ -16,8 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import org.grad.secomv2.core.models.ResponseObject;
-import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
@@ -27,7 +26,6 @@ import org.grad.secomv2.core.models.RemoveSubscriptionObject;
 import org.grad.secomv2.core.models.RemoveSubscriptionResponseObject;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
@@ -88,6 +86,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
+                || ex instanceof MethodArgumentNotValidException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseObject.setMessage("Bad Request");
@@ -95,9 +94,6 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
             httpStatus = HttpStatus.FORBIDDEN;
             responseObject.setMessage("Not authorized to remove subscription");
         } else if(ex instanceof SecomNotFoundException) {
-            httpStatus = HttpStatus.NOT_FOUND;
-            responseObject.setMessage("Subscriber identifier not found");
-        } else if (ex instanceof MissingServletRequestParameterException){
             httpStatus = HttpStatus.NOT_FOUND;
             responseObject.setMessage("Subscriber identifier not found");
         } else {

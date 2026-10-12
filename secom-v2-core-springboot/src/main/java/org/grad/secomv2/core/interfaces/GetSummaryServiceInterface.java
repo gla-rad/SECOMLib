@@ -16,27 +16,21 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.UnexpectedTypeException;
 import org.grad.secomv2.core.models.ResponseObject;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.SecomConstants;
-import org.grad.secomv2.core.base.SecomV2Param;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
-import org.grad.secomv2.core.exceptions.SecomSchemaValidationException;
 import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetSummaryResponseObject;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
@@ -118,8 +112,6 @@ public interface GetSummaryServiceInterface extends GenericSecomInterface {
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof MethodArgumentTypeMismatchException
-                || ex instanceof UnexpectedTypeException
-                || ex instanceof ConstraintViolationException
                 || ex instanceof HandlerMethodValidationException
                 || ex instanceof ValidationException) {
             httpStatus = HttpStatus.BAD_REQUEST;

@@ -16,12 +16,8 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.UnexpectedTypeException;
 import org.grad.secomv2.core.models.ResponseObject;
-import org.springframework.boot.json.JsonParseException;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -33,6 +29,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.GetFilterObject;
 import org.grad.secomv2.core.models.GetResponseObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,10 +83,8 @@ public interface PostGetServiceInterface extends GenericSecomInterface{
         if(ex instanceof SecomValidationException
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof JacksonException
+                || ex instanceof MethodArgumentNotValidException
                 || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof MethodArgumentTypeMismatchException
-                || ex instanceof UnexpectedTypeException
-                || ex instanceof ConstraintViolationException
                 || ex instanceof HttpMessageNotReadableException
                 || ex instanceof IllegalArgumentException
                 || ex instanceof ValidationException) {

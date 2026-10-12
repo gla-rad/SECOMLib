@@ -16,7 +16,6 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
@@ -31,6 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,8 +86,8 @@ public interface UploadLinkServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
-                || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof JsonParseException) {
+                || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpClientErrorException.NotFound) {
             uploadResponseObject.setSECOM_ResponseCode(SECOM_ResponseCodeEnum.MISSING_REQUIRED_DATA_FOR_SERVICE);
             uploadResponseObject.setMessage("Missing required data for the service");
             httpStatus = HttpStatus.BAD_REQUEST;

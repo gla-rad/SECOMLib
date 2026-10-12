@@ -17,7 +17,6 @@
 package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.models.ResponseObject;
-import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -28,6 +27,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.AccessNotificationObject;
 import org.grad.secomv2.core.models.AccessNotificationResponseObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,9 +83,9 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
+                || ex instanceof MethodArgumentNotValidException
                 || ex instanceof SecomNotFoundException
-                || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof JsonParseException) {
+                || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else {
             httpStatus = GenericSecomInterface.handleCommonExceptionResponseCode(ex);

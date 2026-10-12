@@ -16,9 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
-import jakarta.websocket.server.PathParam;
 import org.grad.secomv2.core.exceptions.SecomNotAuthorisedException;
-import org.springframework.boot.json.JsonParseException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.SecomNotFoundException;
@@ -30,6 +28,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.grad.secomv2.core.models.SearchResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -94,8 +93,8 @@ public interface RetrieveResultServiceInterface extends GenericSecomInterface {
                 || ex.getCause() instanceof SecomValidationException
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
-                || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof JsonParseException) {
+                || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpClientErrorException.NotFound) {
             responseStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotFoundException) {
             responseStatus = HttpStatus.NOT_FOUND;
