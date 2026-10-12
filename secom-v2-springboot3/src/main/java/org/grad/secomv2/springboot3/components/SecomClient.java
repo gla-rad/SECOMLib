@@ -64,6 +64,7 @@ import static org.grad.secomv2.core.interfaces.GetSummaryServiceInterface.GET_SU
 import static org.grad.secomv2.core.interfaces.PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PingServiceInterface.PING_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetPublicKeyServiceInterface.POST_GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RemoveSubscriptionServiceInterface.REMOVE_SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH;
@@ -71,6 +72,7 @@ import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEA
 import static org.grad.secomv2.core.interfaces.SubscriptionNotificationServiceInterface.SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SubscriptionServiceInterface.SUBSCRIPTION_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadLinkServiceInterface.UPLOAD_LINK_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.UploadPublicKeyServiceInterface.UPLOAD_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.UploadServiceInterface.UPLOAD_INTERFACE_PATH;
 
 /**
@@ -447,7 +449,10 @@ public class SecomClient {
      *
      * @param transactionIdentifier the transaction identifier
      * @return the object in an "application/octet-stream" encoding
+     * @deprecated Since SECOM v2.0 this operation has been replaced by
+     * {@link #postGetByLink(GetByLinkObject)}.
      */
+    @Deprecated
     public Optional<byte[]> getByLink(UUID transactionIdentifier) {
         return this.secomClient
                 .get()
@@ -503,7 +508,10 @@ public class SecomClient {
      * @param page the page number to be retrieved
      * @param pageSize the maximum page size
      * @return the object information
+     * @deprecated Since SECOM v2.0 this operation has been replaced by
+     * {@link #postGet(GetFilterObject)}.
      */
+    @Deprecated
     public Optional<GetResponseObject> get(UUID dataReference,
                                            ContainerTypeEnum containerType,
                                            SECOM_DataProductType dataProductType,
@@ -580,7 +588,10 @@ public class SecomClient {
      * @param page the page number to be retrieved
      * @param pageSize the maximum page size
      * @return the summary response object
+     * @deprecated Since SECOM v2.0 this operation has been replaced by
+     * {@link #postGetSummary(GetSummaryFilterObject)}.
      */
+    @Deprecated
     public Optional<GetSummaryResponseObject> getSummary(ContainerTypeEnum containerType,
                                                          SECOM_DataProductType dataProductType,
                                                          String productVersion,
@@ -801,7 +812,10 @@ public class SecomClient {
      * @param dataProtection Flag indicating that the requested key is for symmetric
      *                       key derivation in exchange for a random encryption key
      * @return PublicKeyObject The returned publicKeyObject
+     * @deprecated Since SECOM v2.0 this operation has been replaced by
+     * {@link #postGetPublicKey(PublicKeyFilterObject)}.
      */
+    @Deprecated
     public Optional<PublicKeyResponseObject> getPublicKey(String certificateThumbprint, boolean dataProtection) throws URISyntaxException {
         return this.secomClient
                 .get()
@@ -812,6 +826,31 @@ public class SecomClient {
                     return builder.build();
                 })
                 .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(PublicKeyResponseObject.class)
+                .blockOptional();
+    }
+
+    /**
+     * POST /v2/publicKey/download : This operation receives a request for a
+     * public key. If authorized, the key is sent back in the response. It is
+     * up to the service provider to apply relevant authorization procedure
+     * and access control to information.
+     *
+     * @param publicKeyFilterObject the public key filter object
+     * @return the public key response object
+     */
+    public Optional<PublicKeyResponseObject> postGetPublicKey(PublicKeyFilterObject publicKeyFilterObject) {
+        if(this.getSignatureProvider() != null && this.getCertificateProvider() != null) {
+            publicKeyFilterObject.signEnvelope(this.getCertificateProvider(), this.getSignatureProvider());
+        }
+
+        return this.secomClient
+                .post()
+                .uri(POST_GET_PUBLIC_KEY_INTERFACE_PATH)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(BodyInserters.fromValue(publicKeyFilterObject))
                 .retrieve()
                 .bodyToMono(PublicKeyResponseObject.class)
                 .blockOptional();
@@ -833,7 +872,7 @@ public class SecomClient {
         // And perform the web-call
         return this.secomClient
                 .post()
-                .uri(GET_PUBLIC_KEY_INTERFACE_PATH)
+                .uri(UPLOAD_PUBLIC_KEY_INTERFACE_PATH)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(publicKeyRequestObject))

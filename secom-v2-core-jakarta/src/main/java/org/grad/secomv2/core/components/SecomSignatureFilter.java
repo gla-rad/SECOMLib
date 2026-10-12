@@ -125,6 +125,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             }
             // For the Encryption Key Interface Requests
             else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, EncryptionKeyObject.class);
+            }
+            // For the Encryption Key Request Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH)) {
                 obj = this.parseRequestBody(rqstCtx, EncryptionKeyRequestObject.class);
             }
             // For the Search Service Interface Requests
@@ -143,6 +147,10 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
             else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetSummaryServiceInterface.POST_GET_SUMMARY_INTERFACE_PATH)){
                 obj = this.parseRequestBody(rqstCtx, GetSummaryFilterObject.class);
             }
+            // For the POST Get Public Key Interface Requests
+            else if (rqstCtx.getUriInfo().getPath().endsWith(PostGetPublicKeyServiceInterface.POST_GET_PUBLIC_KEY_INTERFACE_PATH)) {
+                obj = this.parseRequestBody(rqstCtx, PublicKeyFilterObject.class);
+            }
             // For the POST Retrieve Result Interface Requests
             else if (rqstCtx.getUriInfo().getPath().contains(RetrieveResultServiceInterface.RETRIEVE_RESULT_INTERFACE_PATH_BASE)){
                 obj = this.parseRequestBody(rqstCtx, RetrieveResultObject.class);
@@ -152,11 +160,9 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
         // If we have an object, validate the signatures
         if(obj != null && obj.getEnvelope() != null) {
             // First decide on the signature algorithm
-            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(obj)
-                    .map(EnvelopeSignatureBearer::getEnvelopeSignatureAlgorithm)
-                    .orElseGet(() -> Optional.of(this.signatureProvider)
-                            .map(SecomSignatureProvider::getSignatureAlgorithm)
-                            .orElse(DigitalSignatureAlgorithmEnum.DSA));
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(this.signatureProvider)
+                    .map(SecomSignatureProvider::getSignatureAlgorithm)
+                    .orElse(DigitalSignatureAlgorithmEnum.SHA2_384_WITH_ECDSA);
 
             // Then validate the envelope certificate
             if(this.trustStoreProvider != null) {
@@ -210,10 +216,7 @@ public class SecomSignatureFilter implements ContainerRequestFilter {
                                 .map(ExchangeMetadata::getDigitalSignatureValue)
                                 .map(DigitalSignatureValueObject::getPublicCertificate)
                                 .orElse(null),
-                        Optional.of(dataObj)
-                                .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(ExchangeMetadata::getDigitalSignatureReference)
-                                .orElse(digitalSignatureAlgorithm),
+                        digitalSignatureAlgorithm,
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
                                 .map(ExchangeMetadata::getDigitalSignatureValue)

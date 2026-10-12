@@ -49,8 +49,11 @@ import java.util.UUID;
  * order to direct the implementation of the relevant endpoint according to
  * the specified SECOM standard version.
  *
+ * @deprecated Since SECOM v2.0 this operation has been replaced by a POST
+ * request, see {@link PostGetServiceInterface}.
  * @author Nikolaos Vastardis (email: Nikolaos.Vastardis@gla-rad.org)
  */
+@Deprecated
 public interface GetServiceInterface extends GenericSecomInterface {
 
     /**

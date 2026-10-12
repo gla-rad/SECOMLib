@@ -57,8 +57,11 @@ import java.time.Instant;
  * order to direct the implementation of the relevant endpoint according to
  * the specified SECOM standard version.
  *
+ * @deprecated Since SECOM v2.0 this operation has been replaced by a POST
+ * request, see {@link PostGetSummaryServiceInterface}.
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
+@Deprecated
 @RequestMapping("/api/secom/")
 public interface GetSummaryServiceInterface extends GenericSecomInterface {
 

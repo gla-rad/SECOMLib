@@ -21,7 +21,6 @@ import tools.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,8 +58,6 @@ class UploadLinkObjectTest {
         // Create SECOM exchange metadata
         this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
-        this.exchangeMetadata.setProtectionScheme("SECOM");
-        this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
@@ -97,8 +94,6 @@ class UploadLinkObjectTest {
         assertEquals(this.obj.getEnvelope().getDataProductType(), result.getEnvelope().getDataProductType());
         assertNotNull(result.getEnvelope().getExchangeMetadata());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDataProtection(), result.getEnvelope().getExchangeMetadata().getDataProtection());
-        assertEquals(this.obj.getEnvelope().getExchangeMetadata().getProtectionScheme(), result.getEnvelope().getExchangeMetadata().getProtectionScheme());
-        assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureReference(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureReference());
         assertNotNull(result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue());
         assertEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertArrayEquals(this.obj.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getEnvelope().getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());

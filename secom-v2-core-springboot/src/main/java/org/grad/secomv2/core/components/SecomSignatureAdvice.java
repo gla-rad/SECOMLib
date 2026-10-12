@@ -194,11 +194,9 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
         // If we have an object, validate the signatures
         if(obj != null && obj.getEnvelope() != null) {
             // First decide on the signature algorithm
-            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(obj)
-                    .map(EnvelopeSignatureBearer::getEnvelopeSignatureAlgorithm)
-                    .orElseGet(() -> Optional.of(this.signatureProvider)
-                            .map(SecomSignatureProvider::getSignatureAlgorithm)
-                            .orElse(DigitalSignatureAlgorithmEnum.DSA));
+            final DigitalSignatureAlgorithmEnum digitalSignatureAlgorithm = Optional.of(this.signatureProvider)
+                    .map(SecomSignatureProvider::getSignatureAlgorithm)
+                    .orElse(DigitalSignatureAlgorithmEnum.SHA2_384_WITH_ECDSA);
 
             // Then validate the envelope certificate
             if(this.trustStoreProvider != null) {
@@ -252,10 +250,7 @@ public class SecomSignatureAdvice implements RequestBodyAdvice {
                                 .map(ExchangeMetadata::getDigitalSignatureValue)
                                 .map(DigitalSignatureValueObject::getPublicCertificate)
                                 .orElse(null),
-                        Optional.of(dataObj)
-                                .map(DigitalSignatureBearer::getExchangeMetadata)
-                                .map(ExchangeMetadata::getDigitalSignatureReference)
-                                .orElse(digitalSignatureAlgorithm),
+                        digitalSignatureAlgorithm,
                         Optional.of(dataObj)
                                 .map(DigitalSignatureBearer::getExchangeMetadata)
                                 .map(ExchangeMetadata::getDigitalSignatureValue)

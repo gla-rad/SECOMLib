@@ -19,8 +19,6 @@ package org.grad.secomv2.core.base;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.grad.secomv2.core.exceptions.SecomInvalidCertificateException;
 import org.grad.secomv2.core.models.AbstractEnvelope;
-import org.grad.secomv2.core.models.ExchangeMetadata;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secomv2.core.utils.SecomPemUtils;
 
 import javax.xml.bind.DatatypeConverter;
@@ -116,21 +114,5 @@ public interface EnvelopeSignatureBearer extends GenericSignatureBearer {
         return this;
     }
 
-    /**
-     * A helper function that retrieves the envelope signature algorithm from
-     * the exchange metadata level (if that exists) and returns it so that is
-     * can be used during the signature checks.
-     *
-     * @return The digital signature algorithm type
-     */
-    @JsonIgnore
-    default DigitalSignatureAlgorithmEnum getEnvelopeSignatureAlgorithm() {
-        return Optional.ofNullable(this.getEnvelope())
-                .filter(GenericExchangeMetadataBearer.class::isInstance)
-                .map(GenericExchangeMetadataBearer.class::cast)
-                .map(GenericExchangeMetadataBearer::getExchangeMetadata)
-                .map(ExchangeMetadata::getDigitalSignatureReference)
-                .orElse(null);
-    }
 
 }
