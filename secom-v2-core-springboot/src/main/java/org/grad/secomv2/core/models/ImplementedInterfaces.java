@@ -31,6 +31,10 @@ public class ImplementedInterfaces {
     @NotNull
     private Boolean uploadLink;
     @NotNull
+    private Boolean acknowledgement;
+    @NotNull
+    private Boolean accessNotification;
+    @NotNull
     private Boolean get;
     @NotNull
     private Boolean getSummary;
@@ -38,6 +42,10 @@ public class ImplementedInterfaces {
     private Boolean getByLink;
     @NotNull
     private Boolean subscription;
+    @NotNull
+    private Boolean removeSubscription;
+    @NotNull
+    private Boolean subscriptionNotification;
     @NotNull
     private Boolean access;
     @NotNull
@@ -51,10 +59,14 @@ public class ImplementedInterfaces {
     public ImplementedInterfaces() {
         this.upload = Boolean.FALSE;
         this.uploadLink = Boolean.FALSE;
+        this.acknowledgement = Boolean.FALSE;
+        this.accessNotification = Boolean.FALSE;
         this.get = Boolean.FALSE;
         this.getSummary = Boolean.FALSE;
         this.getByLink = Boolean.FALSE;
         this.subscription = Boolean.FALSE;
+        this.removeSubscription = Boolean.FALSE;
+        this.subscriptionNotification = Boolean.FALSE;
         this.access = Boolean.FALSE;
         this.encryptionKey = Boolean.FALSE;
         this.publicKey = Boolean.FALSE;
@@ -94,6 +106,42 @@ public class ImplementedInterfaces {
      */
     public void setUploadLink(Boolean uploadLink) {
         this.uploadLink = uploadLink;
+    }
+
+    /**
+     * Gets acknowledgement.
+     *
+     * @return the acknowledgement
+     */
+    public Boolean getAcknowledgement() {
+        return acknowledgement;
+    }
+
+    /**
+     * Sets acknowledgement.
+     *
+     * @param acknowledgement the acknowledgement
+     */
+    public void setAcknowledgement(Boolean acknowledgement) {
+        this.acknowledgement = acknowledgement;
+    }
+
+    /**
+     * Gets access notification.
+     *
+     * @return the access notification
+     */
+    public Boolean getAccessNotification() {
+        return accessNotification;
+    }
+
+    /**
+     * Sets access notification.
+     *
+     * @param accessNotification the access notification
+     */
+    public void setAccessNotification(Boolean accessNotification) {
+        this.accessNotification = accessNotification;
     }
 
     /**
@@ -166,6 +214,42 @@ public class ImplementedInterfaces {
      */
     public void setSubscription(Boolean subscription) {
         this.subscription = subscription;
+    }
+
+    /**
+     * Gets remove subscription.
+     *
+     * @return the remove subscription
+     */
+    public Boolean getRemoveSubscription() {
+        return removeSubscription;
+    }
+
+    /**
+     * Sets remove subscription.
+     *
+     * @param removeSubscription the remove subscription
+     */
+    public void setRemoveSubscription(Boolean removeSubscription) {
+        this.removeSubscription = removeSubscription;
+    }
+
+    /**
+     * Gets subscription notification.
+     *
+     * @return the subscription notification
+     */
+    public Boolean getSubscriptionNotification() {
+        return subscriptionNotification;
+    }
+
+    /**
+     * Sets subscription notification.
+     *
+     * @param subscriptionNotification the subscription notification
+     */
+    public void setSubscriptionNotification(Boolean subscriptionNotification) {
+        this.subscriptionNotification = subscriptionNotification;
     }
 
     /**

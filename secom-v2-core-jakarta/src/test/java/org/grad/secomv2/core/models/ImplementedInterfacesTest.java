@@ -53,6 +53,11 @@ class ImplementedInterfacesTest {
         this.obj.setSubscription(Boolean.TRUE);
         this.obj.setAccess(Boolean.TRUE);
         this.obj.setEncryptionKey(Boolean.TRUE);
+        this.obj.setAcknowledgement(Boolean.TRUE);
+        this.obj.setAccessNotification(Boolean.TRUE);
+        this.obj.setRemoveSubscription(Boolean.TRUE);
+        this.obj.setSubscriptionNotification(Boolean.TRUE);
+        this.obj.setPublicKey(Boolean.TRUE);
     }
 
     /**
@@ -74,6 +79,11 @@ class ImplementedInterfacesTest {
         assertEquals(this.obj.getSubscription(), result.getSubscription());
         assertEquals(this.obj.getAccess(), result.getAccess());
         assertEquals(this.obj.getEncryptionKey(), result.getEncryptionKey());
+        assertEquals(this.obj.getAcknowledgement(), result.getAcknowledgement());
+        assertEquals(this.obj.getAccessNotification(), result.getAccessNotification());
+        assertEquals(this.obj.getRemoveSubscription(), result.getRemoveSubscription());
+        assertEquals(this.obj.getSubscriptionNotification(), result.getSubscriptionNotification());
+        assertEquals(this.obj.getPublicKey(), result.getPublicKey());
     }
 
 }

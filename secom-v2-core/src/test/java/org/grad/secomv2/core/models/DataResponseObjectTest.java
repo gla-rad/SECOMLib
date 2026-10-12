@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secomv2.core.base.DigitalSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,8 +54,6 @@ class DataResponseObjectTest {
         // Create SECOM exchange metadata
         this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
-        this.exchangeMetadata.setProtectionScheme("SECOM");
-        this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
@@ -80,8 +77,6 @@ class DataResponseObjectTest {
         assertNotNull(result);
         assertEquals(new String(this.obj.getData()), new String(result.getData()));
         assertEquals(this.obj.getExchangeMetadata().getDataProtection(), result.getExchangeMetadata().getDataProtection());
-        assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), result.getExchangeMetadata().getProtectionScheme());
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference(), result.getExchangeMetadata().getDigitalSignatureReference());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertArrayEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());

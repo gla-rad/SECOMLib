@@ -49,8 +49,11 @@ import org.springframework.web.client.HttpClientErrorException;
  * order to direct the implementation of the relevant endpoint according to
  * the specified SECOM standard version.
  *
+ * @deprecated Since SECOM v2.0 this operation has been replaced by a POST
+ * request, see {@link PostGetPublicKeyServiceInterface}.
  * @author Lawrence Hughes (email: Lawrence.Hughes@gla-rad.org)
  */
+@Deprecated
 @RequestMapping("/api/secom/")
 public interface GetPublicKeyServiceInterface extends GenericSecomInterface {
 

@@ -18,7 +18,6 @@ package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import org.grad.secomv2.core.base.CsvStringGenerator;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 
 import javax.validation.constraints.NotNull;
 
@@ -33,12 +32,6 @@ public class ExchangeMetadata implements CsvStringGenerator {
     @NotNull
     @Schema(description = "(S-100) Indicates if the data is encrypted. \\r\\n0 indicates unencrypted data\\r\\n1 indicates encrypted data")
     private Boolean dataProtection;
-    @NotNull
-    @Schema(description = "S-100) Specification or method used for data protection Such as S-63, SECOM")
-    private String protectionScheme;
-    @NotNull
-    @Schema(description = "(S-100) Specifies the algorithm used to compute digitalSignatureValue\\r\\nFor example \\\"ECDSA-384-SHA2\\\"")
-    private DigitalSignatureAlgorithmEnum digitalSignatureReference;
     @NotNull
     private DigitalSignatureValueObject digitalSignatureValueObject;
     @NotNull
@@ -61,42 +54,6 @@ public class ExchangeMetadata implements CsvStringGenerator {
      */
     public void setDataProtection(Boolean dataProtection) {
         this.dataProtection = dataProtection;
-    }
-
-    /**
-     * Gets protection scheme.
-     *
-     * @return the protection scheme
-     */
-    public String getProtectionScheme() {
-        return protectionScheme;
-    }
-
-    /**
-     * Sets protection scheme.
-     *
-     * @param protectionScheme the protection scheme
-     */
-    public void setProtectionScheme(String protectionScheme) {
-        this.protectionScheme = protectionScheme;
-    }
-
-    /**
-     * Gets digital signature reference.
-     *
-     * @return the digital signature reference
-     */
-    public DigitalSignatureAlgorithmEnum getDigitalSignatureReference() {
-        return digitalSignatureReference;
-    }
-
-    /**
-     * Sets digital signature reference.
-     *
-     * @param digitalSignatureReference the digital signature reference
-     */
-    public void setDigitalSignatureReference(DigitalSignatureAlgorithmEnum digitalSignatureReference) {
-        this.digitalSignatureReference = digitalSignatureReference;
     }
 
     /**
@@ -146,8 +103,6 @@ public class ExchangeMetadata implements CsvStringGenerator {
         // Create the CSV array
         return new Object[] {
                 dataProtection,
-                protectionScheme,
-                digitalSignatureReference,
                 digitalSignatureValueObject,
                 compressionFlag
         };

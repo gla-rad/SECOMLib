@@ -37,6 +37,7 @@ import static org.grad.secomv2.core.interfaces.CapabilityServiceInterface.CAPABI
 import static org.grad.secomv2.core.interfaces.EncryptionKeyRequestServiceInterface.ENCRYPTION_KEY_REQUEST_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetByLinkServiceInterface.POST_GET_BY_LINK_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.GetPublicKeyServiceInterface.GET_PUBLIC_KEY_INTERFACE_PATH;
+import static org.grad.secomv2.core.interfaces.PostGetPublicKeyServiceInterface.POST_GET_PUBLIC_KEY_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.PostGetServiceInterface.POST_GET_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.SearchServiceServiceInterface.SEARCH_SERVICE_INTERFACE_PATH;
 import static org.grad.secomv2.core.interfaces.EncryptionKeyServiceInterface.ENCRYPTION_KEY_INTERFACE_PATH;
@@ -144,6 +145,8 @@ public class SecomV2ExceptionMapper {
                 }
             case API_PATH + SUBSCRIPTION_NOTIFICATION_INTERFACE_PATH:
                 return SubscriptionNotificationServiceInterface.handleSubscriptionNotificationInterfaceExceptions(ex, request);
+            case API_PATH + POST_GET_PUBLIC_KEY_INTERFACE_PATH:
+                return PostGetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);
             case API_PATH + GET_PUBLIC_KEY_INTERFACE_PATH:
                 if("GET".equals(method)) {
                     return GetPublicKeyServiceInterface.handleGetPublicKeyExceptions(ex, request);

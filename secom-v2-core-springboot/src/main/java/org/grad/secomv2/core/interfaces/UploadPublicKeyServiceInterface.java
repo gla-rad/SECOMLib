@@ -17,6 +17,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.grad.secomv2.core.base.SecomConstants;
 import org.grad.secomv2.core.exceptions.*;
 import org.grad.secomv2.core.models.ResponseObject;
 import org.springframework.boot.json.JsonParseException;
@@ -52,7 +53,7 @@ public interface UploadPublicKeyServiceInterface extends GenericSecomInterface {
     /**
      * The Interface Endpoint Path.
      */
-    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = GET_PUBLIC_KEY_INTERFACE_PATH;
+    String UPLOAD_PUBLIC_KEY_INTERFACE_PATH = "/" + SecomConstants.SECOM_VERSION + "/publicKey";
 
     /**
      * POST /v2/publicKey : The purpose of this interface is to receive a public key.

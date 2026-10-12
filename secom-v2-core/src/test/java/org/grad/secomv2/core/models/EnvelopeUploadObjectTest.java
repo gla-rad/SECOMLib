@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,8 +62,6 @@ class EnvelopeUploadObjectTest {
         // Create SECOM exchange metadata
         this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
-        this.exchangeMetadata.setProtectionScheme("SECOM");
-        this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
@@ -98,8 +95,6 @@ class EnvelopeUploadObjectTest {
         assertEquals(this.obj.getContainerType(), this.obj.getContainerType());
         assertEquals(this.obj.getDataProductType(), result.getDataProductType());
         assertEquals(this.obj.getExchangeMetadata().getDataProtection(), result.getExchangeMetadata().getDataProtection());
-        assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), result.getExchangeMetadata().getProtectionScheme());
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference(), result.getExchangeMetadata().getDigitalSignatureReference());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertArrayEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
         assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), result.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature());
@@ -127,19 +122,17 @@ class EnvelopeUploadObjectTest {
         assertEquals(String.valueOf(this.obj.getContainerType().getValue()), csv[1]);
         assertEquals(this.obj.getDataProductType().getValue(), csv[2]);
         assertEquals(this.obj.getExchangeMetadata().getDataProtection().toString(), csv[3]);
-        assertEquals(this.obj.getExchangeMetadata().getProtectionScheme(), csv[4]);
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureReference().toString().toLowerCase(), csv[5]);
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[6]);
-        assertEquals(String.join(",", this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[7]);
-        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[8]);
-        assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[9]);
-        assertEquals(String.valueOf(this.obj.getSubscriptionIdentifier()), csv[10]);
-        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[11]);
-        assertEquals(String.valueOf(this.obj.getCallbackEndpoint()), csv[12]);
-        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[13]);
-        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[14]);
-        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[15]);
-        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[16]);
+        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[4]);
+        assertEquals(String.join(",", this.obj.getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate()), csv[5]);
+        assertEquals(this.obj.getExchangeMetadata().getDigitalSignatureValue().getDigitalSignature(), csv[6]);
+        assertEquals(this.obj.getExchangeMetadata().getCompressionFlag().toString(), csv[7]);
+        assertEquals(String.valueOf(this.obj.getSubscriptionIdentifier()), csv[8]);
+        assertEquals(String.valueOf(this.obj.getAckRequest().getValue()), csv[9]);
+        assertEquals(String.valueOf(this.obj.getCallbackEndpoint()), csv[10]);
+        assertEquals(this.obj.getTransactionIdentifier().toString(), csv[11]);
+        assertEquals(String.join(",", this.obj.getEnvelopeSignatureCertificate()), csv[12]);
+        assertEquals(this.obj.getEnvelopeRootCertificateThumbprint(), csv[13]);
+        assertEquals(String.valueOf(this.obj.getEnvelopeSignatureTime().getEpochSecond()), csv[14]);
     }
 
     /**

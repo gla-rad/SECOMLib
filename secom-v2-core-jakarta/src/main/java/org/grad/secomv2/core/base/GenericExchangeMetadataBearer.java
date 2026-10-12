@@ -65,8 +65,6 @@ public interface GenericExchangeMetadataBearer {
                 .orElseGet(ExchangeMetadata::new);
 
         // Populate the known values
-        metadata.setProtectionScheme(signatureProvider != null ? SecomConstants.SECOM_PROTECTION_SCHEME : metadata.getProtectionScheme());
-        metadata.setDigitalSignatureReference(signatureProvider != null ? signatureProvider.getSignatureAlgorithm() : metadata.getDigitalSignatureReference());
         metadata.setDataProtection(Optional.of(metadata)
                 .map(ExchangeMetadata::getDataProtection)
                 .orElse(Boolean.FALSE));

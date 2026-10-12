@@ -18,7 +18,6 @@ package org.grad.secomv2.core.models;
 
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -52,8 +51,6 @@ class SECOM_ExchangeMetadataObjectTest {
         // Generate a new object
         this.obj = new ExchangeMetadata();
         this.obj.setDataProtection(Boolean.TRUE);
-        this.obj.setProtectionScheme("SECOM");
-        this.obj.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         this.obj.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.obj.setCompressionFlag(Boolean.FALSE);
     }
@@ -70,8 +67,6 @@ class SECOM_ExchangeMetadataObjectTest {
         // Make sure it looks OK
         assertNotNull(result);
         assertEquals(this.obj.getDataProtection(), result.getDataProtection());
-        assertEquals(this.obj.getProtectionScheme(), result.getProtectionScheme());
-        assertEquals(this.obj.getDigitalSignatureReference(), result.getDigitalSignatureReference());
         assertNotNull(result.getDigitalSignatureValue());
         assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertArrayEquals(this.obj.getDigitalSignatureValue().getPublicCertificate(), result.getDigitalSignatureValue().getPublicCertificate());
@@ -90,12 +85,10 @@ class SECOM_ExchangeMetadataObjectTest {
         // Match the individual entries of the string
         String[] csv = signatureCSV.split("\\.");
         assertEquals(this.obj.getDataProtection().toString(), csv[0]);
-        assertEquals(this.obj.getProtectionScheme(), csv[1]);
-        assertEquals(this.obj.getDigitalSignatureReference().toString().toLowerCase(), csv[2]);
-        assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[3]);
-        assertEquals(String.join(",", this.obj.getDigitalSignatureValue().getPublicCertificate()), csv[4]);
-        assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), csv[5]);
-        assertEquals(this.obj.getCompressionFlag().toString(), csv[6]);
+        assertEquals(this.obj.getDigitalSignatureValue().getPublicRootCertificateThumbprint(), csv[1]);
+        assertEquals(String.join(",", this.obj.getDigitalSignatureValue().getPublicCertificate()), csv[2]);
+        assertEquals(this.obj.getDigitalSignatureValue().getDigitalSignature(), csv[3]);
+        assertEquals(this.obj.getCompressionFlag().toString(), csv[4]);
     }
 
 }

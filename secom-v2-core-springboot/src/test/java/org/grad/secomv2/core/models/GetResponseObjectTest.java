@@ -21,7 +21,6 @@ import tools.jackson.databind.ObjectMapper;
 import org.grad.secomv2.core.base.DigitalSignatureCollectionBearer;
 import org.grad.secomv2.core.base.EnvelopeSignatureBearer;
 import org.grad.secomv2.core.models.enums.AckRequestEnum;
-import org.grad.secomv2.core.models.enums.DigitalSignatureAlgorithmEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,8 +56,6 @@ class GetResponseObjectTest {
         // Create SECOM exchange metadata
         this.exchangeMetadata = new ExchangeMetadata();
         this.exchangeMetadata.setDataProtection(Boolean.TRUE);
-        this.exchangeMetadata.setProtectionScheme("SECOM");
-        this.exchangeMetadata.setDigitalSignatureReference(DigitalSignatureAlgorithmEnum.DSA);
         this.exchangeMetadata.setDigitalSignatureValue(this.digitalSignatureValueObject);
         this.exchangeMetadata.setCompressionFlag(Boolean.FALSE);
 
@@ -95,8 +92,6 @@ class GetResponseObjectTest {
         assertEquals(new String(this.obj.getDataResponseObject().get(0).getData()), new String(result.getDataResponseObject().get(0).getData()));
         assertNotNull(result.getDataResponseObject().get(0).getExchangeMetadata());
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDataProtection(), result.getDataResponseObject().get(0).getExchangeMetadata().getDataProtection());
-        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getProtectionScheme(), result.getDataResponseObject().get(0).getExchangeMetadata().getProtectionScheme());
-        assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureReference());
         assertNotNull(result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue());
         assertEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicRootCertificateThumbprint());
         assertArrayEquals(this.obj.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate(), result.getDataResponseObject().get(0).getExchangeMetadata().getDigitalSignatureValue().getPublicCertificate());
