@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +82,7 @@ public interface EncryptionKeyRequestServiceInterface extends GenericSecomInterf
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException
                 || ex instanceof HttpClientErrorException.NotFound) {
             encryptionKeyResponseObject.setMessage("Bad Request");
             httpStatus = HttpStatus.BAD_REQUEST;

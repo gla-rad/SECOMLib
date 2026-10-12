@@ -29,6 +29,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.PublicKeyFilterObject;
 import org.grad.secomv2.core.models.PublicKeyResponseObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +88,7 @@ public interface PostGetPublicKeyServiceInterface extends GenericSecomInterface 
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException

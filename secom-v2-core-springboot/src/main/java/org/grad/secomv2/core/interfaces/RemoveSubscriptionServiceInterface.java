@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.interfaces;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -87,6 +88,7 @@ public interface RemoveSubscriptionServiceInterface extends GenericSecomInterfac
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;
             responseObject.setMessage("Bad Request");

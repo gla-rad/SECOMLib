@@ -27,6 +27,7 @@ import org.grad.secomv2.core.exceptions.SecomValidationException;
 import org.grad.secomv2.core.models.AccessNotificationObject;
 import org.grad.secomv2.core.models.AccessNotificationResponseObject;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,6 +85,7 @@ public interface AccessNotificationServiceInterface extends GenericSecomInterfac
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException
                 || ex instanceof SecomNotFoundException
                 || ex instanceof HttpClientErrorException.NotFound) {
             httpStatus = HttpStatus.BAD_REQUEST;

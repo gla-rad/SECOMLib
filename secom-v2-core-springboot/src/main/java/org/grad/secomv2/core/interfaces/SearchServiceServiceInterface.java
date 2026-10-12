@@ -29,6 +29,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.ValidationException;
 import org.grad.secomv2.core.models.SearchResult;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -87,6 +88,7 @@ public interface SearchServiceServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException
                 || ex instanceof HttpClientErrorException.NotFound
                 || ex instanceof IllegalArgumentException) {
             httpStatus = HttpStatus.BAD_REQUEST;

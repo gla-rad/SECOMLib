@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.interfaces;
 
 import org.grad.secomv2.core.models.ResponseObject;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import tools.jackson.core.JacksonException;
 import org.grad.secomv2.core.base.SecomConstants;
@@ -85,7 +86,8 @@ public interface SubscriptionServiceInterface extends GenericSecomInterface {
                 || ex instanceof ValidationException
                 || ex instanceof JacksonException
                 || ex instanceof HttpClientErrorException.NotFound
-                || ex instanceof MethodArgumentNotValidException) {
+                || ex instanceof MethodArgumentNotValidException
+                || ex instanceof HttpMessageNotReadableException) {
             httpStatus = HttpStatus.BAD_REQUEST;
         } else if(ex instanceof SecomNotAuthorisedException) {
             httpStatus = HttpStatus.FORBIDDEN;
