@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.Base64StringArray;
 import java.util.UUID;
 
 /**
@@ -61,7 +62,7 @@ public class EnvelopeRemoveSubscriptionObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[]{
                 subscriptionIdentifier,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

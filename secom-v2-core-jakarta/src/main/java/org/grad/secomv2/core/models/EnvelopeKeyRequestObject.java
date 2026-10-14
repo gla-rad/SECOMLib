@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 
 import java.net.URL;
 import java.util.UUID;
@@ -107,7 +108,7 @@ public class EnvelopeKeyRequestObject extends AbstractEnvelope {
         return new Object[] {
                 dataReference,
                 publicCertificate,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeSignatureTime,
                 envelopeRootCertificateThumbprint,
                 callbackEndpoint

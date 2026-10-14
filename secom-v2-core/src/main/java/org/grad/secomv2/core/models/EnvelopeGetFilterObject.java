@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
 
@@ -256,7 +257,7 @@ public class EnvelopeGetFilterObject extends AbstractEnvelope {
                 validTo,
                 page,
                 pageSize,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
 import org.grad.secomv2.core.models.enums.ReasonEnum;
 import org.grad.secomv2.core.models.enums.SECOM_DataProductType;
@@ -183,7 +184,7 @@ public class EnvelopeAccessRequestObject extends AbstractEnvelope {
                 dataReference,
                 productVersion,
                 callbackEndpoint,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

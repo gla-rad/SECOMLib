@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.SecomInstantDeserializer;
 import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.AckTypeEnum;
@@ -153,7 +154,7 @@ public class EnvelopeAckObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[] {
                 createdAt,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 transactionIdentifier,
                 ackType,

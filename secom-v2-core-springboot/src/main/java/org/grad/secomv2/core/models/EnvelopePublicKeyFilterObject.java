@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 
 /**
  * The SECOM Envelope Public Key Filter Object Class.
@@ -81,7 +82,7 @@ public class EnvelopePublicKeyFilterObject extends AbstractEnvelope {
         return new Object[]{
                 dataProtection,
                 certificateThumbprint,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

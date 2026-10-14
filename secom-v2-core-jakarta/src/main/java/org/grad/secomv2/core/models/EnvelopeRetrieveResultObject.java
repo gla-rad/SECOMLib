@@ -16,6 +16,7 @@
 
 package org.grad.secomv2.core.models;
 
+import org.grad.secomv2.core.base.Base64StringArray;
 /**
  * The SECOM Search Filter Object Class.
  *
@@ -54,7 +55,7 @@ public class EnvelopeRetrieveResultObject extends AbstractEnvelope {
     public Object[] getAttributeArray() {
         return new Object[]{
                 transactionId,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

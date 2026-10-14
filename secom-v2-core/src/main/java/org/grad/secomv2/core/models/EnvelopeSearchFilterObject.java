@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 
 import javax.validation.constraints.Pattern;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class EnvelopeSearchFilterObject extends AbstractEnvelope {
                 query,
                 geometry,
                 localOnly,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

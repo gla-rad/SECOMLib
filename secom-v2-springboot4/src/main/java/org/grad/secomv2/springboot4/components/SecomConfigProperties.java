@@ -35,6 +35,7 @@ public class SecomConfigProperties {
     private String truststore;
     private String truststoreType;
     private String truststorePassword;
+    private String rootCertAlias;
     private Boolean insecureSslPolicy;
     private Integer clientMaxMemorySize;
 
@@ -144,6 +145,24 @@ public class SecomConfigProperties {
      */
     public void setTruststorePassword(String truststorePassword) {
         this.truststorePassword = truststorePassword;
+    }
+
+    /**
+     * Gets root cert alias.
+     *
+     * @return the root cert alias
+     */
+    public String getRootCertAlias() {
+        return rootCertAlias;
+    }
+
+    /**
+     * Sets root cert alias.
+     *
+     * @param rootCertAlias the root cert alias
+     */
+    public void setRootCertAlias(String rootCertAlias) {
+        this.rootCertAlias = rootCertAlias;
     }
 
     /**

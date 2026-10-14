@@ -92,6 +92,11 @@ public interface CsvStringGenerator {
                     .map(Boolean.class::cast)
                     .map(Object::toString)
                     .orElse("");
+        } else if(attribute instanceof Number) {
+            return Optional.of(attribute)
+                    .map(Number.class::cast)
+                    .map(Number::toString)
+                    .orElse("");
         } else if(attribute instanceof UUID) {
             return Optional.of(attribute)
                     .map(UUID.class::cast)
@@ -108,16 +113,15 @@ public interface CsvStringGenerator {
                     .map(src -> Base64.getEncoder().encode(src))
                     .map(out -> new String(out, StandardCharsets.UTF_8))
                     .orElse("");
-        } else if(attribute instanceof Number) {
-            return Optional.of(attribute)
-                    .map(Number.class::cast)
-                    .map(Number::toString)
-                    .orElse("");
+        } else if(attribute instanceof Base64StringArray) {
+            return Arrays.stream(((Base64StringArray) attribute).values())
+                    .map(element -> Optional.ofNullable(element).orElse(""))
+                    .collect(Collectors.joining(","));
         } else if(attribute instanceof String[]) {
-            return Optional.of(attribute)
-                    .map(String[].class::cast)
-                    .map(array -> String.join(",", array))
-                    .orElse("");
+            return Arrays.stream((String[]) attribute)
+                    .map(element -> Optional.ofNullable(element).orElse(""))
+                    .map(element -> Base64.getEncoder().encodeToString(element.getBytes(StandardCharsets.UTF_8)))
+                    .collect(Collectors.joining(","));
         } else {
             return attribute.toString();
         }

@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
 import org.grad.secomv2.core.base.SecomByteArraySerializer;
 
@@ -159,7 +160,7 @@ public class EnvelopeKeyObject extends AbstractEnvelope {
                 iv,
                 transactionIdentifier,
                 digitalSignatureValue,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime,
                 expirationTime

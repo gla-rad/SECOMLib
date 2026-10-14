@@ -27,9 +27,11 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -126,7 +128,7 @@ class EnvelopeSearchFilterObjectTest {
         assertEquals(statusCode, csv[1]);
 
         assertEquals(this.obj.getQuery().getVersion(), csv[2]);
-        assertEquals(String.join(",", this.obj.getQuery().getKeywords()), csv[3]);
+        assertEquals(Base64.getEncoder().encodeToString("keywords".getBytes(StandardCharsets.UTF_8)), csv[3]);
         assertEquals(this.obj.getQuery().getDescription(), csv[4]);
         assertEquals(this.obj.getQuery().getDataProductType().asString(), csv[5]);
         assertEquals(this.obj.getQuery().getSpecificationId(), csv[6]);

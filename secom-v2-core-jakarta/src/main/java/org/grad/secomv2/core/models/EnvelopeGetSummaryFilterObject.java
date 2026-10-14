@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.SecomInstantDeserializer;
 import org.grad.secomv2.core.base.SecomInstantSerializer;
 import org.grad.secomv2.core.models.enums.ContainerTypeEnum;
@@ -242,7 +243,7 @@ public class EnvelopeGetSummaryFilterObject extends AbstractEnvelope {
                 validTo,
                 page,
                 pageSize,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

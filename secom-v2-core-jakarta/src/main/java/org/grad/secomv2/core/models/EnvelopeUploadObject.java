@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.SecomByteArrayDeSerializer;
 import org.grad.secomv2.core.base.SecomByteArraySerializer;
 import org.grad.secomv2.core.base.DigitalSignatureBearer;
@@ -235,7 +236,7 @@ public class EnvelopeUploadObject extends AbstractEnvelope implements DigitalSig
                 ackRequest,
                 callbackEndpoint,
                 transactionIdentifier,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

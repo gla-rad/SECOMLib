@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import jakarta.validation.constraints.NotNull;
+import org.grad.secomv2.core.base.Base64StringArray;
 import java.util.UUID;
 
 /**
@@ -120,7 +121,7 @@ public class EnvelopeAccessNotificationObject extends AbstractEnvelope {
                 decisionReason,
                 dataReference,
                 transactionIdentifier,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

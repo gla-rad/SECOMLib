@@ -19,6 +19,7 @@ package org.grad.secomv2.core.models;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.models.enums.SubscriptionEventEnum;
 
 import java.util.UUID;
@@ -84,7 +85,7 @@ public class EnvelopeSubscriptionNotificationObject extends AbstractEnvelope {
         return new Object[]{
                 subscriptionIdentifier,
                 eventEnum,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

@@ -21,6 +21,7 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 import tools.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.GenericExchangeMetadataBearer;
 import org.grad.secomv2.core.base.SecomInstantDeserializer;
 import org.grad.secomv2.core.base.SecomInstantSerializer;
@@ -253,7 +254,7 @@ public class EnvelopeLinkObject extends AbstractEnvelope implements GenericExcha
                 ackRequest,
                 callbackEndpoint,
                 transactionIdentifier,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 size,
                 timeToLive,

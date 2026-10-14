@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 import org.grad.secomv2.core.base.CsvStringGenerator;
 
 import jakarta.validation.constraints.NotNull;
@@ -105,7 +106,7 @@ public class DigitalSignatureValueObject implements CsvStringGenerator {
         // Create the CSV array
         return new Object[] {
                 publicRootCertificateThumbprint,
-                publicCertificate,
+                Base64StringArray.of(publicCertificate),
                 digitalSignature
         };
     }

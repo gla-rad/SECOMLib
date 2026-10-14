@@ -16,6 +16,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 
 import javax.validation.constraints.NotNull;
 
@@ -58,8 +59,8 @@ public class EnvelopePublicKeyResponseObject extends AbstractEnvelope {
     @Override
     public Object[] getAttributeArray() {
         return new Object[] {
-                publicCertificate,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(publicCertificate),
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };

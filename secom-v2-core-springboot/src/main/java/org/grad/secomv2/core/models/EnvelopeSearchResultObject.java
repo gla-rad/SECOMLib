@@ -17,6 +17,7 @@
 package org.grad.secomv2.core.models;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.grad.secomv2.core.base.Base64StringArray;
 
 import java.util.List;
 import java.util.UUID;
@@ -79,7 +80,7 @@ public class EnvelopeSearchResultObject extends AbstractEnvelope {
         return new Object[]{
                 transactionId,
                 serviceInstance,
-                envelopeSignatureCertificate,
+                Base64StringArray.of(envelopeSignatureCertificate),
                 envelopeRootCertificateThumbprint,
                 envelopeSignatureTime
         };
